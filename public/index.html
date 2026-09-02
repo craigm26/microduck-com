@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microduck Studio — an app for Microduck owners</title>
+<meta name="description" content="An independent iOS app for inspecting, authoring and measuring motions for the Pollen Robotics Microduck. Plus the physics bench it talks to.">
+<style>
+  :root{
+    --ink:#17171a; --dim:#5c5c66; --line:#e4e4e9; --bg:#fbfbfc; --card:#fff;
+    --accent:#b8860b; --good:#1a7f4b; --warn:#a2540b;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#ececf0; --dim:#9a9aa6; --line:#2a2a31; --bg:#121215; --card:#1a1a1f;
+           --accent:#e0b040; --good:#4bbd82; --warn:#d69145; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem}
+  header{padding:4.5rem 0 2.5rem}
+  h1{font-size:clamp(2rem,5.5vw,3rem);line-height:1.1;margin:0 0 .6rem;letter-spacing:-.02em}
+  .lede{font-size:1.15rem;color:var(--dim);max-width:38rem;margin:0}
+  h2{font-size:1.35rem;margin:3rem 0 .75rem;letter-spacing:-.01em}
+  h3{font-size:1rem;margin:1.5rem 0 .35rem}
+  p{margin:0 0 1rem}
+  a{color:var(--accent)}
+  .note{border-left:3px solid var(--line);padding:.1rem 0 .1rem 1rem;color:var(--dim);
+        margin:1.5rem 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+        padding:1.25rem 1.4rem;margin:1rem 0}
+  .grid{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+        margin:1.25rem 0}
+  .grid .card{margin:0}
+  .grid h3{margin-top:0}
+  .grid p{font-size:.93rem;color:var(--dim);margin:0}
+  code,kbd{font:.88em ui-monospace,SFMono-Regular,Menlo,monospace;
+           background:color-mix(in srgb,var(--line) 55%,transparent);
+           padding:.12em .38em;border-radius:4px}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:10px;
+      padding:1rem 1.1rem;overflow-x:auto;font-size:.86rem;line-height:1.55}
+  pre code{background:none;padding:0}
+  .dl{display:inline-flex;align-items:center;gap:.55rem;background:var(--accent);
+      color:#fff;text-decoration:none;font-weight:600;padding:.7rem 1.1rem;
+      border-radius:9px;margin:.35rem .5rem .35rem 0}
+  .meta{font-size:.85rem;color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.93rem;display:block;
+        overflow-x:auto;white-space:nowrap}
+  th,td{text-align:left;padding:.55rem .8rem .55rem 0;border-bottom:1px solid var(--line);
+        vertical-align:top}
+  th{font-weight:600;color:var(--dim);font-size:.82rem;text-transform:uppercase;
+     letter-spacing:.04em}
+  footer{margin:4rem 0 3rem;padding-top:1.5rem;border-top:1px solid var(--line);
+         color:var(--dim);font-size:.9rem}
+  .hair{color:var(--dim);font-size:.9rem;margin-top:-.4rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Microduck Studio</h1>
+  <p class="lede">An app for people who own — or are waiting for — a Microduck.
+  It reads the trained networks that drive the robot, lets you write motions for
+  it, and measures what those motions actually do in physics.</p>
+</header>
+
+<div class="note">
+  <strong>Nobody has the hardware yet.</strong> Pollen Robotics' first Microduck
+  deliveries are around Christmas 2026. Everything here runs against a trained
+  policy on your phone, a physics bench on your own network, or a recorded
+  motion. Nothing on this site is talking to a robot, and the app says so on
+  every screen where it matters.
+</div>
+
+<h2>What it does</h2>
+
+<div class="grid">
+  <div class="card">
+    <h3>Policies</h3>
+    <p>Load a trained <code>.onnx</code>, see what is inside it, and check
+    whether it is one of Pollen's. Blend two into a third and find out whether
+    the result still does anything.</p>
+  </div>
+  <div class="card">
+    <h3>Motions</h3>
+    <p>Write a motion keyframe by keyframe, or describe it in words and let a
+    language model draft it. Every angle it writes is checked against the
+    robot's own joint travel before you see it.</p>
+  </div>
+  <div class="card">
+    <h3>The bench</h3>
+    <p>A phone has no physics engine. Point the app at a machine that does and
+    it will run a policy or a motion properly, and tell you how often it
+    worked — not whether it looked good once.</p>
+  </div>
+  <div class="card">
+    <h3>The Lab</h3>
+    <p>A life-size duck on your floor in AR, seven synthesised duck calls,
+    soccer, and a room-capture that writes real scene geometry.</p>
+  </div>
+</div>
+
+<h2>The bench</h2>
+
+<p>This is the piece that turns a preview into a measurement. It is a small
+Node program that runs MuJoCo on a computer you already own — a Mac, a PC, a
+Raspberry Pi — and the app talks to it over your own network.</p>
+
+<p>
+  <a class="dl" href="/duckbench-bundle.zip">Download the bench &middot; 12&nbsp;MB</a>
+  <span class="meta"><a href="/duckbench-bundle.zip.sha256">sha256</a></span>
+</p>
+
+<h3>Starting it</h3>
+<pre><code># Windows: right-click start.ps1 → Run with PowerShell
+# macOS / Linux:
+./start.sh</code></pre>
+
+<p class="hair">The first start installs MuJoCo and onnxruntime and takes a
+couple of minutes. Every start after that is seconds. It prints the address to
+type into the app.</p>
+
+<div class="note">
+  <strong>Use the Tailscale address it prints, not a Wi-Fi one.</strong> A
+  192.168 address works right up until your phone prefers cellular or you leave
+  the room — and it fails looking exactly like a bench that has gone down.
+</div>
+
+<h3>What travels with it</h3>
+<p>The bundle carries <code>scene.mjb</code>, the physics world every
+measurement is made against, and its digest. A number measured against a
+different world is not comparable to one measured here, which is why the world
+ships with the code rather than just its filename.</p>
+
+<h2>File formats</h2>
+
+<p>Every format the app writes is its own, and it reads back everything it
+writes. That was not always true and fixing it is why these are documented.</p>
+
+<table>
+  <tr><th>Extension</th><th>What it holds</th></tr>
+  <tr>
+    <td><code>.duckmove</code><br><span class="meta">duck-move/2</span></td>
+    <td>A motion: keyframe times and fifteen joint angles each. Poses and times
+    interpolated — no physics ran.</td>
+  </tr>
+  <tr>
+    <td><code>.duckplan</code><br><span class="meta">duck-plan/1</span></td>
+    <td>A fetch plan: the measured object and what was asked for. The steps are
+    derived when it is read, so a plan cannot go stale and disagree with the app
+    that opens it.</td>
+  </tr>
+  <tr>
+    <td><code>.duckintent</code></td>
+    <td>A recording of a policy running in physics, with the world it was
+    recorded in named inside it.</td>
+  </tr>
+  <tr>
+    <td><code>.onnx</code></td>
+    <td>A trained policy. 61 inputs, 14 outputs, and the app will tell you
+    exactly why it refuses one that is not.</td>
+  </tr>
+</table>
+
+<h2>What is honest about this</h2>
+
+<p>Two claims are easy to make about a robot app and neither is made here. A
+preview on a phone is <em>what you asked for</em>, not what the robot would do:
+the four authored stair motions in the app get up their flight 0 times in 16
+when a physics engine is asked. And a success rate is not an answer on its own —
+the bench's criterion is "ends standing", which a duck standing perfectly still
+passes every time.</p>
+
+<footer>
+  <p><strong>Independent.</strong> Microduck Studio is not made by, endorsed by, or
+  affiliated with Pollen Robotics. Microduck is their robot; this is an owner's
+  app for it, and Pollen's own policies stay clearly labelled as theirs
+  throughout.</p>
+  <p style="margin-top:1rem"><a href="/privacy/">Privacy</a></p>
+</footer>
+
+</div>
+</body>
+</html>

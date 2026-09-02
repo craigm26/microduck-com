@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — Microduck Studio</title>
+<meta name="description" content="What Microduck Studio does and does not do with your data. No accounts, no analytics, no tracking.">
+<style>
+  :root{ --ink:#17171a; --dim:#5c5c66; --line:#e4e4e9; --bg:#fbfbfc; --card:#fff;
+         --accent:#b8860b; --good:#1a7f4b; }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#ececf0; --dim:#9a9aa6; --line:#2a2a31; --bg:#121215; --card:#1a1a1f;
+           --accent:#e0b040; --good:#4bbd82; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
+  header{padding:3.5rem 0 1.5rem}
+  h1{font-size:clamp(1.8rem,5vw,2.5rem);line-height:1.15;margin:0 0 .5rem;letter-spacing:-.02em}
+  .lede{font-size:1.08rem;color:var(--dim);margin:0}
+  .updated{font-size:.85rem;color:var(--dim);margin-top:.75rem}
+  h2{font-size:1.25rem;margin:2.5rem 0 .6rem;letter-spacing:-.01em}
+  h3{font-size:1rem;margin:1.4rem 0 .3rem}
+  p{margin:0 0 1rem}
+  ul{margin:0 0 1rem;padding-left:1.2rem}
+  li{margin:.35rem 0}
+  a{color:var(--accent)}
+  code{font:.88em ui-monospace,SFMono-Regular,Menlo,monospace;
+       background:color-mix(in srgb,var(--line) 55%,transparent);
+       padding:.12em .38em;border-radius:4px}
+  .headline{background:var(--card);border:1px solid var(--line);border-radius:12px;
+            padding:1.1rem 1.3rem;margin:1.5rem 0}
+  .headline p{margin:0}
+  .headline strong{color:var(--good)}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem;
+        display:block;overflow-x:auto}
+  th,td{text-align:left;padding:.6rem .9rem .6rem 0;border-bottom:1px solid var(--line);
+        vertical-align:top}
+  th{font-weight:600;color:var(--dim);font-size:.8rem;text-transform:uppercase;
+     letter-spacing:.04em}
+  footer{margin:3.5rem 0 3rem;padding-top:1.5rem;border-top:1px solid var(--line);
+         color:var(--dim);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Privacy</h1>
+  <p class="lede">What Microduck Studio does and does not do with your data.</p>
+  <p class="updated">Last updated 31 August 2026 · applies to Microduck Studio for iPhone and iPad</p>
+</header>
+
+<div class="headline">
+  <p><strong>There are no accounts, no analytics, and no tracking.</strong>
+  The app collects nothing about you, sends nothing about you anywhere, and
+  contains no third-party analytics or advertising SDK of any kind. Nobody who
+  makes this app can see that you are using it, or what you do in it.</p>
+</div>
+
+<h2>What stays on your device</h2>
+
+<p>Everything you make. Policies you import, motions you write or record, plans,
+scenes, and any language model you download all live in the app's own storage on
+your device and are never uploaded anywhere by the app.</p>
+
+<p>Credentials — a Hugging Face token, a bench token, an API key for a model
+service you configured — are stored in the iOS Keychain. They are sent only to
+the service they belong to, only when you ask for something that needs them.</p>
+
+<h2>When the app talks to the network</h2>
+
+<p>Only in response to something you do. The app has no background activity, no
+periodic sync, and no phone-home.</p>
+
+<table>
+  <tr><th>Where</th><th>When</th><th>What goes</th></tr>
+  <tr>
+    <td><code>huggingface.co</code></td>
+    <td>You search for or download an on-device model, or publish something you
+    chose to publish.</td>
+    <td>Your search text; the model you picked; your token if you set one. On a
+    publish, only the file you selected.</td>
+  </tr>
+  <tr>
+    <td><code>api.github.com</code><br><code>raw.githubusercontent.com</code></td>
+    <td>You browse Pollen Robotics' public policy list.</td>
+    <td>Nothing about you — an unauthenticated read of a public repository.</td>
+  </tr>
+  <tr>
+    <td>A bench you added</td>
+    <td>You run, record, measure, or drive.</td>
+    <td>The policy or motion you are running and the commands you send. This is
+    a machine on your own network, at an address you typed.</td>
+  </tr>
+  <tr>
+    <td>A model service you added</td>
+    <td>You ask a model to draft something, and you have chosen a service rather
+    than an on-device model.</td>
+    <td>The words you typed and the context the app builds. It goes to whoever
+    runs that service, under their privacy policy, not ours.</td>
+  </tr>
+</table>
+
+<p>If you use an on-device model instead, nothing you type leaves the device at
+all — the weights were downloaded once and everything after that is local.</p>
+
+<h2>Permissions the app asks for</h2>
+
+<h3>Camera</h3>
+<p>Used only in the Lab, and only when you choose to put a duck on your own
+floor. It finds the floor so the duck can be drawn at its real size on it.
+<strong>No image is recorded, stored, or transmitted.</strong> Every Lab mode
+also works on a rendered stage with the camera off.</p>
+
+<h3>Local network</h3>
+<p>Used to reach a physics bench at an address you typed in, when you ask it to
+run something. The app does not scan or browse for machines on its own.</p>
+
+<h3>Bluetooth</h3>
+<p>Used to find a Microduck robot near you, pair with it, and ask it which
+software it is running. It looks for one specific service identifier belonging to
+the robot and ignores everything else. It is not used for location, for
+proximity to anything, or for any other purpose.</p>
+
+<h2>Children</h2>
+
+<p>The app collects no personal information from anyone, of any age. There is
+nothing to delete because nothing is gathered.</p>
+
+<h2>What we would have to tell you, and cannot</h2>
+
+<p>There is no data retention schedule, because nothing is retained. There is no
+list of third parties data is shared with, because there is no data and no
+sharing. There is no way to request a copy of your information from us, because
+we do not have any. If that changes, this page changes first, and the app's
+release notes will say so.</p>
+
+<h2>Independent project</h2>
+
+<p>Microduck Studio is not made by, endorsed by, or affiliated with Pollen
+Robotics. Microduck is their robot; this is an independent owner's app for it.
+Policies released by Pollen are labelled as theirs throughout the app.</p>
+
+<footer>
+  <p>Questions about this policy: <a href="mailto:craigm26@gmail.com">craigm26@gmail.com</a></p>
+  <p><a href="/">← Microduck Studio</a></p>
+</footer>
+
+</div>
+</body>
+</html>
