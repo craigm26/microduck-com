@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://microduckstudio.com/sitemap.xml

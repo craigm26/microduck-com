@@ -1,0 +1,99 @@
+{
+  "counts": {
+    "ball": {
+      "controls": 4,
+      "entries": 0,
+      "oracles": 0,
+      "rows": 4
+    },
+    "stairs": {
+      "controls": 3,
+      "entries": 16,
+      "oracles": 2,
+      "rows": 19
+    }
+  },
+  "duck_studio_commit": "ddb759d3d3da90bfd2c7452cc9809f9364333402",
+  "eval_keys_missing": [],
+  "formats": {
+    "intent": "duck-intent/2",
+    "plan": "duck-plan/1"
+  },
+  "generated_by": "scripts/extract_kit_sentences.py",
+  "numbers": {
+    "ball_cell_count": 14,
+    "ball_core_count": 9,
+    "ball_extended_bearings_deg": [
+      -40.0,
+      40.0
+    ],
+    "ball_extended_range_m": 1.2,
+    "ball_ranges_m": [
+      0.45,
+      0.7,
+      0.95
+    ],
+    "ball_tail_ticks": 50,
+    "ball_touch_mm": 3.0,
+    "ball_travel_min_mm": 100.0,
+    "ball_upright_tail_min": 45,
+    "stairs_cell_count": 14,
+    "stairs_core_count": 9
+  },
+  "quoted": {
+    "ball_controls_clause": "Standing still and both of Pollen's kick policies chase nothing at all; walking straight ahead takes 4 of the 9 core cells and 1 of the 5 extended",
+    "ball_rows_said": "Four control rows and no entries.",
+    "ball_why_not_the_reward": "The nine reward terms are the reward these policies were trained on, and they are reported so an edit can be watched moving them. They are not the verdict: a shaped sum of nine weighted terms is not a thing a person can hold in their head, and a leaderboard sorted on it would reward a duck that stands beautifully still.",
+    "eight_rollouts_clause": "the four authored stair motions in this app get up their flight 0 times in 16",
+    "independence": "Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.",
+    "plant_digest": "3f8c9ab9b409ba74c73c30179d5f7c12b025f631693f9eec78d80dca242547be",
+    "stairs_bar": "The bar is 7 of the 9 core cells, cleared and still standing. Nothing has met it: the record is 5 of 9 at a 60 mm rise, and round six measured the trunk's peak height as the reason 7 was never reachable at this scale.",
+    "stairs_criterion": "honest: at the scored instant the trunk is upright, past the riser at x > 120 mm, more than 95 mm above the tread, with at least two feet resting on a tread (past the riser, within 5 mm below to 45 mm above it, and within 3 mm of a step), and the duck never left the 340 mm-wide flight at any tick of the episode. stable: honest, and upright for at least 45 of the 50 tail ticks.",
+    "stairs_rows_said": "Nineteen rows are published: sixteen entries, two of them reference oracles, and three reference controls, with the intent files they name, byte for byte as the audit ran them.",
+    "submission_what_is_sent": "The file holds the move, all fourteen per-cell answers unrounded, the bench's plant digest and the date. It is written to this device and nothing is sent until you pick where it goes."
+  },
+  "quoted_when_shipped": {
+    "no_seed_said": "No seed was recorded, because no route on this bench reads one and a seed here would name a control nothing used. What varies between the epochs of a scene is the height the duck is dropped from, and every height is listed."
+  },
+  "restated": {
+    "ball_caveat_raw": "Pollen's ball is not this ball. The kick config was trained against a 70 mm, 15 g ball; this plant's is 100 mm and 30 g \u2014 1.43\u00d7 the radius and twice the mass. Every reward term below is the config's own function at the config's own weight, evaluated on a different ball, so a speed in m/s is not comparable with anything Pollen published.",
+    "ball_criterion_raw": "chased: the duck touched the ball \u2014 any duck geometry within 3 mm of it at any tick \u2014 and the ball finished at least 100 mm further along the duck's initial heading than it started, and the duck was still upright at the end of the episode. stable: chased, and upright for at least 45 of the 50 tail ticks.",
+    "ball_leaderboard_raw": "Four control rows, no entries. Standing still and both of Pollen's kick policies chase nothing at all; walking straight ahead takes 4 of the 9 core cells and 1 of the 5 extended \u2014 the whole \u221220\u00b0 column and dead-ahead at 0.45 m, because the gait drifts about 15\u00b0 right \u2014 and misses the ball dead ahead at 0.70 and 0.95 m. Every cell it misses needs steering, and nothing bundled steers.",
+    "ball_one_sentence_raw": "Get the duck to reach a ball and move it in simulation \u2014 from wherever the ball is put down, up to 1.2 m away and up to 40\u00b0 off the duck's heading \u2014 and stay standing.",
+    "eight_rollouts_raw": "Eight rollouts at different drop heights, because one that stays up proves very little \u2014 the four authored stair motions in this app get up their flight 0 times in 16.",
+    "stairs_one_sentence_raw": "Get the duck from the floor onto a step in simulation and leave it standing there \u2014 upright on the tread with both feet resting on it, fifty ticks after your move ends."
+  },
+  "routes": [
+    "/chase",
+    "/chase/grid",
+    "/climb",
+    "/climb/grid",
+    "/health",
+    "/intent",
+    "/measure",
+    "/perform",
+    "/policy",
+    "/record",
+    "/reset",
+    "/state",
+    "/stop",
+    "/tune",
+    "/upload",
+    "/world"
+  ],
+  "shipped_numbers": {
+    "evallog_schema_version": 1,
+    "reducers": [
+      "mean",
+      "median",
+      "max",
+      "min",
+      "mode"
+    ]
+  },
+  "urls": {
+    "ball_dataset": "https://huggingface.co/datasets/craigm26/microduck-ball-challenge",
+    "harness": "https://github.com/craigm26/duck-sounds",
+    "stairs_dataset": "https://huggingface.co/datasets/craigm26/microduck-stairs-challenge"
+  }
+}

@@ -1,0 +1,23 @@
+<div id="evallog-not-shipped">
+
+<p>The evaluation rail is built and is not on TestFlight yet. It will be
+described here in the present tense when the build carrying it is available to
+testers, and not before. The button at the top of this page installs the build
+that exists today, and that build has no Evaluations screen.</p>
+
+<p>What it will be, so the design can be argued with now. Microduck Studio takes
+its evaluation vocabulary from
+<a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
+an open source framework for evaluating physical AI. Its one big idea is that a
+robotics evaluation has two swappable inputs where a language model evaluation
+has one. A <strong>policy</strong> turns an observation into actions. An
+<strong>embodiment</strong> is the body and the world that executes them. A
+<strong>task</strong> is defined against neither: it is a set of scenes, a set of
+scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
+
+<p>What the app will not do is run inspect-robots. An iPhone cannot run Python,
+and it has no physics engine either. The rollouts happen on a bench, the scoring
+reads the trajectory the bench recorded, and the file is written to
+inspect-robots' schema rather than by inspect-robots' code.</p>
+
+</div>

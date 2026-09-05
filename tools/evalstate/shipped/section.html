@@ -1,0 +1,81 @@
+<div id="evallog-shipped">
+
+<p>Microduck Studio takes its evaluation vocabulary from
+<a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
+an open source framework for evaluating physical AI. Its one big idea is that a
+robotics evaluation has two swappable inputs where a language model evaluation
+has one. A <strong>policy</strong> turns an observation into actions. An
+<strong>embodiment</strong> is the body and the world that executes them. A
+<strong>task</strong> is defined against neither: it is a set of scenes, a set of
+scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
+
+<p>In the app that becomes a setup screen. Pick a policy: a network from your
+library by digest, a motion you authored, a tuned candidate, or a challenge
+entrant. Pick an embodiment: a bench on your network, named and carrying its
+world's digest, or this phone's own bench. Pick a task. Set the epochs and the
+reducer. Run it.</p>
+
+<p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
+carries the whole specification beside the results, so a number can always be
+traced back to the run that produced it. It records the task, the policy, the
+embodiment and its world, the horizon, when it started and finished, the metric
+for every scorer, and every scene's per epoch scores as well as the reduced one.
+Trials that errored are recorded and never scored, and a run where every trial
+errored is a failure rather than a zero.</p>
+
+<p>What it does not record is a seed, and the file says so in its own words:</p>
+
+<blockquote class="quote"><p>No seed was recorded, because no route on this
+bench reads one and a seed here would name a control nothing used. What varies
+between the epochs of a scene is the height the duck is dropped from, and every
+height is listed.</p></blockquote>
+
+<dl class="spec">
+  <dt>Policy</dt>
+  <dd>Observation in, actions out. Named by digest, not by filename, because
+  anybody can call a file <code>alpha_walking.onnx</code>.</dd>
+
+  <dt>Embodiment</dt>
+  <dd>The body and the world. A bench on your network, or this phone's own
+  bench. A real Microduck is named and unavailable: nothing can drive one
+  yet.</dd>
+
+  <dt>Task</dt>
+  <dd>Scenes, scorers, one horizon, and epochs with a reducer: mean, median,
+  max, min or mode.</dd>
+
+  <dt>Scorer</dt>
+  <dd>A pure reader of the recorded trajectory. It cannot change what happened,
+  only report on it.</dd>
+
+  <dt>EvalLog</dt>
+  <dd>Version 1, strict JSON, sorted keys, non finite floats written as null.
+  The filename is the task slug and a short hash.</dd>
+</dl>
+
+<p>What the app does not do is run inspect-robots. An iPhone cannot run Python,
+and it has no physics engine either. The rollouts happen on a bench, the scoring
+reads the trajectory the bench recorded, and the file is written to
+inspect-robots' schema rather than by inspect-robots' code. That distinction
+matters enough that it is tested rather than promised: a check in the app's
+repository writes a log, reads it back with the real library, and fails if their
+reader refuses it.</p>
+
+<p>The field that would carry inspect-robots' version instead carries a sentence
+naming Microduck Studio and saying that no inspect-robots ran. Their own viewer
+prints that field in its header, so a stranger who renders one of these logs is
+told, in their own report, what wrote it.</p>
+
+<p>An evaluation you have run can be saved, exported as its JSON, rendered as a
+self contained report the app draws itself, sent through the share sheet, or
+published to a Hugging Face dataset under your own account. A log written
+somewhere else can be opened on the phone. On a computer,
+<code>inspect-robots view LOG.json</code> renders the same file as a standalone
+HTML report, and <code>read_eval_log</code> will refuse it outright if the schema
+is wrong, which is the point of writing the real one.</p>
+
+<p>An EvalLog is a record and not a submission. The two challenge screens are
+the only path onto either leaderboard, and a log of a challenge run does not put
+anything on one.</p>
+
+</div>
