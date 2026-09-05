@@ -53,6 +53,7 @@
     "submission_what_is_sent": "The file holds the move, all fourteen per-cell answers unrounded, the bench's plant digest and the date. It is written to this device and nothing is sent until you pick where it goes."
   },
   "quoted_when_shipped": {
+    "no_pass_at_k": "pass at k is not offered. It estimates how often a success would appear in k independent draws, and these epochs are not draws. They are a fixed list of drop heights the bench walks in order, so the estimator's assumption is false here and its number would look like a probability without being one.",
     "no_seed_said": "No seed was recorded, because no route on this bench reads one and a seed here would name a control nothing used. What varies between the epochs of a scene is the height the duck is dropped from, and every height is listed."
   },
   "restated": {

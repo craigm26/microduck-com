@@ -10,6 +10,13 @@
 # "it is tested rather than promised", and a gate that is only checked for
 # existence is a gate a three line stub satisfies.
 #
+# IT READS THE HEAD, WHICH NOTHING ELSE DOES. check_site_sentences.sh and
+# check_site_claims.sh both flatten the page with a tag strip, and a tag strip
+# deletes a <meta> element and the content attribute with it. So the one
+# sentence a stranger reads first, the search snippet, is invisible to every
+# other gate here. This one parses the two description metas out of the head
+# and holds them to the same state the body copy is in.
+#
 # EVAL KEYS ARE OPTIONAL UNTIL THIS GATE SAYS OTHERWISE. The extractor records
 # any StudioKit Eval constant it could not read in `eval_keys_missing` and does
 # not fail on it, because the site has to stay deployable in the not-shipped
@@ -25,6 +32,7 @@ python3 - <<'PY'
 import datetime as dt
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -52,8 +60,38 @@ for marker, expected in want.items():
     if seen != expected:
         fail.append(f"{marker} appears {seen} times in the {state} state, expected {expected}")
 
+# FLATTENED, LIKE EVERY OTHER COPY CHECK IN THIS REPO. The canonical shipped
+# paragraph wraps this sentence across two lines (tools/evalstate/shipped/
+# section.html), and set_evallog_state.sh splices region files in verbatim, so a
+# raw substring probe could never match the one text it exists to catch.
+flat_page = re.sub(r"\s+", " ", page)
+# The head. The two description metas are spliced by state like the body copy,
+# and the word this gate is here to police is "evaluat".
+head = page[page.find("<head"):page.find("</head>")]
+if head.count("<!-- EVALSTATE:META:BEGIN -->") != 1 or \
+        head.count("<!-- EVALSTATE:META:END -->") != 1:
+    fail.append("the head does not carry exactly one EVALSTATE:META marker pair, "
+                "so scripts/set_evallog_state.sh cannot govern the search snippet")
+descriptions = {}
+for name, pattern in (("description", r'<meta name="description" content="([^"]*)"'),
+                      ("og:description", r'<meta property="og:description" content="([^"]*)"')):
+    found = re.findall(pattern, head)
+    if len(found) != 1:
+        fail.append(f"the head carries {len(found)} {name} metas; exactly one is allowed")
+    else:
+        descriptions[name] = found[0]
+evaluating = sorted(n for n, v in descriptions.items() if "evaluat" in v.lower())
+if evaluating and not is_shipped:
+    fail.append("the head's " + " and ".join(evaluating) + " promises evaluating while "
+                "the page is in the not-shipped state; the search snippet is the first "
+                "sentence a stranger reads and no other gate can see it")
+if not evaluating and is_shipped and len(descriptions) == 2:
+    fail.append("the page is in the shipped state and neither description meta "
+                "mentions evaluating, so the two states of the head are the same "
+                "text and the split checks nothing")
+
 TESTED_SENTENCE = "That distinction matters enough that it is tested"
-claims_tested = TESTED_SENTENCE in page
+claims_tested = TESTED_SENTENCE in flat_page
 if claims_tested and not is_shipped:
     fail.append("the page claims the parity gate is tested while it is in the "
                 "not-shipped state")
@@ -84,9 +122,23 @@ if is_shipped and receipt_path.is_file():
             fail.append(f"the parity gate {gate} exited {run.returncode}: "
                         + " / ".join(tail))
 
-    if receipt.get("testflight_state") != "READY_FOR_TESTING":
-        fail.append(f"the receipt's TestFlight state is "
-                    f"{receipt.get('testflight_state')!r}, not READY_FOR_TESTING")
+    # The App Store Connect beta states that mean a tester can install the
+    # build. Asserting a name only this repo's own writer produces would be a
+    # gate comparing a literal against itself, so the value has to be one of
+    # ASC's and it has to still be in the status line the receipt stored.
+    INSTALLABLE = ("IN_BETA_TESTING", "READY_FOR_BETA_TESTING", "BETA_APPROVED",
+                   "READY_FOR_BETA_SUBMISSION")
+    got_state = receipt.get("testflight_state")
+    line = receipt.get("testflight_line", "")
+    if got_state not in INSTALLABLE:
+        fail.append(f"the receipt's TestFlight state is {got_state!r}, which is not "
+                    "one of " + ", ".join(INSTALLABLE))
+    elif f"={got_state}" not in line:
+        fail.append(f"the receipt says {got_state} and its stored App Store Connect "
+                    f"line does not contain it: {line!r}")
+    if not re.search(r"^build \d+\s+VALID\b", line):
+        fail.append("the receipt's stored App Store Connect line does not read "
+                    f"VALID for a build: {line!r}")
     build = receipt.get("testflight_build")
     if not isinstance(build, int) or build < 58:
         fail.append(f"the receipt's build is {build!r}; the Evaluations screen ships in 58")

@@ -141,11 +141,20 @@ if phrase not in flat_index:
 #    are the page describing its own contents, and they go stale the moment
 #    somebody adds a step or a repository. So they are read off the markup.
 def section(page_id: str) -> str:
+    """The markup of one section, ending at the next h2 OR at the footer.
+
+    THE FOOTER ENDS IT, and that is not tidiness. #links is the last h2 on the
+    page, so a slice that ran to the end of the document swallowed the footer,
+    and the footer carries its own link to this repository. Deleting
+    microduck-com from the links list left the page saying "four repositories"
+    above three of them and this gate still green, because the footer supplied
+    the fourth.
+    """
     start = index.find(f'id="{page_id}"')
     if start < 0:
         return ""
-    nxt = index.find("<h2 ", start)
-    return index[start:nxt if nxt > 0 else len(index)]
+    ends = [x for x in (index.find("<h2 ", start), index.find("<footer", start)) if x > 0]
+    return index[start:min(ends) if ends else len(index)]
 
 
 reproduce = section("reproduce")

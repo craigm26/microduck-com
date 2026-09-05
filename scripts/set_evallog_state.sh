@@ -5,7 +5,12 @@
 # Evaluations screen; until it is available to testers, present tense copy about
 # it is a capability asserted one tap from a TestFlight button, where a stranger
 # cannot check it. So the copy for both states lives in tools/evalstate/ and this
-# script splices the chosen one between the three marker pairs in the page.
+# script splices the chosen one between the four marker pairs in the page.
+#
+# THE HEAD IS ONE OF THE FOUR. The meta description is the search snippet and
+# the link preview, which is the first sentence a stranger reads and the one
+# place every gate that strips tags is blind to. It gets the same two states as
+# the body copy, and check_evallog_claims.sh reads it out of the head directly.
 #
 # DETERMINISTIC AND IDEMPOTENT. Running it twice with the same argument produces
 # the same bytes, and running it with the other argument gets you back exactly
@@ -34,7 +39,8 @@ state = os.environ["STATE"]
 page = pathlib.Path("public/index.html")
 text = page.read_text(encoding="utf-8")
 
-regions = {"CARD": "card.html", "SECTION": "section.html", "FORMATROW": "formatrow.html"}
+regions = {"META": "meta.html", "CARD": "card.html", "SECTION": "section.html",
+           "FORMATROW": "formatrow.html"}
 for marker, filename in regions.items():
     source = pathlib.Path("tools/evalstate") / state / filename
     if not source.is_file():

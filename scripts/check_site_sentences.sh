@@ -11,6 +11,17 @@
 # wrap a sentence across lines (it must) and may write `>` as `&gt;` (it must,
 # inside the stairs criterion) without either counting as a difference.
 #
+# THE SHIPPED NUMBERS ARE CHECKED AS VALUES, NOT AS PRESENCE. The extractor
+# reads the reducer cases and the EvalLog schema version out of StudioKit, and
+# the shipped copy prints both. Reading them and never comparing them would
+# leave two numbers on a public page with nothing behind them, which is the one
+# rule this site has about numbers.
+#
+# BOTH PAGES ARE READ, NOT ONE. The independence paragraph is quoted from
+# StudioKit on the front page AND on the privacy page, and the privacy page is
+# the URL the App Store listing points at. A gate that pinned it on one of them
+# would let the other drift, on the copy that matters most.
+#
 # THE SHIPPED SET IS CHECKED BOTH WAYS. A sentence in `quoted_when_shipped`
 # must be on the page in the shipped state and must NOT be on it in the
 # not-shipped state, because those sentences describe controls that a tester
@@ -29,7 +40,9 @@ test -f tools/kit-sentences.json || {
 python3 - <<'PY'
 import html, json, pathlib, re, sys
 
-page = pathlib.Path("public/index.html").read_text(encoding="utf-8")
+pages = {p: pathlib.Path(p).read_text(encoding="utf-8")
+         for p in ("public/index.html", "public/privacy/index.html")}
+page = pages["public/index.html"]
 # The stylesheet is not something a person reads, so it is stripped before
 # the page is flattened. Otherwise a CSS length can satisfy a copy check.
 def flatten(markup: str) -> str:
@@ -38,6 +51,7 @@ def flatten(markup: str) -> str:
 
 
 flat = flatten(page)
+flat_pages = {name: flatten(text) for name, text in pages.items()}
 data = json.loads(pathlib.Path("tools/kit-sentences.json").read_text(encoding="utf-8"))
 
 
@@ -52,6 +66,17 @@ if missing:
           + ", ".join(sorted(missing)), file=sys.stderr)
     sys.exit(1)
 
+# The independence paragraph is on both pages word for word, so it is held on
+# both. Naming the page in the failure is the whole point: the two files drift
+# one at a time.
+BOTH_PAGES = ("independence",)
+for key in BOTH_PAGES:
+    for name, text in flat_pages.items():
+        if norm(quoted[key]) not in text:
+            print(f"check_site_sentences: {name} does not carry {key} verbatim",
+                  file=sys.stderr)
+            sys.exit(1)
+
 shipped = 'id="evallog-shipped"' in page
 when_shipped = data.get("quoted_when_shipped", {})
 if shipped:
@@ -59,6 +84,23 @@ if shipped:
     if absent:
         print("check_site_sentences: the shipped page is missing "
               + ", ".join(sorted(absent)), file=sys.stderr)
+        sys.exit(1)
+    # The two numbers the shipped copy prints, as values read out of StudioKit.
+    numbers_wrong = []
+    shipped_numbers = data.get("shipped_numbers", {})
+    reducers = shipped_numbers.get("reducers")
+    if reducers:
+        phrase = ", ".join(reducers[:-1]) + " or " + reducers[-1]
+        if phrase not in flat:
+            numbers_wrong.append(f"the reducer list reads {phrase!r} in "
+                                 "EvalEpochs.Reducer and not on the page")
+    version = shipped_numbers.get("evallog_schema_version")
+    if version is not None and f"Version {version}" not in flat:
+        numbers_wrong.append(f"EvalLog.schemaVersion is {version} and the page does "
+                             f"not say 'Version {version}'")
+    if numbers_wrong:
+        for problem in numbers_wrong:
+            print("check_site_sentences: " + problem, file=sys.stderr)
         sys.exit(1)
 else:
     leaked = [k for k, v in when_shipped.items() if norm(v) in flat]

@@ -9,11 +9,24 @@ has one. A <strong>policy</strong> turns an observation into actions. An
 <strong>task</strong> is defined against neither: it is a set of scenes, a set of
 scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
 
-<p>In the app that becomes a setup screen. Pick a policy: a network from your
-library by digest, a motion you authored, a tuned candidate, or a challenge
-entrant. Pick an embodiment: a bench on your network, named and carrying its
-world's digest, or this phone's own bench. Pick a task. Set the epochs and the
-reducer. Run it.</p>
+<p>In the app that becomes a setup screen with four presets, and a preset is a
+whole plan rather than a starting point. Picking one fills the scenes, what
+varies between the epochs of a scene, the rule for reducing them, the horizon
+and the scorers. Two of the four walk a network under a command schedule from
+drop heights it was never tuned on. The other two run one episode per published
+cell of a challenge grid, scored by the challenge harness rather than by the
+app.</p>
+
+<p>What is left to pick is the thing being evaluated and where it runs. The
+thing being evaluated is a network from your library, named by digest, or a
+published challenge entrant. Where it runs is an embodiment: a bench on your
+network, named and carrying its world's digest, or this phone's own bench. A
+real Microduck is on that list and cannot be chosen, because nothing can drive
+one yet.</p>
+
+<p>There is no epoch count, no reducer picker and no seed field on that screen.
+A control that could disagree with the preset would be a second opinion about
+what the preset means, and the four presets are the whole argument.</p>
 
 <p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
 carries the whole specification beside the results, so a number can always be
@@ -29,6 +42,15 @@ errored is a failure rather than a zero.</p>
 bench reads one and a seed here would name a control nothing used. What varies
 between the epochs of a scene is the height the duck is dropped from, and every
 height is listed.</p></blockquote>
+
+<p>One of inspect-robots' reducers is missing here for the same kind of reason,
+and the app says which and why:</p>
+
+<blockquote class="quote"><p>pass at k is not offered. It estimates how often a
+success would appear in k independent draws, and these epochs are not draws.
+They are a fixed list of drop heights the bench walks in order, so the
+estimator's assumption is false here and its number would look like a
+probability without being one.</p></blockquote>
 
 <dl class="spec">
   <dt>Policy</dt>

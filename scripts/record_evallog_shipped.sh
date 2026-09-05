@@ -19,6 +19,13 @@
 # line it read, rather than writing a receipt whose own field would be
 # aspirational.
 #
+# THE RECEIPT RECORDS WHAT APP STORE CONNECT SAID, NOT WHAT THIS SCRIPT HOPED.
+# It used to write a fixed "READY_FOR_TESTING", a string App Store Connect
+# never emits, and check_evallog_claims.sh asserted that same literal back, so
+# the two files agreed about a word neither of them had read anywhere. Now the
+# matched state word is captured out of the line and stored beside the whole
+# line, and the checker holds the word to ASC's own vocabulary and to the line.
+#
 # IT ALSO FLIPS THE PAGE. A receipt without a page in the shipped state is an
 # orphan and check_evallog_claims.sh treats it as a failure, so writing one and
 # leaving the flip to a second command would leave the repo red between them.
@@ -66,22 +73,26 @@ printf '%s\n' "$LINE" | grep -qE "^build ${WANT_BUILD}[[:space:]]+VALID\b" || {
   echo "        $LINE" >&2
   exit 1
 }
-# The three App Store Connect beta states that mean a tester can install it.
-# IN_BETA_TESTING is in the list because a build people are already testing
-# reports that rather than READY_FOR_BETA_TESTING, and refusing it here would
-# block the flip on the one case the page is waiting for.
-printf '%s\n' "$LINE" | grep -qE "(internal|external)=(READY_FOR_BETA_TESTING|IN_BETA_TESTING|BETA_APPROVED)" || {
+# The App Store Connect beta states that mean a tester can install the build,
+# and the one that is matched is the one the receipt records. IN_BETA_TESTING is
+# in the list because a build people are already testing reports that rather
+# than READY_FOR_BETA_TESTING, and refusing it here would block the flip on the
+# one case the page is waiting for. check_evallog_claims.sh holds the receipt to
+# this same set and to the line it was read out of.
+STATE="$(printf '%s' "$LINE" | grep -oE "(internal|external)=(READY_FOR_BETA_TESTING|IN_BETA_TESTING|BETA_APPROVED|READY_FOR_BETA_SUBMISSION)" | head -1 | cut -d= -f2 || true)"
+[ -n "$STATE" ] || {
   echo "record: build $WANT_BUILD is VALID but no tester can install it yet. The line was:" >&2
   echo "        $LINE" >&2
   exit 1
 }
+echo "record: build $WANT_BUILD is VALID and App Store Connect says $STATE"
 
 mkdir -p tools
 cat > tools/evallog-shipped.json <<JSON
 {
   "parity_gate": "$PARITY",
   "testflight_build": $WANT_BUILD,
-  "testflight_state": "READY_FOR_TESTING",
+  "testflight_state": "$STATE",
   "testflight_line": "$(printf '%s' "$LINE" | sed 's/"/\\"/g')",
   "checked": "$(date +%Y-%m-%d)"
 }

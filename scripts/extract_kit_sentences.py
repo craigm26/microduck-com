@@ -338,6 +338,12 @@ def main() -> int:
     else:
         quoted_when_shipped["no_seed_said"] = no_seed
 
+    no_pass_at_k, why = optional(read_string, root, EPOCHS, "noPassAtK")
+    if no_pass_at_k is None:
+        eval_missing.append(f"no_pass_at_k: {why}")
+    else:
+        quoted_when_shipped["no_pass_at_k"] = no_pass_at_k
+
     version, why = optional(read_number, root, EVALLOG, "schemaVersion")
     if version is None:
         eval_missing.append(f"evallog_schema_version: {why}")

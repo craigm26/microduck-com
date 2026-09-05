@@ -41,8 +41,10 @@ Three rules the gates exist to hold:
    substitute is a picture of an app that does not look like that. `img-src 'self' data:`
    makes a hotlinked one unrepresentable.
 3. **The build goes before the site.** The Evaluations section is authored in two states
-   and served in one. Present tense copy about a screen a tester cannot open is a
-   capability asserted one tap from a TestFlight button.
+   and served in one, and the head is one of the four spliced regions, because the search
+   snippet is the first sentence a stranger reads and a tag stripping gate cannot see it.
+   Present tense copy about a screen a tester cannot open is a capability asserted one tap
+   from a TestFlight button.
 
 ## Flipping Evaluations to the shipped wording
 
@@ -53,8 +55,9 @@ bash scripts/record_evallog_shipped.sh ~/projects/duck-studio
 That is the only writer of `tools/evallog-shipped.json`. It runs the app's own EvalLog
 parity gate and requires exit 0, reads TestFlight through
 `ios-certificates/skills/appstore-submit/testflight.py` and requires build 58 VALID and
-installable, then writes the receipt and puts the page into the shipped state. To go back,
-`bash scripts/set_evallog_state.sh not-shipped` and delete the receipt.
+installable, then records the beta state App Store Connect actually returned, writes the
+receipt beside the whole status line, and puts the page into the shipped state. To go
+back, `bash scripts/set_evallog_state.sh not-shipped` and delete the receipt.
 
 ## Deploy
 

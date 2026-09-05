@@ -4,18 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Microduck Studio, an app for Microduck owners</title>
-<meta name="description" content="An independent iOS app for inspecting, authoring, measuring and evaluating motions for the Pollen Robotics Microduck. Free on TestFlight. Source on GitHub.">
+<!-- The two sentences a stranger reads before they read the page: the search
+     snippet and the link preview. They are spliced with the body copy by
+     scripts/set_evallog_state.sh, because a head that promises a capability the
+     body says is not on TestFlight is the same false claim in the place no gate
+     that strips tags can see. -->
+<!-- EVALSTATE:META:BEGIN -->
+<meta name="description" content="An independent iOS app for inspecting, authoring and measuring motions for the Pollen Robotics Microduck. Free on TestFlight. Source on GitHub.">
+<meta property="og:description" content="An independent iOS app for the Pollen Robotics Microduck. Read the trained networks, write motions, and measure what they actually do in physics. Free on TestFlight.">
+<!-- EVALSTATE:META:END -->
 <link rel="canonical" href="https://microduckstudio.com/">
 <meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0D1417" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://microduckstudio.com/">
 <meta property="og:title" content="Microduck Studio">
-<meta property="og:description" content="An independent iOS app for the Pollen Robotics Microduck. Read the trained networks, write motions, and measure what they actually do in physics. Free on TestFlight.">
 <meta name="twitter:card" content="summary">
 <style>
 /* == SHARED TOKENS: mirror this block byte for byte in the other page == */
 :root{
+  /* The UA paints scrollbars and form controls from this, so without it the
+     dark theme gets light scrollbars on every overflow box below. */
+  color-scheme:light dark;
   --bg:#F6F0E4; --card:#FDFAF3; --ink:#111A1D; --dim:#4A555A; --line:#DED3BE;
   --accent:#AF540C; --accent-fill:#AF540C; --on-fill:#FFFFFF;
   --brand:#3D7576; --focus:#3D7576; --good:#2E6B4F; --warn:#8E650F;
@@ -99,16 +109,21 @@
       -webkit-text-size-adjust:100%}
   pre code{background:none;padding:0;word-break:normal}
   .meta{font-size:.88rem;color:var(--dim)}
-  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.93rem;display:block;
-        overflow-x:auto}
+  /* The scroll lives on a wrapper, never on the table itself. A table whose
+     display is not `table` loses its row and column semantics in some
+     browsers, and the columns are the whole point of both of these. */
+  .scroller{overflow-x:auto;margin:1rem 0}
+  .scroller table{margin:0}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.93rem}
+  caption{text-align:left;color:var(--dim);font-size:.88rem;padding-bottom:.4rem}
   th,td{text-align:left;padding:.55rem .8rem .55rem 0;border-bottom:1px solid var(--line);
         vertical-align:top}
   th{font-weight:600;color:var(--dim);font-size:.82rem;text-transform:uppercase;
      letter-spacing:.04em}
   footer{margin:4rem 0 3rem;padding-top:1.5rem;border-top:1px solid var(--line);
          color:var(--dim);font-size:.9rem}
-  a:focus-visible,.cta:focus-visible{outline:2px solid var(--focus);outline-offset:2px;
-                                     border-radius:3px}
+  a:focus-visible,.cta:focus-visible,pre:focus-visible,.scroller:focus-visible{
+    outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
   @media (min-width: 26rem){
     .ctas{flex-direction:row;align-items:center}
     .cta{justify-content:flex-start}
@@ -125,7 +140,7 @@
 </style>
 </head>
 <body>
-<a class="skip" href="#what">Skip to what it does</a>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
 
 <header>
@@ -163,7 +178,7 @@
   </nav>
 </header>
 
-<main>
+<main id="main" tabindex="-1">
 
 <div class="note" id="hardware">
   <p><strong>Nobody has the hardware yet.</strong> Pollen Robotics' first
@@ -267,7 +282,7 @@ Raspberry Pi, and the app talks to it over your own network.</p>
 Pi, and it does not run on the phone.</p>
 
 <h3>Starting it</h3>
-<pre><code># Windows: right-click start.ps1, then Run with PowerShell
+<pre tabindex="0" role="region" aria-label="Starting the bench, as a shell command"><code># Windows: right-click start.ps1, then Run with PowerShell
 # macOS and Linux:
 ./start.sh</code></pre>
 
@@ -322,7 +337,7 @@ move ends.</p>
 
 <p>The criterion, as <code>sim/climb_score.mjs</code> exports it:</p>
 
-<pre><code>honest: at the scored instant the trunk is upright, past the riser at
+<pre tabindex="0" role="region" aria-label="The stairs criterion, as the harness exports it"><code>honest: at the scored instant the trunk is upright, past the riser at
 x &gt; 120 mm, more than 95 mm above the tread, with at least two feet resting
 on a tread (past the riser, within 5 mm below to 45 mm above it, and within
 3 mm of a step), and the duck never left the 340 mm-wide flight at any tick
@@ -429,11 +444,13 @@ a route that exists on one bench and not the other cannot hide.</p>
 
 <h2 id="formats">File formats</h2>
 
-<p>Every format the app writes is its own, and it reads back everything it
-writes. That was not always true and fixing it is why these are documented.</p>
+<p>The app reads back every format it writes. That was not always true and
+fixing it is why these are documented.</p>
 
+<div class="scroller" role="region" aria-label="File formats" tabindex="0">
 <table>
-  <tr><th>Extension</th><th>What it holds</th></tr>
+  <caption>Every format the app writes and reads back</caption>
+  <tr><th scope="col">Extension</th><th scope="col">What it holds</th></tr>
   <tr>
     <td><code>.duckmove</code><br><span class="meta">duck-move/2</span></td>
     <td>A motion: keyframe times and one angle per joint. Poses and times
@@ -461,6 +478,7 @@ writes. That was not always true and fixing it is why these are documented.</p>
        the build that writes one is available to testers. -->
 <!-- EVALSTATE:FORMATROW:END -->
 </table>
+</div>
 
 <h2 id="honest">What is honest about this</h2>
 

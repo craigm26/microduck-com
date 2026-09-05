@@ -5,8 +5,10 @@
 # everything after it reads that file, so a stale extract cannot license a page.
 # The link check runs late because it is the only step that needs the network.
 #
-# PROVED ABLE TO FAIL, 2026-09-05, six times, one at a time and each restored
-# to a byte identical file before the next:
+# PROVED ABLE TO FAIL, 2026-09-05, sixteen times, one at a time and each
+# restored to a byte identical file before the next. The first seven were run in
+# this tree; the last nine in a throwaway copy of the whole repository, because
+# they need a receipt and a shipped page and neither belongs in a commit:
 #   * a wrong digest in public/duckbench-bundle.zip.sha256: check_site_claims
 #     exited 1, "does not match its sha256".
 #   * a wrong byte size. Done in a throwaway copy of the whole repo with the zip
@@ -24,6 +26,41 @@
 #   * a sixth step added to the reproduce list while the standfirst still said
 #     five: check_site_claims exited 1, "the reproduce section has 6 steps and
 #     calls itself five".
+#   * the microduck-com list item deleted from the links section, leaving the
+#     page saying four repositories above three: check_site_claims exited 1,
+#     "the links section lists 3 of our repositories". Before the slice was made
+#     to stop at the footer, this same edit passed, because the footer's own
+#     link to this repository supplied the fourth.
+#   * the shipped paragraph's "That distinction / matters enough that it is
+#     tested" pasted, with its line wrap intact, into the not-shipped page:
+#     check_evallog_claims exited 1, "the page claims the parity gate is tested
+#     while it is in the not-shipped state". Before the probe was flattened, the
+#     wrapped form, which is the only form this repository authors, passed.
+#   * "evaluating" put back into the head's meta description while the body was
+#     in the not-shipped state: check_evallog_claims exited 1, "the head's
+#     description promises evaluating while the page is in the not-shipped
+#     state".
+#   * the not-shipped wording left in the head while the page was flipped to
+#     shipped: check_evallog_claims exited 1, "neither description meta mentions
+#     evaluating, so the two states of the head are the same text".
+#   * the privacy page's independence paragraph changed to say the opposite:
+#     check_site_sentences exited 1, "public/privacy/index.html does not carry
+#     independence verbatim". Before both pages were read, only the front page
+#     was held to it.
+#   * a receipt carrying "READY_FOR_TESTING", the state this repository used to
+#     invent and then assert back to itself: check_evallog_claims exited 1,
+#     "which is not one of IN_BETA_TESTING, READY_FOR_BETA_TESTING,
+#     BETA_APPROVED, READY_FOR_BETA_SUBMISSION".
+#   * that same receipt changed to BETA_APPROVED, which App Store Connect does
+#     emit but which the line it stored did not say: check_evallog_claims exited
+#     1, "the receipt says BETA_APPROVED and its stored App Store Connect line
+#     does not contain it".
+#   * a sixth reducer printed on the shipped page: check_site_sentences exited 1,
+#     "the reducer list reads 'mean, median, max, min or mode' in
+#     EvalEpochs.Reducer and not on the page".
+#   * the schema version changed to 7 on the shipped page: check_site_sentences
+#     exited 1, "EvalLog.schemaVersion is 1 and the page does not say 'Version
+#     1'". Before shipped_numbers was read by anything, both of these passed.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

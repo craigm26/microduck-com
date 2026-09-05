@@ -5,9 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy, Microduck Studio</title>
 <meta name="description" content="What Microduck Studio does and does not do with your data. No accounts, no analytics, no tracking.">
+<link rel="canonical" href="https://microduckstudio.com/privacy/">
+<meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1417" media="(prefers-color-scheme: dark)">
 <style>
 /* == SHARED TOKENS: mirror this block byte for byte in the other page == */
 :root{
+  /* The UA paints scrollbars and form controls from this, so without it the
+     dark theme gets light scrollbars on every overflow box below. */
+  color-scheme:light dark;
   --bg:#F6F0E4; --card:#FDFAF3; --ink:#111A1D; --dim:#4A555A; --line:#DED3BE;
   --accent:#AF540C; --accent-fill:#AF540C; --on-fill:#FFFFFF;
   --brand:#3D7576; --focus:#3D7576; --good:#2E6B4F; --warn:#8E650F;
@@ -36,7 +42,11 @@
   .lede{font-size:1.08rem;color:var(--dim);margin:0}
   .updated{font-size:.85rem;color:var(--dim);margin-top:.75rem}
   p,li{max-width:40rem}
-  a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+  a:focus-visible,.scroller:focus-visible{outline:2px solid var(--focus);
+    outline-offset:2px;border-radius:3px}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--card);color:var(--ink);
+        padding:.6rem .9rem;border:1px solid var(--line);border-radius:8px;z-index:2}
+  .skip:focus{left:.75rem;top:.75rem}
   a{text-decoration:underline;text-underline-offset:.16em}
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
@@ -54,8 +64,13 @@
             padding:1.1rem 1.3rem;margin:1.5rem 0}
   .headline p{margin:0}
   .headline strong{color:var(--good)}
-  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem;
-        display:block;overflow-x:auto}
+  /* The scroll lives on a wrapper, never on the table itself. A table whose
+     display is not `table` loses its row and column semantics in some
+     browsers, and "What goes" is the column this whole page is about. */
+  .scroller{overflow-x:auto;margin:1rem 0}
+  .scroller table{margin:0}
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}
+  caption{text-align:left;color:var(--dim);font-size:.88rem;padding-bottom:.4rem}
   th,td{text-align:left;padding:.6rem .9rem .6rem 0;border-bottom:1px solid var(--line);
         vertical-align:top}
   th{font-weight:600;color:var(--dim);font-size:.8rem;text-transform:uppercase;
@@ -70,6 +85,7 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
 
 <header>
@@ -77,6 +93,8 @@
   <p class="lede">What Microduck Studio does and does not do with your data.</p>
   <p class="updated">Last updated 5 September 2026 · applies to Microduck Studio for iPhone and iPad</p>
 </header>
+
+<main id="main" tabindex="-1">
 
 <div class="headline">
   <p><strong>There are no accounts, no analytics, and no tracking.</strong>
@@ -101,8 +119,10 @@ them.</p>
 <p>Only in response to something you do. The app has no background activity, no
 periodic sync, and no phone-home.</p>
 
+<div class="scroller" role="region" aria-label="When the app talks to the network" tabindex="0">
 <table>
-  <tr><th>Where</th><th>When</th><th>What goes</th></tr>
+  <caption>Every host the app can reach, what makes it reach one, and what leaves the device</caption>
+  <tr><th scope="col">Where</th><th scope="col">When</th><th scope="col">What goes</th></tr>
   <tr>
     <td><code>huggingface.co</code></td>
     <td>You search for or download an on-device model, or publish a file you
@@ -130,6 +150,7 @@ periodic sync, and no phone-home.</p>
     runs that service, under their privacy policy, not ours.</td>
   </tr>
 </table>
+</div>
 
 <p>If you use an on-device model instead, nothing you type leaves the device at
 all, because the weights were downloaded once and everything after that is
@@ -176,6 +197,8 @@ release notes will say so.</p>
 or affiliated with Pollen Robotics. Microduck is their robot; this is an
 independent owner's app for it. Policies released by Pollen are labelled as
 theirs throughout the app.</p>
+
+</main>
 
 <footer>
   <p>Questions about this policy: <a href="mailto:craigm26@gmail.com">craigm26@gmail.com</a></p>
