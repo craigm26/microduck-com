@@ -1,0 +1,7 @@
+{
+  "parity_gate": "/home/craigm26/projects/duck-studio/scripts/check_evallog_parity.sh",
+  "testflight_build": 58,
+  "testflight_state": "IN_BETA_TESTING",
+  "testflight_line": "build 58    VALID      internal=IN_BETA_TESTING  external=IN_BETA_TESTING",
+  "checked": "2026-09-05"
+}

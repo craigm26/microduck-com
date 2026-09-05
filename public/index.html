@@ -10,8 +10,8 @@
      body says is not on TestFlight is the same false claim in the place no gate
      that strips tags can see. -->
 <!-- EVALSTATE:META:BEGIN -->
-<meta name="description" content="An independent iOS app for inspecting, authoring and measuring motions for the Pollen Robotics Microduck. Free on TestFlight. Source on GitHub.">
-<meta property="og:description" content="An independent iOS app for the Pollen Robotics Microduck. Read the trained networks, write motions, and measure what they actually do in physics. Free on TestFlight.">
+<meta name="description" content="An independent iOS app for inspecting, authoring, measuring and evaluating motions for the Pollen Robotics Microduck. Free on TestFlight. Source on GitHub.">
+<meta property="og:description" content="An independent iOS app for the Pollen Robotics Microduck. Read the trained networks, write motions, measure what they actually do in physics, and write an evaluation log somebody else can open. Free on TestFlight.">
 <!-- EVALSTATE:META:END -->
 <link rel="canonical" href="https://microduckstudio.com/">
 <meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
@@ -221,11 +221,11 @@
     a room capture that writes real scene geometry.</p>
   </div>
 <!-- EVALSTATE:CARD:BEGIN -->
-  <div class="card" id="card-eval-not-shipped">
+  <div class="card" id="card-eval-shipped">
     <h3>Evaluations</h3>
-    <p>A run is an anecdote. A formal evaluation, in inspect-robots' vocabulary
-    and written in their log format, is built and is not on TestFlight yet. See
-    below for what it will be.</p>
+    <p>A run is an anecdote. Pick one of four presets, the thing being
+    evaluated and a bench, and get back a log in inspect-robots' own format that
+    somebody else can open and check.</p>
   </div>
 <!-- EVALSTATE:CARD:END -->
 </div>
@@ -236,15 +236,9 @@
 somebody else can check.</p>
 
 <!-- EVALSTATE:SECTION:BEGIN -->
-<div id="evallog-not-shipped">
+<div id="evallog-shipped">
 
-<p>The evaluation rail is built and is not on TestFlight yet. It will be
-described here in the present tense when the build carrying it is available to
-testers, and not before. The button at the top of this page installs the build
-that exists today, and that build has no Evaluations screen.</p>
-
-<p>What it will be, so the design can be argued with now. Microduck Studio takes
-its evaluation vocabulary from
+<p>Microduck Studio takes its evaluation vocabulary from
 <a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
 an open source framework for evaluating physical AI. Its one big idea is that a
 robotics evaluation has two swappable inputs where a language model evaluation
@@ -253,10 +247,96 @@ has one. A <strong>policy</strong> turns an observation into actions. An
 <strong>task</strong> is defined against neither: it is a set of scenes, a set of
 scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
 
-<p>What the app will not do is run inspect-robots. An iPhone cannot run Python,
+<p>In the app that becomes a setup screen with four presets, and a preset is a
+whole plan rather than a starting point. Picking one fills the scenes, what
+varies between the epochs of a scene, the rule for reducing them, the horizon
+and the scorers. Two of the four walk a network under a command schedule from
+drop heights it was never tuned on. The other two run one episode per published
+cell of a challenge grid, scored by the challenge harness rather than by the
+app.</p>
+
+<p>What is left to pick is the thing being evaluated and where it runs. The
+thing being evaluated is a network from your library, named by digest, or a
+published challenge entrant. Where it runs is an embodiment: a bench on your
+network, named and carrying its world's digest, or this phone's own bench. A
+real Microduck is on that list and cannot be chosen, because nothing can drive
+one yet.</p>
+
+<p>There is no epoch count, no reducer picker and no seed field on that screen.
+A control that could disagree with the preset would be a second opinion about
+what the preset means, and the four presets are the whole argument.</p>
+
+<p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
+carries the whole specification beside the results, so a number can always be
+traced back to the run that produced it. It records the task, the policy, the
+embodiment and its world, the horizon, when it started and finished, the metric
+for every scorer, and every scene's per epoch scores as well as the reduced one.
+Trials that errored are recorded and never scored, and a run where every trial
+errored is a failure rather than a zero.</p>
+
+<p>What it does not record is a seed, and the file says so in its own words:</p>
+
+<blockquote class="quote"><p>No seed was recorded, because no route on this
+bench reads one and a seed here would name a control nothing used. What varies
+between the epochs of a scene is the height the duck is dropped from, and every
+height is listed.</p></blockquote>
+
+<p>One of inspect-robots' reducers is missing here for the same kind of reason,
+and the app says which and why:</p>
+
+<blockquote class="quote"><p>pass at k is not offered. It estimates how often a
+success would appear in k independent draws, and these epochs are not draws.
+They are a fixed list of drop heights the bench walks in order, so the
+estimator's assumption is false here and its number would look like a
+probability without being one.</p></blockquote>
+
+<dl class="spec">
+  <dt>Policy</dt>
+  <dd>Observation in, actions out. Named by digest, not by filename, because
+  anybody can call a file <code>alpha_walking.onnx</code>.</dd>
+
+  <dt>Embodiment</dt>
+  <dd>The body and the world. A bench on your network, or this phone's own
+  bench. A real Microduck is named and unavailable: nothing can drive one
+  yet.</dd>
+
+  <dt>Task</dt>
+  <dd>Scenes, scorers, one horizon, and epochs with a reducer: mean, median,
+  max, min or mode.</dd>
+
+  <dt>Scorer</dt>
+  <dd>A pure reader of the recorded trajectory. It cannot change what happened,
+  only report on it.</dd>
+
+  <dt>EvalLog</dt>
+  <dd>Version 1, strict JSON, sorted keys, non finite floats written as null.
+  The filename is the task slug and a short hash.</dd>
+</dl>
+
+<p>What the app does not do is run inspect-robots. An iPhone cannot run Python,
 and it has no physics engine either. The rollouts happen on a bench, the scoring
 reads the trajectory the bench recorded, and the file is written to
-inspect-robots' schema rather than by inspect-robots' code.</p>
+inspect-robots' schema rather than by inspect-robots' code. That distinction
+matters enough that it is tested rather than promised: a check in the app's
+repository writes a log, reads it back with the real library, and fails if their
+reader refuses it.</p>
+
+<p>The field that would carry inspect-robots' version instead carries a sentence
+naming Microduck Studio and saying that no inspect-robots ran. Their own viewer
+prints that field in its header, so a stranger who renders one of these logs is
+told, in their own report, what wrote it.</p>
+
+<p>An evaluation you have run can be saved, exported as its JSON, rendered as a
+self contained report the app draws itself, sent through the share sheet, or
+published to a Hugging Face dataset under your own account. A log written
+somewhere else can be opened on the phone. On a computer,
+<code>inspect-robots view LOG.json</code> renders the same file as a standalone
+HTML report, and <code>read_eval_log</code> will refuse it outright if the schema
+is wrong, which is the point of writing the real one.</p>
+
+<p>An EvalLog is a record and not a submission. The two challenge screens are
+the only path onto either leaderboard, and a log of a challenge run does not put
+anything on one.</p>
 
 </div>
 <!-- EVALSTATE:SECTION:END -->
@@ -474,8 +554,13 @@ fixing it is why these are documented.</p>
     does not match.</td>
   </tr>
 <!-- EVALSTATE:FORMATROW:BEGIN -->
-  <!-- The EvalLog row is spliced in here by scripts/set_evallog_state.sh once
-       the build that writes one is available to testers. -->
+  <tr id="format-evallog">
+    <td><code>.json</code><br><span class="meta">EvalLog version 1</span></td>
+    <td>A formal evaluation: the task, the policy, the embodiment and its world
+    digest, the horizon, every scorer's metric, and every scene's per epoch
+    scores. inspect-robots' own schema, so <code>read_eval_log</code> and
+    <code>inspect-robots view</code> open it unchanged.</td>
+  </tr>
 <!-- EVALSTATE:FORMATROW:END -->
 </table>
 </div>
