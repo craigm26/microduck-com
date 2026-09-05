@@ -66,7 +66,11 @@ printf '%s\n' "$LINE" | grep -qE "^build ${WANT_BUILD}[[:space:]]+VALID\b" || {
   echo "        $LINE" >&2
   exit 1
 }
-printf '%s\n' "$LINE" | grep -qE "(internal|external)=(READY_FOR_BETA_TESTING|BETA_APPROVED)" || {
+# The three App Store Connect beta states that mean a tester can install it.
+# IN_BETA_TESTING is in the list because a build people are already testing
+# reports that rather than READY_FOR_BETA_TESTING, and refusing it here would
+# block the flip on the one case the page is waiting for.
+printf '%s\n' "$LINE" | grep -qE "(internal|external)=(READY_FOR_BETA_TESTING|IN_BETA_TESTING|BETA_APPROVED)" || {
   echo "record: build $WANT_BUILD is VALID but no tester can install it yet. The line was:" >&2
   echo "        $LINE" >&2
   exit 1
