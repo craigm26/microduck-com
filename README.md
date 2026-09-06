@@ -54,7 +54,7 @@ bash scripts/record_evallog_shipped.sh ~/projects/duck-studio
 
 That is the only writer of `tools/evallog-shipped.json`. It runs the app's own EvalLog
 parity gate and requires exit 0, reads TestFlight through
-`ios-certificates/skills/appstore-submit/testflight.py` and requires build 58 VALID and
+`ios-certificates/skills/appstore-submit/testflight.py` and requires build 61 VALID and
 installable, then records the beta state App Store Connect actually returned, writes the
 receipt beside the whole status line, and puts the page into the shipped state. To go
 back, `bash scripts/set_evallog_state.sh not-shipped` and delete the receipt.

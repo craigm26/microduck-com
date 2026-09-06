@@ -7,8 +7,12 @@
 #      "exists", not "ran once": it is executed and its exit code is the
 #      evidence, because the sentence it licenses on the page is "it is tested
 #      rather than promised".
-#   2. Build 58 is on TestFlight and available to testers, read through the
-#      operator's existing App Store Connect helper. NEVER a hand-rolled ASC
+#   2. Build 61 is on TestFlight and available to testers, read through the
+#      operator's helper. 61, not 58: 58 introduced the screen and crashed at
+#      the end of every run it filed (Data.write with .atomic and
+#      .withoutOverwriting traps on device); 61 is the first build where a run
+#      actually lands on the shelf, which is the claim the page makes.
+#      NEVER a hand-rolled ASC
 #      call: this project has one JWT implementation and it lives in
 #      ios-certificates/skills/appstore-submit/.
 #
@@ -37,7 +41,7 @@ cd "$(dirname "$0")/.."
 
 DUCK_STUDIO="${1:-${DUCK_STUDIO:-$HOME/projects/duck-studio}}"
 BUNDLE="com.duckstudio.ios"
-WANT_BUILD=58
+WANT_BUILD=61
 TESTFLIGHT="$HOME/projects/ios-certificates/skills/appstore-submit/testflight.py"
 
 export ASC_KEY_ID="${ASC_KEY_ID:-68T2S87K39}"
