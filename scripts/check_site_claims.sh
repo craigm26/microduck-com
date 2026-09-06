@@ -25,7 +25,7 @@ test -f tools/kit-sentences.json || {
   exit 1
 }
 
-# The bundle is built in duck-sounds and never edited here. Its digest is
+# The bundle is built in duckbench and never edited here. Its digest is
 # checked against its own sidecar before the page's size claim is compared.
 ( cd public && sha256sum -c duckbench-bundle.zip.sha256 >/dev/null ) || {
   echo "check_site_claims: public/duckbench-bundle.zip does not match its sha256" >&2

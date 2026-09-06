@@ -11,7 +11,7 @@ page. You can read the whole site in a text editor, which is the point.
   is on the listing for app 6806299485, so the path, the filename and the trailing slash
   never change.
 - `public/duckbench-bundle.zip` (+ `.sha256`) - the downloadable duckbench bundle, built in
-  the `duck-sounds` repo; regenerate there, do not edit here.
+  the `duckbench` repo; regenerate there, do not edit here.
 - `public/_headers` - the response headers, including a CSP with `default-src 'none'` and
   no `script-src`, so no script can execute on this site at all.
 - `public/robots.txt`, `public/sitemap.xml` - the two URLs and a crawl pointer.

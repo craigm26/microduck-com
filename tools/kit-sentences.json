@@ -94,7 +94,7 @@
   },
   "urls": {
     "ball_dataset": "https://huggingface.co/datasets/craigm26/microduck-ball-challenge",
-    "harness": "https://github.com/craigm26/duck-sounds",
+    "harness": "https://github.com/craigm26/duckbench",
     "stairs_dataset": "https://huggingface.co/datasets/craigm26/microduck-stairs-challenge"
   }
 }
