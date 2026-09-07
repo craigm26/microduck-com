@@ -14,188 +14,76 @@
 <meta property="og:description" content="An independent iOS app for the Pollen Robotics Microduck. Read the trained networks, write motions, measure what they actually do in physics, and write an evaluation log somebody else can open. Free on TestFlight.">
 <!-- EVALSTATE:META:END -->
 <link rel="canonical" href="https://microduckstudio.com/">
-<meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0D1417" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://microduckstudio.com/">
 <meta property="og:title" content="Microduck Studio">
 <meta name="twitter:card" content="summary">
-<style>
-/* == SHARED TOKENS: mirror this block byte for byte in the other page == */
-:root{
-  /* The UA paints scrollbars and form controls from this, so without it the
-     dark theme gets light scrollbars on every overflow box below. */
-  color-scheme:light dark;
-  --bg:#F6F0E4; --card:#FDFAF3; --ink:#111A1D; --dim:#4A555A; --line:#DED3BE;
-  --accent:#AF540C; --accent-fill:#AF540C; --on-fill:#FFFFFF;
-  --brand:#3D7576; --focus:#3D7576; --good:#2E6B4F; --warn:#8E650F;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0D1417; --card:#151F23; --ink:#F6F0E4; --dim:#AFBDC1; --line:#2A383D;
-    --accent:#FF7A12; --accent-fill:#FF7A12; --on-fill:#111A1D;
-    --brand:#69C7C8; --focus:#69C7C8; --good:#5FC38F; --warn:#FFB51B;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0D1417; --card:#151F23; --ink:#F6F0E4; --dim:#AFBDC1; --line:#2A383D;
-  --accent:#FF7A12; --accent-fill:#FF7A12; --on-fill:#111A1D;
-  --brand:#69C7C8; --focus:#69C7C8; --good:#5FC38F; --warn:#FFB51B;
-}
-/* == END SHARED TOKENS == */
-
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-       font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
-       -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
-  .wrap{max-width:52rem;margin:0 auto;padding:0 1.25rem}
-  .skip{position:absolute;left:-9999px;top:0;background:var(--card);color:var(--ink);
-        padding:.6rem .9rem;border:1px solid var(--line);border-radius:8px;z-index:2}
-  .skip:focus{left:.75rem;top:.75rem}
-  header{padding:2.75rem 0 1.75rem}
-  h1{font-size:clamp(2rem,5.5vw,3rem);line-height:1.1;margin:0 0 .6rem;letter-spacing:-.02em}
-  .lede{font-size:clamp(1.08rem,3.2vw,1.2rem);color:var(--dim);max-width:34rem;margin:0 0 1.25rem}
-  h2{font-size:1.35rem;margin:3.25rem 0 .75rem;letter-spacing:-.01em;position:relative;
-     padding-top:.85rem}
-  h2::before{content:"";position:absolute;top:0;left:0;width:2rem;height:3px;
-             background:var(--brand);border-radius:2px}
-  h3{font-size:1rem;margin:1.5rem 0 .35rem}
-  p,li{margin:0 0 1rem;max-width:40rem}
-  li{margin:.35rem 0}
-  ol,ul{padding-left:1.2rem}
-  a{color:var(--accent);text-decoration:underline;text-underline-offset:.16em}
-  .standfirst{font-size:1.08rem;color:var(--ink);max-width:34rem}
-  .facts{list-style:none;padding:0;margin:0 0 1.5rem;max-width:34rem}
-  .facts li{position:relative;padding-left:1.1rem;font-size:.93rem;color:var(--dim);
-            margin:.3rem 0}
-  .facts li::before{content:"";position:absolute;left:0;top:.55em;width:.5rem;height:.5rem;
-                    background:var(--brand);border-radius:1px}
-  .ctas{display:flex;flex-direction:column;gap:.6rem;align-items:stretch;margin:0 0 .9rem;
-        max-width:34rem}
-  .cta{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
-       background:var(--accent-fill);color:var(--on-fill);text-decoration:none;
-       font-weight:600;min-height:44px;padding:.75rem 1.15rem;border-radius:9px;
-       border:1.5px solid var(--accent-fill);transition:opacity .15s ease}
-  .cta:hover{opacity:.9}
-  .cta.secondary{background:transparent;color:var(--accent);border-color:var(--accent)}
-  .hair{color:var(--dim);font-size:.88rem;margin-top:0;max-width:34rem}
-  nav.sections{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-               padding:.75rem 0;margin:1.5rem 0 0}
-  nav.sections ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.35rem 1rem}
-  nav.sections li{margin:0;font-size:.9rem}
-  .note{border-left:3px solid var(--warn);padding:.1rem 0 .1rem 1rem;color:var(--dim);
-        margin:1.5rem 0}
-  .note p{margin:0}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
-        padding:1.25rem 1.4rem;margin:1rem 0}
-  .grid{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
-        margin:1.25rem 0}
-  .grid .card{margin:0}
-  .grid h3{margin-top:0}
-  .grid p{font-size:.93rem;color:var(--dim);margin:0}
-  /* The two dataset cards print their whole URL as the link text. Nothing else
-     on the page has a run this long, and at 320 pixels it has to be breakable. */
-  .grid .card a{overflow-wrap:anywhere}
-  .quote{margin:1rem 0;padding:.1rem 0 .1rem 1rem;border-left:3px solid var(--brand)}
-  .quote p{margin:0;color:var(--dim)}
-  .spec{margin:1.25rem 0}
-  .spec dt{color:var(--brand);font-weight:600;margin-top:.9rem}
-  .spec dd{margin:.15rem 0 .9rem;max-width:40rem}
-  code,kbd{font:.88em ui-monospace,SFMono-Regular,Menlo,monospace;
-           background:color-mix(in srgb,var(--line) 55%,transparent);
-           padding:.12em .38em;border-radius:4px;word-break:break-all}
-  pre{background:var(--card);border:1px solid var(--line);border-radius:10px;
-      padding:1rem 1.1rem;overflow-x:auto;font-size:.86rem;line-height:1.55;
-      -webkit-text-size-adjust:100%}
-  pre code{background:none;padding:0;word-break:normal}
-  .meta{font-size:.88rem;color:var(--dim)}
-  /* The scroll lives on a wrapper, never on the table itself. A table whose
-     display is not `table` loses its row and column semantics in some
-     browsers, and the columns are the whole point of both of these. */
-  .scroller{overflow-x:auto;margin:1rem 0}
-  .scroller table{margin:0}
-  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.93rem}
-  caption{text-align:left;color:var(--dim);font-size:.88rem;padding-bottom:.4rem}
-  th,td{text-align:left;padding:.55rem .8rem .55rem 0;border-bottom:1px solid var(--line);
-        vertical-align:top}
-  th{font-weight:600;color:var(--dim);font-size:.82rem;text-transform:uppercase;
-     letter-spacing:.04em}
-  footer{margin:4rem 0 3rem;padding-top:1.5rem;border-top:1px solid var(--line);
-         color:var(--dim);font-size:.9rem}
-  a:focus-visible,.cta:focus-visible,pre:focus-visible,.scroller:focus-visible{
-    outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
-  @media (min-width: 26rem){
-    .ctas{flex-direction:row;align-items:center}
-    .cta{justify-content:flex-start}
-  }
-  @media (min-width: 40rem){ header{padding:4.5rem 0 2rem} }
-  @media (prefers-reduced-motion: reduce){
-    *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
-  }
-  @media print{
-    body{background:#fff;color:#000}
-    nav.sections,.ctas,.skip{display:none}
-    .card,pre{border:1px solid #999}
-  }
-</style>
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="wrap">
-
-<header>
-  <h1>Microduck Studio</h1>
-  <p class="lede">An independent iOS app for people who own a Microduck, or are
-  waiting for one. It reads the trained networks that drive the robot, lets you
-  write motions for it, and measures what those motions actually do in
-  physics.</p>
-
-  <ul class="facts">
-    <li>Free on TestFlight. No account, and nothing is collected.</li>
-    <li>iPhone and iPad, iOS 17 or later.</li>
-    <li>Independent. Not made by, endorsed by, or affiliated with Pollen Robotics.</li>
-    <li>Source on GitHub, Apache-2.0.</li>
-  </ul>
-
-  <div class="ctas">
-    <a class="cta" href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">Join the TestFlight beta</a>
-    <a class="cta secondary" href="https://github.com/craigm26/duck-studio" rel="noopener">Read the source</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#what" aria-current="page">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
   </div>
-  <p class="hair">TestFlight is Apple's own beta service and needs the free
-  TestFlight app. There is no App Store release yet, and no date to give you for
-  one.</p>
-
-  <nav class="sections" aria-label="Sections">
-    <ul>
-      <li><a href="#what">What it does</a></li>
-      <li><a href="#evaluations">Evaluations</a></li>
-      <li><a href="#bench">The bench</a></li>
-      <li><a href="#challenges">Challenges</a></li>
-      <li><a href="#reproduce">Reproduce</a></li>
-      <li><a href="#formats">File formats</a></li>
-      <li><a href="#links">Downloads</a></li>
-    </ul>
-  </nav>
 </header>
 
 <main id="main" tabindex="-1">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <p class="product-name">Microduck Studio for iPhone and iPad</p>
+    <h1 id="hero-title">Your Microduck.<br>Your next idea.</h1>
+    <p class="lede">Read its policies. Write a motion. Measure what it does in physics. An independent app for your Microduck adventures.</p>
+    <ul class="facts">
+      <li>Free. No account or tracking.</li>
+      <li>iOS 17 or later.</li>
+      <li>Independent of Pollen Robotics.</li>
+      <li>Open source, Apache-2.0.</li>
+    </ul>
+    <div class="ctas">
+      <a class="cta" href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">Join the TestFlight beta</a>
+      <a class="cta secondary" href="/docs/#get-started">Explore the docs</a>
+    </div>
+    <p class="hair">Requires Apple's free TestFlight app. There is no App Store release yet, and no date to give you for one.</p>
+  </section>
 
-<div class="note" id="hardware">
-  <p><strong>Nobody has the hardware yet.</strong> Pollen Robotics' first
-  Microduck deliveries are around Christmas 2026. Everything here runs against a
-  trained policy on your phone, a physics bench on your own network, or a
-  recorded motion. Nothing on this site is talking to a robot, and the app says
-  so on every screen where it matters.</p>
-</div>
+  <div class="wrap">
+    <section class="studio-feature" aria-labelledby="studio-title">
+      <figure class="studio-art">
+        <img src="/assets/studio-icon.png" width="1024" height="1024" alt="Microduck Studio's illustrated duck app icon">
+        <figcaption>Microduck Studio app artwork</figcaption>
+      </figure>
+      <div class="studio-feature-copy">
+        <h2 id="studio-title">Make a move.<br>See what happens.</h2>
+        <p>A place to explore the little robot you own, or are waiting for. Look inside a trained policy, build a motion, then put it through a physics bench.</p>
+        <p>Start on your phone. Bring your own bench when you are ready to measure.</p>
+        <a class="text-link" href="/docs/#get-started">Get to know Studio <span aria-hidden="true">›</span></a>
+      </div>
+    </section>
 
-<h2 id="what">What it does</h2>
-
-<div class="grid">
+    <section class="section" aria-labelledby="what">
+      <div class="section-heading">
+        <h2 id="what">Room to experiment.</h2>
+        <p>From the network that drives a duck to the motion you make your own. Here is what you can explore in Studio.</p>
+      </div>
+<div class="feature-grid">
   <div class="card">
     <h3>Policies</h3>
     <p>Load a trained <code>.onnx</code>, see what is inside it, and check
-    whether it is one of Pollen's. Blend two into a third and find out whether
-    the result still does anything.</p>
+    whether it is one of Pollen's. Blend two into a third, or search one's
+    weights on a bench, keep what comes out, and publish it to Hugging Face
+    where every other phone's Community list can find it.</p>
   </div>
   <div class="card">
     <h3>Motions</h3>
@@ -207,7 +95,8 @@
     <h3>The bench</h3>
     <p>A phone has no physics engine. Point the app at a machine that does and
     it will run a policy or a motion properly, then tell you how often it worked
-    rather than whether it looked good once.</p>
+    rather than whether it looked good once. Put a network of your own on it
+    under its own name and steer by it.</p>
   </div>
   <div class="card">
     <h3>Challenges</h3>
@@ -229,458 +118,70 @@
   </div>
 <!-- EVALSTATE:CARD:END -->
 </div>
-
-<h2 id="evaluations">Evaluations</h2>
-
-<p class="standfirst">One good run is an anecdote. An evaluation is a number
-somebody else can check.</p>
-
-<!-- EVALSTATE:SECTION:BEGIN -->
-<div id="evallog-shipped">
-
-<p>Microduck Studio takes its evaluation vocabulary from
-<a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
-an open source framework for evaluating physical AI. Its one big idea is that a
-robotics evaluation has two swappable inputs where a language model evaluation
-has one. A <strong>policy</strong> turns an observation into actions. An
-<strong>embodiment</strong> is the body and the world that executes them. A
-<strong>task</strong> is defined against neither: it is a set of scenes, a set of
-scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
-
-<p>In the app that becomes a setup screen with four presets, and a preset is a
-whole plan rather than a starting point. Picking one fills the scenes, what
-varies between the epochs of a scene, the rule for reducing them, the horizon
-and the scorers. Two of the four walk a network under a command schedule from
-drop heights it was never tuned on. The other two run one episode per published
-cell of a challenge grid, scored by the challenge harness rather than by the
-app.</p>
-
-<p>What is left to pick is the thing being evaluated and where it runs. The
-thing being evaluated is a network from your library, named by digest, or a
-published challenge entrant. Where it runs is an embodiment: a bench on your
-network, named and carrying its world's digest, or this phone's own bench. A
-real Microduck is on that list and cannot be chosen, because nothing can drive
-one yet.</p>
-
-<p>There is no epoch count, no reducer picker and no seed field on that screen.
-A control that could disagree with the preset would be a second opinion about
-what the preset means, and the four presets are the whole argument.</p>
-
-<p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
-carries the whole specification beside the results, so a number can always be
-traced back to the run that produced it. It records the task, the policy, the
-embodiment and its world, the horizon, when it started and finished, the metric
-for every scorer, and every scene's per epoch scores as well as the reduced one.
-Trials that errored are recorded and never scored, and a run where every trial
-errored is a failure rather than a zero.</p>
-
-<p>What it does not record is a seed, and the file says so in its own words:</p>
-
-<blockquote class="quote"><p>No seed was recorded, because no route on this
-bench reads one and a seed here would name a control nothing used. What varies
-between the epochs of a scene is the height the duck is dropped from, and every
-height is listed.</p></blockquote>
-
-<p>One of inspect-robots' reducers is missing here for the same kind of reason,
-and the app says which and why:</p>
-
-<blockquote class="quote"><p>pass at k is not offered. It estimates how often a
-success would appear in k independent draws, and these epochs are not draws.
-They are a fixed list of drop heights the bench walks in order, so the
-estimator's assumption is false here and its number would look like a
-probability without being one.</p></blockquote>
-
-<dl class="spec">
-  <dt>Policy</dt>
-  <dd>Observation in, actions out. Named by digest, not by filename, because
-  anybody can call a file <code>alpha_walking.onnx</code>.</dd>
-
-  <dt>Embodiment</dt>
-  <dd>The body and the world. A bench on your network, or this phone's own
-  bench. A real Microduck is named and unavailable: nothing can drive one
-  yet.</dd>
-
-  <dt>Task</dt>
-  <dd>Scenes, scorers, one horizon, and epochs with a reducer: mean, median,
-  max, min or mode.</dd>
-
-  <dt>Scorer</dt>
-  <dd>A pure reader of the recorded trajectory. It cannot change what happened,
-  only report on it.</dd>
-
-  <dt>EvalLog</dt>
-  <dd>Version 1, strict JSON, sorted keys, non finite floats written as null.
-  The filename is the task slug and a short hash.</dd>
-</dl>
-
-<p>What the app does not do is run inspect-robots. An iPhone cannot run Python,
-and it has no physics engine either. The rollouts happen on a bench, the scoring
-reads the trajectory the bench recorded, and the file is written to
-inspect-robots' schema rather than by inspect-robots' code. That distinction
-matters enough that it is tested rather than promised: a check in the app's
-repository writes a log, reads it back with the real library, and fails if their
-reader refuses it.</p>
-
-<p>The field that would carry inspect-robots' version instead carries a sentence
-naming Microduck Studio and saying that no inspect-robots ran. Their own viewer
-prints that field in its header, so a stranger who renders one of these logs is
-told, in their own report, what wrote it.</p>
-
-<p>An evaluation you have run can be saved, exported as its JSON, rendered as a
-self contained report the app draws itself, sent through the share sheet, or
-published to a Hugging Face dataset under your own account. A log written
-somewhere else can be opened on the phone. On a computer,
-<code>inspect-robots view LOG.json</code> renders the same file as a standalone
-HTML report, and <code>read_eval_log</code> will refuse it outright if the schema
-is wrong, which is the point of writing the real one.</p>
-
-<p>An EvalLog is a record and not a submission. The two challenge screens are
-the only path onto either leaderboard, and a log of a challenge run does not put
-anything on one.</p>
-
+<div class="note" id="hardware">
+  <p><strong>Nobody has the hardware yet.</strong> Pollen Robotics' first
+  Microduck deliveries are around Christmas 2026. Everything here runs against a
+  trained policy on your phone, a physics bench on your own network, or a
+  recorded motion. Nothing on this site is talking to a robot. The app can find a
+  duck over Bluetooth and ask what it is, and with a small bridge running on the
+  robot's own computer it can put a policy file on that computer's disk. It cannot
+  drive one, and it says so on every screen where it matters.</p>
 </div>
-<!-- EVALSTATE:SECTION:END -->
+    </section>
 
-<p class="meta">inspect-robots:
-<a href="https://github.com/robocurve/inspect-robots" rel="noopener">the repository</a> &middot;
-<a href="https://docs.inspectrobots.org/" rel="noopener">the documentation</a>. MIT
-licensed. This project adopts its log format and vocabulary and is not made by,
-endorsed by, or affiliated with it.</p>
+    <section class="section" aria-labelledby="docs-title">
+      <div class="docs-hub">
+        <div>
+          <h2 id="docs-title">A little guidance.<br>A lot to explore.</h2>
+          <p class="intro">Start with your first import, connect a physics bench, or go deeper into the files and results.</p>
+          <a class="cta" href="/docs/">Read the documentation</a>
+        </div>
+        <nav class="guide-links" aria-label="Documentation guides">
+          <a href="/docs/#get-started"><strong>Getting started</strong><span>Install Studio and take a first look.</span></a>
+          <a href="/docs/#policies"><strong>Policies and motions</strong><span>Inspect a network. Author a move.</span></a>
+          <a id="bench" href="/docs/#bench"><strong>The physics bench</strong><span>Connect, run and measure.</span></a>
+          <a id="evaluations" href="/docs/#evaluations"><strong>Evaluations</strong><span>Understand presets and log files.</span></a>
+          <a id="challenges" href="/docs/#challenges"><strong>Open challenges</strong><span>Explore the stairs and ball datasets.</span></a>
+          <a id="formats" href="/docs/#formats"><strong>File formats</strong><span>Know what each file contains.</span></a>
+          <a id="reproduce" href="/docs/#reproduce"><strong>Reproduce a result</strong><span>Follow the published procedure.</span></a>
+          <a id="honest" href="/docs/#honest"><strong>What the numbers mean</strong><span>Read the limits of simulation.</span></a>
+        </nav>
+      </div>
+    </section>
 
-<h2 id="bench">The bench</h2>
-
-<p>This is the piece that turns a preview into a measurement. It is a small Node
-program that runs MuJoCo on a computer you already own, a Mac, a PC or a
-Raspberry Pi, and the app talks to it over your own network.</p>
-
-<p>
-  <a class="cta" href="/duckbench-bundle.zip">Download the bench, 11.7&nbsp;MB</a>
-  <span class="meta"><a href="/duckbench-bundle.zip.sha256" aria-label="sha256 checksum for the bench bundle">sha256</a></span>
-</p>
-
-<p class="hair">It is a desktop download. It runs on a Mac, a PC or a Raspberry
-Pi, and it does not run on the phone.</p>
-
-<h3>Starting it</h3>
-<pre tabindex="0" role="region" aria-label="Starting the bench, as a shell command"><code># Windows: right-click start.ps1, then Run with PowerShell
-# macOS and Linux:
-./start.sh</code></pre>
-
-<p class="hair">The first start installs MuJoCo and onnxruntime and takes a
-couple of minutes. Every start after that is seconds. It prints the address to
-type into the app, or to curl.</p>
-
-<div class="note">
-  <p><strong>Use the Tailscale address it prints, not a Wi-Fi one.</strong> A
-  192.168 address works right up until your phone prefers cellular or you leave
-  the room, and then it fails looking exactly like a bench that has gone
-  down.</p>
-</div>
-
-<h3>What travels with it</h3>
-<p>The bundle carries <code>scene.mjb</code>, the physics world every
-measurement is made against, and its digest. A number measured against a
-different world is not comparable to one measured here, which is why the world
-ships with the code rather than just its filename.</p>
-
-<p><code>3f8c9ab9b409ba74c73c30179d5f7c12b025f631693f9eec78d80dca242547be</code></p>
-
-<p class="hair">That is the plant every number on this page was produced
-against. It is printed in full rather than shortened, because a shortened digest
-is a digest nobody can compare.</p>
-
-<h3>The bench inside the phone</h3>
-<p>The app also carries the bench, served to itself over HTTP on 127.0.0.1, so
-that it has one client for one protocol rather than two. Its speed on a phone
-has never been measured. The figure that gets quoted for the core came off a
-desktop browser on a Raspberry Pi 5, which is not an iPhone, so the app reports
-the tick its own bench measures wherever it actually runs rather than quoting
-somebody else's machine.</p>
-
-<p>You can drive the same core in Safari without the app. The
-<a href="https://microduck-sim.pages.dev/phonebench/" rel="noopener">phone bench probe</a>
-tells you what your own phone can and cannot do with it. It is a probe and not a
-bench: it is there so you find out before the app asks you to trust a
-number.</p>
-
-<h2 id="challenges">Challenges</h2>
-
-<p class="standfirst">Two published challenges. Both open, both unmet, both
-scored against the same compiled world by the harness in
-<a href="https://github.com/craigm26/duckbench" rel="noopener">duckbench</a>.</p>
-
-<h3>Stairs</h3>
-
-<p>Get the duck from the floor onto a step in simulation and leave it standing
-there, upright on the tread with both feet resting on it, fifty ticks after the
-move ends.</p>
-
-<p>The criterion, as <code>sim/climb_score.mjs</code> exports it:</p>
-
-<pre tabindex="0" role="region" aria-label="The stairs criterion, as the harness exports it"><code>honest: at the scored instant the trunk is upright, past the riser at
-x &gt; 120 mm, more than 95 mm above the tread, with at least two feet resting
-on a tread (past the riser, within 5 mm below to 45 mm above it, and within
-3 mm of a step), and the duck never left the 340 mm-wide flight at any tick
-of the episode. stable: honest, and upright for at least 45 of the 50 tail
-ticks.</code></pre>
-
-<p>The bar is 7 of the 9 core cells, cleared and still standing. Nothing has met
-it: the record is 5 of 9 at a 60 mm rise, and round six measured the trunk's
-peak height as the reason 7 was never reachable at this scale.</p>
-
-<p>A submission is scored over fourteen cells of which nine are the core every
-published number is quoted against. Nineteen rows are published: sixteen
-entries, two of them reference oracles, and three reference controls, with the
-intent files they name, byte for byte as the audit ran them. The negative result
-is published rather than hidden.</p>
-
-<h3>Ball</h3>
-
-<p>A ball is put down in front of the duck, between 450 mm and 1.2 m away and up
-to 40 degrees off its heading, and the duck has to reach it and move it in
-simulation without falling over.</p>
-
-<p>The criterion, restated from <code>sim/chase_score.mjs</code>: chased means
-the duck touched the ball, meaning any duck geometry came within 3 mm of it at
-any tick, and the ball finished at least 100 mm further along the duck's initial
-heading than it started, and the duck was still upright at the end of the
-episode. Stable means chased, and upright for at least 45 of the 50 tail
-ticks.</p>
-
-<p>Four control rows and no entries. Standing still and both of Pollen's kick
-policies chase nothing at all; walking straight ahead takes 4 of the 9 core
-cells and 1 of the 5 extended, and every cell the controls miss needs steering,
-which nothing bundled does.</p>
-
-<p>The nine reward terms are the reward these policies were trained on, and they
-are reported so an edit can be watched moving them. They are not the verdict: a
-shaped sum of nine weighted terms is not a thing a person can hold in their
-head, and a leaderboard sorted on it would reward a duck that stands beautifully
-still.</p>
-
-<p>One caveat this challenge carries. The kick config was trained against a
-70 mm, 15 g ball. This plant's ball is 100 mm and 30 g, so a speed in metres per
-second measured here is not comparable with anything Pollen published.</p>
-
-<p>Both grids, both entrant corpora and every published score live in the
-datasets below. The app scores an entrant on the published grid, through the
-harness's own episode function, against the same compiled world, and it says so
-beside every number, because a score measured somewhere else is not a score on
-this leaderboard.</p>
-
-<div class="grid">
-  <div class="card">
-    <h3>Stairs challenge dataset</h3>
-    <p><a href="https://huggingface.co/datasets/craigm26/microduck-stairs-challenge" rel="noopener">huggingface.co/datasets/craigm26/microduck-stairs-challenge</a></p>
+    <section class="section download-section" aria-labelledby="links">
+      <div>
+        <h2 id="links">Ready when you are.</h2>
+        <p>Get the app, set up your bench, or read the code. Everything is public.</p>
+        <a class="text-link" href="/docs/#links">All downloads and resources <span aria-hidden="true">›</span></a>
+      </div>
+      <ul class="download-links">
+        <li><a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">Get the TestFlight beta <span>iPhone and iPad</span></a></li>
+        <li><a href="/duckbench-bundle.zip">Download the bench <span>Desktop bundle</span></a></li>
+        <li><a href="https://github.com/craigm26/duck-studio" rel="noopener">Explore the source <span>GitHub</span></a></li>
+        <li><a href="https://pollen-robotics.com/microduck/" rel="noopener">Meet the Microduck robot <span>By Pollen Robotics</span></a></li>
+      </ul>
+    </section>
   </div>
-  <div class="card">
-    <h3>Ball challenge dataset</h3>
-    <p><a href="https://huggingface.co/datasets/craigm26/microduck-ball-challenge" rel="noopener">huggingface.co/datasets/craigm26/microduck-ball-challenge</a></p>
-  </div>
-</div>
-
-<h3>Submit a result</h3>
-
-<p>A submission is not a number. The file holds the move, all fourteen per-cell
-answers unrounded, the bench's plant digest and the date. It is written to this
-device and nothing is sent until you pick where it goes.</p>
-
-<p>Where it goes is a
-<a href="https://github.com/craigm26/duckbench/issues/new" rel="noopener">GitHub issue on duckbench</a>
-with the file attached. That is the submission a maintainer sees. Publishing the
-same file to a Hugging Face dataset under your own account, under CC BY 4.0, is
-your archive and submits nothing to anyone.</p>
-
-<h2 id="reproduce">Reproduce a published number</h2>
-
-<p class="standfirst">Five steps, and no app required.</p>
-
-<ol>
-  <li><strong>Get the bench and check it.</strong> Download the bundle above, run
-  <code>shasum -a 256 duckbench-bundle.zip</code>, and compare the answer with
-  the digest linked beside the download.</li>
-  <li><strong>Start it.</strong> <code>./start.sh</code> on macOS or Linux. The
-  first start installs MuJoCo and onnxruntime.</li>
-  <li><strong>Check the plant.</strong> <code>curl -s http://ADDRESS/health</code>
-  and read the plant name and digest out of the answer. If the digest is not the
-  one printed above, stop. Whatever you measure will not be comparable with
-  anything on this page, and the honest thing to do with an incomparable number
-  is not to publish it.</li>
-  <li><strong>Get an entrant.</strong> The published intents live in the two
-  datasets, and the same files with the same digests are in
-  <code>duckbench/challenge/intents</code>.</li>
-  <li><strong>Score it, and compare the right column.</strong> Post the entrant
-  to <code>/climb</code> or <code>/chase</code> one cell at a time, taking the
-  cell list from <code>/climb/grid</code> or <code>/chase/grid</code>, or run the
-  harness directly. The stairs table ranks on cleared core cells and prints the
-  stable count beside it; the ball table ranks on chased and prints stable beside
-  it. Quoting one without the other is quoting a number the table does not rank
-  by.</li>
-</ol>
-
-<p class="hair">The app calls sixteen bench routes and no others, and the bench
-inside the phone answers exactly that set and returns 404 for anything else, so
-a route that exists on one bench and not the other cannot hide.</p>
-
-<h2 id="formats">File formats</h2>
-
-<p>The app reads back every format it writes. That was not always true and
-fixing it is why these are documented.</p>
-
-<div class="scroller" role="region" aria-label="File formats" tabindex="0">
-<table>
-  <caption>Every format the app writes and reads back</caption>
-  <tr><th scope="col">Extension</th><th scope="col">What it holds</th></tr>
-  <tr>
-    <td><code>.duckmove</code><br><span class="meta">duck-move/2</span></td>
-    <td>A motion: keyframe times and one angle per joint. Poses and times
-    interpolated, with no physics run.</td>
-  </tr>
-  <tr>
-    <td><code>.duckplan</code><br><span class="meta">duck-plan/1</span></td>
-    <td>A fetch plan: the measured object and what was asked for. The steps are
-    derived when it is read, so a plan cannot go stale and disagree with the app
-    that opens it.</td>
-  </tr>
-  <tr>
-    <td><code>.duckintent</code><br><span class="meta">duck-intent/2</span></td>
-    <td>A recording of a policy running in physics, with the world it was
-    recorded in named inside it.</td>
-  </tr>
-  <tr>
-    <td><code>.onnx</code></td>
-    <td>A trained policy. The app checks its input and output widths against the
-    robot the app knows about, and tells you exactly why it refuses one that
-    does not match.</td>
-  </tr>
-<!-- EVALSTATE:FORMATROW:BEGIN -->
-  <tr id="format-evallog">
-    <td><code>.json</code><br><span class="meta">EvalLog version 1</span></td>
-    <td>A formal evaluation: the task, the policy, the embodiment and its world
-    digest, the horizon, every scorer's metric, and every scene's per epoch
-    scores. inspect-robots' own schema, so <code>read_eval_log</code> and
-    <code>inspect-robots view</code> open it unchanged.</td>
-  </tr>
-<!-- EVALSTATE:FORMATROW:END -->
-</table>
-</div>
-
-<h2 id="honest">What is honest about this</h2>
-
-<p>Two claims are easy to make about a robot app and neither one is made here,
-and there are four more things worth saying out loud.</p>
-
-<p><strong>A preview is not a result.</strong> A preview on a phone is what you
-asked for, not what the robot would do. The bench was asked, and the four
-authored stair motions in this app get up their flight 0 times in 16. Nothing on
-a phone screen would ever have told you that.</p>
-
-<p><strong>A success rate is not an answer.</strong> The bench's criterion is
-"ends standing", which a duck standing perfectly still passes every time. So the
-distance travelled is shown beside the rate, always, and a leaderboard is never
-sorted on a shaped sum of reward terms.</p>
-
-<p><strong>Nothing here has run on hardware.</strong> Every number on this page
-and in the app came out of simulation, in a named world, with that world's
-digest attached to it. When a real Microduck arrives, none of these numbers
-transfers for free.</p>
-
-<p><strong>The bench inside the phone has never been speed measured on a
-phone.</strong> The figure that gets quoted for the core was measured in a
-desktop browser on a Raspberry Pi 5. That is not an iPhone, and the app does not
-pretend otherwise: it reports the tick its own bench measures where it actually
-runs.</p>
-
-<p><strong>The ball challenge's numbers are about this ball.</strong> The kick
-config was trained against a 70 mm, 15 g ball and this plant's ball is 100 mm
-and 30 g, so a speed measured here is not comparable with anything Pollen
-published.</p>
-
-<p><strong>This site borrows a framework's vocabulary, one way.</strong>
-Microduck Studio adopts inspect-robots' evaluation vocabulary and log format. It
-is not made by, endorsed by, or affiliated with inspect-robots, and no
-inspect-robots code runs in the app.</p>
-
-<h2 id="links">Downloads and links</h2>
-
-<p>Everything is public. Our four repositories, the two challenge datasets, the
-bench bundle, the phone bench probe, and the two projects this one stands
-on.</p>
-
-<h3>Get the app</h3>
-<ul>
-  <li><a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">TestFlight beta</a>
-  Free. iPhone and iPad, iOS 17 or later. Needs Apple's TestFlight app.</li>
-  <li>App Store: not yet, and there is no date.</li>
-</ul>
-
-<h3>The code</h3>
-<ul>
-  <li><a href="https://github.com/craigm26/duck-studio" rel="noopener">duck-studio</a>
-  The app itself, and StudioKit, the package that holds everything it computes.
-  Apache-2.0.</li>
-  <li><a href="https://github.com/craigm26/duckkit" rel="noopener">duckkit</a>
-  The Microduck as pure Swift: its joints, their travel, its kinematics. The app
-  pins a released tag of it.</li>
-  <li><a href="https://github.com/craigm26/duckbench" rel="noopener">duckbench</a>
-  The bench and the challenge harness. The physics, and the scoring functions the
-  challenge numbers came out of.</li>
-  <li><a href="https://github.com/craigm26/microduck-com" rel="noopener">microduck-com</a>
-  This site. Two HTML files and no build step, so you can read the whole
-  thing.</li>
-</ul>
-
-<h3>The data</h3>
-<ul>
-  <li><a href="https://huggingface.co/datasets/craigm26/microduck-stairs-challenge" rel="noopener">Stairs challenge</a>
-  The grid, the entrants, the published scores, and the round that measured why
-  the bar is out of reach.</li>
-  <li><a href="https://huggingface.co/datasets/craigm26/microduck-ball-challenge" rel="noopener">Ball challenge</a>
-  The grid, the entrants and the published scores.</li>
-  <li><a href="https://github.com/craigm26/duckbench/issues/new" rel="noopener">Submit a result</a>
-  An issue on duckbench with the submission file attached. That is the path a
-  maintainer sees.</li>
-</ul>
-
-<h3>The tools</h3>
-<ul>
-  <li><a href="/duckbench-bundle.zip">The bench bundle</a> 11.7&nbsp;MB, with its
-  <a href="/duckbench-bundle.zip.sha256" aria-label="sha256 checksum for the bench bundle, in the links section">sha256</a>.
-  MuJoCo, onnxruntime, and the compiled world every number is measured against. A
-  desktop download; it does not run on the phone.</li>
-  <li><a href="https://microduck-sim.pages.dev/phonebench/" rel="noopener">Phone bench probe</a>
-  The same core in Safari, so you can see what your own phone manages before you
-  trust a number from it.</li>
-  <li><a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>
-  and its <a href="https://docs.inspectrobots.org/" rel="noopener">documentation</a>
-  The evaluation framework whose vocabulary and log format the app adopts. MIT
-  licensed, and not ours.</li>
-</ul>
-
-<h3>Elsewhere</h3>
-<ul>
-  <li><a href="https://github.com/pollen-robotics/microduck" rel="noopener">Pollen Robotics' Microduck</a>
-  The robot itself, from the people who make it. This app is not theirs.</li>
-  <li><a href="/privacy/">Privacy</a> No accounts, no analytics, no tracking, and
-  the reason this page loads nothing from anywhere else.</li>
-</ul>
-
 </main>
 
-<footer>
-  <p><strong>Independent.</strong> Microduck Studio is an independent project. It
-  is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is
-  their robot; this is an independent owner's app for it.</p>
-  <p>Policies released by Pollen are labelled as theirs throughout the app.
-  Microduck Studio, duckkit and the bench are Apache-2.0. inspect-robots is MIT
-  licensed, and this project adopts its log format and vocabulary without being
-  part of it.</p>
-  <p><a href="/privacy/">Privacy</a> &middot;
-  <a href="https://github.com/craigm26/microduck-com" rel="noopener">Source for this site</a> &middot;
-  Apache-2.0 &middot;
-  <a href="mailto:craigm26@gmail.com">craigm26@gmail.com</a></p>
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <p>Policies released by Pollen are labelled as theirs throughout the app. Microduck Studio, duckkit and the bench are Apache-2.0. inspect-robots is MIT licensed, and this project adopts its log format and vocabulary without being part of it.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/docs/">Documentation</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="mailto:craigm26@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </div>
 </footer>
-
-</div>
 </body>
 </html>

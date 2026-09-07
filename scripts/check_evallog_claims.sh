@@ -36,8 +36,13 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, "scripts")
+from site_helpers import read_pages
+
 fail = []
-page = pathlib.Path("public/index.html").read_text(encoding="utf-8")
+pages = read_pages()
+page = "\n".join(pages.values())
+home = pages["public/index.html"]
 receipt_path = pathlib.Path("tools/evallog-shipped.json")
 
 shipped = page.count('id="evallog-shipped"')
@@ -67,7 +72,7 @@ for marker, expected in want.items():
 flat_page = re.sub(r"\s+", " ", page)
 # The head. The two description metas are spliced by state like the body copy,
 # and the word this gate is here to police is "evaluat".
-head = page[page.find("<head"):page.find("</head>")]
+head = home[home.find("<head"):home.find("</head>")]
 if head.count("<!-- EVALSTATE:META:BEGIN -->") != 1 or \
         head.count("<!-- EVALSTATE:META:END -->") != 1:
     fail.append("the head does not carry exactly one EVALSTATE:META marker pair, "
@@ -89,6 +94,27 @@ if not evaluating and is_shipped and len(descriptions) == 2:
     fail.append("the page is in the shipped state and neither description meta "
                 "mentions evaluating, so the two states of the head are the same "
                 "text and the split checks nothing")
+
+# No additional public page may advertise evaluation before the receipt permits it.
+for name, markup in pages.items():
+    if name == "public/index.html":
+        continue
+    other_head = markup[markup.find("<head"):markup.find("</head>")]
+    for description in re.findall(r'<meta\b[^>]*content="([^"]*)"', other_head):
+        if "evaluat" in description.lower() and not is_shipped:
+            fail.append(f"{name} has a meta that promises evaluating in the not-shipped state")
+
+# The four regions have one fixed home, even though their claims span the site.
+for marker, expected_page in {
+    "META": "public/index.html", "CARD": "public/index.html",
+    "SECTION": "public/docs/index.html", "FORMATROW": "public/docs/index.html",
+}.items():
+    for name, markup in pages.items():
+        expected = 1 if name == expected_page else 0
+        for edge in ("BEGIN", "END"):
+            token = f"<!-- EVALSTATE:{marker}:{edge} -->"
+            if markup.count(token) != expected:
+                fail.append(f"{name} must carry {expected} {marker}:{edge} markers")
 
 TESTED_SENTENCE = "That distinction matters enough that it is tested"
 claims_tested = TESTED_SENTENCE in flat_page

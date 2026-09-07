@@ -17,7 +17,7 @@
 # leave two numbers on a public page with nothing behind them, which is the one
 # rule this site has about numbers.
 #
-# BOTH PAGES ARE READ, NOT ONE. The independence paragraph is quoted from
+# EVERY PUBLIC PAGE IS READ. The independence paragraph is quoted from
 # StudioKit on the front page AND on the privacy page, and the privacy page is
 # the URL the App Store listing points at. A gate that pinned it on one of them
 # would let the other drift, on the copy that matters most.
@@ -38,20 +38,14 @@ test -f tools/kit-sentences.json || {
 }
 
 python3 - <<'PY'
-import html, json, pathlib, re, sys
+import json, pathlib, re, sys
+sys.path.insert(0, "scripts")
+from site_helpers import read_pages, flatten
 
-pages = {p: pathlib.Path(p).read_text(encoding="utf-8")
-         for p in ("public/index.html", "public/privacy/index.html")}
-page = pages["public/index.html"]
-# The stylesheet is not something a person reads, so it is stripped before
-# the page is flattened. Otherwise a CSS length can satisfy a copy check.
-def flatten(markup: str) -> str:
-    body = re.sub(r"<style\b.*?</style>", " ", markup, flags=re.DOTALL)
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
-
-
-flat = flatten(page)
+pages = read_pages()
+page = "\n".join(pages.values())
 flat_pages = {name: flatten(text) for name, text in pages.items()}
+flat = " ".join(flat_pages.values())
 data = json.loads(pathlib.Path("tools/kit-sentences.json").read_text(encoding="utf-8"))
 
 
@@ -62,15 +56,15 @@ def norm(value: str) -> str:
 quoted = data["quoted"]
 missing = [k for k, v in quoted.items() if norm(v) not in flat]
 if missing:
-    print("check_site_sentences: not found verbatim on the page: "
+    print("check_site_sentences: not found verbatim on the site: "
           + ", ".join(sorted(missing)), file=sys.stderr)
     sys.exit(1)
 
-# The independence paragraph is on both pages word for word, so it is held on
-# both. Naming the page in the failure is the whole point: the two files drift
+# The independence paragraph is on every page word for word, so it is held
+# on every page. Naming the page in the failure is the whole point: the two files drift
 # one at a time.
-BOTH_PAGES = ("independence",)
-for key in BOTH_PAGES:
+ALL_PAGES = ("independence",)
+for key in ALL_PAGES:
     for name, text in flat_pages.items():
         if norm(quoted[key]) not in text:
             print(f"check_site_sentences: {name} does not carry {key} verbatim",

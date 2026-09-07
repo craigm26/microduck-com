@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Both HTML pages parse and every element closes; the sitemap is valid XML.
+"""Every public HTML page closes its elements; the sitemap lists valid local pages.
 
 WHY NOT JUST xmllint. It is not installed on this machine and it is not worth a
 package install to run before a deploy, so the fallback the plan named is the
@@ -18,6 +18,7 @@ import pathlib
 import sys
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
+from site_helpers import read_pages, local_target
 
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
         "meta", "param", "source", "track", "wbr"}
@@ -33,8 +34,14 @@ class Stack(HTMLParser):
         self.name = name
         self.open: list[tuple[str, int]] = []
         self.problems: list[str] = []
+        self.ids: set[str] = set()
 
     def handle_starttag(self, tag: str, attrs) -> None:
+        node_id = dict(attrs).get("id")
+        if node_id in self.ids:
+            self.problems.append(f"{self.name}:{self.getpos()[0]}: duplicate id {node_id}")
+        if node_id:
+            self.ids.add(node_id)
         if tag not in VOID:
             self.open.append((tag, self.getpos()[0]))
 
@@ -63,7 +70,8 @@ class Stack(HTMLParser):
 
 def main() -> int:
     problems: list[str] = []
-    for name in ("public/index.html", "public/privacy/index.html"):
+    pages = read_pages()
+    for name in pages:
         path = pathlib.Path(name)
         if not path.is_file():
             problems.append(f"{name} is missing")
@@ -78,15 +86,26 @@ def main() -> int:
         problems.append("public/sitemap.xml is missing")
     else:
         try:
-            ET.parse(sitemap)
-        except ET.ParseError as why:
+            root = ET.parse(sitemap).getroot()
+            listed = set()
+            for location in root.findall("{*}url/{*}loc"):
+                target, _ = local_target(str(sitemap), location.text or "")
+                if target is None or not target.is_file():
+                    problems.append(f"public/sitemap.xml names a missing local page: {location.text}")
+                else:
+                    listed.add(target)
+            missing = {pathlib.Path(name).resolve() for name in pages} - listed
+            if missing:
+                problems.append("public/sitemap.xml omits " + ", ".join(str(p) for p in sorted(missing)))
+        except (ET.ParseError, ValueError) as why:
             problems.append(f"public/sitemap.xml is not valid XML: {why}")
 
     if problems:
         for problem in problems:
             print("check_wellformed: " + problem, file=sys.stderr)
         return 1
-    print("check_wellformed: both pages close every element, the sitemap parses")
+    print(f"check_wellformed: {len(pages)} pages close every element with unique ids, "
+          "and the sitemap covers every page")
     return 0
 
 

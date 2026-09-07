@@ -75,10 +75,10 @@ step() { printf '\n== %s\n' "$1"; }
 step "1/6 extract the pinned StudioKit values"
 python3 scripts/extract_kit_sentences.py "$DUCK_STUDIO"
 
-step "2/6 every pinned sentence is on the page"
+step "2/6 every pinned sentence is on the site"
 bash scripts/check_site_sentences.sh
 
-step "3/6 dashes, third parties, the bundle, the shared tokens"
+step "3/6 dashes, third parties, the bundle, the shared stylesheet"
 bash scripts/check_site_claims.sh
 
 step "4/6 the Evaluations copy matches what a tester can open"
@@ -87,9 +87,10 @@ bash scripts/check_evallog_claims.sh
 step "5/6 every link resolves"
 bash scripts/check_links.sh
 
-step "6/6 both pages are well formed"
+step "6/6 every page is well formed"
 if command -v xmllint >/dev/null 2>&1; then
-  xmllint --html --noout public/index.html public/privacy/index.html
+  mapfile -d '' html_pages < <(find public -type f -name '*.html' -print0)
+  xmllint --html --noout "${html_pages[@]}"
   echo "check_wellformed: xmllint is installed and it is quiet"
 fi
 python3 scripts/check_wellformed.py

@@ -33,22 +33,16 @@ test -f tools/kit-sentences.json || {
 }
 
 python3 - <<'PY'
-import html, json, pathlib, re, sys
+import json, pathlib, re, sys
+sys.path.insert(0, "scripts")
+from site_helpers import read_pages, flatten, Markup, section_markup, css_references
 
 fail = []
 data = json.loads(pathlib.Path("tools/kit-sentences.json").read_text(encoding="utf-8"))
-pages = {p: pathlib.Path(p).read_text(encoding="utf-8")
-         for p in ("public/index.html", "public/privacy/index.html")}
-index = pages["public/index.html"]
-# The stylesheet is not something a person reads, so it is stripped before
-# the page is flattened. Otherwise a CSS length can satisfy a copy check.
-def flatten(markup: str) -> str:
-    body = re.sub(r"<style\b.*?</style>", " ", markup, flags=re.DOTALL)
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
-
-
+pages = read_pages()
+index = "\n".join(pages.values())
 flat = {p: flatten(t) for p, t in pages.items()}
-flat_index = flat["public/index.html"]
+flat_index = " ".join(flat.values())
 
 WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight",
          "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
@@ -68,11 +62,11 @@ for name, text in pages.items():
 for key in ("stairs_dataset", "ball_dataset"):
     url = data["urls"][key]
     if url not in index:
-        fail.append(f"public/index.html does not carry {key} exactly: {url}")
+        fail.append(f"the site does not carry {key} exactly: {url}")
 found = set(re.findall(r"https://huggingface\.co/datasets/[A-Za-z0-9._/-]+", index))
 extra = found - {data["urls"]["stairs_dataset"], data["urls"]["ball_dataset"]}
 if extra:
-    fail.append("public/index.html links a dataset the kit does not name: " + ", ".join(sorted(extra)))
+    fail.append("the site links a dataset the kit does not name: " + ", ".join(sorted(extra)))
 
 # 3. The format strings, read as values. duck-move/2 is NOT pinned here: its
 #    constant lives in duckkit, a different repository pinned by tag, which this
@@ -80,32 +74,50 @@ if extra:
 for key in ("intent", "plan"):
     fmt = data["formats"][key]
     if fmt not in index:
-        fail.append(f"public/index.html does not print the {key} format string {fmt}")
+        fail.append(f"the site does not print the {key} format string {fmt}")
 
-# 4. The shared token block is byte identical in both pages.
-BEGIN = "/* == SHARED TOKENS: mirror this block byte for byte in the other page == */"
-END = "/* == END SHARED TOKENS == */"
-blocks = {}
+# 4. Every page uses one local stylesheet, so shared design tokens cannot drift.
+stylesheet = pathlib.Path("public/assets/site.css")
+if not stylesheet.is_file():
+    fail.append("public/assets/site.css is missing")
 for name, text in pages.items():
-    if text.count(BEGIN) != 1 or text.count(END) != 1:
-        fail.append(f"{name} does not carry exactly one shared token block")
-        continue
-    blocks[name] = text[text.index(BEGIN):text.index(END) + len(END)]
-if len(blocks) == 2 and len(set(blocks.values())) != 1:
-    fail.append("the two pages' shared token blocks have drifted apart")
+    styles = [attrs.get("href") for tag, attrs in Markup(text).elements
+              if tag == "link" and "stylesheet" in attrs.get("rel", "").split()]
+    if styles != ["/assets/site.css"]:
+        fail.append(f"{name} must link /assets/site.css exactly once as its stylesheet")
 
-# 5. No third party request is possible from either page.
+# 5. Read all served HTML, stylesheets and SVGs for scripts or remote assets.
 HOSTS = ("fonts.googleapis", "fonts.gstatic", "googletagmanager",
          "google-analytics", "plausible.io", "cdn.jsdelivr", "cdnjs.cloudflare")
-for name, text in pages.items():
-    if "<script" in text:
+assets = {str(path): path.read_text(encoding="utf-8")
+          for path in pathlib.Path("public").rglob("*")
+          if path.suffix.lower() in (".css", ".svg")}
+for name, text in (pages | assets).items():
+    parsed = Markup(text) if not name.endswith(".css") else None
+    if re.search(r"<script\b", text, flags=re.IGNORECASE):
         fail.append(f"{name} carries a script tag")
+    if parsed:
+        for tag, attrs in parsed.elements:
+            if any(attr.lower().startswith("on") for attr in attrs):
+                fail.append(f"{name} carries an event handler on <{tag}>")
+            if any(value and value.strip().lower().startswith("javascript:")
+                   for value in attrs.values()):
+                fail.append(f"{name} carries a JavaScript URL")
+            for attr in ("src", "srcset", "poster", "data"):
+                if re.search(r"(?:https?:)?//", attrs.get(attr, ""), flags=re.IGNORECASE):
+                    fail.append(f"{name} has a remote {attr} asset")
+            if tag == "link" and set(attrs.get("rel", "").split()) & {
+                    "stylesheet", "icon", "preload", "prefetch", "preconnect", "dns-prefetch"}:
+                if re.match(r"(?:https?:)?//", attrs.get("href", ""), flags=re.IGNORECASE):
+                    fail.append(f"{name} loads a remote link asset")
     for host in HOSTS:
-        if host in text:
+        if host in text.lower():
             fail.append(f"{name} references {host}")
-    for pattern in (r'src="http', r'srcset="http', r"@import", r"url\(http"):
-        if re.search(pattern, text):
-            fail.append(f"{name} matches {pattern}, which can fetch from another host")
+    if re.search(r"@import\b", text, flags=re.IGNORECASE):
+        fail.append(f"{name} carries a CSS import")
+    for reference in css_references(text):
+        if re.match(r"(?:https?:)?//", reference, flags=re.IGNORECASE):
+            fail.append(f"{name} fetches a remote CSS asset: {reference}")
 
 # 6. The bundle's byte size, and the size the page claims.
 size = pathlib.Path("public/duckbench-bundle.zip").stat().st_size
@@ -113,10 +125,10 @@ if size != 11666886:
     fail.append(f"public/duckbench-bundle.zip is {size} bytes, not 11666886; "
                 "the page's 11.7 MB was measured against the old file")
 if flat_index.count("11.7 MB") != 2:
-    fail.append(f"public/index.html says 11.7 MB {flat_index.count('11.7 MB')} times, "
+    fail.append(f"the site says 11.7 MB {flat_index.count('11.7 MB')} times, "
                 "expected twice (the bench section and the links section)")
 if "12 MB" in flat_index:
-    fail.append("public/index.html still rounds the bundle to 12 MB")
+    fail.append("the site still rounds the bundle to 12 MB")
 
 # 7. One h1 per page, and a viewport that lets a reader zoom.
 for name, text in pages.items():
@@ -130,40 +142,28 @@ for name, text in pages.items():
 # 8. The counted claims: the plant digest, and the bench route count.
 digest = data["quoted"]["plant_digest"]
 if digest not in index:
-    fail.append("public/index.html does not print the plant digest in full")
+    fail.append("the site does not print the plant digest in full")
 routes = len(data["routes"])
 phrase = f"{WORDS[routes]} bench routes"
 if phrase not in flat_index:
-    fail.append(f"public/index.html does not say {phrase!r}, which is what "
+    fail.append(f"the site does not say {phrase!r}, which is what "
                 "DuckBench.routes counts to today")
 
 # 9. The counts the page makes about ITSELF. These are not kit constants, they
 #    are the page describing its own contents, and they go stale the moment
 #    somebody adds a step or a repository. So they are read off the markup.
 def section(page_id: str) -> str:
-    """The markup of one section, ending at the next h2 OR at the footer.
-
-    THE FOOTER ENDS IT, and that is not tidiness. #links is the last h2 on the
-    page, so a slice that ran to the end of the document swallowed the footer,
-    and the footer carries its own link to this repository. Deleting
-    microduck-com from the links list left the page saying "four repositories"
-    above three of them and this gate still green, because the footer supplied
-    the fourth.
-    """
-    start = index.find(f'id="{page_id}"')
-    if start < 0:
-        return ""
-    ends = [x for x in (index.find("<h2 ", start), index.find("<footer", start)) if x > 0]
-    return index[start:min(ends) if ends else len(index)]
+    return section_markup({"public/docs/index.html": pages.get("public/docs/index.html", "")},
+                          page_id)
 
 
 reproduce = section("reproduce")
-steps = len(re.findall(r"<li>", reproduce))
+steps = sum(tag == "li" for tag, attrs in Markup(reproduce).elements)
 if steps != 5 or "Five steps" not in flatten(reproduce):
     fail.append(f"the reproduce section has {steps} steps and calls itself five")
 
 honest = section("honest")
-claims = len(re.findall(r"<p><strong>", honest))
+claims = len(re.findall(r"<p\b[^>]*>\s*<strong\b", honest))
 if claims != 6:
     fail.append(f"the honest section has {claims} claim paragraphs; the standfirst "
                 "promises two claims and four more things")
@@ -181,14 +181,14 @@ if (len(repos), len(datasets), bundles, probes, upstream) != (4, 2, 1, 1, 2):
                 f"{upstream} upstream projects; its opening sentence says four, two, "
                 "one, one and two")
 
-html_files = sorted(p.name for p in pathlib.Path("public").rglob("*.html"))
-if len(html_files) != 2:
-    fail.append(f"public/ holds {len(html_files)} HTML files and the page says two")
+for required in ("public/index.html", "public/docs/index.html", "public/privacy/index.html"):
+    if required not in pages:
+        fail.append(f"{required} is missing")
 
 if fail:
     for problem in fail:
         print("check_site_claims: " + problem, file=sys.stderr)
     sys.exit(1)
-print(f"check_site_claims: dashes, hosts, tokens, formats, datasets, {size} bytes, "
+print(f"check_site_claims: dashes, hosts, shared CSS, formats, datasets, {size} bytes, "
       f"{routes} routes, {steps} reproduce steps and {claims} honesty claims all check out")
 PY

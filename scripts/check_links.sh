@@ -16,57 +16,61 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 python3 - <<'PY'
-import pathlib, re, subprocess, sys
+import pathlib, subprocess, sys
+from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urlsplit
+sys.path.insert(0, "scripts")
+from site_helpers import read_pages, Markup, css_references, local_target
 
-pages = {p: pathlib.Path(p).read_text(encoding="utf-8")
-         for p in ("public/index.html", "public/privacy/index.html")}
-ids = {p: set(re.findall(r'id="([^"]+)"', t)) for p, t in pages.items()}
+pages = read_pages()
+ids = {pathlib.Path(name).resolve(): set(Markup(text).ids) for name, text in pages.items()}
+references = {name: Markup(text).references + css_references(text)
+              for name, text in pages.items()}
+for path in pathlib.Path("public").rglob("*"):
+    if path.suffix.lower() in (".css", ".svg"):
+        text = path.read_text(encoding="utf-8")
+        references[str(path)] = css_references(text)
+        if path.suffix.lower() == ".svg":
+            references[str(path)] += Markup(text).references
+            ids[path.resolve()] = set(Markup(text).ids)
 
 fail = []
 external = {}
-for name, text in pages.items():
-    for href in re.findall(r'href="([^"]+)"', text):
-        if href.startswith("mailto:"):
+for name, refs in references.items():
+    for href in refs:
+        if urlsplit(href).scheme in ("mailto", "tel", "data"):
             continue
-        if href.startswith("#"):
-            if href[1:] not in ids[name]:
-                fail.append(f"{name} links {href} and has no such id")
+        try:
+            target, fragment = local_target(name, href)
+        except ValueError as why:
+            fail.append(f"{name}: {why}")
             continue
-        if href.startswith("/"):
-            path, _, fragment = href.partition("#")
-            if path in ("", "/"):
-                target = pathlib.Path("public/index.html")
-            elif path.endswith("/"):
-                target = pathlib.Path("public") / path.lstrip("/") / "index.html"
-            else:
-                target = pathlib.Path("public") / path.lstrip("/")
-            if not target.is_file():
-                fail.append(f"{name} links {href} and {target} does not exist")
-            elif fragment:
-                page_ids = ids.get(str(target))
-                if page_ids is None:
-                    page_ids = set(re.findall(r'id="([^"]+)"',
-                                              target.read_text(encoding="utf-8")))
-                if fragment not in page_ids:
-                    fail.append(f"{name} links {href} and {target} has no id {fragment}")
-            continue
-        external.setdefault(href, set()).add(name)
+        if target is None:
+            external.setdefault(href, set()).add(name)
+        elif not target.is_file():
+            fail.append(f"{name} links {href} and {target} does not exist")
+        elif fragment and fragment not in ids.get(target, set()):
+            fail.append(f"{name} links {href} and {target} has no id {fragment}")
 
-for url in sorted(external):
+# An unpublished canonical URL is checked against public/, like other local
+# links. External hosts are fetched; deployment verification checks live URLs.
+def fetch(url):
     got = subprocess.run(
         ["curl", "-s", "-o", "/dev/null", "-L", "--max-time", "20",
-         "-w", "%{http_code}", url],
-        capture_output=True, text=True)
-    code = got.stdout.strip()
-    print(f"{code or 'ERR':>4}  {url}")
-    if code != "200":
-        fail.append(f"{url} answered {code or 'nothing'} "
-                    f"(linked from {', '.join(sorted(external[url]))})")
+         "-w", "%{http_code}", url], capture_output=True, text=True)
+    return url, got.stdout.strip()
+
+with ThreadPoolExecutor(max_workers=8) as pool:
+    for url, code in pool.map(fetch, sorted(external)):
+        print(f"{code or 'ERR':>4}  {url}")
+        if code != "200":
+            fail.append(f"{url} answered {code or 'nothing'} "
+                        f"(linked from {', '.join(sorted(external[url]))})")
 
 if fail:
     for problem in fail:
         print("check_links: " + problem, file=sys.stderr)
     sys.exit(1)
 print(f"check_links: {len(external)} external links answered 200, "
-      "every local path and anchor resolves")
+      "every local path, asset and anchor resolves")
 PY

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Put public/index.html into the shipped or the not-shipped Evaluations state.
+# Put the homepage and docs into the shipped or not-shipped Evaluations state.
 #
 # BOTH STATES ARE AUTHORED AND ONLY ONE IS SERVED. Build 58 carries the
 # Evaluations screen; until it is available to testers, present tense copy about
 # it is a capability asserted one tap from a TestFlight button, where a stranger
 # cannot check it. So the copy for both states lives in tools/evalstate/ and this
-# script splices the chosen one between the four marker pairs in the page.
+# script splices the chosen one between four marker pairs across both pages.
 #
 # THE HEAD IS ONE OF THE FOUR. The meta description is the search snippet and
 # the link preview, which is the first sentence a stranger reads and the one
@@ -36,12 +36,16 @@ STATE="$STATE" python3 - <<'PY'
 import os, pathlib, re, sys
 
 state = os.environ["STATE"]
-page = pathlib.Path("public/index.html")
-text = page.read_text(encoding="utf-8")
+pages = {path: path.read_text(encoding="utf-8") for path in
+         (pathlib.Path("public/index.html"), pathlib.Path("public/docs/index.html"))}
 
-regions = {"META": "meta.html", "CARD": "card.html", "SECTION": "section.html",
-           "FORMATROW": "formatrow.html"}
-for marker, filename in regions.items():
+regions = {"META": ("meta.html", "public/index.html"),
+           "CARD": ("card.html", "public/index.html"),
+           "SECTION": ("section.html", "public/docs/index.html"),
+           "FORMATROW": ("formatrow.html", "public/docs/index.html")}
+for marker, (filename, destination) in regions.items():
+    page = pathlib.Path(destination)
+    text = pages[page]
     source = pathlib.Path("tools/evalstate") / state / filename
     if not source.is_file():
         print(f"set_evallog_state: {source} is missing", file=sys.stderr)
@@ -49,16 +53,16 @@ for marker, filename in regions.items():
     begin = f"<!-- EVALSTATE:{marker}:BEGIN -->"
     end = f"<!-- EVALSTATE:{marker}:END -->"
     if text.count(begin) != 1 or text.count(end) != 1:
-        print(f"set_evallog_state: {marker} markers are not a single pair in the page",
+        print(f"set_evallog_state: {marker} markers are not a single pair in {page}",
               file=sys.stderr)
         sys.exit(1)
     body = source.read_text(encoding="utf-8")
     if not body.endswith("\n"):
         body += "\n"
     pattern = re.compile(re.escape(begin) + r".*?" + re.escape(end), re.DOTALL)
-    text = pattern.sub(lambda _: begin + "\n" + body + end, text, count=1)
+    pages[page] = pattern.sub(lambda _: begin + "\n" + body + end, text, count=1)
 
-page.write_text(text, encoding="utf-8")
+text = "\n".join(pages.values())
 
 # Self-check, so a bad splice cannot be discovered later by a reader.
 shipped = text.count('id="evallog-shipped"')
@@ -72,5 +76,7 @@ if shipped != want or text.count('id="format-evallog"') != want:
     print(f"set_evallog_state: the page is not in the {state} state after the splice",
           file=sys.stderr)
     sys.exit(1)
-print(f"set_evallog_state: public/index.html is now in the {state} state")
+for page, markup in pages.items():
+    page.write_text(markup, encoding="utf-8")
+print(f"set_evallog_state: homepage and docs are now in the {state} state")
 PY

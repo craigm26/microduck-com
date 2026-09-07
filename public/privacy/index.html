@@ -6,89 +6,31 @@
 <title>Privacy, Microduck Studio</title>
 <meta name="description" content="What Microduck Studio does and does not do with your data. No accounts, no analytics, no tracking.">
 <link rel="canonical" href="https://microduckstudio.com/privacy/">
-<meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0D1417" media="(prefers-color-scheme: dark)">
-<style>
-/* == SHARED TOKENS: mirror this block byte for byte in the other page == */
-:root{
-  /* The UA paints scrollbars and form controls from this, so without it the
-     dark theme gets light scrollbars on every overflow box below. */
-  color-scheme:light dark;
-  --bg:#F6F0E4; --card:#FDFAF3; --ink:#111A1D; --dim:#4A555A; --line:#DED3BE;
-  --accent:#AF540C; --accent-fill:#AF540C; --on-fill:#FFFFFF;
-  --brand:#3D7576; --focus:#3D7576; --good:#2E6B4F; --warn:#8E650F;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0D1417; --card:#151F23; --ink:#F6F0E4; --dim:#AFBDC1; --line:#2A383D;
-    --accent:#FF7A12; --accent-fill:#FF7A12; --on-fill:#111A1D;
-    --brand:#69C7C8; --focus:#69C7C8; --good:#5FC38F; --warn:#FFB51B;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0D1417; --card:#151F23; --ink:#F6F0E4; --dim:#AFBDC1; --line:#2A383D;
-  --accent:#FF7A12; --accent-fill:#FF7A12; --on-fill:#111A1D;
-  --brand:#69C7C8; --focus:#69C7C8; --good:#5FC38F; --warn:#FFB51B;
-}
-/* == END SHARED TOKENS == */
-
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-       font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
-       -webkit-font-smoothing:antialiased}
-  .wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
-  header{padding:3.5rem 0 1.5rem}
-  h1{font-size:clamp(1.8rem,5vw,2.5rem);line-height:1.15;margin:0 0 .5rem;letter-spacing:-.02em}
-  .lede{font-size:1.08rem;color:var(--dim);margin:0}
-  .updated{font-size:.85rem;color:var(--dim);margin-top:.75rem}
-  p,li{max-width:40rem}
-  a:focus-visible,.scroller:focus-visible{outline:2px solid var(--focus);
-    outline-offset:2px;border-radius:3px}
-  .skip{position:absolute;left:-9999px;top:0;background:var(--card);color:var(--ink);
-        padding:.6rem .9rem;border:1px solid var(--line);border-radius:8px;z-index:2}
-  .skip:focus{left:.75rem;top:.75rem}
-  a{text-decoration:underline;text-underline-offset:.16em}
-  @media (prefers-reduced-motion: reduce){
-    *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
-  }
-  h2{font-size:1.25rem;margin:2.5rem 0 .6rem;letter-spacing:-.01em}
-  h3{font-size:1rem;margin:1.4rem 0 .3rem}
-  p{margin:0 0 1rem}
-  ul{margin:0 0 1rem;padding-left:1.2rem}
-  li{margin:.35rem 0}
-  a{color:var(--accent)}
-  code{font:.88em ui-monospace,SFMono-Regular,Menlo,monospace;
-       background:color-mix(in srgb,var(--line) 55%,transparent);
-       padding:.12em .38em;border-radius:4px;word-break:break-all}
-  .headline{background:var(--card);border:1px solid var(--line);border-radius:12px;
-            padding:1.1rem 1.3rem;margin:1.5rem 0}
-  .headline p{margin:0}
-  .headline strong{color:var(--good)}
-  /* The scroll lives on a wrapper, never on the table itself. A table whose
-     display is not `table` loses its row and column semantics in some
-     browsers, and "What goes" is the column this whole page is about. */
-  .scroller{overflow-x:auto;margin:1rem 0}
-  .scroller table{margin:0}
-  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.94rem}
-  caption{text-align:left;color:var(--dim);font-size:.88rem;padding-bottom:.4rem}
-  th,td{text-align:left;padding:.6rem .9rem .6rem 0;border-bottom:1px solid var(--line);
-        vertical-align:top}
-  th{font-weight:600;color:var(--dim);font-size:.8rem;text-transform:uppercase;
-     letter-spacing:.04em}
-  footer{margin:3.5rem 0 3rem;padding-top:1.5rem;border-top:1px solid var(--line);
-         color:var(--dim);font-size:.9rem}
-  @media print{
-    body{background:#fff;color:#000}
-    .headline{border:1px solid #999}
-    a[href^="http"]::after{content:" (" attr(href) ")"}
-  }
-</style>
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="wrap">
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
 
-<header>
+<div class="privacy-wrap">
+
+<header class="privacy-header">
   <h1>Privacy</h1>
   <p class="lede">What Microduck Studio does and does not do with your data.</p>
   <p class="updated">Last updated 5 September 2026 · applies to Microduck Studio for iPhone and iPad</p>
@@ -200,7 +142,7 @@ theirs throughout the app.</p>
 
 </main>
 
-<footer>
+<footer class="privacy-footer">
   <p>Questions about this policy: <a href="mailto:craigm26@gmail.com">craigm26@gmail.com</a></p>
   <p><a href="/">Microduck Studio</a> · <a href="/#links">Downloads and links</a></p>
 </footer>
