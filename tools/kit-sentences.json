@@ -13,7 +13,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "9b46ed0074d27b95dd493e6e7a4667e754b2249a",
+  "duck_studio_commit": "351d859d1e85972b694c251d68a062d9601e6784",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -76,6 +76,8 @@
     "/policy",
     "/record",
     "/reset",
+    "/shoot",
+    "/shoot/grid",
     "/state",
     "/stop",
     "/tune",
