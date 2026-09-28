@@ -53,8 +53,15 @@ for name, text in pages.items():
     for label, needle in (("an em dash", "—"), ("an en dash", "–")):
         if needle in text:
             fail.append(f"{name} contains {label}")
-    if "RLHF" in text or "reward model" in text:
-        fail.append(f"{name} names the training acronym this project does not use in copy")
+    # RLHF ONLY BESIDE WHAT IT MEANS HERE (2026-09-28, the app's own rule since
+    # Compare): every sentence naming it must also say "human-feedback" or
+    # "human feedback", because the app collects picks and trains nothing.
+    import re as _re
+    for sentence in _re.split(r"(?<=[.!?])\s+", _re.sub(r"<[^>]+>", " ", text)):
+        if "RLHF" in sentence and not _re.search(r"[Hh]uman[- ]feedback", sentence):
+            fail.append(f"{name} says RLHF without saying it is the human-feedback half")
+    if "reward model" in text:
+        fail.append(f"{name} claims a reward model")
     if "Duck Studio" in text:
         fail.append(f"{name} uses the app's old name")
 
