@@ -33,13 +33,13 @@
 <header class="privacy-header">
   <h1>Privacy</h1>
   <p class="lede">What Microduck Studio does and does not do with your data.</p>
-  <p class="updated">Last updated 5 September 2026 · applies to Microduck Studio for iPhone and iPad</p>
+  <p class="updated">Last updated 28 September 2026 · applies to Microduck Studio for iPhone and iPad</p>
 </header>
 
 <main id="main" tabindex="-1">
 
 <div class="headline">
-  <p><strong>There are no accounts, no analytics, and no tracking.</strong>
+  <p><strong>There are no accounts of ours, no analytics, and no tracking.</strong>
   The app collects nothing about you, sends nothing about you anywhere, and
   contains no third-party analytics or advertising SDK of any kind. Nobody who
   makes this app can see that you are using it, or what you do in it.</p>
@@ -71,6 +71,16 @@ periodic sync, and no phone-home.</p>
     chose to publish.</td>
     <td>Your search text; the model you picked; your token if you set one. On a
     publish, only the file you selected.</td>
+  </tr>
+  <tr>
+    <td><code>huggingface.co</code> sign-in, then<br><code>pollen-robotics-reachy-mini-central.hf.space</code></td>
+    <td>You tap Sign in with Hugging Face to list your ducks from anywhere,
+    and each time that list refreshes.</td>
+    <td>Hugging Face's own sign-in page, in Apple's browser sheet. Then a
+    short-lived sign-in token to Pollen Robotics' rendezvous, which answers with
+    the robots on your account, under Pollen's privacy policy. The request names
+    this app and its version in its User-Agent, as Pollen asked, so it is never
+    taken for their own app.</td>
   </tr>
   <tr>
     <td><code>api.github.com</code><br><code>raw.githubusercontent.com</code></td>
@@ -111,8 +121,11 @@ floor. It finds the floor so the duck can be drawn at its real size on it.
 also works on a rendered stage with the camera off.</p>
 
 <h3>Local network</h3>
-<p>Used to reach a physics bench at an address you typed in, when you ask it to
-run something. The app does not scan or browse for machines on its own.</p>
+<p>Used to find computers on your own network running the physics bench, the
+plan router or a robot's bridge, which announce themselves over Bonjour, and to
+reach the ones you saved or typed in when you ask them to run something. The app
+looks only for those services, only on your own network; nothing is added until
+you tap Add, and nothing found is sent anywhere.</p>
 
 <h3>Bluetooth</h3>
 <p>Used to find a Microduck robot near you, pair with it, and ask it which
@@ -134,6 +147,9 @@ we do not have any. If that changes, this page changes first, and the app's
 release notes will say so.</p>
 
 <h2>Independent project</h2>
+
+<p><strong>This is not the official Microduck app.</strong> Pollen Robotics make
+the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
 
 <p>Microduck Studio is an independent project. It is not made by, endorsed by,
 or affiliated with Pollen Robotics. Microduck is their robot; this is an

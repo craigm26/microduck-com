@@ -67,9 +67,17 @@ STATUS="$(python3 "$TESTFLIGHT" status --bundle "$BUNDLE")" || {
   echo "record: the TestFlight query failed; nothing written" >&2; exit 1; }
 echo "$STATUS"
 
-LINE="$(printf '%s\n' "$STATUS" | grep -E "^build ${WANT_BUILD}[[:space:]]" || true)"
+# THE NEWEST INSTALLABLE BUILD AT OR AFTER 61, NOT 61 ITSELF. TestFlight lists
+# only recent builds and expires old ones, so by 2026-09-28 build 61 had no line
+# at all and this script refused while builds 65-69, which all carry the fix,
+# sat IN_BETA_TESTING. The claim is "a build a tester can install files a run";
+# any build from 61 on makes it, and the receipt records which one was read.
+LINE="$(printf '%s\n' "$STATUS" | grep -E "^build [0-9]+[[:space:]]+VALID\b" \
+  | grep -E "(internal|external)=(READY_FOR_BETA_TESTING|IN_BETA_TESTING|BETA_APPROVED|READY_FOR_BETA_SUBMISSION)" \
+  | awk -v min="$WANT_BUILD" '$2+0 >= min' | sort -k2,2nr | head -1 || true)"
+[ -n "$LINE" ] && WANT_BUILD="$(printf '%s' "$LINE" | awk '{print $2}')"
 [ -n "$LINE" ] || {
-  echo "record: no line for build $WANT_BUILD in the TestFlight status; nothing written" >&2
+  echo "record: no VALID, installable build at or after $WANT_BUILD in the TestFlight status; nothing written" >&2
   exit 1
 }
 printf '%s\n' "$LINE" | grep -qE "^build ${WANT_BUILD}[[:space:]]+VALID\b" || {
