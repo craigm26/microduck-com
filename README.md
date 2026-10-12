@@ -19,6 +19,9 @@ project.
 - `public/assets/site.css` - shared theme, responsive navigation, documentation layout,
   light and dark colors, and keyboard focus styles.
 - `public/assets/studio-icon.png` - the existing app icon, copied from the app repository.
+- `public/assets/fonts/` - Fredoka, the one face that is not the system's, used only on the
+  Duck Cards themselves; served from this site under the SIL Open Font License 1.1, whose
+  text sits beside it.
 - `public/duckbench-bundle.zip` (+ `.sha256`) - the downloadable duckbench bundle, built in
   the `duckbench` repo; regenerate there, do not edit here.
 - `public/_headers` - response headers, including a CSP with `default-src 'none'`, local

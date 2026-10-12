@@ -278,8 +278,24 @@ td code { white-space: normal; }
    ground and its category colours in dark mode, the way a card on a dark table
    would. One component serves the hero row, the gallery, the homepage and the
    cut sheet: every size inside a card is a share of the card's own width
-   (container query units), and printed it is a playing card, 63.5 by 88.9 mm. */
+   (container query units), and printed it is a playing card, 63.5 by 88.9 mm.
+   Fine print has a floor in pixels, so a card drawn small on a screen stays
+   readable; on paper the share is always the larger of the two.
+
+   The cards set their names in Fredoka, served from this site (OFL 1.1, see
+   /assets/fonts/OFL-Fredoka.txt). It is the one face on the site that is not
+   the system's: the pages are the app's, the cards are a toy's. */
+@font-face {
+  font-family: "Fredoka";
+  src: url("/assets/fonts/fredoka-latin-wght-normal.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
+  --dc-face: "Fredoka", ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --dc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+  --dc-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --dc-paper: #ffffff;
   --dc-ink: #1d1d1f;
   --dc-dim: #5c5c64;
@@ -293,7 +309,7 @@ td code { white-space: normal; }
   --dc-trick: #ff9500;
   --dc-trick-ink: #a65a00;
   --dc-trick-tint: #fff1dc;
-  --dc-sound: #22804a;
+  --dc-sound: #1b6e3e;
   --dc-sound-tint: #e2f3e8;
   --dc-control: #3c3c44;
   --dc-control-tint: #ebebf0;
@@ -324,7 +340,7 @@ td code { white-space: normal; }
   color: var(--dc-ink);
   border-radius: 4.6% / 3.3%;
   box-shadow: 0 1px 2px var(--dc-shadow), 0 8px 22px var(--dc-shadow);
-  font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Arial Rounded MT", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--dc-face);
   text-align: left;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -341,61 +357,59 @@ td code { white-space: normal; }
 .dc-when { --c: var(--dc-when); --c-on: var(--dc-ink); --c-ink: var(--dc-when-ink); --c-tint: var(--dc-when-tint); }
 .dc-yours { --c: var(--dc-paper); --c-on: var(--dc-dim); --c-ink: var(--dc-dim); --c-tint: var(--dc-paper); }
 
-.dc-band {
-  flex: none;
-  height: 12cqi;
-  padding: 0 6cqi;
-  background: var(--c);
-  color: var(--c-on);
-  font-size: 4.6cqi;
-  line-height: 12cqi;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.dc-yours .dc-band { border-bottom: .5cqi dashed var(--dc-rule); line-height: 11.5cqi; }
-.dc-art { flex: none; position: relative; height: 60cqi; display: grid; place-items: center; color: var(--c-ink); }
-.dc-art::before { content: ""; position: absolute; width: 51cqi; height: 51cqi; border-radius: 50%; background: var(--c-tint); }
-.dc-art svg { position: relative; width: 39cqi; height: 39cqi; overflow: visible; }
-.dc-blank { height: auto; margin: 5cqi 6cqi 0; aspect-ratio: 1.45; border: .5cqi dashed var(--dc-rule); border-radius: 3cqi; color: var(--dc-dim); font: 600 4.2cqi/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+/* Band, picture, name, code word, then the foot: where it runs, and the code.
+   The picture takes whatever height the words leave, so a one line name and a
+   Repeat card with its write-in box both fill the card. */
+.dc-band { flex: none; display: flex; align-items: center; height: 13cqi; padding: 0 6cqi; background: var(--c); color: var(--c-on); font: 600 max(5.6cqi, 10px)/1 var(--dc-face); letter-spacing: .01em; white-space: nowrap; overflow: hidden; }
+.dc-yours .dc-band { border-bottom: .5cqi dashed var(--dc-rule); }
+.dc-art { flex: 1 1 auto; min-height: 50cqi; position: relative; display: grid; place-items: center; color: var(--c-ink); }
+.dc-art::before { content: ""; position: absolute; width: 52cqi; height: 52cqi; border-radius: 50%; background: var(--c-tint); }
+.dc-art svg { position: relative; width: 40cqi; height: 40cqi; overflow: visible; }
+.dc-blank { min-height: 36cqi; margin: 5cqi 6cqi 0; border: .5cqi dashed var(--dc-rule); border-radius: 3cqi; color: var(--dc-dim); font: 500 max(4.4cqi, 9px)/1.2 var(--dc-face); }
 .dc-blank::before { display: none; }
-.dc-name { margin: 0 6cqi; font-size: 10.5cqi; line-height: 1.06; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }
-.dc-line { margin-top: 3cqi; height: 11cqi; display: flex; align-items: flex-end; border-bottom: .5cqi solid var(--dc-rule); }
-.dc-line span, .dc-does { font: 600 3.9cqi/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--dc-dim); letter-spacing: 0; }
+.dc-name { margin: 0 6cqi; font: 600 11cqi/1.04 var(--dc-face); letter-spacing: -.005em; text-wrap: balance; overflow-wrap: anywhere; }
+.dc-line { margin-top: 4cqi; height: 11cqi; display: flex; align-items: flex-end; border-bottom: .5cqi solid var(--dc-rule); }
+.dc-line span, .dc-does { font: 500 max(4.4cqi, 9px)/1 var(--dc-face); color: var(--dc-dim); }
 .dc-line span { padding-bottom: 1.4cqi; }
 .dc-does { flex: 1; align-self: stretch; display: flex; align-items: flex-start; padding-top: 1cqi; border-bottom: .5cqi solid var(--dc-rule); margin-bottom: 4.6cqi; }
-.dc-write { margin: 1.6cqi 6cqi 0; display: flex; align-items: center; gap: 2cqi; font-size: 5.6cqi; font-weight: 700; color: var(--dc-dim); }
+.dc-write { margin: 1.8cqi 6cqi 0; display: flex; align-items: center; gap: 2cqi; font: 600 max(5.6cqi, 10px)/1 var(--dc-face); color: var(--dc-dim); }
 .dc-box { display: inline-block; width: 12cqi; height: 8.5cqi; border: .6cqi solid var(--dc-ink); border-radius: 1.4cqi; }
-.dc-code { margin: 2.2cqi 6cqi 0; font: 500 4.3cqi/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--dc-dim); overflow-wrap: anywhere; }
-.dc-foot { margin-top: auto; padding: 2cqi 4.5cqi 4.5cqi 6cqi; display: flex; align-items: flex-end; justify-content: space-between; gap: 3cqi; }
-.dc-runs { display: flex; flex-direction: column; align-items: flex-start; gap: 1.4cqi; }
-.dc-runs li { font: 700 3.8cqi/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--dc-ink); border: .45cqi solid var(--dc-rule); border-radius: 99cqi; padding: 1.2cqi 2.4cqi; white-space: nowrap; }
-.dc-tagbox { flex: none; display: flex; flex-direction: column; align-items: center; gap: .6cqi; }
+.dc-code { margin: 1.8cqi 6cqi 0; font: 500 max(4.6cqi, 9.5px)/1.2 var(--dc-mono); color: var(--dc-dim); overflow-wrap: anywhere; }
+.dc-foot { flex: none; margin-top: 4.5cqi; padding: 0 4.5cqi 4.5cqi 6cqi; display: flex; align-items: flex-end; justify-content: space-between; gap: 2cqi; }
+.dc-runs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1.4cqi; }
+.dc-runs li { font: 650 max(4.3cqi, 9px)/1 var(--dc-sans); color: var(--c-ink); background: var(--c-tint); border-radius: 99cqi; padding: 1.5cqi 2.8cqi; white-space: nowrap; }
+.dc-tagbox { flex: none; display: flex; flex-direction: column; align-items: center; gap: .8cqi; }
 .dc-tag { display: block; width: 24cqi; height: 24cqi; }
-.dc-num { font: 600 3.4cqi/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--dc-dim); }
+.dc-num { font: 600 max(3.8cqi, 8.5px)/1 var(--dc-mono); color: var(--dc-dim); }
 
-/* The hero: a row laid on a desk, read left to right. */
-.dc-desk { margin: 0; background: var(--dc-desk); border-radius: 24px; padding: clamp(1.75rem, 4vw, 3rem) 0 1.4rem; }
-.dc-row { list-style: none; margin: 0; padding: .5rem clamp(1rem, 3vw, 2rem) 1.25rem; display: flex; align-items: flex-start; gap: clamp(.7rem, 1.6vw, 1.15rem); overflow-x: auto; scroll-snap-type: x proximity; }
-.dc-step { margin: 0; flex: 0 0 clamp(108px, 13.4vw, 148px); display: flex; flex-direction: column; gap: .7rem; scroll-snap-align: start; }
+/* The hero: a row laid on a desk, read left to right. The desk is wider than
+   the text column on a large screen, because the cards are the point. */
+.dc-desk {
+  --desk: min(100vw - 3rem, 1240px);
+  margin: 0 calc((100% - var(--desk)) / 2);
+  background: var(--dc-desk);
+  border-radius: 28px;
+  padding: clamp(1.75rem, 4vw, 3rem) 0 1.4rem;
+}
+.dc-row { list-style: none; margin: 0; padding: .5rem clamp(1rem, 3vw, 2rem) 1.25rem; display: flex; align-items: flex-start; gap: clamp(.75rem, 1.4vw, 1.1rem); overflow-x: auto; scroll-snap-type: x proximity; }
+.dc-step { margin: 0; flex: 0 0 clamp(124px, 13.2vw, 176px); display: flex; flex-direction: column; gap: .8rem; scroll-snap-align: start; }
 .dc-step:first-child { margin-left: auto; }
 .dc-step:last-child { margin-right: auto; }
 .dc-step > .dc { transform: rotate(-1deg); }
 .dc-step:nth-child(even) > .dc { transform: rotate(1.2deg); }
 .dc-under .dc { transform: rotate(.6deg) translateX(4%); }
-.dc-desk figcaption { padding-inline: 1.5rem; color: var(--dim); font-size: .9rem; text-align: center; text-wrap: balance; }
+.dc-desk figcaption { padding-inline: 1.5rem; color: var(--dim); font-size: .95rem; text-align: center; text-wrap: balance; }
 
-/* The gallery: a row per category, the rule beside its cards. */
-.dc-groups { display: grid; gap: 2rem; }
-.dc-group { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); gap: 1rem 2.5rem; align-items: start; padding-top: 2rem; border-top: 1px solid var(--line); }
-.dc-group-text h3 { margin-bottom: .45rem; }
-.dc-group-text p { color: var(--dim); font-size: .93rem; margin: 0 0 .5rem; }
-.dc-group-text .dc-goes { color: var(--ink); font-size: .86rem; }
-.dc-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 150px)); gap: 1.1rem; }
+/* The gallery: each category's rule, then its cards at a size you can read. */
+.dc-groups { display: grid; gap: 2.75rem; }
+.dc-group { display: grid; gap: 1.25rem; padding-top: 2rem; border-top: 1px solid var(--line); }
+.dc-group-text { max-width: 62ch; }
+.dc-group-text h3 { margin: 0 0 .35rem; }
+.dc-group-text p { color: var(--dim); font-size: .95rem; margin: 0; }
+.dc-group-text .dc-goes { color: var(--ink); font-size: .88rem; margin-top: .35rem; }
+.dc-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 1.25rem; }
 .dc-grid > li { margin: 0; }
-.dc-deck-ctas { margin-top: 2.5rem; gap: 1.25rem; }
+.dc-deck-ctas { margin-top: 2.75rem; gap: 1.25rem; }
 
 .dc-lessons .eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .55rem; }
 .dc-lessons p + p { margin-top: .75rem; }
@@ -405,15 +419,15 @@ td code { white-space: normal; }
 .dc-faq { max-width: 75ch; }
 
 /* The homepage: three cards fanned on the same desk. */
-.dc-promo-art { display: grid; place-items: center; background: var(--dc-desk); padding: 3rem 1.5rem; min-height: 340px; }
+.dc-promo-art { display: grid; place-items: center; background: var(--dc-desk); padding: 3rem 1.5rem; min-height: 360px; }
 .dc-fan { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; }
-.dc-fan > li { margin: 0 -1rem; width: clamp(112px, 12vw, 150px); }
+.dc-fan > li { margin: 0 -1rem; width: clamp(120px, 13vw, 168px); }
 .dc-fan > li:nth-child(1) { transform: rotate(-9deg) translateY(10px); }
 .dc-fan > li:nth-child(2) { position: relative; z-index: 1; transform: translateY(-8px); }
 .dc-fan > li:nth-child(3) { transform: rotate(9deg) translateY(10px); }
 
 /* The format page. */
-.dc-anatomy { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: 2rem; align-items: start; margin: 1.5rem 0; }
+.dc-anatomy { display: grid; grid-template-columns: minmax(0, 13.5rem) minmax(0, 1fr); gap: 2rem; align-items: start; margin: 1.5rem 0; }
 .dc-anatomy .spec { margin: 0; }
 .dc-anatomy .spec dt:first-child { margin-top: 0; }
 .dc-table td:first-child { font-variant-numeric: tabular-nums; }
@@ -426,7 +440,7 @@ td code { white-space: normal; }
 .dc-print-intro .lede { color: var(--dim); font-size: 1.15rem; max-width: 52ch; }
 .dc-print-intro .eyebrow a { text-decoration: none; }
 .dc-pickform { counter-reset: picked; padding-bottom: 1rem; }
-.dc-sheet { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1.4rem 1.1rem; }
+.dc-sheet { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.6rem 1.25rem; }
 .dc-pick { position: relative; margin: 0; display: grid; gap: .55rem; justify-items: start; }
 .dc-pick > input { position: absolute; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; margin: 0; }
 .dc-pick > input:checked { counter-increment: picked; }
@@ -446,11 +460,8 @@ td code { white-space: normal; }
 .dc-print-notes { padding-block: 3rem 4rem; }
 .dc-print-notes h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); }
 
-@media (max-width: 900px) {
-  .dc-group { grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem 1.5rem; }
-}
 @media (max-width: 640px) {
-  .dc-group { grid-template-columns: 1fr; padding-top: 1.5rem; }
+  .dc-group { padding-top: 1.5rem; }
   .dc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
   .dc-sheet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dc-anatomy { grid-template-columns: 1fr; }
