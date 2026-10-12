@@ -108,10 +108,16 @@ A4 after any change to card sizes, and check every code still decodes.
 
 ```sh
 export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
+python3 scripts/stamp_css.py             # after any change to site.css
 bash scripts/predeploy.sh
 git add public scripts tools README.md && git commit
 npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main
 ```
+
+Every page links the stylesheet as `/assets/site.css?v=<first ten hex of its sha256>`. The
+zone serves it with `max-age=14400`, so without the stamp a returning visitor keeps the old
+stylesheet for up to four hours after a deploy while the new HTML arrives at once; the claims
+gate fails until every page carries the current stamp.
 
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
 GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,

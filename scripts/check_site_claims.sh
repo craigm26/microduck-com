@@ -83,15 +83,21 @@ for key in ("intent", "plan"):
     if fmt not in index:
         fail.append(f"the site does not print the {key} format string {fmt}")
 
-# 4. Every page uses one local stylesheet, so shared design tokens cannot drift.
+# 4. Every page uses one local stylesheet, so shared design tokens cannot drift,
+#    and links it by its own hash (scripts/stamp_css.py), because the zone serves
+#    it for four hours and new HTML must never meet an old stylesheet.
+import hashlib
 stylesheet = pathlib.Path("public/assets/site.css")
 if not stylesheet.is_file():
     fail.append("public/assets/site.css is missing")
-for name, text in pages.items():
-    styles = [attrs.get("href") for tag, attrs in Markup(text).elements
-              if tag == "link" and "stylesheet" in attrs.get("rel", "").split()]
-    if styles != ["/assets/site.css"]:
-        fail.append(f"{name} must link /assets/site.css exactly once as its stylesheet")
+else:
+    stamped = "/assets/site.css?v=" + hashlib.sha256(stylesheet.read_bytes()).hexdigest()[:10]
+    for name, text in pages.items():
+        styles = [attrs.get("href") for tag, attrs in Markup(text).elements
+                  if tag == "link" and "stylesheet" in attrs.get("rel", "").split()]
+        if styles != [stamped]:
+            fail.append(f"{name} must link {stamped} exactly once as its stylesheet, and links "
+                        f"{styles}; run python3 scripts/stamp_css.py")
 
 # 5. Read all served HTML, stylesheets and SVGs for scripts or remote assets.
 HOSTS = ("fonts.googleapis", "fonts.gstatic", "googletagmanager",
