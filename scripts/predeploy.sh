@@ -61,6 +61,35 @@
 #   * the schema version changed to 7 on the shipped page: check_site_sentences
 #     exited 1, "EvalLog.schemaVersion is 1 and the page does not say 'Version
 #     1'". Before shipped_numbers was read by anything, both of these passed.
+# PROVED ABLE TO FAIL, 2026-10-12, check_cards fourteen times, in a throwaway
+# copy of the repository, one defect at a time and each file restored before the
+# next; the copy passed again at the end:
+#   * one card renamed by hand inside the print page's markers: "card
+#     'walk_forward' is printed 'Walk forwards'; the deck says 'Walk forward'".
+#   * Kick, right given the left bumper in the gallery: "says it runs on
+#     ['Studio', 'Pad: LB']; the pad table says ['Studio', 'Pad: RB']".
+#   * one cell of Roll's code flipped: "draws a code that is not tag36h11
+#     number 63".
+#   * Kick, right renamed without its comma in the deck file: "is printed 'Kick
+#     right'; Studio calls it 'Kick, right'".
+#   * the bumpers swapped in the extract, as a StudioKit change would: "the HERO
+#     region is not what build_cards.py draws today".
+#   * the code drawn at 30cqi: "the code's black square prints 15.2 mm across;
+#     the format page says a little over a centimetre".
+#   * a 15 mm print margin: "Letter holds 2 rows, not three".
+#   * one box on the print page unticked: "look_right has no ticked box".
+#   * Fast dropped from the starter deck: "26 printed cards then 9 blank ones:
+#     the last sheet is not all blank cards".
+#   * a kick that takes a Look, in the extract: "the What goes under lesson no
+#     longer matches Node.heads".
+#   * a head beat added to RobotPlan, in the extract: "the format page says no
+#     head pose goes to a robot".
+#   * a bench that runs a trick anywhere, in the extract: "the format page says
+#     the bench runs one trick, last".
+#   * a receipt for build 40: "build 40 (6bcf5d6) does not have what the cards
+#     page names".
+#   * the Say it placeholder reworded on the page: "does not carry Studio's
+#     say_it_placeholder word for word".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -72,22 +101,25 @@ DUCK_STUDIO="${1:-${DUCK_STUDIO:-$HOME/projects/duck-studio}}"
 
 step() { printf '\n== %s\n' "$1"; }
 
-step "1/6 extract the pinned StudioKit values"
+step "1/7 extract the pinned StudioKit values"
 python3 scripts/extract_kit_sentences.py "$DUCK_STUDIO"
 
-step "2/6 every pinned sentence is on the site"
+step "2/7 every pinned sentence is on the site"
 bash scripts/check_site_sentences.sh
 
-step "3/6 dashes, third parties, the bundle, the shared stylesheet"
+step "3/7 dashes, third parties, the bundle, the shared stylesheet"
 bash scripts/check_site_claims.sh
 
-step "4/6 the Evaluations copy matches what a tester can open"
+step "4/7 the Evaluations copy matches what a tester can open"
 bash scripts/check_evallog_claims.sh
 
-step "5/6 every link resolves"
+step "5/7 every Duck Card matches the deck, StudioKit, its code and the beta"
+python3 scripts/check_cards.py "$DUCK_STUDIO"
+
+step "6/7 every link resolves"
 bash scripts/check_links.sh
 
-step "6/6 every page is well formed"
+step "7/7 every page is well formed"
 if command -v xmllint >/dev/null 2>&1; then
   mapfile -d '' html_pages < <(find public -type f -name '*.html' -print0)
   xmllint --html --noout "${html_pages[@]}"
@@ -95,5 +127,5 @@ if command -v xmllint >/dev/null 2>&1; then
 fi
 python3 scripts/check_wellformed.py
 
-printf '\npredeploy: all six gates passed. Deploy with\n'
+printf '\npredeploy: all seven gates passed. Deploy with\n'
 printf '  npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main\n'

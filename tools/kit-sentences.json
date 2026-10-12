@@ -1,4 +1,258 @@
 {
+  "cards": {
+    "pad_bindings": [
+      {
+        "control": "leftStick",
+        "here": "drive",
+        "robot": "Translate \u2014 forward on y, strafe on x",
+        "slot": null
+      },
+      {
+        "control": "rightStick",
+        "here": "drive",
+        "robot": "Heading \u2014 yaw on x; in head mode it poses the head",
+        "slot": null
+      },
+      {
+        "control": "a",
+        "here": "loadSlot",
+        "robot": "Ground pick",
+        "slot": "groundPick"
+      },
+      {
+        "control": "x",
+        "here": "loadSlot",
+        "robot": "Roulade \u2014 a forward roll",
+        "slot": "roulade"
+      },
+      {
+        "control": "leftBumper",
+        "here": "loadSlot",
+        "robot": "Kick, left",
+        "slot": "kickLeft"
+      },
+      {
+        "control": "rightBumper",
+        "here": "loadSlot",
+        "robot": "Kick, right",
+        "slot": "kickRight"
+      },
+      {
+        "control": "dpadDown",
+        "here": "loadSlot",
+        "robot": "Sit \u2194 stand",
+        "slot": "sitstand"
+      },
+      {
+        "control": "y",
+        "here": "unsupported",
+        "robot": "Head mode \u2014 the sticks pose the head",
+        "slot": null
+      },
+      {
+        "control": "b",
+        "here": "unsupported",
+        "robot": "Body-pose mode \u2014 lean and crouch while standing",
+        "slot": null
+      },
+      {
+        "control": "rightTrigger",
+        "here": "unsupported",
+        "robot": "Mouth \u2014 and a quack",
+        "slot": null
+      },
+      {
+        "control": "leftTrigger",
+        "here": "unsupported",
+        "robot": "Mouth \u2014 and the wheee",
+        "slot": null
+      },
+      {
+        "control": "start",
+        "here": "unsupported",
+        "robot": "Toggle the policy on and off",
+        "slot": null
+      },
+      {
+        "control": "dpadUp",
+        "here": "unsupported",
+        "robot": "Held 3 s \u2014 switch between walk and roller",
+        "slot": null
+      },
+      {
+        "control": "select",
+        "here": "unsupported",
+        "robot": "Held 2 s \u2014 sit down, then power off",
+        "slot": null
+      },
+      {
+        "control": "dpadLeft",
+        "here": "stop",
+        "robot": "\u2014",
+        "slot": null
+      },
+      {
+        "control": "dpadRight",
+        "here": "reset",
+        "robot": "\u2014",
+        "slot": null
+      }
+    ],
+    "pad_faces": {
+      "a": "A",
+      "b": "B",
+      "dpadDown": "\u25bc",
+      "dpadLeft": "\u25c0",
+      "dpadRight": "\u25b6",
+      "dpadUp": "\u25b2",
+      "leftBumper": "LB",
+      "leftStick": "L stick",
+      "leftTrigger": "LT",
+      "rightBumper": "RB",
+      "rightStick": "R stick",
+      "rightTrigger": "RT",
+      "select": "Select",
+      "start": "Start",
+      "x": "X",
+      "y": "Y"
+    },
+    "plan_format": "duck-intent-plan/0",
+    "plans": {
+      "bench_refusals": [
+        "nothingToRun",
+        "skillNotLast",
+        "twoSkills"
+      ],
+      "robot_beats": [
+        "move",
+        "sound",
+        "skill"
+      ],
+      "robot_refusals": [
+        "nothingToRun",
+        "tooLong"
+      ]
+    },
+    "robotd": {
+      "groundPick": "ground_pick",
+      "kickLeft": "kick_left",
+      "kickRight": "kick_right",
+      "roulade": "roulade",
+      "sitstand": "sit_toggle"
+    },
+    "said": {
+      "detail_everything": "Everything",
+      "detail_simple": "Simple",
+      "detail_switch": "Learn's last lesson or Settings \u2192 Detail turns them on.",
+      "mimic": "Mimic",
+      "name_it_chip": "Name it",
+      "not_a_model": "No model was asked. This is a fixed list of words matched against the drive limits this app already enforces, which is why it works on a phone with nothing configured.",
+      "pick_two": "Pick any two",
+      "record_chip": "Record what I do",
+      "say_it_caption": "Your words become a list of commands. You see the numbers before anything moves.",
+      "say_it_chip": "Say it",
+      "say_it_placeholder": "forward for two seconds then turn left"
+    },
+    "skills": {
+      "kick_left": "kickLeft",
+      "kick_right": "kickRight",
+      "peck_ground": "groundPick",
+      "roll": "roulade",
+      "sit_or_stand": "sitstand"
+    },
+    "takes": {
+      "default": [
+        "action"
+      ],
+      "make_sound": [
+        "action",
+        "sound"
+      ],
+      "stop": [
+        "action",
+        "head"
+      ],
+      "turn_left": [
+        "action",
+        "speed",
+        "head"
+      ],
+      "turn_right": [
+        "action",
+        "speed",
+        "head"
+      ],
+      "walk_backward": [
+        "action",
+        "speed",
+        "head"
+      ],
+      "walk_forward": [
+        "action",
+        "speed",
+        "head"
+      ]
+    },
+    "vocabulary": {
+      "actions": [
+        "walk_forward",
+        "walk_backward",
+        "turn_left",
+        "turn_right",
+        "stop",
+        "kick_left",
+        "kick_right",
+        "sit_or_stand",
+        "roll",
+        "peck_ground",
+        "make_sound",
+        "unsupported"
+      ],
+      "heads": [
+        "straight",
+        "look_left",
+        "look_right",
+        "look_up",
+        "look_down"
+      ],
+      "id": "r001",
+      "sounds": [
+        "greet",
+        "alarm",
+        "inquire",
+        "peck",
+        "chirp",
+        "coo",
+        "wheee"
+      ],
+      "speeds": [
+        "slow",
+        "normal",
+        "fast"
+      ]
+    },
+    "words": {
+      "greet": "Hello",
+      "kick_left": "Kick, left",
+      "kick_right": "Kick, right",
+      "look_down": "Look down",
+      "look_left": "Look left",
+      "look_right": "Look right",
+      "look_up": "Look up",
+      "make_sound": "Make a sound",
+      "peck_ground": "Peck the ground",
+      "roll": "Roll",
+      "sit_or_stand": "Sit or stand",
+      "stop": "Stop",
+      "straight": "Straight ahead",
+      "turn_left": "Turn left",
+      "turn_right": "Turn right",
+      "unsupported": "Not something it can do",
+      "walk_backward": "Walk back",
+      "walk_forward": "Walk forward",
+      "wheee": "Wheee"
+    }
+  },
   "counts": {
     "ball": {
       "controls": 4,
@@ -13,7 +267,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "a54986e0298fe8e8ce3d0ddeb970339ba9d8016b",
+  "duck_studio_commit": "563c8fb9beee7bd6a79aa3f2a2668579fa2dc6fa",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duck Cards format | Microduck Studio</title>
+<meta name="description" content="The open Duck Cards format: what every card means, how a row of cards is read, what it becomes as a Studio plan, and what to print and write on a card.">
+<link rel="canonical" href="https://microduckstudio.com/cards/spec/">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://microduckstudio.com/cards/spec/">
+<meta property="og:title" content="The Duck Cards format">
+<meta property="og:description" content="What a Duck Card means, how a row is read, and what a reader should send.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="docs-page dc-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/" aria-label="Microduck Studio home">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/cards/" aria-current="page">Cards</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<!-- DUCKCARDS:SPRITE:BEGIN -->
+<svg class="dc-sprite" aria-hidden="true" focusable="false"><defs><symbol id="dc-i-walk-forward" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 39V9"/><path d="M13 20 24 9l11 11"/></g></symbol><symbol id="dc-i-walk-back" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 9v30"/><path d="M13 28l11 11 11-11"/></g></symbol><symbol id="dc-i-turn-left" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M31 40V24c0-6.6-5.4-12-12-12h-6.5"/><path d="M19 5l-7 7 7 7"/></g></symbol><symbol id="dc-i-turn-right" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M17 40V24c0-6.6 5.4-12 12-12h6.5"/><path d="M29 5l7 7-7 7"/></g></symbol><symbol id="dc-i-stop" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="13" y="11" width="7.5" height="26" rx="2" fill="currentColor" stroke="none"/><rect x="27.5" y="11" width="7.5" height="26" rx="2" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-speed-slow" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 33a16 16 0 0 1 32 0"/><path d="M8 38h32"/><path d="M24 33L11.00 33.00A13 13 0 0 1 15.64 23.04z" fill="currentColor" fill-opacity=".28" stroke="none"/><path d="M24 33L12.67 27.72"/><circle cx="24" cy="33" r="3" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-speed-fast" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 33a16 16 0 0 1 32 0"/><path d="M8 38h32"/><path d="M24 33L32.36 23.04A13 13 0 0 1 37.00 33.00z" fill="currentColor" fill-opacity=".28" stroke="none"/><path d="M24 33L35.33 27.72"/><circle cx="24" cy="33" r="3" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-speed-normal" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 33a16 16 0 0 1 32 0"/><path d="M8 38h32"/><path d="M24 33L18.51 21.22A13 13 0 0 1 29.49 21.22z" fill="currentColor" fill-opacity=".28" stroke="none"/><path d="M24 33L24.00 20.50"/><circle cx="24" cy="33" r="3" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-look-left" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 24c5.5-8 12-12 19-12s13.5 4 19 12c-5.5 8-12 12-19 12S10.5 32 5 24z"/><circle cx="14" cy="24" r="5.5" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-look-right" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 24c5.5-8 12-12 19-12s13.5 4 19 12c-5.5 8-12 12-19 12S10.5 32 5 24z"/><circle cx="34" cy="24" r="5.5" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-look-up" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 24c5.5-8 12-12 19-12s13.5 4 19 12c-5.5 8-12 12-19 12S10.5 32 5 24z"/><circle cx="24" cy="18" r="5.5" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-look-down" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 24c5.5-8 12-12 19-12s13.5 4 19 12c-5.5 8-12 12-19 12S10.5 32 5 24z"/><circle cx="24" cy="30" r="5.5" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-look-straight" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 24c5.5-8 12-12 19-12s13.5 4 19 12c-5.5 8-12 12-19 12S10.5 32 5 24z"/><circle cx="24" cy="24" r="5.5" fill="currentColor" stroke="none"/><circle cx="24" cy="24" r="9.5"/></g></symbol><symbol id="dc-i-kick-left" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><g transform="matrix(-1 0 0 1 48 0)"><ellipse cx="17" cy="20" rx="10" ry="6.2"/><path d="M23.6 15.6c.6-1.3 1-2.4 1.2-3.4"/><circle cx="26.5" cy="7.5" r="5"/><path d="M31.2 6.0 36.0 7.5l-4.8 1.5"/><circle cx="27.8" cy="6.3" r="1.2" fill="currentColor" stroke="none"/><path d="M14 26v13.5M10.5 40H17"/><path d="M20 25.5 29 31"/><path d="M27.6 28.4l3 4.4"/><circle cx="37.5" cy="35.5" r="6"/><path d="M37.5 32.6l2.7 2-1 3.2h-3.4l-1-3.2z" fill="currentColor" stroke="none"/><path d="M45.6 30.6l1.9-1.6M46.2 36.2h2.4"/></g></g></symbol><symbol id="dc-i-kick-right" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="17" cy="20" rx="10" ry="6.2"/><path d="M23.6 15.6c.6-1.3 1-2.4 1.2-3.4"/><circle cx="26.5" cy="7.5" r="5"/><path d="M31.2 6.0 36.0 7.5l-4.8 1.5"/><circle cx="27.8" cy="6.3" r="1.2" fill="currentColor" stroke="none"/><path d="M14 26v13.5M10.5 40H17"/><path d="M20 25.5 29 31"/><path d="M27.6 28.4l3 4.4"/><circle cx="37.5" cy="35.5" r="6"/><path d="M37.5 32.6l2.7 2-1 3.2h-3.4l-1-3.2z" fill="currentColor" stroke="none"/><path d="M45.6 30.6l1.9-1.6M46.2 36.2h2.4"/></g></symbol><symbol id="dc-i-sit-stand" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="26" cy="33" rx="12" ry="7"/><path d="M33 23.5c-.8 1.6-1.3 2.8-1.6 3.8"/><circle cx="35" cy="18" r="6"/><path d="M40.6 16.4 46 18l-5.4 1.6"/><circle cx="36.6" cy="16.6" r="1.3" fill="currentColor" stroke="none"/><path d="M8 10v28"/><path d="M4 14l4-4 4 4M4 34l4 4 4-4"/></g></symbol><symbol id="dc-i-roll" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 10a14 14 0 1 1-12.1 7"/><path d="M12.4 24.2 11.9 17l-6.5 3.2"/></g></symbol><symbol id="dc-i-peck" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 42h40"/><ellipse cx="17" cy="21" rx="10" ry="6.2" transform="rotate(-18 17 21)"/><path d="M26 22.5c2 2.2 3.4 4.6 4.2 7"/><circle cx="32.5" cy="32.5" r="4.6"/><path d="M34.6 36.6 36.4 41.4l2.6-4.6"/><circle cx="34.2" cy="31.4" r="1.15" fill="currentColor" stroke="none"/><path d="M14 27.5V42"/><circle cx="42" cy="39.6" r="1.7" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-sound-hello" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><circle cx="19" cy="17" r="1.8" fill="currentColor" stroke="none"/><circle cx="29" cy="17" r="1.8" fill="currentColor" stroke="none"/><path d="M18 22.5c3.5 3.5 8.5 3.5 12 0"/></g></symbol><symbol id="dc-i-sound-chirp" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><ellipse cx="20.6" cy="26" rx="3.6" ry="2.8" fill="currentColor" stroke="none"/><path d="M24 25.5V13c3 1 6 3 5.5 7"/></g></symbol><symbol id="dc-i-sound-coo" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><path d="M24 29c-7-4.5-10-8.5-10-12.3 0-2.7 2.1-4.7 4.6-4.7 2.2 0 3.9 1.3 5.4 3.2 1.5-1.9 3.2-3.2 5.4-3.2 2.5 0 4.6 2 4.6 4.7 0 3.8-3 7.8-10 12.3z" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-sound-alarm" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><path d="M24 14v9"/><circle cx="24" cy="28" r="1.9" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-sound-wheee" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><path d="M13 22c2.5-5 5-5 7.5 0s5 5 7.5 0 5-5 7.5 0"/></g></symbol><symbol id="dc-i-sound-inquire" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><path d="M19.5 16.5a4.5 4.5 0 1 1 6 4.2c-1.3.5-1.5 1.3-1.5 2.6v.7"/><circle cx="24" cy="28.5" r="1.8" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-sound-peck" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-8 7v-7h-4a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5z"/><circle cx="17" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="31" cy="21.5" r="2" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-start" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="17"/><path d="M20 15.5v17l13-8.5z" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-end" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="17"/><rect x="17" y="17" width="14" height="14" rx="2" fill="currentColor" stroke="none"/></g></symbol><symbol id="dc-i-repeat" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9H9v30h5"/><path d="M29 15a9 9 0 1 1-7.8 4.5"/><path d="M21.6 24.9l-.4-5.4-4.8 2.4"/></g></symbol><symbol id="dc-i-end-repeat" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M34 9h5v30h-5"/><path d="M19 15a9 9 0 1 1-7.8 4.5"/><path d="M11.6 24.9l-.4-5.4-4.8 2.4"/></g></symbol><symbol id="dc-i-fall" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 42h40"/><ellipse cx="25" cy="34" rx="11" ry="6"/><circle cx="10" cy="35.5" r="4.6"/><path d="M7.6 31.4 5 27.4l4.9 1.2"/><path d="M21 28.5 18.5 18M15.8 17.2l5.4-1.6"/><path d="M29 28.5 32 18.5M29.4 16.8l5.4 2.6"/><path d="M38 12l2.4-3.6M42 18h4.2M33.8 9.4V5"/></g></symbol></defs></svg>
+<!-- DUCKCARDS:SPRITE:END -->
+
+<main class="docs-layout">
+  <aside class="docs-sidebar">
+    <nav class="docs-desktop-nav" aria-label="Format sections">
+      <p class="sidebar-label">Duck Cards format</p>
+      <ul>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#card">A card</a></li>
+        <li><a href="#row">Reading a row</a></li>
+        <li><a href="#plan">Into a Studio plan</a></li>
+        <li><a href="#robot">On a robot</a></li>
+        <li><a href="#code">The code</a></li>
+        <li><a href="#nfc">NFC</a></li>
+        <li><a href="#file">The deck file</a></li>
+        <li><a href="#cards">Every card</a></li>
+        <li><a href="#changes">Changing the format</a></li>
+      </ul>
+      <a class="sidebar-back" href="/cards/">← Back to Duck Cards</a>
+    </nav>
+    <details class="docs-mobile-nav">
+      <summary>On this page</summary>
+    <nav aria-label="Format sections">
+      <p class="sidebar-label">Duck Cards format</p>
+      <ul>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#card">A card</a></li>
+        <li><a href="#row">Reading a row</a></li>
+        <li><a href="#plan">Into a Studio plan</a></li>
+        <li><a href="#robot">On a robot</a></li>
+        <li><a href="#code">The code</a></li>
+        <li><a href="#nfc">NFC</a></li>
+        <li><a href="#file">The deck file</a></li>
+        <li><a href="#cards">Every card</a></li>
+        <li><a href="#changes">Changing the format</a></li>
+      </ul>
+      <a class="sidebar-back" href="/cards/">← Back to Duck Cards</a>
+    </nav>
+    </details>
+  </aside>
+
+  <article class="docs-content" id="main" tabindex="-1">
+    <div class="docs-intro">
+      <p class="eyebrow">Duck Cards</p>
+      <h1>The card format</h1>
+      <p class="lede">What a Duck Card means, how a row is read, and what a reader should send. Short enough to read in one sitting, and exact enough to build on.</p>
+    </div>
+
+    <h2 id="status">Status</h2>
+    <p>This is <code>duck-cards/0</code>. Its words come from Studio's plan vocabulary, <code>r001</code>, and a row becomes a <code>duck-intent-plan/0</code> plan.</p>
+    <div class="note">
+      <p><strong>Nothing reads cards yet.</strong> Not Microduck Studio, and nothing else this project knows of. The format is written down first, so that every deck printed before a reader exists agrees with that reader when it comes.</p>
+    </div>
+    <p>The deck file, <a href="/cards/duck-cards.json"><code>duck-cards.json</code></a>, holds the same information as data. Every card on this site is drawn from it.</p>
+
+    <h2 id="card">A card</h2>
+    <div class="dc-anatomy">
+<!-- DUCKCARDS:ANATOMY:BEGIN -->
+<div class="dc-anatomy-card"><article class="dc dc-trick" data-tag="61" data-code="kick_right"><p class="dc-band">Trick</p><div class="dc-art"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><use href="#dc-i-kick-right"></use></svg></div><p class="dc-name">Kick, right</p><p class="dc-code">kick_right</p><div class="dc-foot"><ul class="dc-runs"><li>Studio</li><li>Pad: RB</li></ul><span class="dc-tagbox"><svg class="dc-tag" viewBox="0 0 10 10" shape-rendering="crispEdges" role="img" aria-label="Code 61"><path fill="#fff" d="M0 0h10v10H0z"/><path fill="#000" d="M1 1h8v1h-8zM1 2h4v1h-4zM7 2h2v1h-2zM1 3h2v1h-2zM5 3h4v1h-4zM1 4h2v1h-2zM5 4h4v1h-4zM1 5h1v1h-1zM3 5h2v1h-2zM6 5h1v1h-1zM8 5h1v1h-1zM1 6h2v1h-2zM5 6h1v1h-1zM7 6h2v1h-2zM1 7h1v1h-1zM4 7h3v1h-3zM8 7h1v1h-1zM1 8h8v1h-8z"/></svg><span class="dc-num">61</span></span></div></article></div>
+<!-- DUCKCARDS:ANATOMY:END -->
+      <dl class="spec">
+        <dt>Band</dt>
+        <dd>The category. The colour is for sorting at a glance; the word is there for black and white printers.</dd>
+        <dt>Picture</dt>
+        <dd>What the duck does, for readers and for children who cannot read yet.</dd>
+        <dt>Name</dt>
+        <dd>The card in Studio's own words, wherever Studio has a word for it.</dd>
+        <dt>Code word</dt>
+        <dd>The label a reader sends, spelled the way Studio's plan spells it.</dd>
+        <dt>Where it runs</dt>
+        <dd>Studio, when the duck in Studio's Play screen can do it. Pad and a button, when the gamepad can.</dd>
+        <dt>Code and number</dt>
+        <dd>An AprilTag and its number. The number is the card.</dd>
+      </dl>
+    </div>
+
+    <h2 id="row">Reading a row</h2>
+    <p class="standfirst">A row is one line of cards, read left to right like a sentence.</p>
+    <ol class="guide-steps">
+      <li><strong>Start and End mark the row.</strong> Both are optional. When they are on the table, nothing before Start or after End is read.</li>
+      <li><strong>An action card is a step.</strong> Walk, Trick and Sound cards each make one step, in the order they lie.</li>
+      <li><strong>Under changes the card above.</strong> A Speed or Look card placed directly below a card adds to that card's step. Under a card that cannot take it, a reader ignores it and says so.</li>
+      <li><strong>Repeat makes a bracket.</strong> Repeat opens one and End repeat closes the nearest one still open. The count is written on the Repeat card, and a reader that cannot read handwriting asks for it. Brackets can sit inside brackets.</li>
+      <li><strong>When it falls starts a second row.</strong> If the duck falls, the first row stops. Once the duck is back on its feet, the second row runs from its first card, and then the program ends.</li>
+      <li><strong>Your cards mean what the deck file says.</strong> A reader that has no meaning for one stops at it and says which card it was.</li>
+    </ol>
+
+    <h2 id="plan">Into a Studio plan</h2>
+    <p>A row becomes the steps of a <code>duck-intent-plan/0</code> plan, the format Studio's plan editor reads from a router. Each action card is one step, and the card's name is the step's clause. A card under it adds a label to that step. Control cards shape the steps and never become one. A plan has no events, so a When it falls row stays with the reader.</p>
+    <p>The row on <a href="/cards/">the Duck Cards page</a> becomes this:</p>
+<!-- DUCKCARDS:EXAMPLE:BEGIN -->
+<pre tabindex="0" role="region" aria-label="The example row as a Studio plan"><code>{
+  &quot;format&quot;: &quot;duck-intent-plan/0&quot;,
+  &quot;request&quot;: &quot;Start. Say hello. Walk forward, slowly. Turn left. Kick with the right foot. End.&quot;,
+  &quot;model&quot;: &quot;duck-cards/0&quot;,
+  &quot;steps&quot;: [
+    {
+      &quot;clause&quot;: &quot;Hello&quot;,
+      &quot;labels&quot;: {
+        &quot;action&quot;: &quot;make_sound&quot;,
+        &quot;sound&quot;: &quot;greet&quot;
+      }
+    },
+    {
+      &quot;clause&quot;: &quot;Walk forward&quot;,
+      &quot;labels&quot;: {
+        &quot;action&quot;: &quot;walk_forward&quot;,
+        &quot;speed&quot;: &quot;slow&quot;
+      }
+    },
+    {
+      &quot;clause&quot;: &quot;Turn left&quot;,
+      &quot;labels&quot;: {
+        &quot;action&quot;: &quot;turn_left&quot;
+      }
+    },
+    {
+      &quot;clause&quot;: &quot;Kick, right&quot;,
+      &quot;labels&quot;: {
+        &quot;action&quot;: &quot;kick_right&quot;
+      }
+    }
+  ]
+}</code></pre>
+<!-- DUCKCARDS:EXAMPLE:END -->
+    <p id="bench-rules">Studio's bench runs a plan with one trick at most, and only as its last step: on the bench a trick is a network that takes over when the walking ends, and it does not hand the duck back. A row with a trick anywhere else still becomes a plan, and Studio says why it will not run it. Sound and Look steps stay in the plan, but the bench plays no sound and sends no head pose.</p>
+
+    <h2 id="robot">On a robot</h2>
+    <p id="robot-calls">A reader that drives a real Microduck sends robotd's own calls, the way Microduck Studio's source does when it runs a plan on a duck: <code>robot.move</code> for each walking step, <code>robot.do</code> with the skill's name for a trick, and <code>robot.sound</code> with its tag for a sound. On a robot a trick can sit anywhere in a row, and a row can hold more than one, because the robot takes the duck back to walking when a trick ends. A Look card needs a head pose, <code>robot.head</code>, and Studio's source does not send one to a robot yet. <a href="#cards">Every card</a> names its call.</p>
+    <p>Wait for each trick to finish before sending the next step: a trick runs to its end once it starts, and stopping the duck does not cancel it. Send intents only, never motor positions. The robot's own software decides what is safe to carry out.</p>
+    <p class="hair">Nobody has run a card on a real Microduck yet, because nobody has a Microduck yet.</p>
+
+    <h2 id="code">The code</h2>
+    <p>Every card carries an AprilTag from the <code>tag36h11</code> family. The tag's id is the card's number.</p>
+    <ul>
+      <li><strong>Size.</strong> On a full size card the tag's black square is a little over a centimetre across, with a white margin one cell wide around it. Keep that margin on a card of your own.</li>
+      <li><strong>Numbers by category.</strong> Each category has its own range, so a new card can join it without renumbering anything:
+<!-- DUCKCARDS:RANGES:BEGIN -->
+Walk 0 to 19, Speed 20 to 39, Look 40 to 59, Trick 60 to 79, Sound 80 to 99, Control 100 to 119, When 120 to 139, and Your card 200 to 299.
+<!-- DUCKCARDS:RANGES:END -->
+      </li>
+      <li><strong>Checked before publishing.</strong> The codes are drawn from the family's own table, and this site's checks read every printed code back against that table before a page goes live.</li>
+    </ul>
+
+    <h2 id="nfc">NFC</h2>
+    <p>Optional. Any NFC Forum Type 2 sticker with room for two records will do, and an NTAG213 has room for every card in the deck. Write the records in this order:</p>
+<!-- DUCKCARDS:NFC:BEGIN -->
+<pre tabindex="0" role="region" aria-label="What to write on the NFC sticker for Kick, right"><code>Record 1, URI:
+https://microduckstudio.com/cards/spec/#card-61
+
+Record 2, MIME type application/vnd.duckcards+json:
+{&quot;format&quot;:&quot;duck-cards/0&quot;,&quot;tag&quot;:61,&quot;code&quot;:&quot;kick_right&quot;}</code></pre>
+<!-- DUCKCARDS:NFC:END -->
+    <p>A phone that taps the card opens its row in <a href="#cards">the table below</a>. Lock the sticker after writing it, if your app offers to, so a curious tap cannot change a card.</p>
+
+    <h2 id="file">The deck file</h2>
+    <p><a href="/cards/duck-cards.json"><code>duck-cards.json</code></a> is plain JSON, and a deck of your own starts as a copy of it.</p>
+    <dl class="spec">
+      <dt><code>format</code></dt>
+      <dd><code>duck-cards/0</code>. A reader refuses a format it does not know.</dd>
+      <dt><code>vocabulary</code> and <code>plan_format</code></dt>
+      <dd>The Studio vocabulary the cards' labels come from, and the plan a row becomes.</dd>
+      <dt><code>categories</code></dt>
+      <dd>Each has an <code>id</code>, a <code>name</code>, a line <code>about</code> it, and <code>codes</code>, its range of numbers.</dd>
+      <dt><code>cards</code></dt>
+      <dd>Each card has a <code>tag</code> number, a <code>code</code> word, a <code>name</code>, a <code>category</code>, a <code>kind</code> (action, modifier, control, event or yours), the <code>plan</code> labels it adds to a step, and whether it is <code>printed</code> in the starter deck. A card of your own can add a <code>does</code> sentence that says what it means.</dd>
+      <dt><code>example</code></dt>
+      <dd>The row shown on the Duck Cards page, and how it reads aloud.</dd>
+      <dt><code>license</code></dt>
+      <dd>CC BY 4.0, for the cards, their pictures and the lessons.</dd>
+    </dl>
+
+    <h2 id="cards">Every card</h2>
+    <p>Studio's words and the gamepad's buttons in this table are read out of Microduck Studio's source before every publish, and the site will not publish while a card disagrees with them.</p>
+<!-- DUCKCARDS:TABLE:BEGIN -->
+<div class="scroller" role="region" aria-label="Every card in the format" tabindex="0"><table class="dc-table"><caption>Every card, by code number. Vocabulary r001.</caption><tr><th scope="col">Code</th><th scope="col">Card</th><th scope="col">Studio plan step</th><th scope="col">Under it</th><th scope="col">Runs in Studio</th><th scope="col">Pad</th><th scope="col">On a robot</th></tr><tr id="card-0"><td>0</td><td>Walk forward<br><span class="meta"><code>walk_forward</code> action</span></td><td>action <code>walk_forward</code></td><td>Speed, Look</td><td>Yes</td><td>L stick</td><td><code>robot.move</code></td></tr><tr id="card-1"><td>1</td><td>Walk back<br><span class="meta"><code>walk_backward</code> action</span></td><td>action <code>walk_backward</code></td><td>Speed, Look</td><td>Yes</td><td>L stick</td><td><code>robot.move</code></td></tr><tr id="card-2"><td>2</td><td>Turn left<br><span class="meta"><code>turn_left</code> action</span></td><td>action <code>turn_left</code></td><td>Speed, Look</td><td>Yes</td><td>R stick</td><td><code>robot.move</code></td></tr><tr id="card-3"><td>3</td><td>Turn right<br><span class="meta"><code>turn_right</code> action</span></td><td>action <code>turn_right</code></td><td>Speed, Look</td><td>Yes</td><td>R stick</td><td><code>robot.move</code></td></tr><tr id="card-4"><td>4</td><td>Stop<br><span class="meta"><code>stop</code> action</span></td><td>action <code>stop</code></td><td>Look</td><td>Yes</td><td>None</td><td><code>robot.move at zero</code></td></tr><tr id="card-20"><td>20</td><td>Slow<br><span class="meta"><code>slow</code> goes under</span></td><td>speed <code>slow</code></td><td>Goes under Walk forward, Walk back, Turn left or Turn right</td><td>Yes</td><td>None</td><td><code>scales robot.move</code></td></tr><tr id="card-21"><td>21</td><td>Fast<br><span class="meta"><code>fast</code> goes under</span></td><td>speed <code>fast</code></td><td>Goes under Walk forward, Walk back, Turn left or Turn right</td><td>Yes</td><td>None</td><td><code>scales robot.move</code></td></tr><tr id="card-22"><td>22</td><td>Normal<br><span class="meta"><code>normal</code> goes under, not in the starter deck</span></td><td>speed <code>normal</code></td><td>Goes under Walk forward, Walk back, Turn left or Turn right</td><td>Yes</td><td>None</td><td><code>scales robot.move</code></td></tr><tr id="card-40"><td>40</td><td>Look left<br><span class="meta"><code>look_left</code> goes under</span></td><td>head <code>look_left</code></td><td>Goes under Walk forward, Walk back, Turn left, Turn right or Stop</td><td>No</td><td>Y</td><td><code>robot.head</code></td></tr><tr id="card-41"><td>41</td><td>Look right<br><span class="meta"><code>look_right</code> goes under</span></td><td>head <code>look_right</code></td><td>Goes under Walk forward, Walk back, Turn left, Turn right or Stop</td><td>No</td><td>Y</td><td><code>robot.head</code></td></tr><tr id="card-42"><td>42</td><td>Look up<br><span class="meta"><code>look_up</code> goes under</span></td><td>head <code>look_up</code></td><td>Goes under Walk forward, Walk back, Turn left, Turn right or Stop</td><td>No</td><td>Y</td><td><code>robot.head</code></td></tr><tr id="card-43"><td>43</td><td>Look down<br><span class="meta"><code>look_down</code> goes under</span></td><td>head <code>look_down</code></td><td>Goes under Walk forward, Walk back, Turn left, Turn right or Stop</td><td>No</td><td>Y</td><td><code>robot.head</code></td></tr><tr id="card-44"><td>44</td><td>Straight ahead<br><span class="meta"><code>straight</code> goes under</span></td><td>head <code>straight</code></td><td>Goes under Walk forward, Walk back, Turn left, Turn right or Stop</td><td>No</td><td>Y</td><td><code>robot.head</code></td></tr><tr id="card-60"><td>60</td><td>Kick, left<br><span class="meta"><code>kick_left</code> action</span></td><td>action <code>kick_left</code></td><td>Nothing</td><td>Yes</td><td>LB</td><td><code>robot.do kick_left</code></td></tr><tr id="card-61"><td>61</td><td>Kick, right<br><span class="meta"><code>kick_right</code> action</span></td><td>action <code>kick_right</code></td><td>Nothing</td><td>Yes</td><td>RB</td><td><code>robot.do kick_right</code></td></tr><tr id="card-62"><td>62</td><td>Sit or stand<br><span class="meta"><code>sit_or_stand</code> action</span></td><td>action <code>sit_or_stand</code></td><td>Nothing</td><td>Yes</td><td>▼</td><td><code>robot.do sit_toggle</code></td></tr><tr id="card-63"><td>63</td><td>Roll<br><span class="meta"><code>roll</code> action</span></td><td>action <code>roll</code></td><td>Nothing</td><td>Yes</td><td>X</td><td><code>robot.do roulade</code></td></tr><tr id="card-64"><td>64</td><td>Peck the ground<br><span class="meta"><code>peck_ground</code> action</span></td><td>action <code>peck_ground</code></td><td>Nothing</td><td>Yes</td><td>A</td><td><code>robot.do ground_pick</code></td></tr><tr id="card-80"><td>80</td><td>Hello<br><span class="meta"><code>greet</code> action</span></td><td>action <code>make_sound</code>, sound <code>greet</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound greet</code></td></tr><tr id="card-81"><td>81</td><td>Chirp<br><span class="meta"><code>chirp</code> action</span></td><td>action <code>make_sound</code>, sound <code>chirp</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound chirp</code></td></tr><tr id="card-82"><td>82</td><td>Coo<br><span class="meta"><code>coo</code> action</span></td><td>action <code>make_sound</code>, sound <code>coo</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound coo</code></td></tr><tr id="card-83"><td>83</td><td>Alarm<br><span class="meta"><code>alarm</code> action</span></td><td>action <code>make_sound</code>, sound <code>alarm</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound alarm</code></td></tr><tr id="card-84"><td>84</td><td>Wheee<br><span class="meta"><code>wheee</code> action</span></td><td>action <code>make_sound</code>, sound <code>wheee</code></td><td>Nothing</td><td>No</td><td>LT</td><td><code>robot.sound wheee</code></td></tr><tr id="card-85"><td>85</td><td>Inquire<br><span class="meta"><code>inquire</code> action, not in the starter deck</span></td><td>action <code>make_sound</code>, sound <code>inquire</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound inquire</code></td></tr><tr id="card-86"><td>86</td><td>Peck<br><span class="meta"><code>peck</code> action, not in the starter deck</span></td><td>action <code>make_sound</code>, sound <code>peck</code></td><td>Nothing</td><td>No</td><td>None</td><td><code>robot.sound peck</code></td></tr><tr id="card-100"><td>100</td><td>Start<br><span class="meta"><code>start</code> control</span></td><td>Not in Studio's plan</td><td>Marks where the row begins.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-101"><td>101</td><td>End<br><span class="meta"><code>end</code> control</span></td><td>Not in Studio's plan</td><td>Marks where the row ends.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-102"><td>102</td><td>Repeat<br><span class="meta"><code>repeat</code> control</span></td><td>Not in Studio's plan</td><td>Opens a bracket. The count is written on the card.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-103"><td>103</td><td>End repeat<br><span class="meta"><code>end_repeat</code> control</span></td><td>Not in Studio's plan</td><td>Closes the nearest open Repeat.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-120"><td>120</td><td>When it falls<br><span class="meta"><code>when_falls</code> when</span></td><td>Not in Studio's plan</td><td>Starts a second row that runs after a fall.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-200"><td>200</td><td>Your card<br><span class="meta"><code>card_1</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-201"><td>201</td><td>Your card<br><span class="meta"><code>card_2</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-202"><td>202</td><td>Your card<br><span class="meta"><code>card_3</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-203"><td>203</td><td>Your card<br><span class="meta"><code>card_4</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-204"><td>204</td><td>Your card<br><span class="meta"><code>card_5</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-205"><td>205</td><td>Your card<br><span class="meta"><code>card_6</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-206"><td>206</td><td>Your card<br><span class="meta"><code>card_7</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-207"><td>207</td><td>Your card<br><span class="meta"><code>card_8</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr><tr id="card-208"><td>208</td><td>Your card<br><span class="meta"><code>card_9</code> yours</span></td><td>Not in Studio's plan</td><td>Yours to decide, and to write down in the deck file.</td><td>No</td><td>None</td><td>None</td></tr></table></div>
+<!-- DUCKCARDS:TABLE:END -->
+
+    <h2 id="changes">Changing the format</h2>
+    <ul>
+      <li><strong>A number never changes meaning.</strong> A new card takes a new number from its category's range.</li>
+      <li><strong>Studio's words win.</strong> When Studio renames a label, the card is renamed with it.</li>
+      <li><strong>The version changes</strong> when a reader written for the old format would misread the new one.</li>
+      <li><strong>Propose a card</strong> by <a href="https://github.com/craigm26/microduck-com/issues/new" rel="noopener">opening an issue</a> on this site's repository.</li>
+    </ul>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p><strong>This is not the official Microduck app.</strong> Pollen Robotics make the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <p>Duck Cards, their pictures and their lessons are CC BY 4.0. Microduck Studio, duckkit and the bench are Apache-2.0.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Studio</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/cards/">Duck Cards</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="mailto:craigm26@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

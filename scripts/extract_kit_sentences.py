@@ -209,6 +209,261 @@ def read_leaderboard(root: pathlib.Path, rel: str) -> dict[str, int]:
     raise Missing(f"{rel}: no `public static let leaderboard: [Row]`")
 
 
+def read_string_list(root: pathlib.Path, rel: str, name: str) -> list[str]:
+    """`public static let NAME = ["a", "b",` and every line up to the closing `]`.
+
+    Duck Cards: DuckIntentPlan.Vocabulary wraps its action list across three
+    lines, so the literal is collected until the bracket closes, not per line.
+    """
+    lines = _lines(root, rel)
+    head = re.compile(r"^\s*public static let " + re.escape(name) + r"\s*(?::[^=]+)?=\s*\[(.*)$")
+    for index, line in enumerate(lines):
+        match = head.match(line)
+        if not match:
+            continue
+        text, cursor = match.group(1), index + 1
+        while "]" not in text:
+            if cursor >= len(lines):
+                raise Missing(f"{rel}: {name} has no closing bracket")
+            text += " " + lines[cursor]
+            cursor += 1
+        items = [_unescape(item) for item in
+                 re.findall(r'"((?:[^"\\]|\\.)*)"', text.split("]")[0])]
+        if not items:
+            raise Missing(f"{rel}: {name} is an empty list")
+        return items
+    raise Missing(f"{rel}: no `public static let {name}` binding a list")
+
+
+def read_switch(root: pathlib.Path, rel: str, head_text: str,
+                case_pattern: str) -> tuple[list[tuple[str, ...]], str | None]:
+    """The `case ...: return ...` rows of the first switch under a head line.
+
+    Returns the matched rows, in order, and the text of the `default:` row if
+    there is one. A row the pattern does not read is a failure rather than a
+    skip: a switch that grew a shape this reader has not seen must stop the
+    deploy, not shrink the table it feeds.
+    """
+    lines = _lines(root, rel)
+    starts = [i for i, line in enumerate(lines) if line.strip() == head_text]
+    if not starts:
+        raise Missing(f"{rel}: no line reading `{head_text}`")
+    rows: list[tuple[str, ...]] = []
+    default = None
+    for line in lines[starts[0] + 1:]:
+        stripped = line.strip()
+        if stripped.startswith("switch ") or not stripped or stripped.startswith("//"):
+            continue
+        if stripped.startswith("default:"):
+            default = stripped
+            break
+        if stripped == "}":
+            break
+        match = re.fullmatch(case_pattern, stripped)
+        if not match:
+            raise Missing(f"{rel}: under `{head_text}`, a row this reader does not "
+                          f"understand: {stripped!r}")
+        rows.append(match.groups())
+    if not rows:
+        raise Missing(f"{rel}: the switch under `{head_text}` has no rows")
+    return rows, default
+
+
+def read_block(root: pathlib.Path, rel: str, head_pattern: str) -> str:
+    """The text of a bracketed literal: from a head line to the line closing it.
+
+    Comment lines are dropped first, so a binding named in a comment is not a
+    binding.
+    """
+    lines = _lines(root, rel)
+    head = re.compile(head_pattern)
+    for index, line in enumerate(lines):
+        if not head.match(line):
+            continue
+        body: list[str] = []
+        for row in lines[index + 1:]:
+            stripped = row.strip()
+            if stripped.startswith("]"):
+                if not body:
+                    raise Missing(f"{rel}: the literal after {head_pattern!r} is empty")
+                return "\n".join(body)
+            if stripped.startswith("//"):
+                continue
+            body.append(row)
+        raise Missing(f"{rel}: the literal after {head_pattern!r} never closes")
+    raise Missing(f"{rel}: no line matching {head_pattern!r}")
+
+
+def read_enum_block(root: pathlib.Path, rel: str, head_pattern: str,
+                    after: str | None = None) -> list[str]:
+    """The case names of one enum, in order: `case a`, `case b(String)`, `case c, d`.
+
+    Only the enum's own level is read, so the `case .a:` rows of a switch inside
+    it are not cases. `after` names a line the enum must come after, for a file
+    that declares two enums of the same name in two types.
+    """
+    lines = _lines(root, rel)
+    head = re.compile(head_pattern)
+    start = 0
+    if after is not None:
+        marks = [i for i, line in enumerate(lines) if re.match(after, line)]
+        if not marks:
+            raise Missing(f"{rel}: no line matching {after!r}")
+        start = marks[0]
+    for index in range(start, len(lines)):
+        if not head.match(lines[index]):
+            continue
+        depth, opened, cases = 0, False, []
+        for row in lines[index:]:
+            code = re.sub(r'"(?:[^"\\]|\\.)*"', '""', row.split("//")[0])
+            if depth == 1:
+                match = re.match(r"\s*case\s+(\w+(?:\([^)]*\))?(?:\s*,\s*\w+(?:\([^)]*\))?)*)", code)
+                if match:
+                    cases += [re.match(r"\w+", part.strip()).group()
+                              for part in re.split(r",(?![^(]*\))", match.group(1))]
+            depth += code.count("{") - code.count("}")
+            opened = opened or depth > 0
+            if opened and depth <= 0:
+                if not cases:
+                    raise Missing(f"{rel}: the enum at {head_pattern!r} has no cases")
+                return cases
+        raise Missing(f"{rel}: the enum at {head_pattern!r} never closes")
+    raise Missing(f"{rel}: no line matching {head_pattern!r}")
+
+
+def read_pad(root: pathlib.Path) -> tuple[dict[str, str], list[dict[str, object]]]:
+    """The pad: each control's face, and what each control does on the robot and here.
+
+    Its own function because check_cards.py reads it twice: out of today's
+    StudioKit, and out of the StudioKit the beta was built from.
+    """
+    rows, _ = read_switch(root, PAD, "public var face: String {",
+                          r'case \.(\w+): return "((?:[^"\\]|\\.)*)"')
+    faces = {control: _unescape(face) for control, face in rows}
+    block = read_block(root, PAD, r"^\s*public static let bindings\s*:\s*\[Binding\]\s*=\s*\[\s*$")
+    # `robot` is padd's own description. It is kept for the renderer to tell
+    # head mode and the wheee apart, and it is never printed: several of these
+    # carry an em dash, which no page on this site may.
+    bindings = [{"control": control, "robot": _unescape(robot), "here": effect,
+                 "slot": slot or None}
+                for control, robot, effect, slot in re.findall(
+                    r'Binding\(control:\s*\.(\w+),\s*onTheRobot:\s*"((?:[^"\\]|\\.)*)",'
+                    r'\s*here:\s*\.(\w+)(?:\(\.(\w+)\))?', block)]
+    if sorted(b["control"] for b in bindings) != sorted(faces):
+        raise Missing(f"{PAD}: the bindings do not cover every control on the pad once")
+    return faces, bindings
+
+
+def read_said(root: pathlib.Path) -> dict[str, str]:
+    """The Play, Compare and Settings words the Duck Cards page names, as values.
+
+    Also read twice by check_cards.py, which is how "every control named here is
+    already in the beta" is checked rather than hoped.
+    """
+    rows, _ = read_switch(root, DETAIL, "public var name: String {",
+                          r'case \.(\w+): return "((?:[^"\\]|\\.)*)"')
+    detail = dict(rows)
+    said = {
+        "record_chip": read_string(root, PAD_PILOT, "recordChip"),
+        "name_it_chip": read_string(root, PAD_PILOT, "nameItChip"),
+        "say_it_chip": read_string(root, PAD_PILOT, "sayItChip"),
+        "say_it_caption": read_string(root, PAD_PILOT, "sayItCaption"),
+        "say_it_placeholder": read_string(root, TALK, "sayItPlaceholder"),
+        "not_a_model": read_string(root, TALK, "notAModel"),
+        "pick_two": read_string(root, COMPARE, "pickTwo"),
+        "mimic": read_string(root, MIMIC, "title"),
+        "detail_simple": detail.get("simple", ""),
+        "detail_everything": detail.get("full", ""),
+    }
+    for key, value in said.items():
+        if not value:
+            raise Missing(f"read_said: {key} came back empty")
+        if EM_DASH in value or EN_DASH in value:
+            raise Missing(f"read_said: {key} now carries a dash this site cannot quote")
+    # Where Simple says the rest of the app is. Not quoted (it carries an arrow),
+    # but the page's "Learn's last lesson can turn it on too" is held to it.
+    note = re.search(r'"\. (Learn[^"]*)"', "\n".join(_lines(root, DETAIL)))
+    if not note:
+        raise Missing(f"{DETAIL}: withheldNote no longer names where the switch is")
+    said["detail_switch"] = _unescape(note.group(1))
+    return said
+
+
+def read_cards(root: pathlib.Path) -> dict[str, object]:
+    """Everything the Duck Cards pages print about the app, read as values.
+
+    A card is named in Studio's own words, carries a pad button only where
+    StudioKit's transcription of `padd` has one, and says it runs in Studio
+    only where the bench answers that button. Every one of those is read here,
+    so a renamed label or a moved binding fails the deploy instead of leaving a
+    printed card that disagrees with the phone.
+    """
+    vocabulary = {
+        "id": read_string(root, INTENT_PLAN, "id"),
+        "actions": read_string_list(root, INTENT_PLAN, "actions"),
+        "speeds": read_string_list(root, INTENT_PLAN, "speeds"),
+        "heads": read_string_list(root, INTENT_PLAN, "heads"),
+        "sounds": read_string_list(root, INTENT_PLAN, "sounds"),
+    }
+    if not re.fullmatch(r"r\d{3}", vocabulary["id"]):
+        raise Missing(f"{INTENT_PLAN}: the vocabulary id {vocabulary['id']!r} is not rNNN")
+
+    rows, default = read_switch(
+        root, INTENT_PLAN, "public static func words(_ label: String) -> String {",
+        r'case "([a-z_]+)": return "((?:[^"\\]|\\.)*)"')
+    if default != "default: return label.prefix(1).uppercased() + label.dropFirst()":
+        raise Missing(f"{INTENT_PLAN}: words(_:) spells unlisted labels another way now "
+                      f"({default!r}); teach read_cards the new rule")
+    words = {label: _unescape(said) for label, said in rows}
+
+    rows, default = read_switch(
+        root, INTENT_PLAN, "public var heads: [Head] {",
+        r'case ((?:"[a-z_]+",?\s*)+): return \[([^\]]*)\]')
+    takes: dict[str, list[str]] = {}
+    for labels, heads in rows:
+        for label in re.findall(r'"([a-z_]+)"', labels):
+            takes[label] = re.findall(r"\.(\w+)", heads)
+    if default != "default: return [.action]":
+        raise Missing(f"{INTENT_PLAN}: Node.heads has a new default ({default!r})")
+    takes["default"] = ["action"]
+
+    skills = dict(re.findall(r'"([a-z_]+)":\s*\.(\w+)', read_block(
+        root, INTENT_PLAN, r"^\s*static let skills\s*:.*=\s*\[\s*$")))
+    robotd = dict(re.findall(r'\.(\w+):\s*"([a-z_]+)"', read_block(
+        root, ROBOT_PLAN, r"^\s*public static let robotdName\s*:.*=\s*\[\s*$")))
+    missing = sorted(slot for slot in skills.values() if slot not in robotd)
+    if not skills or missing:
+        raise Missing(f"{ROBOT_PLAN}: no robotd name for the slots {missing}")
+
+    faces, bindings = read_pad(root)
+    said = read_said(root)
+
+    # What a plan may hold, on the bench and on a robot. The format page says a
+    # bench runs one trick and only as the last step, that a robot takes a trick
+    # anywhere and more than one, and that no head pose goes to a robot yet.
+    # Each of those is a refusal case or a beat case, read here as a name.
+    plans = {
+        "bench_refusals": read_enum_block(root, INTENT_PLAN, r"^\s*public enum RunRefusal\b"),
+        "robot_refusals": read_enum_block(root, ROBOT_PLAN, r"^\s*public enum Refusal\b",
+                                          after=r"^public struct RobotPlan\b"),
+        "robot_beats": read_enum_block(root, ROBOT_PLAN, r"^\s*public enum Beat\b",
+                                       after=r"^public struct RobotPlan\b"),
+    }
+
+    return {
+        "vocabulary": vocabulary,
+        "plan_format": read_string(root, INTENT_PLAN, "format"),
+        "plans": plans,
+        "words": words,
+        "takes": takes,
+        "skills": skills,
+        "robotd": robotd,
+        "pad_faces": faces,
+        "pad_bindings": bindings,
+        "said": said,
+    }
+
+
 def optional(reader, *args):
     """An Eval-derived read. Returns (value, None) or (None, reason)."""
     try:
@@ -260,6 +515,15 @@ INTENT = "StudioKit/Sources/StudioKit/IntentExport.swift"
 PLAN = "StudioKit/Sources/StudioKit/DuckPlanFile.swift"
 EPOCHS = "StudioKit/Sources/StudioKit/EvalEpochs.swift"
 EVALLOG = "StudioKit/Sources/StudioKit/EvalLog.swift"
+# Duck Cards (read_cards): the plan vocabulary, the pad, and the Play labels.
+INTENT_PLAN = "StudioKit/Sources/StudioKit/DuckIntentPlan.swift"
+PAD = "StudioKit/Sources/StudioKit/DuckPad.swift"
+PAD_PILOT = "StudioKit/Sources/StudioKit/PadPilot.swift"
+TALK = "StudioKit/Sources/StudioKit/DuckTalk.swift"
+ROBOT_PLAN = "StudioKit/Sources/StudioKit/RobotPlan.swift"
+COMPARE = "StudioKit/Sources/StudioKit/Compare.swift"
+MIMIC = "StudioKit/Sources/StudioKit/MimicSource.swift"
+DETAIL = "StudioKit/Sources/StudioKit/DetailLevel.swift"
 
 BALL_CONTROLS_CLAUSE = (
     "Standing still and both of Pollen's kick policies chase nothing at all; "
@@ -321,6 +585,7 @@ def main() -> int:
             "stairs_core_count": int(read_number(root, STAIRS_GRID, "coreCount")),
             "stairs_cell_count": int(read_number(root, STAIRS_GRID, "count")),
         }
+        cards = read_cards(root)
     except Missing as why:
         print(f"extract: {why}", file=sys.stderr)
         return 1
@@ -423,6 +688,7 @@ def main() -> int:
         "numbers": numbers,
         "shipped_numbers": shipped_numbers,
         "eval_keys_missing": eval_missing,
+        "cards": cards,
     }
 
     mirror = here / "tools/site-sentences.json"
@@ -439,7 +705,8 @@ def main() -> int:
     out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"extract: {len(quoted)} quoted, {len(restated)} restated, "
           f"{len(routes)} routes, stairs {stairs_rows['rows']} rows, "
-          f"ball {ball_rows['rows']} rows -> tools/kit-sentences.json")
+          f"ball {ball_rows['rows']} rows, cards vocabulary {cards['vocabulary']['id']} "
+          f"and {len(cards['pad_bindings'])} pad bindings -> tools/kit-sentences.json")
     if eval_missing:
         print("extract: not yet in the kit: " + "; ".join(eval_missing))
     return 0

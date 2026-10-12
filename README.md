@@ -3,15 +3,19 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Three HTML pages and a shared stylesheet, with no build step, bundler, npm dependency,
-or JavaScript. The visual theme follows Pollen Robotics' warm orange accents, spacious
-typography and rounded panels while clearly identifying Studio as an independent project.
+Six HTML pages and a shared stylesheet, with no build step at deploy time, bundler, npm
+dependency, or JavaScript. The visual theme follows Pollen Robotics' warm orange accents,
+spacious typography and rounded panels while clearly identifying Studio as an independent
+project.
 
 - `public/index.html` - the product overview and downloads.
 - `public/docs/index.html` - getting started, policy and motion guides, bench setup,
   evaluations, challenge criteria, reproducibility, file formats and resources.
 - `public/privacy/index.html` - the privacy policy the App Store listing links to. Its URL
   is on the listing for app 6806299485, so the path, filename and trailing slash never change.
+- `public/cards/` - Duck Cards, a printable deck for classrooms: the deck and its lessons
+  (`index.html`), the cut sheet (`print/index.html`), the card format (`spec/index.html`),
+  and the deck file every card is drawn from (`duck-cards.json`).
 - `public/assets/site.css` - shared theme, responsive navigation, documentation layout,
   light and dark colors, and keyboard focus styles.
 - `public/assets/studio-icon.png` - the existing app icon, copied from the app repository.
@@ -19,8 +23,10 @@ typography and rounded panels while clearly identifying Studio as an independent
   the `duckbench` repo; regenerate there, do not edit here.
 - `public/_headers` - response headers, including a CSP with `default-src 'none'`, local
   stylesheets allowed, and no `script-src`, so scripts cannot execute on this site.
-- `public/robots.txt`, `public/sitemap.xml` - all three URLs and a crawl pointer.
+- `public/robots.txt`, `public/sitemap.xml` - every page and a crawl pointer.
 - `scripts/` - the gates. `tools/` is never served.
+- `tools/duckcards/` - draws the cards into the pages: `build_cards.py`, the pictures
+  (`art.py`) and the AprilTag table (`tag36h11.txt`).
 
 ## Preview locally
 
@@ -34,7 +40,7 @@ Open `http://localhost:8000/` and `/docs/`. The preview server does not apply Cl
 ## Run the gates before every deploy
 
 ```sh
-bash scripts/predeploy.sh                # all six, stopping at the first failure
+bash scripts/predeploy.sh                # all seven, stopping at the first failure
 ```
 
 In order: the extractor reads the **values** of the pinned StudioKit constants out of
@@ -43,6 +49,9 @@ on the site word for word and every restated number has to be in the constant it
 from. The copy checks cover every public HTML page, and the independence statement must
 appear on each one. The dash, third party, shared stylesheet, dataset, format and bundle
 claims are checked. The Evaluations copy is checked against the receipt in both directions.
+Every Duck Card on every page is read back against the deck file, Studio's own words and
+pad, and the AprilTag table cell by cell; the controls the cards page names are read again
+out of the StudioKit the receipt's beta build was made from.
 Local links, cross-page fragments, stylesheet references and assets must resolve within
 `public/`; external links are fetched by GET and must answer 200. Every page must close its
 elements, use unique IDs and appear in the sitemap. Same-site canonical URLs are validated
@@ -76,6 +85,25 @@ installable, then records the beta state App Store Connect actually returned, wr
 receipt beside the whole status line, and puts the homepage and docs into the shipped
 state. To go back, `bash scripts/set_evallog_state.sh not-shipped` and delete the receipt.
 
+## Duck Cards
+
+The cards are drawn, never typed. `public/cards/duck-cards.json` says which cards exist,
+`tools/kit-sentences.json` (written by the extractor) says what Studio calls each one and
+which pad button does what, and `tools/duckcards/tag36h11.txt` says what each code looks
+like. To change a card, edit the deck file, then redraw the regions between the
+`DUCKCARDS` markers:
+
+```sh
+python3 scripts/extract_kit_sentences.py ~/projects/duck-studio
+python3 tools/duckcards/build_cards.py           # --check only reports stale regions
+```
+
+A card's number never changes meaning; a new card takes a new number from its category's
+range. The pictures in `art.py` are original drawings, not traced from Pollen Robotics'
+art. The deck, its pictures and its lessons are CC BY 4.0; the code that draws them is
+Apache-2.0 like the rest of the project. Print the cut sheet at actual size on Letter and on
+A4 after any change to card sizes, and check every code still decodes.
+
 ## Deploy
 
 ```sh
@@ -86,11 +114,12 @@ npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main
 ```
 
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
-GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/` and `/privacy/`
-all return 200, the stylesheet and icon load, the zip is 11666886 bytes, the CSP header
-is present, and the docs carry exactly one `id="evallog-..."` marker matching the receipt.
+GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,
+`/cards/`, `/cards/print/`, `/cards/spec/` and `/cards/duck-cards.json` all return 200, the
+stylesheet and icon load, the zip is 11666886 bytes, the CSP header is present, and the docs
+carry exactly one `id="evallog-..."` marker matching the receipt.
 
-Check the homepage, docs navigation, tables and privacy page at narrow mobile and desktop
-widths in light and dark mode. Confirm that the primary TestFlight and docs links are easy
+Check the homepage, docs navigation, tables, privacy page and the three cards pages at
+narrow mobile and desktop widths in light and dark mode, and print the cut sheet once. Confirm that the primary TestFlight and docs links are easy
 to find, that keyboard focus stays visible, and that no content causes horizontal page
 scrolling. Open the TestFlight link on a real iPhone to confirm the beta still accepts testers.
