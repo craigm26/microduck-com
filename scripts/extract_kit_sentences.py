@@ -464,6 +464,60 @@ def read_cards(root: pathlib.Path) -> dict[str, object]:
     }
 
 
+PACKS_DIR = "StudioKit/Sources/StudioKit/Resources/DuckPacks"
+PACKS_DOC = "docs/PACKS.md"
+FIRST_MEASUREMENT = "### First measurement: duckbench, 2026-10-15"
+
+
+def read_packs(root: pathlib.Path) -> dict[str, object]:
+    """The Duck Card packs Studio bundles, by digest, and the first card-size measurement.
+
+    A PACK IS A FILE, NOT A CONSTANT. The site serves byte identical copies of
+    StudioKit's .duckpack resources and prints their boards, pars and lessons, so
+    what is pinned here is each file's sha256 against this commit;
+    scripts/check_packs.py holds the site's copies to the checkout and to these.
+
+    THE ONE NUMBER FROM A DOCUMENT. How far one Walk forward card carries a duck
+    is in no StudioKit constant: every pack's duck_square_cm is null until it is
+    measured on a duck. The first simulator measurement is a table in
+    docs/PACKS.md, so the median is read out of that table's Walk forward row,
+    Normal column, and the pack pages may say that number and no other.
+    """
+    import hashlib
+    folder = root / PACKS_DIR
+    files = sorted(folder.glob("*.duckpack")) if folder.is_dir() else []
+    if not files:
+        raise Missing(f"{PACKS_DIR} has no .duckpack files in {root}")
+    digests = {path.stem: hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+    lines = _lines(root, PACKS_DOC)
+    try:
+        start = lines.index(FIRST_MEASUREMENT)
+    except ValueError:
+        raise Missing(f"{PACKS_DOC}: no {FIRST_MEASUREMENT!r} section") from None
+    header = row = None
+    for line in lines[start + 1:]:
+        if line.startswith("#"):
+            break
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if cells and cells[0] == "card":
+            header = cells
+        elif cells and cells[0] == "Walk forward":
+            row = cells
+            break
+    if not header or not row or "Normal" not in header:
+        raise Missing(f"{PACKS_DOC}: the first measurement has no Walk forward row under a "
+                      "Normal column")
+    median = re.match(r"\*\*(\d+(?:\.\d+)?) cm\*\*", row[header.index("Normal")])
+    if not median:
+        raise Missing(f"{PACKS_DOC}: Walk forward at Normal is {row[header.index('Normal')]!r}, "
+                      "not a bold median in cm")
+    value = float(median.group(1))
+    return {"digests": digests,
+            "first_measurement": {"source": PACKS_DOC, "section": FIRST_MEASUREMENT[4:],
+                                  "walk_forward_normal_cm": int(value) if value.is_integer()
+                                  else value}}
+
+
 def optional(reader, *args):
     """An Eval-derived read. Returns (value, None) or (None, reason)."""
     try:
@@ -621,6 +675,12 @@ def main() -> int:
     else:
         shipped_numbers["reducers"] = reducers
 
+    # The packs, optional until duck-studio's main branch has them. A site that
+    # serves packs against a checkout without them fails in check_packs.py.
+    packs, why = optional(read_packs, root)
+    if packs is None:
+        packs = {"missing": why}
+
     # ---- always-on assertions, each fatal ---------------------------------
     try:
         for key, value in list(quoted.items()) + list(quoted_when_shipped.items()):
@@ -689,6 +749,7 @@ def main() -> int:
         "shipped_numbers": shipped_numbers,
         "eval_keys_missing": eval_missing,
         "cards": cards,
+        "packs": packs,
     }
 
     mirror = here / "tools/site-sentences.json"
@@ -706,7 +767,10 @@ def main() -> int:
     print(f"extract: {len(quoted)} quoted, {len(restated)} restated, "
           f"{len(routes)} routes, stairs {stairs_rows['rows']} rows, "
           f"ball {ball_rows['rows']} rows, cards vocabulary {cards['vocabulary']['id']} "
-          f"and {len(cards['pad_bindings'])} pad bindings -> tools/kit-sentences.json")
+          f"and {len(cards['pad_bindings'])} pad bindings, "
+          f"{len(packs.get('digests', {}))} packs -> tools/kit-sentences.json")
+    if "missing" in packs:
+        print("extract: no packs in the kit: " + packs["missing"])
     if eval_missing:
         print("extract: not yet in the kit: " + "; ".join(eval_missing))
     return 0

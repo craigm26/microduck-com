@@ -267,7 +267,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "d9bc45177a89ad5a1305bd08dfc23e295ad75f65",
+  "duck_studio_commit": "c06bd76836c1b2cffea09cedba0fa6c32ee14dea",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -293,6 +293,19 @@
     "ball_upright_tail_min": 45,
     "stairs_cell_count": 14,
     "stairs_core_count": 9
+  },
+  "packs": {
+    "digests": {
+      "design-a-level": "8c44bf49f77f9282bb875b09fc3b0000914595286af578c03e2e847694d1d5a1",
+      "duck-maze": "756ff9c4f6c3e3ac9243c99a112e630b81c3c3bbab977fc44d365d0564f95392",
+      "get-to-the-pond": "af4bfac6e9fd7b203fb134090cb4d7d5b4256b179c3ec9a31196c5fbad13fa61",
+      "loop-the-course": "b47cef07735c75acfa6a28bc7779f45a9f0690176dc712b342bc0bfb997963af"
+    },
+    "first_measurement": {
+      "section": "First measurement: duckbench, 2026-10-15",
+      "source": "docs/PACKS.md",
+      "walk_forward_normal_cm": 14
+    }
   },
   "quoted": {
     "ball_controls_clause": "Standing still and both of Pollen's kick policies chase nothing at all; walking straight ahead takes 4 of the 9 core cells and 1 of the 5 extended",
