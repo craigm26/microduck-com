@@ -93,32 +93,31 @@ def load_packs() -> list[dict]:
 
 
 def measurement() -> dict:
-    """The closed-loop card measurement the extractor read out of duck-studio's docs/PACKS.md:
-    the duck square, the rows, the falls and how far off a row ended. The pack pages quote these
-    and no other numbers about a duck."""
+    """The closed-loop cards' off switch the extractor read out of duck-studio
+    (duck-card-loop.json and `DuckCardLoop.offNote`): whether measured cards are on for a duck,
+    the square they walk, and the sentence said while they are off. The pack pages quote these
+    and claim no measured bound about a duck."""
     kit = json.loads(bc.KIT.read_text(encoding="utf-8"))
     packs = kit.get("packs") or {}
-    if "closed_loop" not in packs:
-        raise PackError("tools/kit-sentences.json has no packs.closed_loop; run "
+    if "closed_loop" not in packs or "off_note" not in packs["closed_loop"]:
+        raise PackError("tools/kit-sentences.json has no packs.closed_loop off switch; run "
                         "scripts/extract_kit_sentences.py against a duck-studio with packs "
                         f"({packs.get('missing', 'no packs section')})")
     return packs["closed_loop"]
 
 
 def duck_sentences(fm: dict) -> list[str]:
-    """What every pack page says about a duck, built from the measurement and nothing else.
-    check_packs.py looks for each, word for word."""
-    fell = "and it never fell" if fm["falls"] == 0 else f"and it fell {fm['falls']} times"
+    """What every pack page says about a duck, built from the off switch and nothing else.
+    check_packs.py looks for each, word for word. Written for the switch OFF: if duck-studio
+    turns measured cards on, these are rewritten with the results that turned them on."""
+    if fm["enabled_on_robot"]:
+        raise PackError("duck-studio says measured cards are on for a duck (validated: "
+                        f"{fm.get('validated')!r}); the pack pages say they are timed, so rewrite them first")
     return [
-        f"In a simulator of the duck, a Walk card walks until the duck's own odometry says one "
-        f"{fm['duck_square_cm']:g} cm square, and a Turn card turns until it says a quarter turn.",
-        f"Over {fm['rows']} rows, the duck ended within {fm['error_max_cm']:g} cm of the board's "
-        f"square ({fm['back_error_max_cm']:g} cm in rows with Walk back) and within "
-        f"{fm['heading_max_deg']:g} degrees of the board's heading ({fm['back_heading_max_deg']:g} "
-        f"with Walk back), {fell}.",
-        "On a real duck, one card has not been measured yet.",
-        "A duck that does not report where it is runs each card for two seconds instead, and does "
-        "not walk squares.",
+        fm["off_note"],
+        f"Measured cards walk until the duck's own odometry says one {fm['duck_square_cm']:g} cm "
+        "square and turn until it says a quarter turn. They are being validated, in Pollen's "
+        "simulator and then on testers' ducks, before they are switched on.",
         "So for now the board is played by people and in Studio, and a duck beside it is a trial.",
     ]
 
@@ -520,14 +519,14 @@ def score_html(pack: dict, deck: dict) -> str:
 def sizing_html(packs: list[dict], fm: dict) -> str:
     squares = sorted({p["board"]["square_cm"] for p in packs})
     cm = " or ".join(f"{s:g} cm" for s in squares)
-    sim, bound, real, timed, trial = duck_sentences(fm)
+    timed, measured, trial = duck_sentences(fm)
     return (
         '<div class="feature-grid pk-sizing">'
         '<div class="card"><h3>The board rule</h3><p>One Walk card moves the duck one square. '
         'One Turn card is a quarter turn, where it stands. That is the rule on paper and in '
         'Studio, and every par is counted by it.</p></div>'
-        f'<div class="card"><h3>A duck in a simulator</h3><p>{esc(sim)} {esc(bound)}</p></div>'
-        f'<div class="card"><h3>A real duck</h3><p>{esc(real)} {esc(timed)} {esc(trial)}</p></div>'
+        f'<div class="card"><h3>A real duck</h3><p>{esc(timed)} {esc(trial)}</p></div>'
+        f'<div class="card"><h3>Measured cards</h3><p>{esc(measured)}</p></div>'
         f'<div class="card"><h3>Squares for people</h3><p>Tape the board on the floor in {cm} '
         'squares, so a student playing the duck can stand in one. Or draw it on squared paper and '
         'walk a finger.</p></div></div>')

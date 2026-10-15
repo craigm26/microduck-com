@@ -268,7 +268,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "4d74a9f8fc301a991855f1839048b7e606903a4b",
+  "duck_studio_commit": "7cbaa6bf4eb1b05e428c2830655dcdf26793f047",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -297,25 +297,17 @@
   },
   "packs": {
     "closed_loop": {
-      "back_error_max_cm": 6.4,
-      "back_error_median_cm": 3.8,
-      "back_heading_max_deg": 22.9,
-      "back_heading_median_deg": 7.5,
       "duck_square_cm": 30,
-      "error_max_cm": 4.6,
-      "error_median_cm": 2.5,
-      "falls": 0,
-      "heading_max_deg": 10.3,
-      "heading_median_deg": 3.6,
-      "rows": 140,
-      "section": "Closed-loop cards: duckbench, 2026-10-15",
-      "source": "docs/PACKS.md"
+      "enabled_on_robot": false,
+      "off_note": "Walk and Turn cards on a duck are timed for now: two seconds each, and the duck does not land on board squares. Measured cards are being tested.",
+      "source": "StudioKit/Sources/StudioKit/Resources/DuckCards/duck-card-loop.json",
+      "validated": null
     },
     "digests": {
-      "design-a-level": "28ef41055df71b82dbdc2721b4d8a1ad82f11a6f618f539d350d864ba031ccd2",
-      "duck-maze": "bdd76a469d9184463f6be6e00adb623025be15972dc70b25cf5050fb3a9bae7c",
-      "get-to-the-pond": "e3703cad85723ba1bb9704dbabc45ddf7e3cc383a944dbec43e901c0ef2fd233",
-      "loop-the-course": "fab06a9ceb5399ad5538c54926e7cb5bed50880e8239ce2f0a07edbea23d01c4"
+      "design-a-level": "b2be9f9a79319095ca6fd85412b82b844245f75faac99bfc5a44f2666ea27c0a",
+      "duck-maze": "b22cd2e709dc931316aba4de999bd94732efba03fff35e516e509fb804f38f95",
+      "get-to-the-pond": "5a84c5c790b5f764af5845116e24db2df127a79f898d1a8fc123d49c90239005",
+      "loop-the-course": "66c58f64dd3d84e9cbe0390223818aed620ceeb9c0fcc0d68f21439855b37a94"
     },
     "first_measurement": {
       "section": "First measurement: duckbench, 2026-10-15",

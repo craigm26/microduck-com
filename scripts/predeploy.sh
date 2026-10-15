@@ -155,6 +155,20 @@
 #     ['Room 12 drew this.'] the challenge does not carry".
 #   * the extract's error bound changed 4.6 -> 3.9: every pack page "is not what
 #     build_packs.py draws today".
+# PROVED ABLE TO FAIL, 2026-10-15, after duck-studio shipped closed-loop cards
+# OFF for real ducks (duck-card-loop.json enabled_on_robot: false) and the pages
+# took Studio's own sentence for it, each restored:
+#   * duck-maze's page made to say "Over 140 rows, the duck ended within 4.6 cm":
+#     "claims 'Over 140 rows' about a duck, and measured cards are off for real
+#     ducks", "claims 'ended within'", "prints 4.6 cm, which is neither a pack's
+#     floor square nor the square the cards walk", and "is not what
+#     build_packs.py draws today".
+#   * the extract's enabled_on_robot set true: "duck-studio turned measured
+#     cards on for a duck (validated: None); these pages say they are timed, so
+#     rewrite them, and this gate, with the results".
+#   * the extractor's read_closed_loop on a copy of duck-studio with the switch
+#     taken out of duck-card-loop.json: "has no enabled_on_robot switch"; and
+#     with DuckCardLoop.offNote renamed: "has no offNote".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

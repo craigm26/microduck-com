@@ -19,15 +19,16 @@ marker's transform, the goal, every wall and every tunnel and its axis) and
 compared with the pack file. A renderer that drew a wall on the wrong edge, or
 a tunnel turned the wrong way, is caught by a reading that did not draw it.
 
-THE CLAIMS ABOUT A DUCK ARE CHECKED AS CLAIMS. The pages say what the
-closed-loop measurement in duck-studio's docs/PACKS.md says (a Walk card walks
-one duck square on odometry, and in so many simulated rows the duck ended
-within so many centimetres and degrees of the board, with so many falls), and
-every one of those numbers must be the one the extractor read out of that
-table. Every pack's duck_square_cm must be that duck square, with a
-duck_square_source. The pages still say one card has not been measured on a
-real duck. And they print no other centimetres than the duck square, the two
-error bounds and the pack's own floor squares.
+THE CLAIMS ABOUT A DUCK ARE CHECKED AS CLAIMS, AND THE OFF SWITCH IS ONE. duck-studio
+ships closed-loop Walk and Turn cards off for real ducks (duck-card-loop.json
+`enabled_on_robot: false`) until they pass docs/PACKS.md "Acceptance". So every pack
+page must say Studio's own sentence for that (`DuckCardLoop.offNote`, which the
+extractor reads), that measured cards are being validated, and that the board is
+played by people and in Studio; and no page may claim a measured bound about a duck
+(no "Over N rows", no "ended within", no "never fell"). Every pack's duck_square_cm
+must be the square the cards walk, with a duck_square_source. The pages print no
+other centimetres than that square and the packs' floor squares. If the switch is
+ever on, this gate fails until the pages are rewritten with the results.
 
 The print arithmetic is read from the stylesheet that prints it: two activity
 cards across and two down, on Letter and on A4.
@@ -153,6 +154,10 @@ def main() -> int:
         fm = bp.measurement()
     except bp.PackError as why:
         problem(str(why))
+        return report()
+    if fm["enabled_on_robot"]:
+        problem(f"duck-studio turned measured cards on for a duck (validated: {fm.get('validated')!r}); "
+                "these pages say they are timed, so rewrite them, and this gate, with the results")
         return report()
     for pack in packs:
         for text in bp.check_pack(pack, deck):
@@ -298,29 +303,27 @@ def main() -> int:
     for pack in packs:
         if pack["board"].get("duck_square_cm") != duck_cm or not pack["board"].get("duck_square_source"):
             problem(f"pack {pack['id']!r} says a duck square is {pack['board'].get('duck_square_cm')!r} cm "
-                    f"from {pack['board'].get('duck_square_source')!r}; docs/PACKS.md measured {duck_cm:g} cm")
-    allowed_cm = {f"{v:g}" for v in squares} | {f"{fm[k]:g}" for k in
-                                                ("duck_square_cm", "error_max_cm", "back_error_max_cm")}
-    # Written here from the extract's numbers, not borrowed from the renderer: a
-    # page is held to the measurement, not to whatever build_packs.py printed.
-    fell = "and it never fell" if fm["falls"] == 0 else f"and it fell {fm['falls']} times"
+                    f"from {pack['board'].get('duck_square_source')!r}; the cards walk {duck_cm:g} cm")
+    allowed_cm = {f"{v:g}" for v in squares} | {f"{duck_cm:g}"}
+    # Written here from the extract, not borrowed from the renderer: a page is held to what
+    # duck-studio says, not to whatever build_packs.py printed.
     for name, text in pack_pages.items():
         flat = flatten(text)
         for sentence in ("One Walk card moves the duck one square.",
                          "One Turn card is a quarter turn, where it stands.",
-                         f"walks until the duck's own odometry says one {duck_cm:g} cm square",
-                         f"Over {fm['rows']} rows, the duck ended within {fm['error_max_cm']:g} cm of "
-                         f"the board's square ({fm['back_error_max_cm']:g} cm in rows with Walk back)",
-                         f"within {fm['heading_max_deg']:g} degrees of the board's heading "
-                         f"({fm['back_heading_max_deg']:g} with Walk back), {fell}.",
-                         "On a real duck, one card has not been measured yet.",
+                         fm["off_note"],
+                         f"Measured cards walk until the duck's own odometry says one {duck_cm:g} cm square",
+                         "They are being validated",
                          "So for now the board is played by people and in Studio"):
             if sentence not in flat:
                 problem(f"{name} does not say {sentence!r}")
+        for claim in re.findall(r"Over \d+ rows|ended within|never fell|within \d+(?:\.\d+)? degrees",
+                                flat):
+            problem(f"{name} claims {claim!r} about a duck, and measured cards are off for real ducks")
         for cm in re.findall(r"(\d+(?:\.\d+)?) ?cm\b", flat):
             if cm not in allowed_cm:
-                problem(f"{name} prints {cm} cm, which is neither a pack's floor square nor a "
-                        f"number in docs/PACKS.md's closed-loop table ({sorted(allowed_cm)})")
+                problem(f"{name} prints {cm} cm, which is neither a pack's floor square nor the "
+                        f"square the cards walk ({sorted(allowed_cm)})")
     for name, text in pages.items():
         for brand in NEVER:
             if brand in text:
@@ -360,8 +363,8 @@ def main() -> int:
     print(f"check_packs: {len(packs)} packs byte for byte with duck-studio "
           f"{str(kit.get('duck_studio_commit'))[:7]}, {challenge_count} challenge cards read back "
           f"square by square, every par played on the board, {len(pages)} pages free of the brand, "
-          f"a {duck_cm:g} cm duck square within {fm['error_max_cm']:g} cm as measured in "
-          f"{fm['rows']} simulated rows, and four activity cards to a sheet on Letter and A4")
+          f"a {duck_cm:g} cm duck square with measured cards off for a duck, as duck-studio says, "
+          f"and four activity cards to a sheet on Letter and A4")
     return 0
 
 
