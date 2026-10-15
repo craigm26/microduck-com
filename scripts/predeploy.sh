@@ -145,6 +145,16 @@
 #   * and check_cards: one Walk forward card on a pack page given the right
 #     stick: "public/cards/packs/get-to-the-pond/index.html: card
 #     'walk_forward' says it runs on ['Studio', 'Pad: R stick']".
+# PROVED ABLE TO FAIL, 2026-10-15, after the pages took the closed-loop card
+# measurement (duck-studio docs/PACKS.md, "Closed-loop cards"), each restored:
+#   * duck-maze's page made to say "within 3 cm of the board": "does not say
+#     'Over 140 rows, the duck ended within 4.6 cm ...'" and "prints 3 cm, which
+#     is neither a pack's floor square nor a number in docs/PACKS.md's
+#     closed-loop table".
+#   * a note planted on #maze-1, which carries none: "#maze-1 shows a note
+#     ['Room 12 drew this.'] the challenge does not carry".
+#   * the extract's error bound changed 4.6 -> 3.9: every pack page "is not what
+#     build_packs.py draws today".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

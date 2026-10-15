@@ -19,11 +19,15 @@ marker's transform, the goal, every wall and every tunnel and its axis) and
 compared with the pack file. A renderer that drew a wall on the wrong edge, or
 a tunnel turned the wrong way, is caught by a reading that did not draw it.
 
-THE CLAIMS ABOUT A REAL DUCK ARE CHECKED AS CLAIMS. The pages say one card has
-not been measured on a duck, so every pack's duck_square_cm must still be null.
-They say the first simulator measurement carried the duck about N cm, so N must
-be the median the extractor read out of duck-studio's docs/PACKS.md. And they
-print no other centimetres than that and the pack's own floor squares.
+THE CLAIMS ABOUT A DUCK ARE CHECKED AS CLAIMS. The pages say what the
+closed-loop measurement in duck-studio's docs/PACKS.md says (a Walk card walks
+one duck square on odometry, and in so many simulated rows the duck ended
+within so many centimetres and degrees of the board, with so many falls), and
+every one of those numbers must be the one the extractor read out of that
+table. Every pack's duck_square_cm must be that duck square, with a
+duck_square_source. The pages still say one card has not been measured on a
+real duck. And they print no other centimetres than the duck square, the two
+error bounds and the pack's own floor squares.
 
 The print arithmetic is read from the stylesheet that prints it: two activity
 cards across and two down, on Letter and on A4.
@@ -161,7 +165,7 @@ def main() -> int:
 
     # 3. Every pack page, read back.
     cards = bc.by_code(deck)
-    walk_cm = fm["walk_forward_normal_cm"]
+    duck_cm = fm["duck_square_cm"]
     challenge_count = 0
     for pack in packs:
         pid = pack["id"]
@@ -215,6 +219,11 @@ def main() -> int:
                         f"{ch['par']} {bp.unit(pack)}")
             if ch["hint"] not in got:
                 problem(f"{where} does not carry its hint word for word")
+            notes = [flatten(n) for n in re.findall(r'<p class="pk-note">(.*?)</p>', body, flags=re.S)]
+            if ch.get("note") and notes != [ch["note"]]:
+                problem(f"{where} shows the note {notes}, not the challenge's {ch['note']!r}")
+            elif not ch.get("note") and notes:
+                problem(f"{where} shows a note {notes} the challenge does not carry")
             svg = re.search(r'<svg class="pk-board".*?</svg>', body, flags=re.S)
             if not svg:
                 problem(f"{where} has no board drawing")
@@ -286,21 +295,32 @@ def main() -> int:
     pack_pages = {n: t for n, t in pages.items() if n.startswith("public/cards/packs/")
                   and not n.endswith("/print/index.html")}
     squares = {p["board"]["square_cm"] for p in packs}
-    allowed_cm = {f"{v:g}" for v in squares} | {f"{walk_cm:g}"}
+    for pack in packs:
+        if pack["board"].get("duck_square_cm") != duck_cm or not pack["board"].get("duck_square_source"):
+            problem(f"pack {pack['id']!r} says a duck square is {pack['board'].get('duck_square_cm')!r} cm "
+                    f"from {pack['board'].get('duck_square_source')!r}; docs/PACKS.md measured {duck_cm:g} cm")
+    allowed_cm = {f"{v:g}" for v in squares} | {f"{fm[k]:g}" for k in
+                                                ("duck_square_cm", "error_max_cm", "back_error_max_cm")}
+    # Written here from the extract's numbers, not borrowed from the renderer: a
+    # page is held to the measurement, not to whatever build_packs.py printed.
+    fell = "and it never fell" if fm["falls"] == 0 else f"and it fell {fm['falls']} times"
     for name, text in pack_pages.items():
         flat = flatten(text)
         for sentence in ("One Walk card moves the duck one square.",
                          "One Turn card is a quarter turn, where it stands.",
+                         f"walks until the duck's own odometry says one {duck_cm:g} cm square",
+                         f"Over {fm['rows']} rows, the duck ended within {fm['error_max_cm']:g} cm of "
+                         f"the board's square ({fm['back_error_max_cm']:g} cm in rows with Walk back)",
+                         f"within {fm['heading_max_deg']:g} degrees of the board's heading "
+                         f"({fm['back_heading_max_deg']:g} with Walk back), {fell}.",
                          "On a real duck, one card has not been measured yet.",
-                         f"a Walk forward card carried the duck about {walk_cm:g} cm",
-                         "its turns were not quarter turns yet",
-                         "So for now the board is played by people and in Studio."):
+                         "So for now the board is played by people and in Studio"):
             if sentence not in flat:
                 problem(f"{name} does not say {sentence!r}")
         for cm in re.findall(r"(\d+(?:\.\d+)?) ?cm\b", flat):
             if cm not in allowed_cm:
-                problem(f"{name} prints {cm} cm, which is neither a pack's floor square nor the "
-                        f"first measurement ({sorted(allowed_cm)})")
+                problem(f"{name} prints {cm} cm, which is neither a pack's floor square nor a "
+                        f"number in docs/PACKS.md's closed-loop table ({sorted(allowed_cm)})")
     for name, text in pages.items():
         for brand in NEVER:
             if brand in text:
@@ -340,7 +360,8 @@ def main() -> int:
     print(f"check_packs: {len(packs)} packs byte for byte with duck-studio "
           f"{str(kit.get('duck_studio_commit'))[:7]}, {challenge_count} challenge cards read back "
           f"square by square, every par played on the board, {len(pages)} pages free of the brand, "
-          f"about {walk_cm:g} cm as measured, and four activity cards to a sheet on Letter and A4")
+          f"a {duck_cm:g} cm duck square within {fm['error_max_cm']:g} cm as measured in "
+          f"{fm['rows']} simulated rows, and four activity cards to a sheet on Letter and A4")
     return 0
 
 

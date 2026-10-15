@@ -125,6 +125,7 @@
       ],
       "robot_beats": [
         "move",
+        "card",
         "sound",
         "skill"
       ],
@@ -267,7 +268,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "c06bd76836c1b2cffea09cedba0fa6c32ee14dea",
+  "duck_studio_commit": "4d74a9f8fc301a991855f1839048b7e606903a4b",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -295,11 +296,26 @@
     "stairs_core_count": 9
   },
   "packs": {
+    "closed_loop": {
+      "back_error_max_cm": 6.4,
+      "back_error_median_cm": 3.8,
+      "back_heading_max_deg": 22.9,
+      "back_heading_median_deg": 7.5,
+      "duck_square_cm": 30,
+      "error_max_cm": 4.6,
+      "error_median_cm": 2.5,
+      "falls": 0,
+      "heading_max_deg": 10.3,
+      "heading_median_deg": 3.6,
+      "rows": 140,
+      "section": "Closed-loop cards: duckbench, 2026-10-15",
+      "source": "docs/PACKS.md"
+    },
     "digests": {
-      "design-a-level": "8c44bf49f77f9282bb875b09fc3b0000914595286af578c03e2e847694d1d5a1",
-      "duck-maze": "756ff9c4f6c3e3ac9243c99a112e630b81c3c3bbab977fc44d365d0564f95392",
-      "get-to-the-pond": "af4bfac6e9fd7b203fb134090cb4d7d5b4256b179c3ec9a31196c5fbad13fa61",
-      "loop-the-course": "b47cef07735c75acfa6a28bc7779f45a9f0690176dc712b342bc0bfb997963af"
+      "design-a-level": "28ef41055df71b82dbdc2721b4d8a1ad82f11a6f618f539d350d864ba031ccd2",
+      "duck-maze": "bdd76a469d9184463f6be6e00adb623025be15972dc70b25cf5050fb3a9bae7c",
+      "get-to-the-pond": "e3703cad85723ba1bb9704dbabc45ddf7e3cc383a944dbec43e901c0ef2fd233",
+      "loop-the-course": "fab06a9ceb5399ad5538c54926e7cb5bed50880e8239ce2f0a07edbea23d01c4"
     },
     "first_measurement": {
       "section": "First measurement: duckbench, 2026-10-15",

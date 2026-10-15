@@ -93,13 +93,34 @@ def load_packs() -> list[dict]:
 
 
 def measurement() -> dict:
+    """The closed-loop card measurement the extractor read out of duck-studio's docs/PACKS.md:
+    the duck square, the rows, the falls and how far off a row ended. The pack pages quote these
+    and no other numbers about a duck."""
     kit = json.loads(bc.KIT.read_text(encoding="utf-8"))
     packs = kit.get("packs") or {}
-    if "first_measurement" not in packs:
-        raise PackError("tools/kit-sentences.json has no packs.first_measurement; run "
+    if "closed_loop" not in packs:
+        raise PackError("tools/kit-sentences.json has no packs.closed_loop; run "
                         "scripts/extract_kit_sentences.py against a duck-studio with packs "
                         f"({packs.get('missing', 'no packs section')})")
-    return packs["first_measurement"]
+    return packs["closed_loop"]
+
+
+def duck_sentences(fm: dict) -> list[str]:
+    """What every pack page says about a duck, built from the measurement and nothing else.
+    check_packs.py looks for each, word for word."""
+    fell = "and it never fell" if fm["falls"] == 0 else f"and it fell {fm['falls']} times"
+    return [
+        f"In a simulator of the duck, a Walk card walks until the duck's own odometry says one "
+        f"{fm['duck_square_cm']:g} cm square, and a Turn card turns until it says a quarter turn.",
+        f"Over {fm['rows']} rows, the duck ended within {fm['error_max_cm']:g} cm of the board's "
+        f"square ({fm['back_error_max_cm']:g} cm in rows with Walk back) and within "
+        f"{fm['heading_max_deg']:g} degrees of the board's heading ({fm['back_heading_max_deg']:g} "
+        f"with Walk back), {fell}.",
+        "On a real duck, one card has not been measured yet.",
+        "A duck that does not report where it is runs each card for two seconds instead, and does "
+        "not walk squares.",
+        "So for now the board is played by people and in Studio, and a duck beside it is a trial.",
+    ]
 
 
 def css_version() -> str:
@@ -262,9 +283,18 @@ def check_pack(pack: dict, deck: dict) -> list[str]:
         problems.append(f"{label} leaves Start or End out of play")
     if pack.get("score") not in ("steps", "cards"):
         problems.append(f"{label} is scored by {pack.get('score')!r}")
-    if pack["board"].get("duck_square_cm") is not None:
-        problems.append(f"{label} carries a measured duck square; the pack pages say one card "
-                        "has not been measured on a duck, so rewrite them first")
+    board = pack.get("board", {})
+    try:
+        square = measurement()["duck_square_cm"]
+    except PackError:
+        square = None
+    if board.get("duck_square_cm") != square:
+        problems.append(f"{label} says a duck square is {board.get('duck_square_cm')!r} cm; the "
+                        f"closed-loop measurement in docs/PACKS.md says {square!r}")
+    source = board.get("duck_square_source")
+    if square is not None and (not isinstance(source, str) or not source.strip()):
+        problems.append(f"{label} carries a duck square with no duck_square_source saying where it "
+                        "was measured")
     if not 3 <= len(pack.get("lessons", [])) <= 6:
         problems.append(f"{label} has {len(pack.get('lessons', []))} lessons, not 3 to 6")
     text = json.dumps(pack, ensure_ascii=False)
@@ -490,16 +520,14 @@ def score_html(pack: dict, deck: dict) -> str:
 def sizing_html(packs: list[dict], fm: dict) -> str:
     squares = sorted({p["board"]["square_cm"] for p in packs})
     cm = " or ".join(f"{s:g} cm" for s in squares)
-    walk_cm = fm["walk_forward_normal_cm"]
+    sim, bound, real, timed, trial = duck_sentences(fm)
     return (
         '<div class="feature-grid pk-sizing">'
         '<div class="card"><h3>The board rule</h3><p>One Walk card moves the duck one square. '
         'One Turn card is a quarter turn, where it stands. That is the rule on paper and in '
         'Studio, and every par is counted by it.</p></div>'
-        '<div class="card"><h3>A real duck</h3><p>On a real duck, one card has not been measured '
-        f'yet. The first measurement was in a simulator: a Walk forward card carried the duck '
-        f'about {walk_cm:g} cm, and its turns were not quarter turns yet. So for now the board is '
-        'played by people and in Studio.</p></div>'
+        f'<div class="card"><h3>A duck in a simulator</h3><p>{esc(sim)} {esc(bound)}</p></div>'
+        f'<div class="card"><h3>A real duck</h3><p>{esc(real)} {esc(timed)} {esc(trial)}</p></div>'
         f'<div class="card"><h3>Squares for people</h3><p>Tape the board on the floor in {cm} '
         'squares, so a student playing the duck can stand in one. Or draw it on squared paper and '
         'walk a finger.</p></div></div>')
@@ -516,6 +544,8 @@ def activity_card(pack: dict, ch: dict, n: int, deck: dict) -> str:
              f'<p class="pk-par">Par <b>{ch["par"]}</b> {unit(pack)}</p></header>',
              f'<div class="pk-board-box">{board_svg(pack, ch, cards)}</div>',
              f'<p class="pk-hint">{esc(ch["hint"])}</p>']
+    if ch.get("note"):
+        parts.append(f'<p class="pk-note">{esc(ch["note"])}</p>')
     if ch.get("finish_with"):
         parts.append(f'<div class="pk-finish"><p>Finish with</p>'
                      f'{mini(ch["finish_with"], pack, deck)}</div>')

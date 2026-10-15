@@ -546,6 +546,7 @@ td code { white-space: normal; }
 .pk-gate rect { fill: var(--dc-trick-tint); }
 .pk-gate path { fill: none; stroke: var(--dc-trick-ink); stroke-width: 1.2; stroke-linecap: round; }
 .pk-hint { font: 500 3.9cqi/1.3 var(--dc-face); color: var(--dc-ink); }
+.pk-note { margin-top: 1.6cqi; font: italic 500 3.4cqi/1.3 var(--dc-face); color: var(--dc-dim); }
 .pk-finish { margin-top: 3cqi; display: flex; align-items: center; gap: 2.5cqi; }
 .pk-finish > p, .pk-bug > p { font: 500 3.6cqi/1.3 var(--dc-face); color: var(--dc-dim); }
 .pk-finish > p { font-weight: 600; }

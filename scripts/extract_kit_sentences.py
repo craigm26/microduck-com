@@ -467,6 +467,18 @@ def read_cards(root: pathlib.Path) -> dict[str, object]:
 PACKS_DIR = "StudioKit/Sources/StudioKit/Resources/DuckPacks"
 PACKS_DOC = "docs/PACKS.md"
 FIRST_MEASUREMENT = "### First measurement: duckbench, 2026-10-15"
+CLOSED_LOOP = "### Closed-loop cards: duckbench, 2026-10-15"
+# The rows of the closed-loop table the pack pages may quote, by first cell, and
+# the bold numbers each must carry, in order.
+CLOSED_LOOP_ROWS = {
+    "duck square": ("duck_square_cm",),
+    "rows": ("rows",),
+    "falls": ("falls",),
+    "position error, rows without Walk back": ("error_median_cm", "error_max_cm"),
+    "position error, rows with Walk back": ("back_error_median_cm", "back_error_max_cm"),
+    "heading error, rows without Walk back": ("heading_median_deg", "heading_max_deg"),
+    "heading error, rows with Walk back": ("back_heading_median_deg", "back_heading_max_deg"),
+}
 
 
 def read_packs(root: pathlib.Path) -> dict[str, object]:
@@ -515,7 +527,42 @@ def read_packs(root: pathlib.Path) -> dict[str, object]:
     return {"digests": digests,
             "first_measurement": {"source": PACKS_DOC, "section": FIRST_MEASUREMENT[4:],
                                   "walk_forward_normal_cm": int(value) if value.is_integer()
-                                  else value}}
+                                  else value},
+            "closed_loop": read_closed_loop(lines)}
+
+
+def read_closed_loop(lines: list[str]) -> dict[str, object]:
+    """The closed-loop card measurement: docs/PACKS.md's table, read row by row.
+
+    THE PACK PAGES QUOTE THESE AND NO OTHER. A Walk card that closes on
+    odometry carries the duck one duck square, and the table says how far off
+    the end of a row was, in how many rows, with how many falls. Every number
+    the pages print about a duck is one of these bold numbers, so a page cannot
+    say a tighter bound than the measurement did.
+    """
+    try:
+        start = lines.index(CLOSED_LOOP)
+    except ValueError:
+        raise Missing(f"{PACKS_DOC}: no {CLOSED_LOOP!r} section") from None
+    out: dict[str, object] = {"source": PACKS_DOC, "section": CLOSED_LOOP[4:]}
+    for line in lines[start + 1:]:
+        if line.startswith("#"):
+            break
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 2 or cells[0] not in CLOSED_LOOP_ROWS:
+            continue
+        keys = CLOSED_LOOP_ROWS[cells[0]]
+        bold = re.findall(r"\*\*(\d+(?:\.\d+)?)[^*]*\*\*", cells[1])
+        if len(bold) != len(keys):
+            raise Missing(f"{PACKS_DOC}: the closed-loop row {cells[0]!r} carries {len(bold)} bold "
+                          f"numbers, not {len(keys)}")
+        for key, text in zip(keys, bold):
+            value = float(text)
+            out[key] = int(value) if value.is_integer() else value
+    missing = [k for keys in CLOSED_LOOP_ROWS.values() for k in keys if k not in out]
+    if missing:
+        raise Missing(f"{PACKS_DOC}: the closed-loop table has no {', '.join(missing)}")
+    return out
 
 
 def optional(reader, *args):
