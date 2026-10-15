@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://microduckstudio.com/cards/</loc>
-    <lastmod>2026-10-12</lastmod>
+    <lastmod>2026-10-15</lastmod>
   </url>
   <url>
     <loc>https://microduckstudio.com/cards/print/</loc>
@@ -23,5 +23,41 @@
   <url>
     <loc>https://microduckstudio.com/cards/spec/</loc>
     <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/get-to-the-pond/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/get-to-the-pond/print/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/duck-maze/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/duck-maze/print/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/loop-the-course/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/loop-the-course/print/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/design-a-level/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://microduckstudio.com/cards/packs/design-a-level/print/</loc>
+    <lastmod>2026-10-15</lastmod>
   </url>
 </urlset>

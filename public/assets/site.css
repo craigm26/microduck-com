@@ -485,3 +485,112 @@ td code { white-space: normal; }
   .dc-print-page .dc-pick > input, .dc-print-page .dc-pick > label { display: none; }
   .dc-print-page .dc-pick .dc { width: 63.5mm; height: 88.9mm; aspect-ratio: auto; border-radius: 0; opacity: 1; filter: none; outline: .25mm dashed #9a9aa2; outline-offset: -.125mm; }
 }
+
+/* Duck Card packs, at /cards/packs/. An activity card is paper in both themes,
+   like a Duck Card, and every size inside it is a share of its own width, so
+   the card on a phone and the card on paper are one drawing. Printed it is
+   98 by 130 mm: two across and two down on Letter and on A4. */
+.pk-intro { padding-block: 3rem .5rem; }
+.pk-intro h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); }
+.pk-intro .lede { color: var(--dim); font-size: 1.15rem; max-width: 52ch; }
+.pk-intro .eyebrow a { text-decoration: none; }
+.pk-first { padding-top: 2.5rem; }
+.pk-first .section-heading { margin-bottom: 0; }
+.pk-facts { list-style: none; padding: 0; margin: 0 0 1.6rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.pk-facts li { margin: 0; padding: .3rem .8rem; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--dim); font-size: .85rem; }
+.pk-facts strong { color: var(--ink); font-weight: 600; }
+.pk-intro .ctas { gap: 1rem 1.25rem; }
+.pk-prose { max-width: 62ch; }
+.pk-prose p { color: var(--dim); }
+.pk-prose strong { color: var(--ink); }
+.pk-sub { margin: 2.75rem 0 .35rem; }
+.pk-subtext { color: var(--dim); font-size: .95rem; max-width: 62ch; }
+.pk-blanks { margin-top: 1.25rem; }
+.pk-yours .pk-row { margin-top: 1rem; gap: .4rem; }
+.pk-list h3 a { color: var(--ink); text-decoration-color: var(--brand); }
+.pk-list .meta { margin-top: .8rem; }
+.pk-sizing .card:first-child { border-top: 3px solid var(--brand); }
+
+.pk-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1.25rem; }
+.pk-cards > li { margin: 0; container-type: inline-size; }
+.pk-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 5cqi 5.5cqi 4cqi;
+  background: var(--dc-paper);
+  color: var(--dc-ink);
+  border-radius: 4cqi;
+  box-shadow: 0 1px 2px var(--dc-shadow), 0 8px 22px var(--dc-shadow);
+  font-family: var(--dc-face);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+:where(.pk-card) p, :where(.pk-card) ol { margin: 0; padding: 0; }
+:where(.pk-card) li { margin: 0; list-style: none; }
+.pk-card-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 0 3cqi; }
+.pk-num { grid-column: 1 / -1; font: 500 3.6cqi/1.2 var(--dc-face); color: var(--dc-dim); }
+.pk-card h3 { margin: .6cqi 0 0; font: 600 6.2cqi/1.08 var(--dc-face); letter-spacing: -.005em; color: var(--dc-ink); }
+.pk-par { font: 600 4.2cqi/1 var(--dc-face); color: var(--dc-dim); white-space: nowrap; padding: 1.4cqi 2.8cqi; border-radius: 99cqi; background: var(--dc-trick-tint); }
+.pk-par b { font-size: 6.4cqi; color: var(--dc-trick-ink); }
+.pk-board-box { margin: 3cqi 0 2.5cqi; display: flex; justify-content: center; }
+.pk-board { display: block; width: auto; height: 46cqi; max-width: 100%; overflow: visible; }
+.pk-card-row .pk-board { height: 40cqi; }
+.pk-ground { fill: var(--dc-paper); }
+.pk-grid { fill: none; stroke: var(--dc-rule); stroke-width: .35; }
+.pk-edge { fill: none; stroke: var(--dc-ink); stroke-width: 1.2; }
+.pk-wall { fill: none; stroke: var(--dc-ink); stroke-width: 1.7; stroke-linecap: round; }
+.pk-goal { fill: var(--dc-walk-tint); stroke: var(--dc-walk); stroke-width: .9; }
+.pk-start circle { fill: var(--dc-trick); stroke: var(--dc-ink); stroke-width: .5; }
+.pk-start path { fill: var(--dc-ink); }
+.pk-gate rect { fill: var(--dc-trick-tint); }
+.pk-gate path { fill: none; stroke: var(--dc-trick-ink); stroke-width: 1.2; stroke-linecap: round; }
+.pk-hint { font: 500 3.9cqi/1.3 var(--dc-face); color: var(--dc-ink); }
+.pk-finish { margin-top: 3cqi; display: flex; align-items: center; gap: 2.5cqi; }
+.pk-finish > p, .pk-bug > p { font: 500 3.6cqi/1.3 var(--dc-face); color: var(--dc-dim); }
+.pk-finish > p { font-weight: 600; }
+.pk-bug { margin-top: 3cqi; }
+.pk-bug strong { color: var(--dc-ink); }
+.pk-row { list-style: none; display: flex; flex-wrap: wrap; gap: 1.6cqi; margin-top: 1.6cqi; padding: 0; }
+.pk-row > li { margin: 0; display: flex; flex-direction: column; gap: .8cqi; }
+.pk-mini {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 12.5cqi;
+  min-height: 13cqi;
+  padding: 1.2cqi .6cqi .8cqi;
+  border: .35cqi solid var(--dc-rule);
+  border-top: 1.6cqi solid var(--c);
+  border-radius: 1.4cqi;
+  background: var(--dc-paper);
+  color: var(--c-ink);
+  text-align: center;
+}
+.pk-yours .pk-mini { width: 3.6rem; min-height: 4.4rem; padding: .35rem .2rem .3rem; border-width: 1px; border-top-width: .4rem; border-radius: 6px; }
+.pk-mini svg { width: 5.6cqi; height: 5.6cqi; flex: none; }
+.pk-yours .pk-mini svg { width: 1.6rem; height: 1.6rem; }
+.pk-mini-num { font: 600 3.4cqi/1.4 var(--dc-mono); color: var(--dc-dim); }
+.pk-mini-name { margin-top: .6cqi; font: 600 2.7cqi/1.1 var(--dc-face); color: var(--dc-ink); overflow-wrap: anywhere; }
+.pk-yours .pk-mini-name { margin-top: .2rem; font-size: .62rem; }
+.pk-key { margin-top: auto; padding-top: 2.5cqi; display: flex; flex-wrap: wrap; gap: .8cqi 2.6cqi; font: 500 2.6cqi/1.3 var(--dc-sans); color: var(--dc-dim); }
+.pk-key span { display: inline-flex; align-items: center; gap: 1cqi; }
+.pk-key svg { width: 3.6cqi; height: 3.6cqi; overflow: visible; }
+.pk-credit { margin-top: 1.2cqi; font: 500 2.5cqi/1.3 var(--dc-sans); color: var(--dc-dim); }
+
+@media (max-width: 640px) {
+  .pk-intro { padding-top: 2rem; }
+  .pk-cards { gap: 1rem; }
+}
+@media print {
+  .pk-card { box-shadow: none; }
+  /* A pack page prints its challenge cards and nothing else, four to a sheet. */
+  .pk-pack-page .site-header, .pk-pack-page .site-footer, .pk-pack-page .skip,
+  .pk-pack-page main > section, .pk-pack-page main > .wrap > section:not(.pk-print-area),
+  .pk-pack-page .pk-print-area .section-heading { display: none !important; }
+  .pk-pack-page .wrap { width: auto; }
+  .pk-pack-page .pk-print-area { padding: 0; }
+  .pk-pack-page .pk-cards { display: block; width: 196mm; margin: 0 auto; font-size: 0; line-height: 0; }
+  .pk-pack-page .pk-cards > li { display: inline-block; width: 98mm; height: 130mm; vertical-align: top; break-inside: avoid; page-break-inside: avoid; font-size: 12pt; line-height: 1.2; }
+  .pk-pack-page .pk-card { width: 98mm; height: 130mm; overflow: hidden; border-radius: 0; outline: .25mm dashed #9a9aa2; outline-offset: -.125mm; }
+}
