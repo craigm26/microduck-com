@@ -267,7 +267,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "563c8fb9beee7bd6a79aa3f2a2668579fa2dc6fa",
+  "duck_studio_commit": "d9bc45177a89ad5a1305bd08dfc23e295ad75f65",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
