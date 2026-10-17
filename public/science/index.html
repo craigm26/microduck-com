@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duck Cards evidence | Microduck Studio</title>
+<meta name="description" content="Methods, pre-registered criteria, conditions, results with Wilson intervals, a second-machine reproduction and every raw row for Duck Cards' closed-loop Walk and Turn cards in Pollen Robotics' duck-sim.">
+<link rel="canonical" href="https://microduckstudio.com/science/">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://microduckstudio.com/science/">
+<meta property="og:title" content="Duck Cards evidence">
+<meta property="og:description" content="Pre-registered criteria, Monte Carlo in Pollen's duck-sim, a second machine, and what fails.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=a1f0e4a145">
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/" aria-label="Microduck Studio home">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/cards/">Cards</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="docs-layout">
+  <aside class="docs-sidebar">
+    <nav class="docs-desktop-nav" aria-label="Evidence sections">
+      <p class="sidebar-label">Evidence</p>
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#question">The question</a></li>
+        <li><a href="#system">System under test</a></li>
+        <li><a href="#criteria">Pre-registered criteria</a></li>
+        <li><a href="#conditions">Conditions</a></li>
+        <li><a href="#ladder">Evidence ladder</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#candidate">A rejected candidate</a></li>
+        <li><a href="#diagnosis">Why long rows fail</a></li>
+        <li><a href="#next">What is being tried next</a></li>
+        <li><a href="#reproduce">Reproduce it</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="#data">Data and code</a></li>
+      </ul>
+      <a class="sidebar-back" href="/">← Back to Studio</a>
+    </nav>
+    <details class="docs-mobile-nav">
+      <summary>On this page</summary>
+    <nav aria-label="Evidence sections">
+      <p class="sidebar-label">Evidence</p>
+      <ul>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#question">The question</a></li>
+        <li><a href="#system">System under test</a></li>
+        <li><a href="#criteria">Pre-registered criteria</a></li>
+        <li><a href="#conditions">Conditions</a></li>
+        <li><a href="#ladder">Evidence ladder</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#candidate">A rejected candidate</a></li>
+        <li><a href="#diagnosis">Why long rows fail</a></li>
+        <li><a href="#next">What is being tried next</a></li>
+        <li><a href="#reproduce">Reproduce it</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="#data">Data and code</a></li>
+      </ul>
+      <a class="sidebar-back" href="/">← Back to Studio</a>
+    </nav>
+    </details>
+  </aside>
+
+  <article class="docs-content" id="main" tabindex="-1">
+    <div class="docs-intro">
+      <p class="eyebrow"><a href="/cards/">Duck Cards</a></p>
+      <h1>Duck Cards: the evidence</h1>
+      <p class="lede">Can a Microduck walk one square and turn a quarter turn per card, reliably
+      enough for a classroom? We wrote down what reliable means before running anything, ran it
+      in Pollen Robotics' own simulator, ran it again on a different machine, and publish every row.
+      So far the answer is no, and this page says exactly where and why.</p>
+    </div>
+
+    <h2 id="summary">Summary</h2>
+    <ul>
+      <li><strong>Single cards mostly pass.</strong> Under randomized physics and sensing, 95 to 98%
+      of the pre-registered short rows end within 10 cm and 15° of where they should.</li>
+      <li><strong>The pre-registered bar is not met.</strong> At Studio's 10 Hz state rate, heading
+      sits on the 95% line (96.9% on one machine, 94.9% on another, 93.8% on a repeat), Walk back misses position
+      (92.8% and 93.1%), and the stressed condition fails both.</li>
+      <li><strong>Long rows fail.</strong> Of the packs' rows of 10 cards or more, only 33 to 42% land
+      under randomization and none under stress.</li>
+      <li><strong>No falls.</strong> 0 falls in 4,128 rows on a quiet machine. Falls seen on an
+      overloaded machine were the machine.</li>
+      <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
+      Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
+    </ul>
+
+    <h2 id="question">The question</h2>
+    <p>Duck Cards are printed coding cards: a child lays Walk, Turn and Repeat cards in a row and the
+    duck acts them out on a 30 cm grid. A timed card (walk for two seconds) does not land on a
+    square: walking speed varies with the floor, the policy and the battery. A closed-loop card
+    walks until odometry says one square and turns until the heading says a quarter turn. The
+    question is whether that is good enough, measured, before any child relies on it.</p>
+
+    <h2 id="system">System under test</h2>
+    <ul>
+      <li><strong>Simulator:</strong> Pollen Robotics' duck-sim with Pollen's own robotd answering
+      JSON-RPC <code>robot.move</code>, and Pollen's v8 velocity-standing policy walking the duck.
+      Odometry is robotd's own estimate; errors are judged against MuJoCo's true pose.</li>
+      <li><strong>Envelope:</strong> commands are clamped to Pollen's gamepad defaults,
+      vx within 0.4 m/s, vy within 0.3 m/s, vyaw within 1.0 rad/s.</li>
+      <li><strong>Controller:</strong> <code>duck-card-loop/1</code>. The row keeps a board: every
+      card targets an absolute pose on it, so a card corrects what the last one left. Walk cards
+      steer onto the line; Turn cards stop short by their measured coast, settle and trim.
+      Dead bands from system identification: forward starts near 0.20 to 0.25 m/s, back near
+      -0.35 m/s, turning near 0.5 to 0.625 rad/s.</li>
+    </ul>
+
+    <h2 id="criteria">Pre-registered criteria</h2>
+    <p>Written into <code>docs/PACKS.md</code> on 2026-10-15, before any result was in, and not
+    changed since. A condition passes only if every criterion passes.</p>
+    <ul>
+      <li><strong>Position:</strong> at least 95% of rows end within 10 cm of the target.</li>
+      <li><strong>Heading:</strong> at least 95% of rows end within 15° of the target.</li>
+      <li><strong>Falls:</strong> the upper end of the Wilson 95% interval on the fall rate is at most 1%
+      (with zero falls, that takes 381 rows).</li>
+      <li><strong>Time:</strong> no Walk card over 8 s and no Turn card over 6 s.</li>
+      <li><strong>Ending badly:</strong> every row that fails says so to the child.</li>
+    </ul>
+    <p>Every share on this page is the observed share with its Wilson 95% interval in brackets.</p>
+
+    <h2 id="conditions">Conditions</h2>
+    <div class="scroller" role="region" aria-label="Conditions" tabindex="0">
+    <table>
+      <caption>Each condition is fixed before its rows run</caption>
+      <tr><th scope="col">Condition</th><th scope="col">What is perturbed</th></tr>
+      <tr><td>nominal</td><td>Nothing. State at 20 Hz, the reader's rate.</td></tr>
+      <tr><td>randomized</td><td>Per row: floor friction ×U(0.5, 1.2); masses and inertias ×U(0.95, 1.05);
+      IMU heading bias U(-5, 5)° drifting at U(-0.5, 0.5)°/s; added state latency U(0, 0.15) s;
+      odometry noise 5 mm and 0.5° per frame; odometry scale U(0.95, 1.05). State at 20 Hz.</td></tr>
+      <tr><td>randomized-10hz</td><td>As randomized, with state at 10 Hz, the rate Studio asks for.</td></tr>
+      <tr><td>stressed-10hz</td><td>The far end of every range at once: friction ×0.5, mass ×1.05,
+      bias 5° and drift 0.5°/s, latency 0.15 s, odometry scale 0.95 or 1.05. State at 10 Hz.</td></tr>
+    </table>
+    </div>
+
+    <h2 id="ladder">Evidence ladder</h2>
+    <ol class="guide-steps">
+      <li><strong>Rung 1: Pollen's duck-sim, Monte Carlo.</strong> Every criterion in every condition,
+      for the pre-registered rows and separately for rows with a Walk back card.
+      <em>Not passed.</em></li>
+      <li><strong>Rung 2: a second, clean machine.</strong> The same commit and conditions from a fresh
+      checkout on different hardware, matching every verdict. <em>Run on 2026-10-16 on Hugging Face
+      Jobs (x86, AMD EPYC); 38 of 40 verdicts matched, so not reproduced.</em></li>
+      <li><strong>Rung 3: a real duck on a taped 30 cm grid.</strong> Studio's Measure my duck
+      protocol, tape-measured and filmed. <em>Not started; any fall sends the work back to rung 1.</em></li>
+    </ol>
+    <p>Only when all three pass does a card pack turn closed-loop cards on for real ducks.</p>
+
+    <h2 id="results">Results</h2>
+    <p>Pre-registered rows, <code>duck-card-loop/1</code>. First machine: a Raspberry Pi 5.
+    Second machine: Hugging Face Jobs <code>cpu-upgrade</code>. 455 rows per condition on each.</p>
+    <div class="scroller" role="region" aria-label="Pre-registered rows" tabindex="0">
+    <table>
+      <caption>Pre-registered rows: share of rows within the bar</caption>
+      <tr><th scope="col">Condition</th><th scope="col">Criterion</th><th scope="col">First machine</th><th scope="col">Second machine</th></tr>
+      <tr><td>nominal</td><td>position</td><td>PASS 98.7% [97.2, 99.4]</td><td>PASS 99.1% [97.8, 99.7]</td></tr>
+      <tr><td>nominal</td><td>heading</td><td>PASS 98.7% [97.2, 99.4]</td><td>PASS 98.9% [97.5, 99.5]</td></tr>
+      <tr><td>randomized</td><td>position</td><td>PASS 96.9% [94.9, 98.2]</td><td>PASS 97.8% [96.0, 98.8]</td></tr>
+      <tr><td>randomized</td><td>heading</td><td>PASS 96.7% [94.6, 98.0]</td><td>PASS 98.0% [96.3, 99.0]</td></tr>
+      <tr><td>randomized-10hz</td><td>position</td><td>PASS 97.1% [95.2, 98.3]</td><td>PASS 96.0% [93.8, 97.5]</td></tr>
+      <tr><td>randomized-10hz</td><td>heading</td><td>PASS 96.9% [94.9, 98.2]</td><td><strong>FAIL 94.9% [92.5, 96.6]</strong></td></tr>
+      <tr><td>stressed-10hz</td><td>position</td><td>FAIL 86.8% [83.4, 89.6]</td><td>FAIL 84.4% [80.8, 87.4]</td></tr>
+      <tr><td>stressed-10hz</td><td>heading</td><td>FAIL 87.3% [83.9, 90.0]</td><td>FAIL 85.9% [82.4, 88.8]</td></tr>
+    </table>
+    </div>
+    <p>Two of the 40 rung 1 verdicts differ, both heading at randomized 10 Hz: this row, and the same
+    criterion for Walk back rows below. The intervals overlap; a repeat on the first machine got 93.8%. We read it as a true rate near 95%, on the line, and count it as
+    failing. Falls were 0 in every condition on both machines, and every Time and Ending badly
+    criterion passed.</p>
+
+    <div class="scroller" role="region" aria-label="Walk back and long rows" tabindex="0">
+    <table>
+      <caption>Walk back rows (403 per condition) and the packs' long rows (60 to 70 per condition)</caption>
+      <tr><th scope="col">Rows, condition</th><th scope="col">Criterion</th><th scope="col">First machine</th><th scope="col">Second machine</th></tr>
+      <tr><td>Walk back, randomized-10hz</td><td>position</td><td>FAIL 92.8% [89.9, 94.9]</td><td>FAIL 93.1% [90.1, 95.1]</td></tr>
+      <tr><td>Walk back, randomized-10hz</td><td>heading</td><td>PASS 96.0% [93.6, 97.5]</td><td>FAIL 93.8% [91.0, 95.8]</td></tr>
+      <tr><td>Walk back, stressed-10hz</td><td>position</td><td>FAIL 79.9% [75.7, 83.5]</td><td>FAIL 79.9% [75.7, 83.5]</td></tr>
+      <tr><td>10 cards or more, randomized</td><td>position</td><td>41.7% [30.1, 54.3]</td><td>33.3% [22.7, 45.9]</td></tr>
+      <tr><td>10 cards or more, randomized-10hz</td><td>position</td><td>41.7% [30.1, 54.3]</td><td>36.7% [25.6, 49.3]</td></tr>
+      <tr><td>10 cards or more, stressed-10hz</td><td>position</td><td>0.0% [0.0, 5.2]</td><td>0.0% [0.0, 6.0]</td></tr>
+    </table>
+    </div>
+
+    <h2 id="candidate">A rejected candidate</h2>
+    <p><code>duck-card-loop/2</code> gave Walk cards the lead Turn cards have: stop short by the
+    measured coast, settle, and lead later Walk cards by the row's mean coast. Its parameters were
+    chosen on development seeds only, then evaluated once on fresh seeds (4,800 rows), on both
+    machines. Against <code>/1</code> on the same kind of machine:</p>
+    <ul>
+      <li>Walk back position at randomized 10 Hz: FAIL 93.1% to <strong>PASS 96.3%</strong>.</li>
+      <li>Walk back heading, randomized: PASS 98.3% to <strong>FAIL 92.5%</strong>.</li>
+      <li>Long rows' position at randomized 10 Hz: 36.7% to 20.0%.</li>
+      <li>Falls: 11 on the overloaded first machine, 0 in 4,800 rows on the second.</li>
+    </ul>
+    <p>It trades one failing criterion for another and makes long rows worse. Not adopted.</p>
+
+    <h2 id="diagnosis">Why long rows fail</h2>
+    <p>The controller already aims every card at an absolute place on the board, so its own errors
+    do not stack. What stacks is what the duck believes about itself. A heading sensor drifting at
+    up to 0.5°/s is off by up to 30° after a minute, and a minute is about a ten-card row; odometry
+    that reads 5% long or short is off by 5% of every metre walked. Neither is visible to the
+    controller. The enemy is elapsed time and distance, not the number of cards, and no per-card
+    tuning removes a wrong sensor reading.</p>
+
+    <h2 id="next">What is being tried next</h2>
+    <p>Each is a new controller version, held to the same criteria above, evaluated on fresh seeds
+    on a quiet machine, and published here whether it passes or not. One at a time, in this order:</p>
+    <ol class="guide-steps">
+      <li><strong>Calibrate at every stop.</strong> Standing still, the true turn rate is zero, so
+      whatever the sensor reports is drift: measure it before the row and at every settle, and subtract it.</li>
+      <li><strong>The mat as a compass.</strong> Grid lines seen by the duck's camera fix heading to
+      the nearest quarter turn, and position to the nearest square.</li>
+      <li><strong>Spend less time.</strong> Merge consecutive Walk cards into one walk and two quarter
+      turns into a half turn, so a row takes less time to drift.</li>
+      <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
+      long challenges split into chapters no longer than the length that passes.</li>
+    </ol>
+    <p>Separately, Measure my duck will record how much a real duck's heading drifts standing
+    still. If that argues for a gentler simulated condition, the condition is added and
+    pre-registered as new; the conditions above are not edited.</p>
+
+    <h2 id="reproduce">Reproduce it</h2>
+    <p>From a fresh checkout of <a href="https://github.com/craigm26/duck-studio" rel="noopener">duck-studio</a>
+    on Linux (x86 or arm64), with nothing else running:</p>
+    <pre><code>sh cardreader/sim/validate.sh
+python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
+  cardreader/sim/results/raw-acceptance cardreader/sim/results/raw-back</code></pre>
+    <p><code>validate.sh</code> builds Pollen's stack at pinned commits, runs system identification
+    and every Monte Carlo batch, and writes <code>HOST.txt</code> (machine, commit, Pollen SHAs) and a
+    per-minute load log. Each session's randomness is seeded from the batch seed and the rows
+    already done, so a rerun is a fresh statistical sample, not a replay: compare verdicts and
+    intervals, not rows. A loaded machine makes simulated bodies fall behind real time and fall;
+    check the logs for "behind real time" before trusting a fall.</p>
+
+    <h2 id="limits">Limits</h2>
+    <ul>
+      <li>No real duck has run a closed-loop card yet.</li>
+      <li>duck-sim drives position servos, which are not the actuator v8 was trained with.</li>
+      <li>Real floors, real IMU drift and real foot slip appear only through the randomized ranges.
+      The simulated drift is a constant rate per row; a real one wanders.</li>
+      <li>The second machine is shared hardware; its load reading covers the host, not the job.
+      No simulated body logged falling behind real time.</li>
+    </ul>
+
+    <h2 id="data">Data and code</h2>
+    <ul class="link-list">
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/PACKS.md" rel="noopener">The pre-registration and every result <span>docs/PACKS.md</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results" rel="noopener">Every row: first machine, repeat, and the Hugging Face Jobs run in rung2-hf <span>cardreader/sim/results</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-walkback" rel="noopener">The rejected candidate's rows <span>cardreader/sim/results-walkback</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
+    </ul>
+    <p>Questions, a second reproduction or a correction: <a href="mailto:craigm26@gmail.com">email</a>
+    or open an issue on duck-studio.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p><strong>This is not the official Microduck app.</strong> Pollen Robotics make the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <p>Duck Cards, their packs, pictures and lessons are CC BY 4.0. Microduck Studio, duckkit and the bench are Apache-2.0.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Studio</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/cards/">Duck Cards</a>
+        <a href="/science/">Evidence</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="mailto:craigm26@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
