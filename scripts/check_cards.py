@@ -54,6 +54,11 @@ from site_helpers import flatten  # noqa: E402
 
 CARD_PAGES = ("public/cards/index.html", "public/cards/print/index.html",
               "public/cards/spec/index.html", "public/index.html")
+# Every pack page and pack cut sheet draws its cards with the same card_html, and
+# a card on a pack page is printed and cut like any other, so each is read back
+# here too. Their own arithmetic and boards are scripts/check_packs.py's.
+CARD_PAGES += tuple(sorted(str(p) for p in pathlib.Path("public/cards/packs").glob("*/index.html"))
+                    + sorted(str(p) for p in pathlib.Path("public/cards/packs").glob("*/print/index.html")))
 CARDS, PRINT, SPEC = CARD_PAGES[:3]
 RECEIPT = pathlib.Path("tools/evallog-shipped.json")
 CSS = pathlib.Path("public/assets/site.css")

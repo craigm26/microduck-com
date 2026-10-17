@@ -3,7 +3,7 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Six HTML pages and a shared stylesheet, with no build step at deploy time, bundler, npm
+Fifteen HTML pages and a shared stylesheet, with no build step at deploy time, bundler, npm
 dependency, or JavaScript. The visual theme follows Pollen Robotics' warm orange accents,
 spacious typography and rounded panels while clearly identifying Studio as an independent
 project.
@@ -16,6 +16,10 @@ project.
 - `public/cards/` - Duck Cards, a printable deck for classrooms: the deck and its lessons
   (`index.html`), the cut sheet (`print/index.html`), the card format (`spec/index.html`),
   and the deck file every card is drawn from (`duck-cards.json`).
+- `public/cards/packs/` - Duck Card packs, a game for each grade band: the list
+  (`index.html`), each pack's page of challenge cards and lessons (`<id>/index.html`), its cut
+  sheet of only the cards in play (`<id>/print/index.html`), and the pack files themselves
+  (`<id>.duckpack`), byte identical to the ones StudioKit bundles.
 - `public/assets/site.css` - shared theme, responsive navigation, documentation layout,
   light and dark colors, and keyboard focus styles.
 - `public/assets/studio-icon.png` - the existing app icon, copied from the app repository.
@@ -29,7 +33,7 @@ project.
 - `public/robots.txt`, `public/sitemap.xml` - every page and a crawl pointer.
 - `scripts/` - the gates. `tools/` is never served.
 - `tools/duckcards/` - draws the cards into the pages: `build_cards.py`, the pictures
-  (`art.py`) and the AprilTag table (`tag36h11.txt`).
+  (`art.py`) and the AprilTag table (`tag36h11.txt`); `build_packs.py` draws the pack pages.
 
 ## Preview locally
 
@@ -43,7 +47,7 @@ Open `http://localhost:8000/` and `/docs/`. The preview server does not apply Cl
 ## Run the gates before every deploy
 
 ```sh
-bash scripts/predeploy.sh                # all seven, stopping at the first failure
+bash scripts/predeploy.sh                # all eight, stopping at the first failure
 ```
 
 In order: the extractor reads the **values** of the pinned StudioKit constants out of
@@ -54,7 +58,9 @@ appear on each one. The dash, third party, shared stylesheet, dataset, format an
 claims are checked. The Evaluations copy is checked against the receipt in both directions.
 Every Duck Card on every page is read back against the deck file, Studio's own words and
 pad, and the AprilTag table cell by cell; the controls the cards page names are read again
-out of the StudioKit the receipt's beta build was made from.
+out of the StudioKit the receipt's beta build was made from. Every pack file is compared byte
+for byte with the duck-studio checkout's, every par is played on the board, and every challenge
+card is read back off its page square by square.
 Local links, cross-page fragments, stylesheet references and assets must resolve within
 `public/`; external links are fetched by GET and must answer 200. Every page must close its
 elements, use unique IDs and appear in the sitemap. Same-site canonical URLs are validated
@@ -64,7 +70,11 @@ Three rules the gates exist to hold:
 
 1. **Every number on the site is read out of a StudioKit constant, or it is not on the
    site.** A number that lives only in a Swift doc comment cannot be pinned by anything,
-   so it is not printed here.
+   so it is not printed here. A pack page's numbers come from the pack file, which is a
+   StudioKit resource pinned by its sha256; its one number about a real duck, how far the
+   first simulator measurement carried it on one Walk card, is read by the extractor out of
+   the measurement table in duck-studio's `docs/PACKS.md`, and no other centimetres may be
+   printed beside it.
 2. **No image depicting the app's interface ships on this site** until it is a screenshot
    taken from a real device, and the commit that adds it names the device and build
    number. The app cannot build for the Simulator. The app icon is an identity asset,
@@ -107,6 +117,29 @@ art. The deck, its pictures and its lessons are CC BY 4.0; the code that draws t
 Apache-2.0 like the rest of the project. Print the cut sheet at actual size on Letter and on
 A4 after any change to card sizes, and check every code still decodes.
 
+## Duck Card packs
+
+A pack is made in duck-studio (`docs/PACKS.md`), never here. To take a new or changed pack,
+copy it from `StudioKit/Sources/StudioKit/Resources/DuckPacks/` into `public/cards/packs/`,
+then:
+
+```sh
+python3 scripts/extract_kit_sentences.py ~/projects/duck-studio   # pins each pack's sha256
+python3 tools/duckcards/build_packs.py                            # --check only reports
+```
+
+`scripts/check_packs.py` fails while a site copy differs from the checkout's, a pack is on one
+side only, or a page is not what the pack says. The board rule (one Walk card is one square,
+one Turn card a quarter turn) is the paper and Studio rule. A pack page says one card has
+not been measured on a real duck, so the gate fails the day a pack carries a
+`duck_square_cm`; rewrite the sizing copy in `build_packs.py` then. Print a pack page once
+after any change to the activity card: four challenge cards to a Letter or A4 sheet, nothing
+cut off at the bottom of a card that carries a Find the bug row.
+
+The build goes before the site here too. The pack pages say the board is played in Studio,
+and on 2026-10-15 Studio's Packs screen is on duck-studio's `duck-packs` branch and in no
+TestFlight build, so the pack pages go live with that build and not before.
+
 ## Deploy
 
 ```sh
@@ -124,11 +157,12 @@ gate fails until every page carries the current stamp.
 
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
 GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,
-`/cards/`, `/cards/print/`, `/cards/spec/` and `/cards/duck-cards.json` all return 200, the
+`/cards/`, `/cards/print/`, `/cards/spec/`, `/cards/duck-cards.json`, `/cards/packs/`, each
+pack's page, cut sheet and `.duckpack` all return 200, the
 stylesheet and icon load, the zip is 11666886 bytes, the CSP header is present, and the docs
 carry exactly one `id="evallog-..."` marker matching the receipt.
 
-Check the homepage, docs navigation, tables, privacy page and the three cards pages at
+Check the homepage, docs navigation, tables, privacy page, the three cards pages and the pack pages at
 narrow mobile and desktop widths in light and dark mode, and print the cut sheet once. Confirm that the primary TestFlight and docs links are easy
 to find, that keyboard focus stays visible, and that no content causes horizontal page
 scrolling. Open the TestFlight link on a real iPhone to confirm the beta still accepts testers.

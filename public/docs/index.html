@@ -14,7 +14,7 @@
 <meta property="og:description" content="Guides and reference for inspecting policies, writing motions and measuring what they do in physics.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/studio-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=a6c9ecdea5">
+<link rel="stylesheet" href="/assets/site.css?v=a1f0e4a145">
 </head>
 <body class="docs-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -45,6 +45,7 @@
         <li><a href="#evaluations">Evaluations</a></li>
         <li><a href="#bench">Set up the bench</a></li>
         <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#packs">Packs and Measure my duck</a></li>
         <li><a href="#reproduce">Reproduce a result</a></li>
         <li><a href="#formats">File formats</a></li>
         <li><a href="#honest">What the results mean</a></li>
@@ -63,6 +64,7 @@
         <li><a href="#evaluations">Evaluations</a></li>
         <li><a href="#bench">Set up the bench</a></li>
         <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#packs">Packs and Measure my duck</a></li>
         <li><a href="#reproduce">Reproduce a result</a></li>
         <li><a href="#formats">File formats</a></li>
         <li><a href="#honest">What the results mean</a></li>
@@ -429,6 +431,31 @@ device and nothing is sent until you pick where it goes.</p>
 with the file attached. That is the submission a maintainer sees. Publishing the
 same file to a Hugging Face dataset under your own account, under CC BY 4.0, is
 your archive and submits nothing to anyone.</p>
+
+<h2 id="packs">Packs and Measure my duck</h2>
+<p>A pack is a game for <a href="/cards/">Duck Cards</a>, set for a grade band: a board,
+the cards in play, challenges that ramp from easy to hard, and lessons. Four ship with the
+app, from PreK to grade 8; the <a href="/cards/packs/">pack pages</a> print them.</p>
+
+<ol class="guide-steps">
+  <li><strong>Play a challenge.</strong> Open <strong>Packs</strong>, choose a pack and a
+  challenge, and lay a row from the pack's cards, or take the row the camera read. The board
+  plays it step by step and says solved, the score and par.</li>
+  <li><strong>Run it on the duck.</strong> <strong>Run on the duck</strong> sends the same row
+  as a plan. On a real duck its Walk and Turn cards are timed, and the screen says so: a timed
+  card does not land on a square.</li>
+  <li><strong>Design a level.</strong> Tap squares for the start, goal, walls and gates; par is
+  worked out for you. Challenges save into your class pack, which shares as a
+  <code>.duckpack</code>.</li>
+  <li><strong>Measure my duck.</strong> Packs, then <strong>Measure my duck</strong>, is the
+  one screen that runs closed-loop cards on a robot, and it opens by saying it is a test. Tape a
+  grid of 30 cm squares, five long and three wide; the duck walks one to four squares and turns
+  four quarter turns; you type where it ended from the tape. It judges your marks against the
+  same criteria as the simulator and shares a <code>duck-measure/0</code> report.</li>
+</ol>
+
+<p>Why closed-loop cards are off on real ducks, with every number and every row:
+<a href="/science/">the evidence</a>.</p>
 
 <h2 id="reproduce">Reproduce a published number</h2>
 

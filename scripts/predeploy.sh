@@ -90,6 +90,85 @@
 #     page names".
 #   * the Say it placeholder reworded on the page: "does not carry Studio's
 #     say_it_placeholder word for word".
+# PROVED ABLE TO FAIL, 2026-10-15, check_packs nineteen times and check_cards
+# once more, in a throwaway copy of the repository run against a copy of
+# duck-studio's StudioKit/Sources and docs/PACKS.md, one defect at a time and
+# each restored before the next; the copy passed before the first and after
+# the last. The first pass of these proved nothing: the harness handed the gate
+# a relative duck-studio path, so every case "failed" on "has no packs", which is
+# a failure for the wrong reason. They were all run again with an absolute path:
+#   * one byte changed in the site's get-to-the-pond.duckpack: "differs from the
+#     duck-studio checkout's; copy it again, byte for byte".
+#   * a pack on the site only: "extra.duckpack has no twin in
+#     StudioKit/Sources/StudioKit/Resources/DuckPacks".
+#   * a pack in duck-studio only, extract rerun: "is not on the site; copy it to
+#     public/cards/packs/" and "the extract pins extra.duckpack and the site
+#     does not serve it".
+#   * duck-studio's copy changed and the extract not rerun: "differs from the
+#     duck-studio checkout's".
+#   * Corner pond's par made 6 in both copies: "its solution scores 5 steps and
+#     par says 6" and "par is 6 and the fewest steps on the board is 5".
+#   * duck_square_cm set to 14 in both copies of duck-maze: "carries a measured
+#     duck square; the pack pages say one card has not been measured".
+#   * the first measurement changed to 16 cm in docs/PACKS.md, extract rerun:
+#     "does not say 'a Walk forward card carried the duck about 16 cm'" and
+#     "prints 14 cm, which is neither a pack's floor square nor the first
+#     measurement".
+#   * the renderer turning every tunnel: "#pond-6 draws tunnels [((1, 2),
+#     'ns')]; the pack has [((1, 2), 'ew')]".
+#   * the renderer drawing walls on the near edge: "#maze-3 draws walls [[(0,
+#     3), (1, 3)]]; the pack has [[(1, 3), (2, 3)]]".
+#   * the renderer facing east the wrong way: "#pond-6 draws the start at ((0,
+#     0), 'west'); the pack says [0, 0] facing east". Before the gate read the
+#     marker's turn with its own table, it read it through the renderer's, and
+#     this case could not have failed.
+#   * a hint hand-edited on a page: "#pond-1 does not carry its hint word for
+#     word".
+#   * "like Code & Go" planted on the packs page: "names 'Code &amp; Go'; name
+#     the activity's shape, not the brand".
+#   * activity cards printed 140 mm tall: "Letter holds 1 rows of activity
+#     cards, not two".
+#   * the renderer dropping a card from the cut sheet: "prints 4 cards; the
+#     pack plays 5".
+#   * the renderer printing the solution as the Find the bug row: "#loop-3
+#     draws the Find the bug row [...]".
+#   * the renderer finishing with Stop: "#maze-7 shows the finish card
+#     [('stop', 'Stop')], not 'greet'".
+#   * a 20 cm square planted in the renderer: "prints 20 cm, which is neither a
+#     pack's floor square nor the first measurement".
+#   * the renderer listing the packs oldest first: "lists ['design-a-level',
+#     ...]; youngest first is ['get-to-the-pond', ...]". This one PASSED on the
+#     first try, because the gate took youngest-first from the renderer's own
+#     sort; it now sorts by the files' grade_from itself.
+#   * the renderer leaving Start out of play: "draws the cards [...] in play;
+#     the pack plays [... 'start', 'end']" and "prints 4 cards".
+#   * and check_cards: one Walk forward card on a pack page given the right
+#     stick: "public/cards/packs/get-to-the-pond/index.html: card
+#     'walk_forward' says it runs on ['Studio', 'Pad: R stick']".
+# PROVED ABLE TO FAIL, 2026-10-15, after the pages took the closed-loop card
+# measurement (duck-studio docs/PACKS.md, "Closed-loop cards"), each restored:
+#   * duck-maze's page made to say "within 3 cm of the board": "does not say
+#     'Over 140 rows, the duck ended within 4.6 cm ...'" and "prints 3 cm, which
+#     is neither a pack's floor square nor a number in docs/PACKS.md's
+#     closed-loop table".
+#   * a note planted on #maze-1, which carries none: "#maze-1 shows a note
+#     ['Room 12 drew this.'] the challenge does not carry".
+#   * the extract's error bound changed 4.6 -> 3.9: every pack page "is not what
+#     build_packs.py draws today".
+# PROVED ABLE TO FAIL, 2026-10-15, after duck-studio shipped closed-loop cards
+# OFF for real ducks (duck-card-loop.json enabled_on_robot: false) and the pages
+# took Studio's own sentence for it, each restored:
+#   * duck-maze's page made to say "Over 140 rows, the duck ended within 4.6 cm":
+#     "claims 'Over 140 rows' about a duck, and measured cards are off for real
+#     ducks", "claims 'ended within'", "prints 4.6 cm, which is neither a pack's
+#     floor square nor the square the cards walk", and "is not what
+#     build_packs.py draws today".
+#   * the extract's enabled_on_robot set true: "duck-studio turned measured
+#     cards on for a duck (validated: None); these pages say they are timed, so
+#     rewrite them, and this gate, with the results".
+#   * the extractor's read_closed_loop on a copy of duck-studio with the switch
+#     taken out of duck-card-loop.json: "has no enabled_on_robot switch"; and
+#     with DuckCardLoop.offNote renamed: "has no offNote".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -101,25 +180,28 @@ DUCK_STUDIO="${1:-${DUCK_STUDIO:-$HOME/projects/duck-studio}}"
 
 step() { printf '\n== %s\n' "$1"; }
 
-step "1/7 extract the pinned StudioKit values"
+step "1/8 extract the pinned StudioKit values"
 python3 scripts/extract_kit_sentences.py "$DUCK_STUDIO"
 
-step "2/7 every pinned sentence is on the site"
+step "2/8 every pinned sentence is on the site"
 bash scripts/check_site_sentences.sh
 
-step "3/7 dashes, third parties, the bundle, the shared stylesheet"
+step "3/8 dashes, third parties, the bundle, the shared stylesheet"
 bash scripts/check_site_claims.sh
 
-step "4/7 the Evaluations copy matches what a tester can open"
+step "4/8 the Evaluations copy matches what a tester can open"
 bash scripts/check_evallog_claims.sh
 
-step "5/7 every Duck Card matches the deck, StudioKit, its code and the beta"
+step "5/8 every Duck Card matches the deck, StudioKit, its code and the beta"
 python3 scripts/check_cards.py "$DUCK_STUDIO"
 
-step "6/7 every link resolves"
+step "6/8 every Duck Card pack is Studio's, and its pages say what it says"
+python3 scripts/check_packs.py "$DUCK_STUDIO"
+
+step "7/8 every link resolves"
 bash scripts/check_links.sh
 
-step "7/7 every page is well formed"
+step "8/8 every page is well formed"
 if command -v xmllint >/dev/null 2>&1; then
   mapfile -d '' html_pages < <(find public -type f -name '*.html' -print0)
   xmllint --html --noout "${html_pages[@]}"
@@ -127,5 +209,5 @@ if command -v xmllint >/dev/null 2>&1; then
 fi
 python3 scripts/check_wellformed.py
 
-printf '\npredeploy: all seven gates passed. Deploy with\n'
+printf '\npredeploy: all eight gates passed. Deploy with\n'
 printf '  npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main\n'

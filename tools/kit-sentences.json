@@ -125,6 +125,7 @@
       ],
       "robot_beats": [
         "move",
+        "card",
         "sound",
         "skill"
       ],
@@ -267,7 +268,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "d9bc45177a89ad5a1305bd08dfc23e295ad75f65",
+  "duck_studio_commit": "8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -293,6 +294,26 @@
     "ball_upright_tail_min": 45,
     "stairs_cell_count": 14,
     "stairs_core_count": 9
+  },
+  "packs": {
+    "closed_loop": {
+      "duck_square_cm": 30,
+      "enabled_on_robot": false,
+      "off_note": "Walk and Turn cards on a duck are timed for now: two seconds each, and the duck does not land on board squares. Measured cards are being tested.",
+      "source": "StudioKit/Sources/StudioKit/Resources/DuckCards/duck-card-loop.json",
+      "validated": null
+    },
+    "digests": {
+      "design-a-level": "b2be9f9a79319095ca6fd85412b82b844245f75faac99bfc5a44f2666ea27c0a",
+      "duck-maze": "b22cd2e709dc931316aba4de999bd94732efba03fff35e516e509fb804f38f95",
+      "get-to-the-pond": "5a84c5c790b5f764af5845116e24db2df127a79f898d1a8fc123d49c90239005",
+      "loop-the-course": "66c58f64dd3d84e9cbe0390223818aed620ceeb9c0fcc0d68f21439855b37a94"
+    },
+    "first_measurement": {
+      "section": "First measurement: duckbench, 2026-10-15",
+      "source": "docs/PACKS.md",
+      "walk_forward_normal_cm": 14
+    }
   },
   "quoted": {
     "ball_controls_clause": "Standing still and both of Pollen's kick policies chase nothing at all; walking straight ahead takes 4 of the 9 core cells and 1 of the 5 extended",
