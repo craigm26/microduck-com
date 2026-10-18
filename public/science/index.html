@@ -103,6 +103,9 @@
       <li><strong>The first fix tried was rejected.</strong> Calibrating heading drift while the duck
       stands still helped the stressed rows but added falls and broke rows with no drift at all
       (<a href="#calibrate">below</a>).</li>
+      <li><strong>The second fix, the mat as a compass, is being evaluated again.</strong> Its first
+      run lifted long rows from 37% to 81% but added falls, on a machine its own renderer starved; a
+      repeat with the renderer bounded is running (<a href="#compass">below</a>).</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -204,6 +207,35 @@
     </table>
     </div>
 
+    <h2 id="compass">In evaluation: the mat as a compass (<code>duck-card-loop/4</code>)</h2>
+    <p>A taped grid on the floor, 30 cm squares, sits outside the duck and does not drift. After each
+    Walk or Turn card the duck takes one frame from its head camera, keeps the dark tape pixels
+    whose rays meet the floor 0.2 to 1 m ahead, and finds the small turn and shift that put them
+    back on the grid. Heading comes back to the nearest quarter turn and position to the nearest
+    square. In the simulator the mat is rendered from the duck's true pose, and each condition
+    adds errors in what the duck believes about its camera (pitch, roll, mount, height,
+    brightness, noise). Pre-registered with <code>/3</code>'s rule before any row ran.</p>
+    <p><strong>Run 1</strong> (4,800 rows on Hugging Face Jobs), against <code>/1</code> on the same
+    machine type:</p>
+    <ul>
+      <li>Long rows' position at randomized 10 Hz: 36.7% to <strong>80.8%</strong>; randomized 33.3% to
+      82.5%; stressed 10 Hz 0% to 46.7%. Their heading error stopped growing: median 3.6&deg;
+      against 8.6&deg;.</li>
+      <li>Falls in every condition, from none: 146 in all.</li>
+      <li>Nominal, pre-registered position: 99.1% to <strong>93.7%</strong>.</li>
+    </ul>
+    <p><strong>Rejected by its own rule.</strong> The machine looks like the cause. This is not
+    proven. 170 rows stopped because the duck's pose stopped arriving for half a second; the
+    <code>/1</code> run had 2. 17 falls came before the mat had changed anything. The host's load
+    median was 260, against 21 for <code>/3</code>'s run. The mat was rendered in software, which by
+    default takes every core for each frame, beside four simulated ducks on 8 vCPUs. On the Pi,
+    with a GPU, development rows had no falls.</p>
+    <p><strong>The repeat</strong> was pre-registered after run 1 and before any row of it. It
+    changes only the instrument: one render thread, at a lower priority than the duck. The seeds,
+    code, criteria and rule are run 1's. It counts only if 10 or fewer of its 4,800 rows lose the
+    pose. If more do, it is called inconclusive, and the next idea starts from <code>/1</code>. It is
+    running now. Its result goes here, beside run 1, whatever it is.</p>
+
     <h2 id="candidate">Rejected candidates</h2>
     <h3 id="walk-lead">The Walk lead (<code>duck-card-loop/2</code>)</h3>
     <p><code>duck-card-loop/2</code> gave Walk cards the lead Turn cards have: stop short by the
@@ -254,7 +286,8 @@
       <li><strong>Calibrate at every stop.</strong> Tried and <a href="#calibrate">rejected</a>: a
       standing duck is not still enough for its own sensor to measure drift.</li>
       <li><strong>The mat as a compass.</strong> Grid lines seen by the duck's camera fix heading to
-      the nearest quarter turn, and position to the nearest square.</li>
+      the nearest quarter turn, and position to the nearest square. <a href="#compass">In
+      evaluation</a>: run 1 rejected on a starved machine, the repeat running.</li>
       <li><strong>Spend less time.</strong> Merge consecutive Walk cards into one walk and two quarter
       turns into a half turn, so a row takes less time to drift.</li>
       <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
@@ -293,6 +326,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results" rel="noopener">Every row: first machine, repeat, and the Hugging Face Jobs run in rung2-hf <span>cardreader/sim/results</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-walkback" rel="noopener">The Walk lead's rows <span>cardreader/sim/results-walkback</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-calibrate/COMPARE.md" rel="noopener">Calibrate at every stop, criterion by criterion <span>cardreader/sim/results-calibrate</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/run1/COMPARE.md" rel="noopener">The mat as a compass, run 1, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
