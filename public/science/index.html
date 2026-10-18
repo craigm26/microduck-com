@@ -100,6 +100,9 @@
       under randomization and none under stress.</li>
       <li><strong>No falls.</strong> 0 falls in 4,128 rows on a quiet machine. Falls seen on an
       overloaded machine were the machine.</li>
+      <li><strong>The first fix tried was rejected.</strong> Calibrating heading drift while the duck
+      stands still helped the stressed rows but added falls and broke rows with no drift at all
+      (<a href="#calibrate">below</a>).</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -201,7 +204,8 @@
     </table>
     </div>
 
-    <h2 id="candidate">A rejected candidate</h2>
+    <h2 id="candidate">Rejected candidates</h2>
+    <h3 id="walk-lead">The Walk lead (<code>duck-card-loop/2</code>)</h3>
     <p><code>duck-card-loop/2</code> gave Walk cards the lead Turn cards have: stop short by the
     measured coast, settle, and lead later Walk cards by the row's mean coast. Its parameters were
     chosen on development seeds only, then evaluated once on fresh seeds (4,800 rows), on both
@@ -213,6 +217,27 @@
       <li>Falls: 11 on the overloaded first machine, 0 in 4,800 rows on the second.</li>
     </ul>
     <p>It trades one failing criterion for another and makes long rows worse. Not adopted.</p>
+
+    <h3 id="calibrate">Calibrate at every stop (<code>duck-card-loop/3</code>)</h3>
+    <p>The duck stands still for 5 s before a row and between cards; the yaw rate it reports while
+    standing is taken as drift (a pooled least-squares slope over every still window) and taken
+    out of heading and position. Pre-registered with its decision rule before any row ran; chosen
+    on development seeds; evaluated once on fresh seeds, 4,800 rows on Hugging Face Jobs. The rule:
+    it replaces <code>/1</code> only if no verdict <code>/1</code> passed becomes a fail and long rows'
+    position at randomized 10 Hz rises. Against <code>/1</code> on the same machine type:</p>
+    <ul>
+      <li>Long rows' position at randomized 10 Hz: 36.7% to 45.8% (rises).</li>
+      <li>Stressed 10 Hz, pre-registered position: 84.4% to 92.9%; long rows 0% to 30.8%.</li>
+      <li>Falls: none to 1 in 510 (randomized), and 2, 4 and 1 in 493 Walk back rows. Six of the ten
+      came on a row's first card, just after the stand.</li>
+      <li>Every row at nominal, where no drift is injected: position 99.0% to <strong>81.5%</strong>;
+      long rows 98.3% to <strong>45.0%</strong>.</li>
+    </ul>
+    <p><strong>Rejected by its own rule.</strong> The rows say why: the estimate follows the injected
+    drift but sits about 0.15°/s low in every condition, nominal included. A standing duck's yaw
+    really moves (the policy creeps or settles), and a sensor inside the duck cannot tell that from
+    drift. Subtracting it for the whole row turns a small true creep into a heading error that
+    grows with time. Heading needs a reference outside the duck, which is the next idea.</p>
 
     <h2 id="diagnosis">Why long rows fail</h2>
     <p>The controller already aims every card at an absolute place on the board, so its own errors
@@ -226,8 +251,8 @@
     <p>Each is a new controller version, held to the same criteria above, evaluated on fresh seeds
     on a quiet machine, and published here whether it passes or not. One at a time, in this order:</p>
     <ol class="guide-steps">
-      <li><strong>Calibrate at every stop.</strong> Standing still, the true turn rate is zero, so
-      whatever the sensor reports is drift: measure it before the row and at every settle, and subtract it.</li>
+      <li><strong>Calibrate at every stop.</strong> Tried and <a href="#calibrate">rejected</a>: a
+      standing duck is not still enough for its own sensor to measure drift.</li>
       <li><strong>The mat as a compass.</strong> Grid lines seen by the duck's camera fix heading to
       the nearest quarter turn, and position to the nearest square.</li>
       <li><strong>Spend less time.</strong> Merge consecutive Walk cards into one walk and two quarter
@@ -266,7 +291,8 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
     <ul class="link-list">
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/PACKS.md" rel="noopener">The pre-registration and every result <span>docs/PACKS.md</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results" rel="noopener">Every row: first machine, repeat, and the Hugging Face Jobs run in rung2-hf <span>cardreader/sim/results</span></a></li>
-      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-walkback" rel="noopener">The rejected candidate's rows <span>cardreader/sim/results-walkback</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-walkback" rel="noopener">The Walk lead's rows <span>cardreader/sim/results-walkback</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-calibrate/COMPARE.md" rel="noopener">Calibrate at every stop, criterion by criterion <span>cardreader/sim/results-calibrate</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
