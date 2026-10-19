@@ -110,6 +110,9 @@
       <li><strong>The shipped loop, run twice, disagrees with itself.</strong> Seven verdicts differ
       between two runs of the same code, because rows in one simulated session share a duck. Later
       candidates are judged with a test that counts sessions, not rows (<a href="#control">below</a>).</li>
+      <li><strong>The third fix, merging cards, is kept as the base, with a small gain.</strong> Long
+      rows under randomization at 10 Hz rose from 37% to 42%, and nothing got worse. Counted by
+      session, the rise is not clear of noise (<a href="#merge">below</a>).</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -275,6 +278,31 @@
     position, against 20%), and its gain on long rows is clear (93% against 31%). A later mat
     candidate has that to fix, not falls.</p>
 
+    <h2 id="merge">Kept as the base: merge cards (<code>duck-card-loop/5</code>)</h2>
+    <p>Long rows fail because the sensed pose drifts with time, so a row that takes less time
+    should drift less. Consecutive Walk cards run as one walk, up to a cap, and two quarter turns
+    the same way run as one half turn. The board, the cards and every sentence the duck says are
+    unchanged. Pre-registered before any row, with the same rule as before.</p>
+    <p><strong>Choosing the cap</strong>, on development rows only (60 rows a condition, not a
+    result): long rows at randomized 10 Hz passed on position 8 of 15 with no merging, 11 with
+    two walks at a time, 7 with three, 2 with four, and 3 with every walk merged. Every stop lets
+    the next card re-aim at the board; one long walk loses that. The cap is 2.</p>
+    <p><strong>The evaluation</strong> (4,800 rows on Hugging Face Jobs, fresh seeds, no rows lost
+    the pose):</p>
+    <ul>
+      <li>No verdict that passed for <code>/1</code> fails, and long rows' position at randomized
+      10 Hz rose from 36.7% to <strong>41.7%</strong>. By its rule it replaces <code>/1</code> as
+      the base for the next idea.</li>
+      <li>Smaller than predicted: 45 to 55% was expected. Long rows took 6 to 9% less time, not a
+      fifth to a third. The stops a merged run saves are a small part of a row.</li>
+      <li>Against both <code>/1</code> runs, counted by session, it is worse nowhere, and its rise
+      is not clear of noise (p 0.18).</li>
+      <li>Walk back rows at randomized 10 Hz now pass on position (93.1% to 95.7%). Stressed 10 Hz
+      still fails, so rung 1 still fails. 1 fall in 4,800 rows.</li>
+    </ul>
+    <p>The shipped app keeps <code>/1</code>. <code>/5</code> is where the next candidate starts,
+    not a change to what Studio runs.</p>
+
     <h2 id="candidate">Rejected candidates</h2>
     <h3 id="walk-lead">The Walk lead (<code>duck-card-loop/2</code>)</h3>
     <p><code>duck-card-loop/2</code> gave Walk cards the lead Turn cards have: stop short by the
@@ -328,9 +356,8 @@
       the nearest quarter turn, and position to the nearest square. <a href="#compass">Not
       adopted</a>: long rows far better, but Walk back under stress got worse (<a href="#control">control</a>).</li>
       <li><strong>Spend less time.</strong> Merge consecutive Walk cards into one walk and two quarter
-      turns into a half turn, so a row takes less time to drift. Pre-registered; running now. On
-      development rows, merging two Walk cards at a time did best. Merging longer runs did worse,
-      because each stop lets the next card re-aim.</li>
+      turns into a half turn, so a row takes less time to drift. <a href="#merge">Kept as the
+      base</a>: a small gain, 37% to 42% on long rows.</li>
       <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
       long challenges split into chapters no longer than the length that passes.</li>
     </ol>
@@ -372,6 +399,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/COMPARE.md" rel="noopener">The mat as a compass, the repeat, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/run1/COMPARE.md" rel="noopener">The mat as a compass, run 1, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-control" rel="noopener">The control: <code>/1</code> again, the secondary analysis and its self-test <span>cardreader/sim/results-control</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-merge/COMPARE.md" rel="noopener">Merge cards, criterion by criterion, and its secondary analysis <span>cardreader/sim/results-merge</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
