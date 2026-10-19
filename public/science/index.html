@@ -113,6 +113,10 @@
       <li><strong>The third fix, merging cards, is kept as the base, with a small gain.</strong> Long
       rows under randomization at 10 Hz rose from 37% to 42%, and nothing got worse. Counted by
       session, the rise is not clear of noise (<a href="#merge">below</a>).</li>
+      <li><strong>The fourth, a nest and chapters, is the new base.</strong> Long challenges play in
+      chapters of up to 7 cards, and the child re-seats the duck on a nest square between them. Long
+      rows under randomization at 10 Hz rose from 42% to 63%, worse nowhere counted by session
+      (<a href="#nest">below</a>). The stressed condition still fails.</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -278,7 +282,7 @@
     position, against 20%), and its gain on long rows is clear (93% against 31%). A later mat
     candidate has that to fix, not falls.</p>
 
-    <h2 id="merge">Kept as the base: merge cards (<code>duck-card-loop/5</code>)</h2>
+    <h2 id="merge">Kept, then built on: merge cards (<code>duck-card-loop/5</code>)</h2>
     <p>Long rows fail because the sensed pose drifts with time, so a row that takes less time
     should drift less. Consecutive Walk cards run as one walk, up to a cap, and two quarter turns
     the same way run as one half turn. The board, the cards and every sentence the duck says are
@@ -302,6 +306,50 @@
     </ul>
     <p>The shipped app keeps <code>/1</code>. <code>/5</code> is where the next candidate starts,
     not a change to what Studio runs.</p>
+
+    <h2 id="nest">The new base: a nest and chapters (<code>duck-card-loop/6</code>)</h2>
+    <p>The first three fixes tried to make the duck drift less. This one accepts the drift and
+    shortens what drifts. A long challenge plays in chapters, and between chapters the child puts
+    the duck back on a nest square, as they already seat it at the start. Drift then builds over a
+    chapter, not a whole row.</p>
+    <ul>
+      <li><strong>Chapter length was set by a rule, not by hand.</strong> In <code>/5</code>'s rows,
+      rows of 7 cards or fewer landed 95.0% of the time, and rows of 8 or fewer 93.8%. So a chapter
+      is at most 7 cards, split as evenly as possible.</li>
+      <li><strong>The child's re-seat is not perfect in the sim.</strong> Each re-seat after the
+      first places the duck off the nest: about 1.5 cm and 3° under randomized conditions, 3 cm and
+      5° under stress. The board believes the duck is on the nest. Each chapter is scored against
+      the true nest, and a row passes only if every chapter does.</li>
+      <li><strong>Decided by the test that counts sessions</strong>, against <code>/5</code>: the
+      first idea judged that way, declared before any row was read.</li>
+    </ul>
+    <p><strong>The evaluation</strong> (4,800 rows on Hugging Face Jobs, fresh seeds, 1 row lost the
+    pose):</p>
+    <table>
+      <thead><tr><th>Long rows, position within 10 cm</th><th><code>/5</code></th><th><code>/6</code></th></tr></thead>
+      <tbody>
+        <tr><td>nominal</td><td>119 of 120</td><td>120 of 120</td></tr>
+        <tr><td>randomized</td><td>48 of 120</td><td>79 of 120</td></tr>
+        <tr><td>randomized, 10 Hz</td><td>50 of 120</td><td><strong>76 of 120</strong></td></tr>
+        <tr><td>stressed, 10 Hz</td><td>3 of 120</td><td>23 of 120</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>Long rows at randomized 10 Hz rose from 41.7% to <strong>63.3%</strong> (p 0.026, counted
+      by session), and it is worse nowhere after correcting for 80 tests. By its rule it replaces
+      <code>/5</code> as the base.</li>
+      <li>Under what was predicted: 70 to 85% was expected. The re-seat costs about as much as a
+      chapter's own drift: in long rows at randomized 10 Hz, the second chapter failed 32 times and
+      the first 15.</li>
+      <li>The old rule would have rejected it, on eight Walk back verdicts. No Walk back row has
+      more than 7 cards, so none was split: those rows ran <code>/5</code>'s code again on fresh
+      seeds. Their 9 falls, against <code>/5</code>'s 0, are the same noise the
+      <a href="#control">control</a> found.</li>
+      <li>Stressed 10 Hz still fails, so rung 1 still fails.</li>
+    </ul>
+    <p>The shipped app keeps <code>/1</code>, and closed-loop cards stay off on real ducks. If the
+    chapters reach the app, it will be as a nest prompt in the Packs game. The sim cannot show that
+    a child will re-seat a duck this well, or will want to.</p>
 
     <h2 id="candidate">Rejected candidates</h2>
     <h3 id="walk-lead">The Walk lead (<code>duck-card-loop/2</code>)</h3>
@@ -359,7 +407,8 @@
       turns into a half turn, so a row takes less time to drift. <a href="#merge">Kept as the
       base</a>: a small gain, 37% to 42% on long rows.</li>
       <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
-      long challenges split into chapters no longer than the length that passes.</li>
+      long challenges split into chapters no longer than the length that passes. <a href="#nest">The
+      new base</a>: long rows 42% to 63%.</li>
     </ol>
     <p>Separately, Measure my duck now has a 30 second Stand still step that records how much a
     real duck's heading drifts standing still. If that argues for a gentler simulated condition, the condition is added and
@@ -400,6 +449,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/run1/COMPARE.md" rel="noopener">The mat as a compass, run 1, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-control" rel="noopener">The control: <code>/1</code> again, the secondary analysis and its self-test <span>cardreader/sim/results-control</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-merge/COMPARE.md" rel="noopener">Merge cards, criterion by criterion, and its secondary analysis <span>cardreader/sim/results-merge</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-nest" rel="noopener">A nest and chapters, criterion by criterion, and the deciding analysis <span>cardreader/sim/results-nest</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
