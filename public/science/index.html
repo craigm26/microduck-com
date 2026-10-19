@@ -98,14 +98,18 @@
       (92.8% and 93.1%), and the stressed condition fails both.</li>
       <li><strong>Long rows fail.</strong> Of the packs' rows of 10 cards or more, only 33 to 42% land
       under randomization and none under stress.</li>
-      <li><strong>No falls.</strong> 0 falls in 4,128 rows on a quiet machine. Falls seen on an
-      overloaded machine were the machine.</li>
+      <li><strong>Almost no falls.</strong> 0 falls in 4,128 rows on a quiet machine, and 2 in 4,800
+      when the same loop ran again as a control. Falls seen on an overloaded machine were the
+      machine.</li>
       <li><strong>The first fix tried was rejected.</strong> Calibrating heading drift while the duck
       stands still helped the stressed rows but added falls and broke rows with no drift at all
       (<a href="#calibrate">below</a>).</li>
       <li><strong>The second fix, the mat as a compass, is not adopted.</strong> It lifted long rows
       under randomization from 37% to 93%, but a handful of falls fail the rule, and its repeat missed
       its own validity gate by one row (<a href="#compass">below</a>).</li>
+      <li><strong>The shipped loop, run twice, disagrees with itself.</strong> Seven verdicts differ
+      between two runs of the same code, because rows in one simulated session share a duck. Later
+      candidates are judged with a test that counts sessions, not rows (<a href="#control">below</a>).</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -248,6 +252,29 @@
     <p>So it is not adopted and not shipped. The code stays, unused unless a spec asks for it. A
     later candidate that keeps the mat will be pre-registered as new, with fresh seeds.</p>
 
+    <h2 id="control">A control: the shipped loop, run again</h2>
+    <p>The mat's repeat failed on 8 falls, judged against one run of the shipped loop
+    (<code>/1</code>) that had none. So <code>/1</code> was run again on the same machine type with
+    fresh seeds, 4,800 rows, its rule written down first: 3 or more falls would mean the falls
+    criterion cannot tell a candidate from the simulator's own falls.</p>
+    <ul>
+      <li><strong><code>/1</code> fell 2 times.</strong> Under the line of 3, so by the rule the
+      falls were the mat's, and the mat stays not adopted. No rows lost the pose.</li>
+      <li><strong>But two runs of <code>/1</code> differ in seven verdicts.</strong> Two of them
+      are falls: one fall in 510 rows is enough to fail the 1% bound.</li>
+      <li><strong>Rows are not independent.</strong> The simulator draws a condition's physics
+      (friction, mass, heading drift) once per session of 12 rows, so 400 rows are about 34 ducks.
+      Intervals that count rows as independent, including the ones on this page, are too narrow.</li>
+    </ul>
+    <p>A secondary analysis was written then, before any row of the next candidate was read. It
+    compares a candidate with both <code>/1</code> runs pooled, by a permutation test over
+    sessions, with all 80 "worse" tests held to 5% together (Holm). Run on <code>/1</code> against
+    <code>/1</code> it finds nothing, both ways. Looking back, as exploration only, with verdicts
+    unchanged: calibration is still worse with no drift at all. The mat's falls are within
+    <code>/1</code>'s own. Its real cost is Walk back rows under stress (32% of rows miss on
+    position, against 20%), and its gain on long rows is clear (93% against 31%). A later mat
+    candidate has that to fix, not falls.</p>
+
     <h2 id="candidate">Rejected candidates</h2>
     <h3 id="walk-lead">The Walk lead (<code>duck-card-loop/2</code>)</h3>
     <p><code>duck-card-loop/2</code> gave Walk cards the lead Turn cards have: stop short by the
@@ -299,14 +326,16 @@
       standing duck is not still enough for its own sensor to measure drift.</li>
       <li><strong>The mat as a compass.</strong> Grid lines seen by the duck's camera fix heading to
       the nearest quarter turn, and position to the nearest square. <a href="#compass">Not
-      adopted</a>: long rows far better, but falls fail the rule.</li>
+      adopted</a>: long rows far better, but Walk back under stress got worse (<a href="#control">control</a>).</li>
       <li><strong>Spend less time.</strong> Merge consecutive Walk cards into one walk and two quarter
-      turns into a half turn, so a row takes less time to drift.</li>
+      turns into a half turn, so a row takes less time to drift. Pre-registered; running now. On
+      development rows, merging two Walk cards at a time did best. Merging longer runs did worse,
+      because each stop lets the next card re-aim.</li>
       <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
       long challenges split into chapters no longer than the length that passes.</li>
     </ol>
-    <p>Separately, Measure my duck will record how much a real duck's heading drifts standing
-    still. If that argues for a gentler simulated condition, the condition is added and
+    <p>Separately, Measure my duck now has a 30 second Stand still step that records how much a
+    real duck's heading drifts standing still. If that argues for a gentler simulated condition, the condition is added and
     pre-registered as new; the conditions above are not edited.</p>
 
     <h2 id="reproduce">Reproduce it</h2>
@@ -328,6 +357,8 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li>duck-sim drives position servos, which are not the actuator v8 was trained with.</li>
       <li>Real floors, real IMU drift and real foot slip appear only through the randomized ranges.
       The simulated drift is a constant rate per row; a real one wanders.</li>
+      <li>Rows within a 12-row session share their physics, so they are not independent samples
+      (<a href="#control">control</a>).</li>
       <li>The second machine is shared hardware; its load reading covers the host, not the job.
       No simulated body logged falling behind real time.</li>
     </ul>
@@ -340,6 +371,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-calibrate/COMPARE.md" rel="noopener">Calibrate at every stop, criterion by criterion <span>cardreader/sim/results-calibrate</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/COMPARE.md" rel="noopener">The mat as a compass, the repeat, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-compass/run1/COMPARE.md" rel="noopener">The mat as a compass, run 1, criterion by criterion <span>cardreader/sim/results-compass</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-control" rel="noopener">The control: <code>/1</code> again, the secondary analysis and its self-test <span>cardreader/sim/results-control</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
