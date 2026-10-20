@@ -173,22 +173,29 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
     uses your own Dream Labs account, and your key is billed by Dream Labs.</p>
     <ul>
       <li><strong>What you need.</strong> A Dream Labs key (<code>dl_live_...</code>) from
-      platform.dreamlabs.ai; OpenCastor 3.7 or newer on the duck's computer; and a Dream-1
+      platform.dreamlabs.ai, a connected duck, and a Dream-1
       model fine-tuned on recordings of your duck, because Dream-1's public model drives robot
       arms, not ducks. A duck model reads the head camera, with the walk command (vx, vy,
       vyaw) as its state and its action. The app shows only models that fit a duck.</li>
-      <li><strong>Save the key, once.</strong> On that same screen, paste it
-      in the <strong>Dream-1</strong> section and tap <strong>Check and save the key</strong>.
-      The duck's computer checks it with Dream Labs and keeps it in
-      <code>~/.dreamlabs/credentials</code>; the app does not store it. On that computer,
-      <code>castor dream key</code> does the same, and <code>castor dream check --duck</code>
-      lists the models a duck can run.</li>
+      <li><strong>Save the key, once, in one of two places.</strong>
+        <ul>
+          <li><strong>On this device</strong> (from build 88): <strong>Settings → Dream-1</strong>,
+          paste it, tap <strong>Check and save the key</strong>. It is checked with Dream Labs,
+          kept in the Keychain and sent only to Dream Labs. Nothing about Dream is needed on the
+          duck's computer.</li>
+          <li><strong>On the duck's computer</strong> (OpenCastor 3.7 or newer): in the
+          <strong>Dream-1</strong> section of the screen you connected on. The duck's computer
+          checks it and keeps it in <code>~/.dreamlabs/credentials</code>, and the app does not
+          store it. There, <code>castor dream key</code> does the same, and <code>castor dream
+          check --duck</code> lists the models a duck can run.</li>
+        </ul>
+      A key on this device is used first.</li>
       <li><strong>Run it.</strong> Show the camera, pick your model under
       <strong>Dream-1</strong>, type a task, and tap <strong>Run Dream-1 on the duck</strong>.
       Every step is held to the sticks' speeds; the duck stands still while a model starts;
       a run ends at 60 seconds, when you tap <strong>Stop</strong>, or on anything unexpected,
       and always with the duck told to stop.</li>
-      <li><strong>What leaves your home.</strong> While Dream-1 runs, the duck's computer sends
+      <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever holds the key sends
       Dream Labs the duck's last few camera pictures, its last walk command and your task,
       about every two seconds; nothing when it is not running. See the
       <a href="/privacy/">privacy policy</a>.</li>
