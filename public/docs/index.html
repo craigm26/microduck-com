@@ -195,6 +195,22 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
       Every step is held to the sticks' speeds; the duck stands still while a model starts;
       a run ends at 60 seconds, when you tap <strong>Stop</strong>, or on anything unexpected,
       and always with the duck told to stop.</li>
+      <li><strong>No duck model yet? Record one</strong> (from build 88). Under <strong>Record for
+      Dream-1</strong>, type what you are showing the duck (for example "walk to the red mat"), tap
+      <strong>Start a run</strong>, drive it there with the sticks, and tap <strong>End the
+      run</strong>. Each run is one example; record a few dozen, varied. The app writes what the
+      camera saw and what you told the duck, ten times a second, and keeps the runs on this device.
+      <strong>Export for Dream Labs</strong> makes a .zip. On a computer, unzip it and open
+      platform.dreamlabs.ai, Fine-tuning: under <strong>New configuration</strong> choose the
+      folder, name the state part and the action part <code>velocity</code> (3 values each) and give
+      the camera the role <code>head</code>; then <strong>Upload data</strong> with the same folder
+      and start a job. Dream Labs charges for the fine-tune. When it finishes, the model appears in
+      Dream-1 here.</li>
+      <li><strong>No robot? Use the simulated duck</strong> (iOS 18 or macOS 15). On
+      <strong>Play</strong>, with the simulated duck, tap <strong>Dream-1</strong>: the app draws
+      what the duck's head camera would see on a practice mat with a red mat, a blue mat and a ball,
+      from the real camera's position. Recording and Dream-1 work on it exactly as on a robot. A
+      model trained only on these pictures learns this mat, not your floor.</li>
       <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever holds the key sends
       Dream Labs the duck's last few camera pictures, its last walk command and your task,
       about every two seconds; nothing when it is not running. See the
