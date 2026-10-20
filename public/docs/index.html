@@ -40,6 +40,7 @@
       <p class="sidebar-label">Documentation</p>
       <ul>
         <li><a href="#get-started">Getting started</a></li>
+        <li><a href="#real-duck">Connect a real duck</a></li>
         <li><a href="#policies">Inspect a policy</a></li>
         <li><a href="#motions">Write a motion</a></li>
         <li><a href="#evaluations">Evaluations</a></li>
@@ -59,6 +60,7 @@
       <p class="sidebar-label">Documentation</p>
       <ul>
         <li><a href="#get-started">Getting started</a></li>
+        <li><a href="#real-duck">Connect a real duck</a></li>
         <li><a href="#policies">Inspect a policy</a></li>
         <li><a href="#motions">Write a motion</a></li>
         <li><a href="#evaluations">Evaluations</a></li>
@@ -89,10 +91,12 @@
     <ol class="guide-steps">
       <li><strong>Install the beta.</strong> Get Apple's free TestFlight app, then
       <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>
-      on your iPhone or iPad. There is no App Store release yet.</li>
+      on your iPhone, iPad or Mac. There is no App Store release yet.</li>
       <li><strong>Drive it.</strong> The app opens on <strong>Play</strong>. Push the
       left stick to walk and the right one to turn; the buttons between them play
-      moves Pollen trained, like the roulade. It all runs in physics on your phone.</li>
+      moves Pollen trained, like the roulade. It all runs in physics on your phone.
+      The app has five tabs: <strong>Play</strong>, <strong>Learn</strong>,
+      <strong>Behaviours</strong>, <strong>Studio</strong> and <strong>My Microduck</strong>.</li>
       <li><strong>Follow Learn.</strong> The <strong>Learn</strong> tab is nine short
       lessons, from driving to how Microduck is trained to tuning a network, each
       with a button that opens the real screen. The last one turns on every tool.</li>
@@ -129,6 +133,66 @@
       questions. Read <a href="#honest">what the results mean</a> before treating
       a preview or a score as evidence about a real robot.</p>
     </div>
+
+    <h2 id="real-duck">Connect a real duck</h2>
+    <p>The same app drives a real Microduck, through a small bridge on a computer next to
+    the duck (often the duck's own). The bridge comes with
+    <a href="https://pypi.org/project/opencastor/" rel="noopener">OpenCastor</a>, version 3.7
+    or newer.</p>
+
+    <ol class="guide-steps">
+      <li><strong>Start the bridge.</strong> On that computer:
+      <pre><code>pip install -U "opencastor&gt;=3.7"
+castor duck               # finds the duck, checks it, configures it
+castor duck --bridge      # the bridge the app connects to, port 7788</code></pre>
+      <code>castor up --archetype microduck</code> installs it as a service that starts on its
+      own. The bridge prints a token, also saved in <code>~/.microduck-bridge-token</code>.</li>
+      <li><strong>Connect.</strong> In the app, open <strong>My Microduck → Connect to your duck's
+      computer</strong>, type the computer's address (for example <code>duck.local</code>) and
+      the token, and tap <strong>Connect</strong>. The sticks on <strong>Play</strong> now
+      drive the real duck.</li>
+      <li><strong>Show the camera.</strong> On the camera card, type the duck's camera
+      address (for example <code>duck.local:8080</code>) and tap <strong>Show the
+      camera</strong>. Turn on <strong>Read Duck Cards</strong> and the app reads a row of
+      <a href="/cards/">printed cards</a> it can see, ready to open in the plan editor or in
+      <a href="#packs">Packs</a>.</li>
+      <li><strong>Measure my duck.</strong> If you have a duck, the most useful thing you
+      can send us is a <a href="#packs">Measure my duck</a> report.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Keep the stop within reach</strong> the first time anything moves. If the app
+      goes quiet (the Wi-Fi drops, the phone locks, the app closes), the bridge stops the duck
+      by itself. Connect only on your own network, and never expose the bridge to the
+      internet: its token keeps neighbours out by accident, not attackers out on purpose.</p>
+    </div>
+
+    <h3 id="dream">Dream-1, with your own key</h3>
+    <p>Dream Labs' <a href="https://dreamlabs.ai" rel="noopener">Dream-1</a> drives a robot
+    from its camera and a task you type, such as "walk to the red mat". It is optional, it
+    uses your own Dream Labs account, and your key is billed by Dream Labs.</p>
+    <ul>
+      <li><strong>What you need.</strong> A Dream Labs key (<code>dl_live_...</code>) from
+      platform.dreamlabs.ai; OpenCastor 3.7 or newer on the duck's computer; and a Dream-1
+      model fine-tuned on recordings of your duck, because Dream-1's public model drives robot
+      arms, not ducks. A duck model reads the head camera, with the walk command (vx, vy,
+      vyaw) as its state and its action. The app shows only models that fit a duck.</li>
+      <li><strong>Save the key, once.</strong> On that same screen, paste it
+      in the <strong>Dream-1</strong> section and tap <strong>Check and save the key</strong>.
+      The duck's computer checks it with Dream Labs and keeps it in
+      <code>~/.dreamlabs/credentials</code>; the app does not store it. On that computer,
+      <code>castor dream key</code> does the same, and <code>castor dream check --duck</code>
+      lists the models a duck can run.</li>
+      <li><strong>Run it.</strong> Show the camera, pick your model under
+      <strong>Dream-1</strong>, type a task, and tap <strong>Run Dream-1 on the duck</strong>.
+      Every step is held to the sticks' speeds; the duck stands still while a model starts;
+      a run ends at 60 seconds, when you tap <strong>Stop</strong>, or on anything unexpected,
+      and always with the duck told to stop.</li>
+      <li><strong>What leaves your home.</strong> While Dream-1 runs, the duck's computer sends
+      Dream Labs the duck's last few camera pictures, its last walk command and your task,
+      about every two seconds; nothing when it is not running. See the
+      <a href="/privacy/">privacy policy</a>.</li>
+    </ul>
 
     <p class="meta">The app collects no data. Network requests happen when you
     choose to fetch, publish, draft with a service or use a bench. Read the
@@ -200,8 +264,8 @@ app.</p>
 thing being evaluated is a network from your library, named by digest, or a
 published challenge entrant. Where it runs is an embodiment: a bench on your
 network, named and carrying its world's digest, or this phone's own bench. A
-real Microduck is on that list and cannot be chosen, because nothing can drive
-one yet.</p>
+real Microduck is on that list and cannot be chosen yet: an evaluation needs a
+world it can reset and score, and a real duck on a floor is not that.</p>
 
 <p>There is no epoch count, no reducer picker and no seed field on that screen.
 A control that could disagree with the preset would be a second opinion about
@@ -238,8 +302,8 @@ probability without being one.</p></blockquote>
 
   <dt>Embodiment</dt>
   <dd>The body and the world. A bench on your network, or this phone's own
-  bench. A real Microduck is named and unavailable: nothing can drive one
-  yet.</dd>
+  bench. A real Microduck is named and unavailable: evaluations run in physics
+  only.</dd>
 
   <dt>Task</dt>
   <dd>Scenes, scorers, one horizon, and epochs with a reducer: mean, median,
@@ -444,6 +508,10 @@ app, from PreK to grade 8; the <a href="/cards/packs/">pack pages</a> print them
   <li><strong>Run it on the duck.</strong> <strong>Run on the duck</strong> sends the same row
   as a plan. On a real duck its Walk and Turn cards are timed, and the screen says so: a timed
   card does not land on a square.</li>
+  <li><strong>Long rows play in chapters.</strong> A row of more than 7 Walk and Turn cards is
+  split into chapters. The board rings each <strong>nest</strong>, the square the duck goes
+  back on, and which way it faces. Run on the duck stops at each nest until you put the duck
+  there and press <strong>The duck is on the nest</strong>.</li>
   <li><strong>Design a level.</strong> Tap squares for the start, goal, walls and gates; par is
   worked out for you. Challenges save into your class pack, which shares as a
   <code>.duckpack</code>.</li>
@@ -576,7 +644,8 @@ on.</p>
 <h3>Get the app</h3>
 <ul>
   <li><a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">TestFlight beta</a>
-  Free. iPhone and iPad, iOS 17 or later. Needs Apple's TestFlight app.</li>
+  Free. iPhone and iPad (iOS 17 or later) and Mac (macOS 14 or later). Needs Apple's
+  TestFlight app.</li>
   <li>App Store: not yet, and there is no date.</li>
 </ul>
 
