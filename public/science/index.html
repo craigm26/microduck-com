@@ -117,6 +117,12 @@
       chapters of up to 7 cards, and the child re-seats the duck on a nest square between them. Long
       rows under randomization at 10 Hz rose from 42% to 63%, worse nowhere counted by session
       (<a href="#nest">below</a>). The stressed condition still fails.</li>
+      <li><strong>The fifth, the mat on the nest, is the new base in the sim.</strong> The compass
+      from the second idea comes back, on a mat laid under each nest, and the mat now also measures
+      the camera's own tilt. Long rows under randomization at 10 Hz rose from 63% to
+      <strong>97.5%</strong>, worse nowhere counted by session, and every prediction made in advance
+      held (<a href="#mat-nest">below</a>). It is not in the app yet: it needs the duck's camera in
+      the app and a printed mat.</li>
       <li><strong>So closed-loop cards stay off on real ducks.</strong> In the shipped app a duck runs
       Walk and Turn as timed cards; the board rule is kept by the child and the paper board.</li>
     </ul>
@@ -307,7 +313,55 @@
     <p>The shipped app keeps <code>/1</code>. <code>/5</code> is where the next candidate starts,
     not a change to what Studio runs.</p>
 
-    <h2 id="nest">The new base: a nest and chapters (<code>duck-card-loop/6</code>)</h2>
+    <h2 id="mat-nest">The new base: the mat on the nest (<code>duck-card-loop/7</code>)</h2>
+    <p>The mat as a compass (<a href="#compass">above</a>) lifted long rows more than anything else,
+    and was not adopted because Walk back rows under stress got worse. Read after the
+    <a href="#control">control</a>, those rows split on one thing: the simulated camera's tilt
+    error. With the camera tilted 2° one way, 89 of 214 rows missed by more than 10 cm; tilted 2°
+    the other way, 1 of 142. A camera tilted other than the duck believes stretches the floor along
+    its view, so the mat's fix lands a few centimetres short along the walk. That was a hypothesis,
+    so it was tested as one.</p>
+    <ul>
+      <li><strong>The change.</strong> <code>/6</code>, with <code>/4</code>'s mat added unchanged,
+      and one new thing: <strong>the mat calibrates the camera.</strong> At each look, the duck tries
+      tilt corrections from -4° to +4° and keeps the one under which the tape it sees lies best on
+      lines one square apart. Scores add up over a chapter's looks. The method's settings were
+      chosen on synthetic pictures before any simulated row.</li>
+      <li><strong>The mat lies under the nest</strong>, so the mat also sees, and corrects, the
+      child's imperfect re-seat.</li>
+      <li><strong>Pre-registered</strong> before any evaluation row, with predictions: long rows at
+      randomized 10 Hz above 90%; Walk back under stress no worse than <code>/6</code>'s 73.8%, the
+      tilt split gone; the tilt taken out within half a degree in most chapters; the stressed
+      condition still failing somewhere. Decided by the test that counts sessions, against
+      <code>/6</code>.</li>
+    </ul>
+    <p><strong>The evaluation</strong> (4,800 rows on Hugging Face Jobs, fresh seeds, no row lost the
+    pose):</p>
+    <table>
+      <thead><tr><th>Long rows, position within 10 cm</th><th><code>/6</code></th><th><code>/7</code></th></tr></thead>
+      <tbody>
+        <tr><td>nominal</td><td>120 of 120</td><td>119 of 120</td></tr>
+        <tr><td>randomized</td><td>79 of 120</td><td>117 of 120</td></tr>
+        <tr><td>randomized, 10 Hz</td><td>76 of 120</td><td><strong>117 of 120</strong></td></tr>
+        <tr><td>stressed, 10 Hz</td><td>23 of 120</td><td>57 of 120</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>Long rows at randomized 10 Hz rose from 63.3% to <strong>97.5%</strong> (p 0.0002, counted
+      by session), worse nowhere after correcting for 80 tests. By its rule it replaces
+      <code>/6</code> as the base.</li>
+      <li>Walk back rows under stress: position from 73.8% to 89.2%. The tilt split is gone: tilted
+      one way, 20 of 180 rows missed by more than 10 cm; the other way, 26 of 220.</li>
+      <li>The tilt it took out has no bias (mean error at most 0.1°), and is within half a degree in
+      92% of chapters under randomization, 79% under stress.</li>
+      <li>Each look costs time: a long row takes about 5 s longer.</li>
+      <li>Stressed 10 Hz still fails, so rung 1 still fails.</li>
+    </ul>
+    <p><strong>Not in the app yet.</strong> The app ships <code>/6</code>. <code>/7</code> needs the
+    duck's head camera read in the app, the mat reader ported and held to the same test vectors as
+    the sim's, and a printed mat. None of this shows a real lens, real light or a real taped mat.</p>
+
+    <h2 id="nest">Kept, then built on: a nest and chapters (<code>duck-card-loop/6</code>)</h2>
     <p>The first three fixes tried to make the duck drift less. This one accepts the drift and
     shortens what drifts. A long challenge plays in chapters, and between chapters the child puts
     the duck back on a nest square, as they already seat it at the start. Drift then builds over a
@@ -412,7 +466,10 @@
       base</a>: a small gain, 37% to 42% on long rows.</li>
       <li><strong>A reset in the game.</strong> A nest square where the child re-seats the duck, and
       long challenges split into chapters no longer than the length that passes. <a href="#nest">The
-      new base</a>: long rows 42% to 63%.</li>
+      new base</a>, then built on: long rows 42% to 63%.</li>
+      <li><strong>The mat on the nest.</strong> Back to the compass, now that the nest gives it a
+      place to lie, with the camera's tilt measured by the mat. <a href="#mat-nest">The new base in
+      the sim</a>: long rows 63% to 97.5%. Next, porting it to the app.</li>
     </ol>
     <p>Separately, Measure my duck now has a 30 second Stand still step that records how much a
     real duck's heading drifts standing still. If that argues for a gentler simulated condition, the condition is added and
@@ -454,6 +511,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-control" rel="noopener">The control: <code>/1</code> again, the secondary analysis and its self-test <span>cardreader/sim/results-control</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/sim/results-merge/COMPARE.md" rel="noopener">Merge cards, criterion by criterion, and its secondary analysis <span>cardreader/sim/results-merge</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-nest" rel="noopener">A nest and chapters, criterion by criterion, and the deciding analysis <span>cardreader/sim/results-nest</span></a></li>
+      <li><a href="https://github.com/craigm26/duck-studio/tree/main/cardreader/sim/results-mat-nest" rel="noopener">The mat on the nest, criterion by criterion, the tilt it took out, and the deciding analysis <span>cardreader/sim/results-mat-nest</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/cardreader/duckcards/cardloop.py" rel="noopener">The controller <span>cardloop.py</span></a></li>
       <li><a href="https://github.com/craigm26/duck-studio/blob/main/docs/POLLEN-PROPOSAL-move-by-distance.md" rel="noopener">A draft proposal to Pollen: walk by distance, turn by angle <span>not filed</span></a></li>
     </ul>
