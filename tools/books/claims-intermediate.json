@@ -1,0 +1,389 @@
+{
+ "lessons": {
+  "intro": {
+   "ten": {
+    "count": "the lessons in this book"
+   }
+  },
+  "lesson-1": {
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "20": {
+    "toy": "a round episode length for the question"
+   },
+   "1,000": {
+    "derived": "50 * 20"
+   },
+   "five": {
+    "source": "kith-llms",
+    "quote": "a table of your own view at five rows a second"
+   }
+  },
+  "lesson-2": {
+   "61": {
+    "source": "rl-readme",
+    "quote": "61-dim actor obs"
+   },
+   "48": {
+    "source": "rl-readme",
+    "quote": "48 proprioception"
+   },
+   "3": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "13": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "4": {
+    "source": "rl-readme",
+    "quote": "head_pose(4)"
+   },
+   "6": {
+    "source": "rl-readme",
+    "quote": "body_pose(6)"
+   },
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "three": {
+    "source": "md-robotd",
+    "quote": "gyro(3)"
+   },
+   "half": {
+    "editorial": "the big idea's judgement that choosing the observation is a large part of the design"
+   }
+  },
+  "lesson-3": {
+   "14": {
+    "source": "rl-readme",
+    "quote": "Joint layout (14 servos)"
+   },
+   "5": {
+    "source": "rl-readme",
+    "quote": "0–4 left leg (hip_yaw, hip_roll, hip_pitch, knee, ankle)",
+    "means": "servos 0 to 4 are the left leg, and the quote names all five"
+   },
+   "4": {
+    "source": "rl-readme",
+    "quote": "5–8 neck/head (neck_pitch, head_pitch, head_yaw, head_roll)",
+    "means": "servos 5 to 8 are the neck and head, and the quote names all four"
+   },
+   "0": {
+    "source": "rl-readme",
+    "quote": "0–4 left leg"
+   },
+   "8": {
+    "source": "rl-readme",
+    "quote": "5–8 neck/head"
+   },
+   "9": {
+    "source": "rl-readme",
+    "quote": "9–13 right leg"
+   },
+   "13": {
+    "source": "rl-readme",
+    "quote": "9–13 right leg"
+   },
+   "1": {
+    "source": "rl-readme",
+    "quote": "±1° of gear play (2° total)"
+   },
+   "2": {
+    "source": "rl-readme",
+    "quote": "±1° of gear play (2° total)"
+   },
+   "15": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   },
+   "fifteen": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   },
+   "50": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   }
+  },
+  "lesson-4": {
+   "61": {
+    "source": "md-robotd",
+    "quote": "Every alpha policy is `obs[1,61] → actions[1,14]`"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "Every alpha policy is `obs[1,61] → actions[1,14]`"
+   },
+   "512": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "256": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "128": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "three": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)",
+    "means": "three hidden layers, of 512, 256 and 128 units"
+   },
+   "197,774": {
+    "derived": "61*512 + 512 + 512*256 + 256 + 256*128 + 128 + 128*14 + 14"
+   },
+   "198,000": {
+    "derived": "61*512 + 512 + 512*256 + 256 + 256*128 + 128 + 128*14 + 14",
+    "about": true
+   },
+   "8": {
+    "toy": "the picture draws one dot for every 8 units, 64 dots for 512; the lesson's notes call it the picture's choice"
+   }
+  },
+  "lesson-5": {
+   "2.0": {
+    "source": "rl-velocity",
+    "quote": "cfg.rewards[\"track_linear_velocity\"].weight = 2.0"
+   },
+   "3.0": {
+    "source": "rl-velocity",
+    "quote": "cfg.rewards[\"air_time\"].weight = 3.0"
+   },
+   "1.0": {
+    "source": "rl-velocity",
+    "quote": "cfg.rewards[\"pose\"].weight = 1.0"
+   },
+   "0.1": {
+    "source": "rl-velocity",
+    "quote": "cfg.rewards[\"foot_slip\"].weight = -0.1"
+   },
+   "1": {
+    "source": "rl-velocity",
+    "quote": "L1 on a 1 s EMA of the error"
+   },
+   "300": {
+    "source": "rl-velocity",
+    "quote": "the policy stopped walking entirely by iter 300"
+   },
+   "nine": {
+    "source": "site-docs",
+    "quote": "The nine reward terms are the reward these policies were trained on"
+   }
+  },
+  "lesson-6": {
+   "4,096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "4096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "1": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "2": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "24": {
+    "source": "rl-velocity",
+    "quote": "num_steps_per_env=24"
+   },
+   "98,304": {
+    "derived": "4096 * 24"
+   },
+   "0.48": {
+    "derived": "24 / 50"
+   },
+   "half": {
+    "count": "24 steps at 50 a second is 0.48 seconds, about half a second"
+   },
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "1,000": {
+    "source": "rl-agents",
+    "quote": "simple episodic tricks ≈ 1000 iters at 4096 envs"
+   },
+   "4,000": {
+    "source": "rl-agents",
+    "quote": "gaits and curriculum-heavy recovery need 4000–6000"
+   },
+   "6,000": {
+    "source": "rl-agents",
+    "quote": "gaits and curriculum-heavy recovery need 4000–6000"
+   },
+   "250": {
+    "source": "rl-velocity",
+    "quote": "save_interval=250"
+   },
+   "50,000": {
+    "source": "rl-velocity",
+    "quote": "max_iterations=50_000"
+   },
+   "3,750": {
+    "source": "rl-agents",
+    "quote": "walk = 441tzs6d@3750"
+   },
+   "64": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "5": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "2026": {
+    "source": "rl-agents",
+    "quote": "(2026-09: walk = 441tzs6d@3750"
+   },
+   "figure": {
+    "0": {
+     "toy": "the start of the chart's iteration axis"
+    },
+    "500": {
+     "toy": "a tick on the chart's iteration axis; the figure is a toy model and its curve is drawn for the lesson"
+    },
+    "1,500": {
+     "toy": "the end of the chart's iteration axis, past the guide's about 1,000 so the curve has room"
+    }
+   }
+  },
+  "lesson-7": {
+   "0.2": {
+    "source": "rl-velocity",
+    "quote": "clip_param=0.2"
+   },
+   "20": {
+    "derived": "0.2 * 100"
+   },
+   "5": {
+    "source": "rl-velocity",
+    "quote": "num_learning_epochs=5"
+   },
+   "4": {
+    "source": "rl-velocity",
+    "quote": "num_mini_batches=4"
+   },
+   "0.01": {
+    "source": "rl-velocity",
+    "quote": "desired_kl=0.01"
+   }
+  },
+  "lesson-8": {
+   "0.7": {
+    "source": "rl-velocity",
+    "quote": "cfg.events[\"foot_friction\"].params[\"ranges\"] = (0.7, 1.3)"
+   },
+   "1.3": {
+    "source": "rl-velocity",
+    "quote": "cfg.events[\"foot_friction\"].params[\"ranges\"] = (0.7, 1.3)"
+   },
+   "5": {
+    "source": "rl-velocity",
+    "quote": "±5% applied to BOTH mass and inertia together"
+   },
+   "15": {
+    "source": "rl-velocity",
+    "quote": "Capped at ±15 mm"
+   },
+   "3": {
+    "source": "rl-velocity",
+    "quote": "Apply pushes every 3-6 seconds"
+   },
+   "6": {
+    "source": "rl-velocity",
+    "quote": "IMU_ORIENTATION_RANDOMIZATION_ANGLE = 6.0"
+   },
+   "0.3": {
+    "source": "rl-velocity",
+    "quote": "VELOCITY_PUSH_RANGE = (-0.3, 0.3)"
+   },
+   "30": {
+    "source": "rl-velocity",
+    "quote": "the previous ramp to ±30 mm exceeded the foot support polygon"
+   },
+   "20": {
+    "source": "rl-velocity",
+    "quote": "heel is only 20 mm behind the ankle"
+   },
+   "0.5": {
+    "source": "rl-velocity",
+    "quote": "Was ±0.5"
+   },
+   "0.4": {
+    "source": "rl-velocity",
+    "quote": "larger than max walk speed (0.4)"
+   },
+   "nine": {
+    "count": "the nine ducks in the figure"
+   }
+  },
+  "lesson-9": {
+   "61": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "14": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "1": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "4.0": {
+    "source": "rl-readme",
+    "quote": "--kind episodic --duration-s 4.0"
+   }
+  },
+  "lesson-10": {
+   "70": {
+    "source": "rl-readme",
+    "quote": "Kick a 70 mm / 15 g ball forward (actor is ball-blind)"
+   },
+   "15": {
+    "source": "rl-readme",
+    "quote": "Kick a 70 mm / 15 g ball forward (actor is ball-blind)"
+   },
+   "2": {
+    "source": "rl-agents",
+    "quote": "expect 2–5 iterations of reward-hacking"
+   },
+   "5": {
+    "source": "rl-agents",
+    "quote": "expect 2–5 iterations of reward-hacking"
+   },
+   "61": {
+    "source": "rl-readme",
+    "quote": "shared 61-dimensional observation contract"
+   },
+   "64": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "two": {
+    "count": "the two tasks the project starts from"
+   },
+   "figure": {
+    "1": {
+     "toy": "the plan's reward for one bounce"
+    }
+   }
+  }
+ }
+}

@@ -612,6 +612,7 @@ HEADER = """<a class="skip" href="#main">Skip to content</a>
       <a href="/#what">Studio</a>
       <a href="/docs/">Docs</a>
       <a href="/cards/" aria-current="page">Cards</a>
+      <a href="/books/">Books</a>
       <a href="/#links">Downloads</a>
       <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
     </nav>
@@ -632,6 +633,7 @@ FOOTER = """<footer class="site-footer">
         <a href="/">Studio</a>
         <a href="/docs/">Documentation</a>
         <a href="/cards/">Duck Cards</a>
+        <a href="/books/">Books</a>
         <a href="/privacy/">Privacy</a>
         <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
         <a href="mailto:craigm26@gmail.com">Contact</a>
