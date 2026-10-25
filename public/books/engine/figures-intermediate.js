@@ -173,12 +173,15 @@ export const figures = {
     code.position.set(10, 0, 110);
     group.add(code);
     let x0 = 0;
+    // the three order groups are 13 bars together, too narrow for three labels,
+    // so they share one, centred over the right of the code where it fits the page
+    const orders = ctx.label('orders: walk and turn 3, head 4, body 6', V(96, 150, 112), { cls: 'is-small' });
+    show(orders, false);
     const groupLabels = OBS.map((g, gi) => {
       const first = x0, last = x0 + g.n - 1;
       x0 += g.n;
       const mid = (bars.x(first) + bars.x(last)) / 2;
-      const text = gi === 5 ? 'walk and turn 3' : gi === 6 ? 'head 4' : gi === 7 ? 'body 6' : `${g.name} ${g.n}`;
-      const l = ctx.label(text, V(10 + mid, gi % 2 ? 150 : 134, 112), { cls: 'is-small' });
+      const l = gi >= 5 ? orders : ctx.label(`${g.name} ${g.n}`, V(10 + mid, gi % 2 ? 150 : 134, 112), { cls: 'is-small' });
       show(l, false);
       return { l, first, last };
     });
@@ -187,7 +190,8 @@ export const figures = {
     const highlight = (groups) => {
       for (let i = 0; i < 61; i++) dim(i, groups === null);
       if (groups) for (const gi of groups) for (let i = groupLabels[gi].first; i <= groupLabels[gi].last; i++) dim(i, true);
-      groupLabels.forEach((g, gi) => show(g.l, !!groups && groups.includes(gi)));
+      groupLabels.forEach((g, gi) => { if (gi < 5) show(g.l, !!groups && groups.includes(gi)); });
+      show(orders, !!groups && groups.some((gi) => gi >= 5));
     };
     const values = (t) => {
       const v = new Array(61).fill(0);
@@ -558,9 +562,10 @@ export const figures = {
     ctx.label('the best score', V(XP, 175, ZF), { cls: 'is-small' });
     const marble = K.ball(13, K.COL.orange);
     group.add(marble);
-    const band = new THREE.Mesh(new THREE.RingGeometry(1, 2, 40), K.flat(K.COL.blue, { transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false }));
+    // the safe band: a strip on the hill around the marble, as far as one update may move it
+    const band = new THREE.Mesh(new THREE.BufferGeometry(), K.flat(K.COL.blue, { transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false }));
     const bandG = new THREE.Group(); bandG.add(band); group.add(bandG);
-    const bandL = ctx.label('safe band', V(-150, 30, ZF + 90), { cls: 'is-blue' });
+    const bandL = ctx.label('safe band', V(0, 0, 0), { cls: 'is-blue', parent: bandG });
     const tries = new THREE.Group(); group.add(tries);
     const dots = Array.from({ length: 10 }, () => { const m = K.packet(K.COL.yellow, 4.5); m.visible = false; tries.add(m); return m; });
     let clip = 0.2;
@@ -568,7 +573,21 @@ export const figures = {
     const zM = ZF + 62;
     const at = (x) => V(x, H(Math.min(x, 150)) + 13, zM);
     const x0 = -165;
-    const placeBand = (x) => { const r = reach(); band.geometry.dispose(); band.geometry = new THREE.RingGeometry(Math.max(2, r - 3), r, 48); band.rotation.x = -Math.PI / 2; bandG.position.set(x, 2, zM); };
+    let banded = '';
+    const placeBand = (x) => {
+      const r = reach();
+      if (banded === `${x} ${r}`) return;
+      banded = `${x} ${r}`;
+      const a = Math.max(-190, x - r), b = Math.min(150, x + r), N = 32;
+      const strip = new THREE.Shape();
+      for (let i = 0; i <= N; i++) { const xi = a + ((b - a) * i) / N; if (i) strip.lineTo(xi, H(xi) + 21); else strip.moveTo(xi, H(xi) + 21); }
+      for (let i = N; i >= 0; i--) { const xi = a + ((b - a) * i) / N; strip.lineTo(xi, H(xi) + 5); }
+      band.geometry.dispose();
+      band.geometry = new THREE.ShapeGeometry(strip);
+      bandG.position.set(0, 0, zM - 2);
+      const xl = Math.max(-170, Math.min(x, XP - 30));
+      bandL.position.set(xl, H(xl) - 16, 6);
+    };
     let hops = [];
     const planHops = () => {
       hops = [x0];
@@ -579,7 +598,7 @@ export const figures = {
     const api = {
       group,
       slider: { label: 'Band', min: 0.05, max: 0.6, step: 0.01, value: 0.2, format: (v) => `${Math.round(v * 100)}%`, input(v) { clip = v; placeBand(api._x ?? x0); } },
-      reset() { clip = 0.2; api._x = x0; marble.position.copy(at(x0)); marble.scale.setScalar(1); bandG.visible = false; show(bandL, false); dots.forEach((d) => (d.visible = false)); planHops(); },
+      reset() { clip = 0.2; api._x = x0; marble.position.copy(at(x0)); marble.scale.setScalar(1); bandG.visible = false; show(bandL, false); band.scale.set(1, 1, 1); dots.forEach((d) => (d.visible = false)); planHops(); },
       steps: [
         { dur: 2.0, run(u) {
           dots.forEach((d, i) => { const x = x0 + Math.sin(i * 2.3) * 40; d.visible = u > i / 12; d.position.set(x, H(x) + 8, zM + Math.cos(i * 1.7) * 20); });
@@ -597,8 +616,8 @@ export const figures = {
           const r = seg(u, 0, 0.5);
           poof(marble, 1, r);
           if (r >= 0.5) marble.position.copy(at(x0));
-          if (u > 0.5) { bandG.visible = true; show(bandL, true); placeBand(x0); band.scale.setScalar(Math.max(0.01, ease.back(seg(u, 0.5, 1)))); }
-        }, end() { marble.scale.setScalar(1); band.scale.setScalar(1); api._x = x0; } },
+          if (u > 0.5) { bandG.visible = true; show(bandL, true); placeBand(x0); band.material.opacity = 0.5 * ease.out(seg(u, 0.5, 1)); }
+        }, end() { marble.scale.setScalar(1); band.material.opacity = 0.5; api._x = x0; } },
         { dur: 5.2, start() { planHops(); }, run(u) {
           const n = hops.length - 1;
           const f = u * n, k = Math.min(n - 1, Math.floor(f)), v = ease.inOut(f - k);
@@ -608,7 +627,7 @@ export const figures = {
           marble.position.copy(p);
           api._x = lerp(xa, xb, v);
           placeBand(xa);
-          if (u >= 1 && hops[n] <= XP + 25 && !api._top) { api._top = true; ctx.say('TOP', V(XP, 200, ZF), { sound: 'ding', cls: 'is-green' }); }
+          if (u >= 1 && hops[n] <= XP + 25 && !api._top) { api._top = true; ctx.say('TOP', V(XP - 95, 185, ZF), { sound: 'ding', cls: 'is-green' }); }
         }, end() { api._top = false; } },
       ],
     };

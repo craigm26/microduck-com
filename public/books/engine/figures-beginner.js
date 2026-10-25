@@ -378,7 +378,7 @@ export const figures = {
     const { group } = ctx;
     const S = 0.5;
     const path = new THREE.Mesh(new THREE.PlaneGeometry(420, 120), K.paper(0xece4d2));
-    path.rotation.x = -Math.PI / 2; path.position.set(0, 0.8, 50); path.receiveShadow = true;
+    path.rotation.x = -Math.PI / 2; path.position.set(0, 0.8, 100); path.receiveShadow = true;
     const floor = new THREE.Group(); floor.add(path); group.add(floor);
     const rows = new THREE.Group(); group.add(rows);
     const row1 = [K.CARDS.start, K.CARDS.walk_forward, K.CARDS.walk_forward, K.CARDS.end];
@@ -394,13 +394,13 @@ export const figures = {
     const ball = K.solid(new THREE.SphereGeometry(22, 24, 16), K.COL.red, { material: new THREE.MeshToonMaterial({ map: ballFace.tex }) });
     ballG.add(ball); group.add(ballG);
     const x0 = -150, x1 = -40, x2 = -100;
-    const hit = V(x1 + 6, 22, 92);
+    const hit = V(x1 + 6, 22, 142);
     const ballStart = V(170, 22, 230);
     const light = (o, on, dim) => { o.userData.body.material = K.paper(on ? 0xffd27a : dim ? 0xd9d4ca : 0xffffff); o.position.y = on ? 6 : 0; };
     const api = {
       group,
       reset() {
-        duck.root.position.set(x0, 0, 50); duck.root.rotation.y = 0; duck.fall(0); duck.setJoints(duck.stand);
+        duck.root.position.set(x0, 0, 100); duck.root.rotation.y = 0; duck.fall(0); duck.setJoints(duck.stand);
         [...r1, ...r2].forEach((o) => { light(o, false); o.position.copy(o.userData.home); o.position.y = 200; o.visible = false; });
         show(wait, false);
         ballG.position.copy(ballStart); ballG.visible = false;
@@ -421,7 +421,7 @@ export const figures = {
           const a = seg(u, 0, 0.45);
           ballG.position.lerpVectors(ballStart, hit, ease.in(a));
           ball.rotation.x -= 0.2; ball.rotation.z += 0.1;
-          if (u > 0.45 && !api._thud) { api._thud = true; ctx.say('BUMP!', V(x1, 140, 60), { sound: 'thud', cls: 'is-red' }); }
+          if (u > 0.45 && !api._thud) { api._thud = true; ctx.say('BUMP!', V(x1, 140, 110), { sound: 'thud', cls: 'is-red' }); }
           const f = seg(u, 0.45, 0.9);
           duck.fall(f, 'left');
           if (u > 0.45) ballG.position.lerpVectors(hit, V(hit.x + 70, 22, hit.z + 60), ease.out(seg(u, 0.45, 1)));
@@ -433,7 +433,7 @@ export const figures = {
         }, end() { duck.fall(0); duck.setJoints(duck.stand); } },
         { dur: 3.6, start() { show(wait, false); light(r2[0], true); ctx.sound('ding'); }, run(u) {
           if (u > 0.15 && u < 0.5) { light(r2[0], false, false); light(r2[1], true); }
-          if (u > 0.2 && !api._alarm) { api._alarm = true; ctx.say('ALARM!', V(x1, 150, 50), { sound: 'quack', cls: 'is-red', scale: 1.1 }); }
+          if (u > 0.2 && !api._alarm) { api._alarm = true; ctx.say('ALARM!', V(x1, 150, 100), { sound: 'quack', cls: 'is-red', scale: 1.1 }); }
           duck.beak(u > 0.2 && u < 0.45 ? (Math.sin(u * 60) > 0 ? 1 : 0.2) : 0);
           if (u >= 0.5) {
             light(r2[1], false, false); light(r2[2], true);

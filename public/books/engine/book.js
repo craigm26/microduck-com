@@ -702,6 +702,8 @@ async function main() {
     }
     const d = fs.querySelector('details');
     if (d) d.open = true;
+    // the answer opens at the foot of the left page: if the page now scrolls, show the answer
+    if (mode === '3d' && leftEl.scrollHeight > leftEl.clientHeight) leftEl.scrollTo({ top: leftEl.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
     const v = fig.ui.verdict;
     if (picked) {
       v.textContent = picked.value === answer ? 'Your prediction was right.' : 'Not what you predicted. Read why on the left page.';
@@ -718,6 +720,7 @@ async function main() {
     for (const lab of fs.querySelectorAll('label')) lab.classList.remove('is-answer', 'is-wrong');
     const d = fs.querySelector('details');
     if (d) d.open = false;
+    if (mode === '3d') leftEl.scrollTop = 0;
   }
 
   // ---------------------------------------------------------- placing the DOM

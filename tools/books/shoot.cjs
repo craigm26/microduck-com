@@ -75,6 +75,8 @@ fs.mkdirSync(out, { recursive: true });
       await page.evaluate(() => window.__book.advance(300));
       await page.screenshot({ path: path.join(out, `${String(i).padStart(2, '0')}-${s + 1}.png`), timeout: 120000 });
     }
+    // with the answer open the left page may scroll; the engine scrolls it to the answer, so this is a note, not a failure
+    if (st.steps) row.answerScroll = (await page.evaluate(() => window.__book.state())).leftOverflow;
     report.push(row);
   }
   fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ report, problems }, null, 2));
