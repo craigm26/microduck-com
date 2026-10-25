@@ -138,13 +138,13 @@ export const figures = {
   // ------------------------------------------------------------ 1. the return
   horizon(ctx) {
     const { group } = ctx;
-    const N = 120, W = 2.4, G = 0.9, MAXH = 120;
+    const N = 120, W = 2.1, G = 0.8, MAXH = 120;
     const span = N * W + (N - 1) * G;
     const xOf = (k) => -span / 2 + k * (W + G) + W / 2;
     const R = K.rng(5);
     const rew = Array.from({ length: N }, (_, k) => clamp(0.55 + 0.32 * Math.sin(k * 0.37 + 0.4) + 0.12 * (R() - 0.5), 0.12, 1));
     const ROWZ = 80;
-    const base = new THREE.Group(); base.add(strip(410, 18)); base.children[0].position.z = ROWZ + 6; group.add(base);
+    const base = new THREE.Group(); base.add(strip(362, 18)); base.children[0].position.z = ROWZ + 6; group.add(base);
     const bars = instBars(N, { w: W, d: 9 });
     const barsG = new THREE.Group(); barsG.add(bars.mesh); group.add(barsG);
     // the envelope gamma^k, as a paper wire over the bars
@@ -152,7 +152,7 @@ export const figures = {
     let env = null;
     const flag = new THREE.Group();
     const pole = K.cylinder(2.2, 2.2, 150, K.COL.ink, { seg: 8 }); pole.position.y = 75; flag.add(pole);
-    const cloth = K.box(46, 26, 2, ORANGE); cloth.position.set(24, 136, 0); flag.add(cloth);
+    const cloth = K.box(46, 26, 2, ORANGE); cloth.position.set(-24, 136, 0); flag.add(cloth);
     const flagG = new THREE.Group(); flagG.add(flag); group.add(flagG);
     flag.position.set(xOf(100), 0, ROWZ - 14);
     const flagLabel = ctx.label('100 ticks = 2 s', V(xOf(100), 170, ROWZ - 14), { cls: 'is-accent' });
@@ -221,7 +221,7 @@ export const figures = {
   // ------------------------------------------------------------ 2. value, advantage
   advantage(ctx) {
     const { group } = ctx;
-    const N = 20, X0 = -175, X1 = 175;
+    const N = 20, X0 = -150, X1 = 122;
     const xOf = (i) => lerp(X0, X1, i / (N - 1));
     const gamma = 0.99;
     // made-up values and errors; the errors would come from rewards as r + γV(s') - V(s)
@@ -230,9 +230,9 @@ export const figures = {
     const POSTZ = -110, DZ = 40, T0 = 4;
     const posts = instBars(N, { w: 11, d: 11, color: 0x7aa7e6 });
     const postsG = new THREE.Group(); postsG.add(posts.mesh); group.add(postsG);
-    const lane = new THREE.Group(); lane.add(strip(400, 60)); lane.children[0].position.z = -40; group.add(lane);
-    const base = new THREE.Mesh(new THREE.BoxGeometry(380, 1.2, 2), K.flat(K.COL.ink));
-    base.position.set(0, 1, DZ);
+    const lane = new THREE.Group(); lane.add(strip(330, 60)); lane.children[0].position.set(-7, 0.8, -40); group.add(lane);
+    const base = new THREE.Mesh(new THREE.BoxGeometry(315, 1.2, 2), K.flat(K.COL.ink));
+    base.position.set(-7, 1, DZ);
     const deltas = instBars(N, { w: 11, d: 11 });
     const dG = new THREE.Group(); dG.add(base, deltas.mesh); group.add(dG);
     const sumBar = instBars(1, { w: 26, d: 26, color: ORANGE });
@@ -241,7 +241,7 @@ export const figures = {
     const duck = new K.Duck({ scale: 0.28 });
     group.add(duck.root);
     const valueLabel = ctx.label('V(s): what the critic expects', V(30, 150, POSTZ), { cls: 'is-blue' });
-    const dLabel = ctx.label('TD errors', V(150, 40, DZ + 30), { cls: 'is-small' });
+    const dLabel = ctx.label('TD errors', V(120, 40, DZ + 30), { cls: 'is-small' });
     const aLabel = ctx.label('Â for one step', V(SUMX, 60, SUMZ), { cls: 'is-accent' });
     const critic = K.chip(0x2c64c0, { w: 70, d: 50, h: 14 });
     const eye = K.ball(9, 0xffffff); eye.position.set(0, 26, 10); critic.add(eye);
@@ -310,7 +310,7 @@ export const figures = {
         { dur: 4.2, run(u) { st.walk = u; draw(); } },
         { dur: 2.6, run(u) { st.blend = ease.inOut(u); draw(); }, end() { ctx.say('Â', V(SUMX + 30, 90, SUMZ), { cls: 'is-red', sound: 'ding' }); } },
         { dur: 3.6, start() { ctx.sound('pop'); }, run(u) { st.priv = seg(u, 0, 0.35); st.fold = seg(u, 0.6, 0.95); draw(); },
-          end() { ctx.say('export', V(160, 90, 115), { cls: 'is-blue', sound: 'swish' }); } },
+          end() { ctx.say('export', V(110, 90, 115), { cls: 'is-blue', sound: 'swish' }); } },
       ],
     };
     api.reset();
@@ -320,7 +320,7 @@ export const figures = {
   // ------------------------------------------------------------ 3. PPO's clip
   clip(ctx) {
     const { group } = ctx;
-    const chart = easel(new K.Chart({ w: 340, h: 220, x: [0.4, 1.6], y: [-1.75, 1.45], title: 'the clipped objective, per action', xLabel: 'ratio ρ', yLabel: 'objective', px: 3 }), -18, 105, -0.86);
+    const chart = easel(new K.Chart({ w: 320, h: 220, x: [0.4, 1.6], y: [-1.75, 1.45], title: 'the clipped objective, per action', xLabel: 'ratio ρ', yLabel: 'objective', px: 3 }), -32, 105, -0.86);
     chart.xTicks = [0.8, 1, 1.2];
     group.add(chart.group);
     const st = { axis: 0, good: 0, bad: 0, passes: 0, eps: 0.2 };
@@ -333,9 +333,9 @@ export const figures = {
     const tube = K.box(26, 120, 26, 0xf3ead6); tube.position.y = 60; meter.add(tube);
     const fill = new THREE.Mesh(new THREE.BoxGeometry(18, 1, 18), K.paper(BLUE)); fill.geometry.translate(0, 0.5, 0); fill.position.y = 3; meter.add(fill);
     const target = new THREE.Mesh(new THREE.BoxGeometry(34, 2.4, 34), K.flat(RED)); target.position.y = 90; meter.add(target);
-    meter.position.set(190, 0, 30);
+    meter.position.set(166, 0, 40);
     const meterG = new THREE.Group(); meterG.add(meter); group.add(meterG);
-    const klLabel = ctx.label('KL target 0.01', V(190, 140, 30), { cls: 'is-small' });
+    const klLabel = ctx.label('KL target 0.01', V(166, 140, 40), { cls: 'is-small' });
     const passes = instBars(20, { w: 11, d: 11, color: 0xd9d1c0 });
     const passesG = new THREE.Group(); passesG.add(passes.mesh); group.add(passesG);
     const passX = (k) => -168 + k * 14 + Math.floor(k / 4) * 8;
@@ -582,6 +582,9 @@ export const figures = {
       termLabels.forEach((l) => show(l, st.bug > 0.1));
       show(bugLabel, flip > 0.6);
       show(okLabel, st.fix > 0.7);
+      // the lanes' rule labels sit where the verdicts print: they step aside for them
+      show(ruleL, flip <= 0.6 && st.fix <= 0.7);
+      show(ruleR, flip <= 0.6 && st.fix <= 0.7);
     };
     const api = {
       group,
@@ -592,7 +595,7 @@ export const figures = {
           say1(api, '_p1', u > 0.5, () => ctx.say('+1', V(LX - 40, 130, DZ), { cls: 'is-red', sound: 'tick' }));
           say1(api, '_p2', u > 0.8, () => ctx.say('+1', V(LX + 20, 130, DZ), { cls: 'is-red', sound: 'tick' }));
         } },
-        { dur: 3.4, run(u) { st.pot = seg(u, 0, 0.7); draw(); say1(api, '_h', u > 0.8, () => ctx.say('holding pays nothing', V(RX - 10, 190, DZ - 30), { cls: 'is-green', life: 1.6, scale: 0.8 })); } },
+        { dur: 3.4, run(u) { st.pot = seg(u, 0, 0.7); draw(); say1(api, '_h', u > 0.8, () => ctx.say('holding pays nothing', V(RX - 40, 190, DZ - 30), { cls: 'is-green', life: 1.6, scale: 0.7 })); } },
         { dur: 2.6, start() { ctx.sound('thud'); }, run(u) { st.bug = u; draw(); } },
         { dur: 2.2, start() { ctx.sound('ding'); }, run(u) { st.fix = u; draw(); } },
       ],
@@ -604,7 +607,7 @@ export const figures = {
   // ------------------------------------------------------------ 6. the actuator
   actuator(ctx) {
     const { group } = ctx;
-    const chart = easel(new K.Chart({ w: 260, h: 185, x: [0, 1], y: [0, 1.25], title: 'torque the servo can give', xLabel: 'speed', yLabel: 'torque', px: 3 }), 78, 40, -0.86);
+    const chart = easel(new K.Chart({ w: 260, h: 185, x: [0, 1], y: [0, 1.25], title: 'torque the servo can give', xLabel: 'speed', yLabel: 'torque', px: 3 }), 58, 40, -0.86);
     group.add(chart.group);
     // the servo: a case, a horn on top, and two gears drawn large for the play
     const servo = new THREE.Group();
@@ -918,10 +921,10 @@ export const figures = {
     const la = ctx.label('A', V(55, 96, -185), { cls: 'is-big' });
     const lb = ctx.label('B', V(140, 96, -185), { cls: 'is-big' });
     const tick = ctx.label('picked', V(55, 122, -185), { cls: 'is-green' });
-    const pile = new THREE.Group(); pile.position.set(190, 0, -120); pickG.add(pile);
+    const pile = new THREE.Group(); pile.position.set(176, 0, -112); pickG.add(pile);
     const cards = [];
     for (let i = 0; i < 4; i++) { const c = K.box(36, 3, 24, 0xfff1dc); c.position.set(0, 2 + i * 3.4, 0); c.rotation.y = (i % 2 ? 0.2 : -0.15); c.visible = i < 3; pile.add(c); cards.push(c); }
-    const pileLabel = ctx.label('labels', V(190, 34, -120), { cls: 'is-small' });
+    const pileLabel = ctx.label('labels', V(176, 34, -112), { cls: 'is-small' });
     // front left: a scorer fitted to the picks, off the phone
     const chart = easel(new K.Chart({ w: 210, h: 140, x: [-4, 4], y: [-0.05, 1.05], xLabel: 'score A minus score B', yLabel: 'A picked', px: 3 }), -100, 92, -0.86);
     group.add(chart.group);
@@ -934,7 +937,7 @@ export const figures = {
     const armL = K.capsule(5, 38, 0x5a7d9a); const armR = K.capsule(5, 38, 0x5a7d9a);
     const shL = new THREE.Group(); shL.position.set(-21, 71, 0); shL.add(armL); armL.position.y = -21; person.add(shL);
     const shR = new THREE.Group(); shR.position.set(21, 71, 0); shR.add(armR); armR.position.y = -21; person.add(shR);
-    const md = new K.Duck({ scale: 0.36 }); md.root.position.set(165, 0, 95); md.root.rotation.y = -1.25; poseG.add(md.root);
+    const md = new K.Duck({ scale: 0.36 }); md.root.position.set(152, 0, 100); md.root.rotation.y = -1.25; poseG.add(md.root);
     const mimicLabel = ctx.label('the duck copies the pose', V(130, 4, 148), { cls: 'is-small' });
     const st = { ep: 0, pick: 0, fit: 0, pose: 0, t: 0 };
     const draw = () => {
@@ -982,7 +985,7 @@ export const figures = {
       reset() { Object.assign(st, { ep: 0, pick: 0, fit: 0, pose: 0 }); draw(); },
       steps: [
         { dur: 3.4, start() { ctx.sound('pop'); }, run(u) { st.ep = u; draw(); } },
-        { dur: 3.2, run(u) { st.pick = u; draw(); }, end() { ctx.say('A over B', V(190, 64, -120), { cls: 'is-green', sound: 'tick' }); } },
+        { dur: 3.2, run(u) { st.pick = u; draw(); }, end() { ctx.say('A over B', V(150, 70, -112), { cls: 'is-green', sound: 'tick' }); } },
         { dur: 3.0, run(u) { st.fit = u; draw(); } },
         { dur: 2.6, start() { ctx.sound('quack'); }, run(u) { st.pose = Math.sin(clamp(u / 0.85) * Math.PI / 2); draw(); } },
       ],
@@ -995,8 +998,8 @@ export const figures = {
   // ------------------------------------------------------------ 10. shipping
   ship(ctx) {
     const { group } = ctx;
-    const BZ = 30, X0 = -205, X1 = 210;
-    const S = [-160, -78, 4, 88, 168];
+    const BZ = 30, X0 = -195, X1 = 186;
+    const S = [-152, -74, 4, 82, 150];
     const beltG = new THREE.Group(); group.add(beltG);
     const belt = K.box(X1 - X0, 8, 34, 0x5c5c64); belt.position.set((X0 + X1) / 2, 4, BZ); beltG.add(belt);
     const names = ['smoke test', 'train', 'export', 'publish', 'measure'];
@@ -1103,7 +1106,7 @@ export const figures = {
         { dur: 3.0, run(u) { st.train = u; draw(); } },
         { dur: 3.0, start() { ctx.sound('swish'); }, run(u) { st.exp = u; draw(); } },
         { dur: 3.4, run(u) { st.pub = u; draw(); say1(api, '_r', u > 0.3, () => ctx.say('refused', V(S[3], 116, BZ + 36), { cls: 'is-red', sound: 'thud' })); }, end() { api._r = false; } },
-        { dur: 3.0, run(u) { st.meas = u; draw(); }, end() { ctx.say('report what it shows', V(S[4] - 30, 124, BZ), { cls: 'is-green', sound: 'ding', life: 1.6, scale: 0.8 }); } },
+        { dur: 3.0, run(u) { st.meas = u; draw(); }, end() { ctx.say('report what it shows', V(S[4] - 95, 124, BZ), { cls: 'is-green', sound: 'ding', life: 1.6, scale: 0.65 }); } },
       ],
       idle(t, dt) { st.t += dt; draw(); },
     };
