@@ -21,8 +21,8 @@ app.</p>
 thing being evaluated is a network from your library, named by digest, or a
 published challenge entrant. Where it runs is an embodiment: a bench on your
 network, named and carrying its world's digest, or this phone's own bench. A
-real Microduck is on that list and cannot be chosen, because nothing can drive
-one yet.</p>
+real Microduck is on that list and cannot be chosen yet: an evaluation needs a
+world it can reset and score, and a real duck on a floor is not that.</p>
 
 <p>There is no epoch count, no reducer picker and no seed field on that screen.
 A control that could disagree with the preset would be a second opinion about
@@ -59,8 +59,8 @@ probability without being one.</p></blockquote>
 
   <dt>Embodiment</dt>
   <dd>The body and the world. A bench on your network, or this phone's own
-  bench. A real Microduck is named and unavailable: nothing can drive one
-  yet.</dd>
+  bench. A real Microduck is named and unavailable: evaluations run in physics
+  only.</dd>
 
   <dt>Task</dt>
   <dd>Scenes, scorers, one horizon, and epochs with a reducer: mean, median,
@@ -75,8 +75,8 @@ probability without being one.</p></blockquote>
   The filename is the task slug and a short hash.</dd>
 </dl>
 
-<p>What the app does not do is run inspect-robots. An iPhone cannot run Python,
-and it has no physics engine either. The rollouts happen on a bench, the scoring
+<p>What the app does not do is run inspect-robots. An iPhone cannot run Python.
+The rollouts happen on a bench, the phone's own or one on your network, the scoring
 reads the trajectory the bench recorded, and the file is written to
 inspect-robots' schema rather than by inspect-robots' code. That distinction
 matters enough that it is tested rather than promised: a check in the app's
