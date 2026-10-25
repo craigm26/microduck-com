@@ -326,7 +326,7 @@ export const figures = {
     outBars.mesh.position.set(22, 0, 88);
     const outG = new THREE.Group(); outG.add(outBars.mesh); group.add(outG);
     const duck = new K.Duck({ scale: 0.4 });
-    duck.root.position.set(170, 0, 125); duck.root.rotation.y = -0.9;
+    duck.root.position.set(140, 0, 135); duck.root.rotation.y = -0.9;
     group.add(duck.root);
     // a small random network of the same shape, so the outputs really come from the inputs
     const W = [];
@@ -427,7 +427,7 @@ export const figures = {
       const v = terms.map(([, w, k], i) => {
         let met = k;
         if (i === 0 || i === 1 || i === 3) met = k * walk;
-        if (i === 5) return walk > 0.5 ? lerp(w * k, -2.6 * strict, strict * (1 - fixed)) : w * 0.95;
+        if (i === 5) return walk > 0.5 ? lerp(w * k, -4.0 * strict, strict * (1 - fixed)) : w * 0.95;
         if (i === 6) met = k * (0.3 + 0.7 * walk);
         return w * met;
       });
@@ -443,7 +443,7 @@ export const figures = {
     const api = {
       group,
       slider: { label: 'Head strictness', min: 0, max: 1, step: 0.01, value: 0, format: (v) => (v < 0.5 ? 'gentle' : v < 0.8 ? 'strict' : 'very strict'),
-        input(v) { strict = v; fixed = 0; } },
+        input(v) { strict = v; fixed = 0; }, get: () => strict },
       reset() { show1 = show2 = show3 = 0; strict = 0; fixed = 0; walk = 1; reveal(0); draw(); },
       steps: [
         { dur: 1.8, start() { reveal(6); ctx.sound('pop'); }, run(u) { show1 = ease.out(u); } },
@@ -568,6 +568,7 @@ export const figures = {
     const bandL = ctx.label('safe band', V(0, 0, 0), { cls: 'is-blue', parent: bandG });
     const tries = new THREE.Group(); group.add(tries);
     const dots = Array.from({ length: 10 }, () => { const m = K.packet(K.COL.yellow, 4.5); m.visible = false; tries.add(m); return m; });
+    const practisedL = ctx.label('where it practised', V(-165, 70, ZF + 62), { cls: 'is-small' });
     let clip = 0.2;
     const reach = () => 20 + clip * 240;
     const zM = ZF + 62;
@@ -598,13 +599,13 @@ export const figures = {
     const api = {
       group,
       slider: { label: 'Band', min: 0.05, max: 0.6, step: 0.01, value: 0.2, format: (v) => `${Math.round(v * 100)}%`, input(v) { clip = v; placeBand(api._x ?? x0); } },
-      reset() { clip = 0.2; api._x = x0; marble.position.copy(at(x0)); marble.scale.setScalar(1); bandG.visible = false; show(bandL, false); band.scale.set(1, 1, 1); dots.forEach((d) => (d.visible = false)); planHops(); },
+      reset() { clip = 0.2; api._x = x0; marble.position.copy(at(x0)); marble.scale.setScalar(1); bandG.visible = false; show(bandL, false); band.scale.set(1, 1, 1); dots.forEach((d) => (d.visible = false)); show(practisedL, false); planHops(); },
       steps: [
         { dur: 2.0, run(u) {
           dots.forEach((d, i) => { const x = x0 + Math.sin(i * 2.3) * 40; d.visible = u > i / 12; d.position.set(x, H(x) + 8, zM + Math.cos(i * 1.7) * 20); });
+          show(practisedL, u > 0.5);
         } },
         { dur: 2.8, run(u) {
-          dots.forEach((d) => (d.visible = false));
           const a = ease.inOut(seg(u, 0, 0.55));
           const x = lerp(x0, 140, a);
           const p = at(x); p.y += Math.sin(a * Math.PI) * 130;
@@ -612,7 +613,7 @@ export const figures = {
           marble.position.copy(p);
           if (u > 0.82 && !api._o) { api._o = true; ctx.say('OVER THE EDGE', V(130, 80, zM), { sound: 'thud', cls: 'is-red' }); }
         }, end() { api._o = false; } },
-        { dur: 1.8, start() { planHops(); }, run(u) {
+        { dur: 1.8, start() { planHops(); dots.forEach((d) => (d.visible = false)); show(practisedL, false); }, run(u) {
           const r = seg(u, 0, 0.5);
           poof(marble, 1, r);
           if (r >= 0.5) marble.position.copy(at(x0));
@@ -659,7 +660,7 @@ export const figures = {
       cells.push({ g, floor, duck, cone, push, grip: 0.7 + R() * 0.6, mass: 0.95 + R() * 0.1, tilt: (R() * 2 - 1), tiltDir: R() * Math.PI * 2, pushAt: R(), pushDir: R() * Math.PI * 2, ph: R() * 6 });
     }
     const gripColor = (g) => new THREE.Color(0x9fd3ff).lerp(new THREE.Color(0xff9a5a), (g - 0.7) / 0.6);
-    const legend = [ctx.label('grip 0.7', V(-150, 24, 245), { cls: 'is-small is-blue' }), ctx.label('grip 1.3', V(150, 24, 245), { cls: 'is-small is-red' })];
+    const legend = [ctx.label('grip 0.7', V(-262, 24, 140), { cls: 'is-small is-blue' }), ctx.label('grip 1.3', V(-262, 24, 182), { cls: 'is-small is-red' })];
     legend.forEach((l) => show(l, false));
     let grip = 0, body = 0, shoves = 0, senses = 0, t = 0;
     const draw = () => {
@@ -703,7 +704,7 @@ export const figures = {
     const belt = new THREE.Mesh(K.roundBox(440, 10, 70, 4, 2), K.paper(0x6d7b8c));
     belt.position.set(0, 5, 70); belt.castShadow = true; belt.receiveShadow = true;
     const beltG = new THREE.Group(); beltG.add(belt); group.add(beltG);
-    const xs = [-170, -85, 0, 85, 170];
+    const xs = [-165, -82, 0, 80, 150];
     const names = ['train', 'export', 'rehearse', 'publish', 'install'];
     const props = new THREE.Group(); group.add(props);
     const gpu = K.chip(K.COL.green, { w: 50, d: 40, h: 10 }); gpu.position.set(xs[0], 0, -30); props.add(gpu);
@@ -723,9 +724,10 @@ export const figures = {
     file.add(fileBox);
     const fileL = ctx.label('checkpoint', V(0, 44, 0), { parent: file, cls: 'is-small is-accent' });
     group.add(file);
-    const stamps = names.map((_, i) => { const s = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 2, 16), K.paper(K.COL.green)); s.position.set(-20 + i * 10, 27, 18); s.visible = false; file.add(s); return s; });
-    const checks = ['', 'normalizer built in', 'walks on a laptop', '61 in, 14 out, no NaN', 'robotctl policy add'];
-    const checkL = checks.map((c, i) => (c ? ctx.label(c, V(xs[i], 22, 150), { cls: 'is-small is-green' }) : null));
+    const stamps = names.map((_, i) => { const s = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 2, 16), K.paper(K.COL.green)); s.position.set(-21 + i * 10.5, 27, 18); s.visible = false; file.add(s); return s; });
+    const checks = ['', 'normalizer built in', 'walks on a laptop', '61 in, 14 out, no NaN', 'loaded on the robot'];
+    // staggered in two rows, so neighbours never print over each other
+    const checkL = checks.map((c, i) => (c ? ctx.label(c, V(xs[i] - (i === 4 ? 30 : 0), 22, i % 2 ? 150 : 188), { cls: 'is-small is-green' }) : null));
     checkL.forEach((l) => l && show(l, false));
     let t = 0, k = 0;
     const move = (from, to, u) => { file.position.set(lerp(xs[from], xs[to], ease.inOut(u)), 10, 70); };

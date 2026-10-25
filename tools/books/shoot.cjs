@@ -34,7 +34,8 @@ fs.mkdirSync(out, { recursive: true });
   page.on('requestfailed', (r) => problems.push('requestfailed: ' + r.url()));
   await page.goto(`http://127.0.0.1:8123/books/${book}/?test`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__book, null, { timeout: 20000 });
-  if (flag('flat')) await page.evaluate(() => window.__book.setMode('flat'));
+  // set the view explicitly: Book 1 opens flat on screens where its 3D pages would read small
+  await page.evaluate((flat) => window.__book.setMode(flat ? 'flat' : '3d'), flag('flat'));
   await page.evaluate(() => window.__book.manual(true));
   await page.evaluate(() => window.__book.advance(2500));
   const lessons = await page.evaluate(() => window.__book.lessons);

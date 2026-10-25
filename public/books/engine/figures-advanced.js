@@ -260,7 +260,7 @@ export const figures = {
     critic.position.set(165, 0, 115);
     ball.position.set(75, 14, 130);
     const cLabel = ctx.label('critic: sees the ball', V(150, 70, 115), { cls: 'is-blue' });
-    const actorLabel = ctx.label('actor: 61 in, 14 out', V(0, 70, 0), { cls: 'is-green', parent: duck.root });
+    const actorLabel = ctx.label('actor: 61 in, 14 out', V(0, 62, -40), { cls: 'is-green' });
     const st = { posts: 0, walk: 0, blend: 0, priv: 0, fold: 0, lambda: 0.95 };
     const sightLine = () => {
       const a = new THREE.Vector3(); eye.getWorldPosition(a); group.worldToLocal(a);
@@ -307,6 +307,7 @@ export const figures = {
       aLabel.position.y = Math.max(20, A) + 26;
       show(cLabel, st.priv > 0.6 && st.fold < 0.4);
       show(actorLabel, st.priv > 0.6);
+      actorLabel.position.set(duck.root.position.x, 62, duck.root.position.z);
     };
     const api = {
       group,
@@ -594,6 +595,7 @@ export const figures = {
       // the lanes' rule labels sit where the verdicts print: they step aside for them
       show(ruleL, flip <= 0.6 && st.fix <= 0.7);
       show(ruleR, flip <= 0.6 && st.fix <= 0.7);
+      if (flip > 0.6 || st.fix > 0.7) show(phiLabel, false);
     };
     const api = {
       group,

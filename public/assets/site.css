@@ -658,7 +658,7 @@ td code { white-space: normal; }
 /* The shelf at /books/. */
 .shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin-top: 2rem; }
 .shelf-book { display: grid; grid-template-rows: auto 1fr; gap: 1rem; text-decoration: none; color: var(--ink); }
-.shelf-cover { position: relative; aspect-ratio: 3 / 3.9; border-radius: 6px 14px 14px 6px; padding: 12% 10%; display: grid; align-content: start; color: var(--c-ink); background: var(--c); box-shadow: inset 10px 0 0 rgba(0,0,0,.14), 0 14px 26px rgba(0,0,0,.18); transition: transform .2s ease; }
+.shelf-cover { position: relative; aspect-ratio: 3 / 3.2; border-radius: 6px 14px 14px 6px; padding: 12% 10%; display: grid; align-content: start; color: var(--c-ink); background: var(--c); box-shadow: inset 10px 0 0 rgba(0,0,0,.14), 0 14px 26px rgba(0,0,0,.18); transition: transform .2s ease; }
 .shelf-book:hover .shelf-cover, .shelf-book:focus-visible .shelf-cover { transform: translateY(-5px) rotate(-.6deg); }
 .shelf-label { background: #fbf6ea; color: var(--c-ink); border: 3px solid var(--c-ink); border-radius: 12px; padding: .9rem .9rem 1rem; text-align: center; }
 .shelf-label small { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
@@ -739,6 +739,10 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 .bk-caption { margin: 0; min-height: 4.4em; font-size: 15px; line-height: 1.45; }
 .bk-caption strong { color: var(--accent); }
 .bk-verdict { margin: 0; font-weight: 700; font-size: 14.5px; color: var(--warn); }
+.bk-next { margin: 0; font-size: 14px; }
+.bk-step[aria-disabled="true"] { cursor: default; }
+/* a prediction's answer waits for its figure */
+.bk-wait { margin: .45rem 0 0; color: var(--dim); font-size: .92em; font-style: italic; }
 .bk-verdict[data-right="true"] { color: var(--good); }
 .bk-bigidea { margin: 0; padding: 9px 12px; border-radius: 12px; background: var(--tint); font-weight: 650; font-size: 15px; line-height: 1.35; }
 .bk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -750,9 +754,9 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 .bk-slider input { width: 100%; accent-color: var(--accent-fill); }
 .bk-slider-out { font-variant-numeric: tabular-nums; min-width: 4.5em; text-align: right; }
 
-.bk-label { padding: 3px 9px; border-radius: 999px; background: #fffaf0; color: #2b2620; border: 1.5px solid #2b2620; font: 650 13px/1.25 ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; white-space: nowrap; pointer-events: none !important; transition: opacity .2s ease; }
-.bk-label.is-big { font-size: 16px; padding: 4px 11px; }
-.bk-label.is-small { font-size: 11px; padding: 2px 7px; }
+.bk-label { --z: var(--bk-zoom, 1); padding: calc(3px * var(--z)) calc(9px * var(--z)); border-radius: 999px; background: #fffaf0; color: #2b2620; border: 1.5px solid #2b2620; font: 650 calc(13px * var(--z))/1.25 ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; white-space: nowrap; pointer-events: none !important; transition: opacity .2s ease; }
+.bk-label.is-big { font-size: calc(16px * var(--z)); padding: calc(4px * var(--z)) calc(11px * var(--z)); }
+.bk-label.is-small { font-size: calc(11px * var(--z)); padding: calc(2px * var(--z)) calc(7px * var(--z)); }
 .bk-label.is-accent { background: #ff9500; color: #1d1d1f; }
 .bk-label.is-blue { background: #2a64c9; color: #fff; border-color: #0d244a; }
 .bk-label.is-green { background: #1b6e3e; color: #fff; border-color: #0b3a20; }
@@ -772,6 +776,8 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 .bk-where-title { font-size: 14px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bk-menu { position: absolute; left: 0; bottom: calc(100% + 10px); width: min(420px, calc(100vw - 24px)); max-height: min(62vh, 520px); overflow: auto; padding: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 14px 36px rgba(0,0,0,.2); }
 .bk-menu[hidden] { display: none; }
+.bk-menu-next { margin: 10px 8px 4px; font-size: 14px; }
+.bk-hint { margin: 6px 8px 2px; color: var(--dim); font-size: 13px; }
 .bk-menu-list { list-style: none; margin: 0; padding: 0; }
 .bk-menu-list li { margin: 0; }
 .bk-menu-item { width: 100%; display: grid; grid-template-columns: 2rem 1fr; gap: .4rem; align-items: baseline; padding: .55rem .7rem; border: 0; border-radius: 10px; background: none; color: var(--ink); font: 550 .95rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: left; cursor: pointer; }
@@ -787,6 +793,7 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 html.bk-flat .book-page main > .book-intro:not(.is-current),
 html.bk-flat .book-page main > .lesson:not(.is-current),
 html.bk-flat .book-page main > .book-next { display: none; }
+html.bk-flat.bk-at-end .book-page main > .book-next { display: block; }
 html.bk-flat .book-page main { padding-bottom: 96px; }
 html.bk-flat .lesson { border-top: 0; padding-top: 28px; }
 html.bk-flat .bk-barwrap { position: fixed; bottom: max(10px, env(safe-area-inset-bottom)); width: min(560px, calc(100% - 16px)); max-width: none; }
@@ -799,7 +806,7 @@ html.bk-flat .bk-where-num { white-space: nowrap; }
 .bk-flatstage { position: relative; aspect-ratio: 1 / 1; max-height: 64svh; width: 100%; border-radius: 14px; overflow: hidden; background: #e4d5bb; }
 .bk-flatcard { position: relative; }
 .bk-flatui .bk-ui { position: static; }
-.bk-flatcard .bk-ui-top { position: absolute; top: 10px; left: 10px; right: 10px; z-index: 2; }
+.bk-flatcard .bk-ui-top { position: static; margin: .6rem 0 0; }
 .bk-flatui .bk-steps { position: static; width: auto; display: flex; flex-wrap: wrap; gap: 6px; margin: .8rem 0 .6rem; }
 .bk-flatui .bk-step { width: auto; padding: 6px 10px 6px 7px; font-size: 13.5px; }
 .bk-flatui .bk-ui-bottom { position: static; }
@@ -812,7 +819,7 @@ html.bk-flat .bk-where-num { white-space: nowrap; }
   .shelf-cover { transition: none; }
 }
 @media print {
-  .bk-stage, .bk-barwrap, .bk-flatcard { display: none !important; }
+  .bk-stage, .bk-barwrap, .bk-flatcard, .bk-wait { display: none !important; }
   /* paper cannot play a pop-up, so the figure's words print in its place */
   html.bk-live .lesson-figure > .figure-steps,
   html.bk-live .lesson-figure > figcaption,

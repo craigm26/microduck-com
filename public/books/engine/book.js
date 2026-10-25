@@ -467,7 +467,13 @@ async function main() {
   notes.append(notesHead, notesBody);
 
   const stageHint = el('p', 'bk-hint');
+  stageHint.id = 'bk-hint';
   stageHint.textContent = 'Use ← and → to turn pages, and Space for the next step.';
+  menu.insertBefore(stageHint, menuFoot);
+  stage.setAttribute('aria-describedby', 'bk-hint');
+  // where the book ends: the next book, in the menu and after the last lesson's answer
+  const nextNote = document.querySelector('.book-next p');
+  if (nextNote) { const n = nextNote.cloneNode(true); n.className = 'bk-menu-next'; menu.insertBefore(n, stageHint); }
 
   const barWrap = el('div', 'bk-barwrap');
   barWrap.append(menu, bar);
@@ -486,6 +492,7 @@ async function main() {
       THREE, K, group, page: { w: PW, h: PH }, stage: STAGE, reduced, dark,
       label(text, pos, opts = {}) {
         const e = el('div', 'bk-label' + (opts.cls ? ' ' + opts.cls : ''), text);
+        e.setAttribute('aria-hidden', 'true');
         const o = opts.flat ? new CSS3DObject(e) : new CSS3DSprite(e);
         if (opts.flat) o.rotation.x = -Math.PI / 2;
         o.position.copy(pos);
@@ -495,6 +502,7 @@ async function main() {
       },
       say(text, pos, opts = {}) {
         const e = el('div', 'bk-say' + (opts.cls ? ' ' + opts.cls : ''), text);
+        e.setAttribute('aria-hidden', 'true');
         const o = new CSS3DSprite(e);
         o.position.copy(pos);
         group.add(o);
@@ -633,13 +641,14 @@ async function main() {
     }
     root.append(top, list, bottom);
     const api = {
-      root, chips, caption, buttons, big, verdict, slider,
+      root, chips, caption, buttons, big, verdict, slider, play, again, bottom,
       update() {
         if (!fig || Ls.kind === 'intro') return;
         buttons.forEach((b, j) => {
           const state = j < fig.done ? 'done' : (fig.run && fig.run.i === j) ? 'running' : j === fig.done ? 'next' : 'later';
           b.dataset.state = state;
-          b.disabled = state !== 'next';
+          b.disabled = false;
+          b.setAttribute('aria-disabled', String(state !== 'next'));
           b.setAttribute('aria-current', state === 'running' ? 'step' : 'false');
         });
         const doneAll = fig.done >= Ls.steps.length;
@@ -658,7 +667,7 @@ async function main() {
     const st = fig.obj.steps[j];
     if (!st) return;
     st.start?.();
-    fig.run = { i: j, t: 0, dur: reduced ? 0.0001 : st.dur ?? 1.6 };
+    fig.run = { i: j, t: 0, dur: st.dur ?? 1.6 };
     fig.ui.update();
     const s = lessons[fig.i].steps[j];
     if (s) live.textContent = s.text;
@@ -672,7 +681,9 @@ async function main() {
     fig.run = null;
     fig.done = r.i + 1;
     if (fig.done >= fig.obj.steps.length) { fig.queue = false; reveal(); }
+    const hadFocus = document.activeElement?.classList?.contains('bk-step');
     fig.ui.update();
+    if (hadFocus) (fig.ui.buttons[fig.done] || fig.ui.again).focus({ preventScroll: true });
     // the breath between queued steps runs on the book's clock, so it pauses
     // with the book (a hidden tab, a manual test clock) rather than on a timer
     if (fig.queue) fig.wait = reduced ? 0 : 0.38;
@@ -683,6 +694,11 @@ async function main() {
     clearSays();
     fig.run = null; fig.queue = false; fig.wait = null; fig.done = 0;
     fig.obj.reset?.();
+    if (fig.ui.slider && fig.obj.slider) {
+      const sl = fig.obj.slider;
+      fig.ui.slider.input.value = sl.value;
+      fig.ui.slider.out.textContent = sl.format ? sl.format(Number(sl.value)) : String(sl.value);
+    }
     unreveal();
     fig.ui.update();
   }
@@ -701,15 +717,23 @@ async function main() {
       lab.classList.toggle('is-wrong', input.checked && input.value !== answer);
     }
     const d = fs.querySelector('details');
-    if (d) d.open = true;
+    const wait = fs.querySelector('.bk-wait');
+    if (wait) wait.hidden = true;
+    if (d) { d.hidden = false; d.open = true; }
     // the answer opens at the foot of the left page: if the page now scrolls, show the answer
     if (mode === '3d' && leftEl.scrollHeight > leftEl.clientHeight) leftEl.scrollTo({ top: leftEl.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
     const v = fig.ui.verdict;
+    const where = mode === 'flat' ? 'above the pop-up' : 'on the left page';
     if (picked) {
-      v.textContent = picked.value === answer ? 'Your prediction was right.' : 'Not what you predicted. Read why on the left page.';
+      v.textContent = picked.value === answer ? 'Your prediction was right.' : `Not what you predicted. Read why ${where}.`;
       v.dataset.right = String(picked.value === answer);
-    } else v.textContent = 'The answer is on the left page.';
+    } else v.textContent = `The answer is ${where}.`;
     v.hidden = false;
+    const said = d?.querySelector('strong')?.textContent?.trim();
+    live.textContent = v.textContent + (said ? ' The answer: ' + said : '');
+    if (fig.i === total && nextNote && !fig.ui.bottom.querySelector('.bk-next')) {
+      const n = nextNote.cloneNode(true); n.className = 'bk-next'; fig.ui.bottom.append(n);
+    }
     sound.play(picked && picked.value === answer ? 'ding' : 'pop');
   }
   function unreveal() {
@@ -719,7 +743,9 @@ async function main() {
     fs.classList.remove('is-revealed');
     for (const lab of fs.querySelectorAll('label')) lab.classList.remove('is-answer', 'is-wrong');
     const d = fs.querySelector('details');
-    if (d) d.open = false;
+    const wait = fs.querySelector('.bk-wait');
+    if (wait) wait.hidden = false;
+    if (d) { d.open = false; d.hidden = true; }
     if (mode === '3d') leftEl.scrollTop = 0;
   }
 
@@ -817,8 +843,8 @@ async function main() {
   function closeMenu() { menu.hidden = true; bContents.setAttribute('aria-expanded', 'false'); }
 
   bContents.addEventListener('click', () => (menu.hidden ? openMenu() : closeMenu()));
-  bPrev.addEventListener('click', () => go(index - 1));
-  bNext.addEventListener('click', () => go(index + 1));
+  bPrev.addEventListener('click', () => go(index - 1, { focus: true }));
+  bNext.addEventListener('click', () => go(index + 1, { focus: true }));
   bNotes.addEventListener('click', () => (notesFor === null ? openNotes() : closeNotes()));
   notesClose.addEventListener('click', () => { closeNotes(); bNotes.focus(); });
   const toggleSound = () => {
@@ -841,7 +867,14 @@ async function main() {
   // ---------------------------------------------------------- turning
 
   let turn = null;   // { dir, t, dur, to }
-  function go(to, { instant = false } = {}) {
+  let focusAfter = false;
+  function focusNext() {
+    if (!fig) return;
+    const b = lessons[index].kind === 'intro' ? fig.ui.play : fig.ui.buttons[fig.done];
+    b?.focus({ preventScroll: true });
+  }
+  function go(to, { instant = false, focus = false } = {}) {
+    focusAfter = focus;
     to = Math.max(0, Math.min(total, to));
     if (to === index && fig) return;
     if (turn) return;
@@ -868,6 +901,8 @@ async function main() {
     const h = index ? '#lesson-' + index : location.pathname + location.search;
     history.replaceState(null, '', index ? location.pathname + location.search + h : h);
     live.textContent = index ? `Lesson ${index}: ${lessons[index].title}` : bookTitle;
+    document.documentElement.classList.toggle('bk-at-end', index === total);
+    if (focusAfter) { focusAfter = false; focusNext(); }
   }
 
   function stepTurn(dt) {
@@ -984,6 +1019,20 @@ async function main() {
     const cyPx = (1 - (r.y0 + r.y1) / 2) / 2 * H;
     camBase.offset = { x: cxPx - W / 2, y: cyPx - usableH / 2 };
     applyCamera();
+    css.domElement.style.setProperty('--bk-zoom', K.clamp(1 / Math.max(0.2, pxPerUnit(V3(STAGE.x + GUT + PW / 2, 0, STAGE.z), 'x')), 1, 2.2).toFixed(2));
+  }
+  const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+  // Screen pixels per world unit at a point, across (x) or down the page (z).
+  function pxPerUnit(at, axis) {
+    camera.updateMatrixWorld();
+    const a = at.clone().project(camera);
+    const b = at.clone().add(axis === 'x' ? V3(100, 0, 0) : V3(0, 0, 100)).project(camera);
+    return Math.hypot((b.x - a.x) * W / 2, (b.y - a.y) * H / 2) / 100;
+  }
+  // How tall the left page's text stands on screen, in pixels, in the 3D book.
+  function pageTextPx() {
+    const size = parseFloat(getComputedStyle(leftEl).fontSize) || 16;
+    return size * pxPerUnit(V3(-(PW / 2 + GUT / 2), 0, 0), 'z');
   }
 
   function applyCamera() {
@@ -1015,6 +1064,16 @@ async function main() {
     if (saved === 'flat' || saved === '3d') return saved;
     return innerWidth < 760 || innerHeight < 540 ? 'flat' : '3d';
   }
+  // Book 1 is read with young readers: where its 3D pages would set the text
+  // smaller than 13 px, it opens as flat pages. The View button still turns it 3D.
+  let autoFlat = false;
+  function chooseMode() {
+    setMode(preferred());
+    if (book === 'beginner' && store('bk-view') === null && mode === '3d') {
+      layout();
+      if (pageTextPx() < 13) { autoFlat = true; setMode('flat'); }
+    }
+  }
 
   function setMode(m) {
     if (m === mode) return;
@@ -1040,9 +1099,13 @@ async function main() {
     const t = e.target;
     const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
     if (e.key === 'Escape') { if (!menu.hidden) { closeMenu(); bContents.focus(); } else if (notesFor !== null) { closeNotes(); bNotes.focus(); } return; }
-    if (typing || e.altKey || e.ctrlKey || e.metaKey) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    // on a prediction, left and right still turn pages; up and down change the choice
+    const onChoice = t && t.type === 'radio' && t.closest?.('.predict');
+    if (typing && !onChoice) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1, { focus: true }); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1, { focus: true }); }
+    else if (onChoice) return;
     else if ((e.key === ' ' || e.key === 'Enter') && (t === document.body || t === stage || t.closest?.('.bk-page'))) {
       if (t.closest?.('a, button, summary, label')) return;
       if (fig && lessons[fig.i].kind === 'lesson') { e.preventDefault(); runStep(fig.done); }
@@ -1072,7 +1135,13 @@ async function main() {
         fig.wait -= dt;
         if (fig.wait <= 0) { fig.wait = null; runStep(fig.done); }
       }
-      if (!reduced) fig.obj.idle?.(clock, dt);
+      fig.obj.idle?.(clock, dt);
+      // a slider a step moves shows where the step put it
+      const sl = fig.obj.slider;
+      if (sl?.get && fig.ui.slider) {
+        const v = sl.get();
+        if (v !== fig.sliderShown) { fig.sliderShown = v; fig.ui.slider.input.value = v; fig.ui.slider.out.textContent = sl.format ? sl.format(v) : String(v); }
+      }
       if (fig.obj.chips) {
         const list = fig.obj.chips();
         const key = JSON.stringify(list);
@@ -1138,15 +1207,34 @@ async function main() {
   const fromHash = /^#lesson-(\d+)$/.exec(location.hash);
   index = fromHash ? Math.max(1, Math.min(total, Number(fromHash[1]))) : 0;
   document.documentElement.classList.add('bk-live');
+  // A prediction is made before the figure plays: each answer stays hidden until
+  // the last step lands, and the options are shuffled, the same way on every visit,
+  // so the right one has no favourite place.
+  lessons.forEach((Ls, i) => {
+    const fs = Ls.predict;
+    if (!fs) return;
+    const d = fs.querySelector('details');
+    const wait = el('p', 'bk-wait', 'Play the pop-up to the end to check your prediction.');
+    if (d) { d.hidden = true; d.before(wait); } else fs.append(wait);
+    const labels = [...fs.querySelectorAll('label')];
+    const rnd = K.rng(17 + i * 31);
+    for (let k = labels.length - 1; k > 0; k--) {
+      const j = Math.floor(rnd() * (k + 1));
+      [labels[k], labels[j]] = [labels[j], labels[k]];
+    }
+    labels.forEach((lab) => fs.insertBefore(lab, wait));
+  });
   setBlocks(thick(index));
   mountFigure(index);
-  setMode(preferred());
+  chooseMode();
+  document.documentElement.classList.toggle('bk-at-end', index === total);
   fig.pop = 0;
   if (!fromHash && mode === '3d' && !testing) openCover(); else hinge.rotation.z = TILT;
   if (!opening) popTo(1, fromHash ? 0.5 : 0.6);
   updateBar();
   addEventListener('resize', () => {
-    if (store('bk-view') === null) setMode(preferred());
+    // decided once at the start: a resize only follows the narrow-screen rule
+    if (store('bk-view') === null && !autoFlat) setMode(preferred());
     layout();
   });
   new ResizeObserver(() => layout()).observe(stage);
@@ -1164,12 +1252,12 @@ async function main() {
     if (opened) return;
     closeNotes();
     for (const n of [...homes.keys()]) giveBack(n);
-    opened = [...document.querySelectorAll('.predict details:not([open])')];
-    opened.forEach((d) => (d.open = true));
+    opened = [...document.querySelectorAll('.predict details')].map((d) => ({ d, open: d.open, hidden: d.hidden }));
+    opened.forEach(({ d }) => { d.hidden = false; d.open = true; });
   });
   addEventListener('afterprint', () => {
     if (!opened) return;
-    opened.forEach((d) => (d.open = false));
+    opened.forEach(({ d, open, hidden }) => { d.open = open; d.hidden = hidden; });
     opened = null;
     placeDOM();
   });

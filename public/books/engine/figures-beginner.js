@@ -423,11 +423,11 @@ export const figures = {
           ball.rotation.x -= 0.2; ball.rotation.z += 0.1;
           if (u > 0.45 && !api._thud) { api._thud = true; ctx.say('BUMP!', V(x1, 140, 110), { sound: 'thud', cls: 'is-red' }); }
           const f = seg(u, 0.45, 0.9);
-          duck.fall(f, 'left');
+          duck.fall(f, 'back');
           if (u > 0.45) ballG.position.lerpVectors(hit, V(hit.x + 70, 22, hit.z + 60), ease.out(seg(u, 0.45, 1)));
         }, end() { api._thud = false; } },
         { dur: 2.2, run(u) {
-          duck.fall(1 - ease.inOut(u), 'left');
+          duck.fall(1 - ease.inOut(u), 'back');
           duck.crouchPose(Math.sin(u * Math.PI) * 0.6);
           ballG.position.x = hit.x + 70 + u * 80;
         }, end() { duck.fall(0); duck.setJoints(duck.stand); } },
@@ -772,6 +772,19 @@ export const figures = {
       }
       crowd.instanceMatrix.needsUpdate = true;
     };
+    // a close-up of nine ducks from the crowd, big enough to see who falls and who steps
+    const lens = new THREE.Group();
+    const lensBase = K.cylinder(64, 64, 10, 0xfffaf0, { seg: 40 }); lensBase.position.y = 5; lens.add(lensBase);
+    const lensRing = new THREE.Mesh(new THREE.TorusGeometry(64, 3, 8, 48), K.paper(0x2a64c9)); lensRing.rotation.x = Math.PI / 2; lensRing.position.y = 10; lens.add(lensRing);
+    const nine = Array.from({ length: 9 }, (_, i) => {
+      const d = new K.Duck({ scale: 0.16 });
+      d.root.position.set((i % 3 - 1) * 34, 10, (Math.floor(i / 3) - 1) * 34); d.root.rotation.y = -0.4;
+      lens.add(d.root);
+      return d;
+    });
+    lens.position.set(140, 0, 150);
+    group.add(lens);
+    const lensLabel = ctx.label('close up', V(140, 34, 78), { cls: 'is-small is-blue' });
     const brain = K.chip(K.COL.green, { w: 70, d: 50, h: 12 });
     brain.position.set(0, 210, -40);
     const brainG = new THREE.Group(); brainG.add(brain); group.add(brainG);
@@ -786,6 +799,7 @@ export const figures = {
         big.root.scale.setScalar(0.55); big.root.visible = true; big.fall(0); big.setJoints(big.stand); big.root.position.set(-20, 0, 10);
         world.visible = true; show(worldLabel, true);
         crowdState = { grow: 0, falls: 0, sync: 0 }; setCrowd(0, 0, 0, 0); crowd.visible = false; floorG.visible = false;
+        lens.visible = false; show(lensLabel, false); nine.forEach((d) => { d.fall(0); d.setJoints(d.stand); });
         brainG.visible = false; brain.position.y = 150; show(brainLabel, false); sends.hide(); phase = 'one';
       },
       chips() { return crowd.visible ? [['pretend ducks', '4,096']] : [['pretend ducks', '1']]; },
@@ -801,13 +815,15 @@ export const figures = {
           if (r >= 0.5) { big.fall(0); big.setJoints(big.stand); big.root.position.x = -20; }
           if (r > 0.5 && !api._reset) { api._reset = true; ctx.say('RESET', V(-20, 160, 10), { sound: 'pop', cls: 'is-blue' }); }
         }, end() { api._oops = api._reset = false; big.root.scale.setScalar(0.55); } },
-        { dur: 2.6, start() { crowd.visible = true; floorG.visible = true; ctx.sound('swish'); }, run(u) {
+        { dur: 2.6, start() { crowd.visible = true; floorG.visible = true; lens.visible = true; ctx.sound('swish'); }, run(u) {
           simFloor.scale.setScalar(Math.max(0.01, ease.out(seg(u, 0, 0.5))));
           big.root.scale.setScalar(0.55 * Math.max(0.01, 1 - ease.in(seg(u, 0, 0.4))));
           world.visible = u < 0.4; show(worldLabel, u < 0.3);
           crowdState.grow = ease.out(seg(u, 0.2, 1));
           setCrowd(crowdState.grow, t, 0, 0);
-        }, end() { big.root.visible = false; crowdState.grow = 1; } },
+          lens.scale.setScalar(Math.max(0.01, ease.out(seg(u, 0.5, 1))));
+          show(lensLabel, u > 0.8);
+        }, end() { big.root.visible = false; crowdState.grow = 1; lens.scale.setScalar(1); } },
         { dur: 3.0, run(u) { crowdState.falls = ease.out(seg(u, 0, 0.3)); } },
         { dur: 3.0, start() { brainG.visible = true; show(brainLabel, true); ctx.sound('whirr'); }, run(u) {
           brain.position.y = lerp(150, 210, ease.out(seg(u, 0, 0.3)));
@@ -818,6 +834,19 @@ export const figures = {
       idle(time, dt) {
         t += dt;
         if (crowd.visible) setCrowd(crowdState.grow, t, crowdState.falls, crowdState.sync);
+        if (lens.visible) {
+          nine.forEach((d, i) => {
+            const faller = i === 1 || i === 5 || i === 6;
+            if (faller && crowdState.falls > 0.05) {
+              const cyc = (t * 0.35 + i * 0.13) % 1;
+              d.fall((cyc < 0.25 ? Math.sin((cyc / 0.25) * Math.PI) : 0) * crowdState.falls, 'forward');
+              d.setJoints(d.stand);
+            } else {
+              d.fall(0);
+              d.walkPose(t * 1.6 + lerp(i * 0.7, 0, crowdState.sync), { stride: 0, lift: 10 });
+            }
+          });
+        }
       },
     };
     api.reset();
@@ -1016,9 +1045,12 @@ export const figures = {
       if (!over) limitHit = false;
     };
     let base = P0;
+    // the name is printed small on the card, so it is also said above it, big enough to read
+    const cardName = ctx.label('Bow', V(150, 150, 10), { cls: 'is-big is-accent' });
     const nameCard = (name) => {
       const fresh = K.duckCard({ ...K.CARDS.yours, name }, { w: 72, h: 100 });
       blank.children.forEach((c) => { if (c.material && c.material.map) c.material = fresh.children[1].material; });
+      show(cardName, name === 'Bow');
     };
     const api = {
       group,
