@@ -215,7 +215,7 @@ td code { white-space: normal; }
   .brand { font-size: .93rem; }
   .brand img { width: 32px; height: 32px; }
   .brand small { font-size: .65rem; }
-  .site-nav { gap: 1.5rem; width: 100%; justify-content: space-between; }
+  .site-nav { gap: .8rem; width: 100%; justify-content: space-between; }
   .site-nav a { font-size: .78rem; padding-block: .55rem; }
   .site-nav .nav-source { padding: .2rem .8rem; }
   .hero { padding: 35px 0 38px; }
@@ -257,6 +257,11 @@ td code { white-space: normal; }
   .docs-content h2 { font-size: 1.65rem; margin-top: 2.5rem; }
   .docs-content .lede { font-size: 1.05rem; }
   .privacy-wrap { padding-top: 2.5rem; }
+}
+@media (max-width: 380px) {
+  .site-nav { gap: .5rem; }
+  .site-nav a { font-size: .72rem; }
+  .site-nav .nav-source { padding: .2rem .6rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
@@ -594,4 +599,233 @@ td code { white-space: normal; }
   .pk-pack-page .pk-cards { display: block; width: 196mm; margin: 0 auto; font-size: 0; line-height: 0; }
   .pk-pack-page .pk-cards > li { display: inline-block; width: 98mm; height: 130mm; vertical-align: top; break-inside: avoid; page-break-inside: avoid; font-size: 12pt; line-height: 1.2; }
   .pk-pack-page .pk-card { width: 98mm; height: 130mm; overflow: hidden; border-radius: 0; outline: .25mm dashed #9a9aa2; outline-offset: -.125mm; }
+}
+
+/* ===================================================================== Books
+   Three reference books at /books/. Without JavaScript a book is one long
+   document: each lesson's page beside its figure's steps, then its notes. With
+   it, /books/engine/book.js lays the same nodes onto a 3D book (html.bk-3d) or,
+   on a narrow screen, shows one lesson at a time with its figure in a card
+   (html.bk-flat). Every class the engine adds starts bk-. */
+.book-page main { padding-bottom: 3rem; }
+.book-intro { padding: 56px 0 28px; }
+.book-intro-page { max-width: 46rem; }
+.book-eyebrow { color: var(--accent); font-size: .85rem; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; margin-bottom: .6rem; }
+.book-intro h1 { font-size: clamp(2.4rem, 5.6vw, 4rem); }
+.book-intro .lede { font-size: clamp(1.08rem, 1.6vw, 1.25rem); color: var(--dim); max-width: 44ch; }
+.book-for { font-size: .95rem; }
+.book-toc { margin: 1.4rem 0 0; padding: 0; list-style: none; counter-reset: toc; columns: 2 16rem; column-gap: 2rem; }
+.book-toc li { counter-increment: toc; margin: 0 0 .45rem; break-inside: avoid; }
+.book-toc a { display: grid; grid-template-columns: 2rem 1fr; text-decoration: none; color: var(--ink); line-height: 1.3; }
+.book-toc a::before { content: counter(toc); color: var(--accent); font-weight: 700; }
+.book-toc a:hover span { text-decoration: underline; text-decoration-color: var(--brand); }
+.book-how { margin-top: 1.4rem; font-size: .92rem; color: var(--dim); max-width: 60ch; }
+
+.lesson { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem 3rem; padding: 56px 0; border-top: 1px solid var(--line); }
+.lesson-page { min-width: 0; }
+.lesson-page .kicker { color: var(--accent); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 .5rem; }
+.lesson-page h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); margin-bottom: 1rem; }
+.lesson-page .rule { margin: 1.1rem 0; padding: .75rem 1rem; border-left: 3px solid var(--brand); background: var(--tint); border-radius: 0 12px 12px 0; font-weight: 560; }
+.lesson-page .rule code, .lesson-notes code { font-size: .88em; }
+.predict { margin: 1.4rem 0 0; padding: .9rem 1rem 1rem; border: 1.5px solid var(--line); border-radius: 14px; }
+.predict legend { padding: 0 .4rem; font-weight: 750; color: var(--accent); }
+.predict > p { margin: 0 0 .5rem; font-weight: 560; }
+.predict label { display: flex; gap: .6rem; align-items: baseline; margin: .15rem 0; padding: .35rem .55rem; border-radius: 9px; cursor: pointer; }
+.predict label:hover { background: var(--tint); }
+.predict input { accent-color: var(--accent-fill); margin: 0; flex: none; transform: translateY(.1em); }
+.predict input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.predict details { margin-top: .6rem; }
+.predict summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.predict details p { margin: .5rem 0 0; }
+.predict.is-revealed label.is-answer { outline: 2px solid var(--good); background: color-mix(in srgb, var(--good) 13%, transparent); }
+.predict.is-revealed label.is-wrong { outline: 2px dashed var(--warn); }
+.lesson-figure { margin: 0; min-width: 0; padding: 1.25rem 1.4rem; background: var(--card); border: 1px solid var(--soft-line); border-radius: 18px; align-self: start; }
+.lesson-figure > p.figure-label { margin: 0 0 .6rem; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+.figure-steps { margin: 0 0 1rem; padding-left: 1.4rem; }
+.figure-steps li { margin: .35rem 0 .55rem; }
+.lesson-figure figcaption { color: var(--dim); font-size: .92rem; margin-bottom: .8rem; }
+.big-idea { margin: 0; padding: .7rem .9rem; border-radius: 12px; background: var(--tint); font-weight: 600; }
+.lesson-notes { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.lesson-notes > section { min-width: 0; }
+.lesson-notes > section { background: var(--card); border: 1px solid var(--soft-line); border-radius: 16px; padding: 1.1rem 1.2rem; font-size: .92rem; }
+.lesson-notes h3 { font-size: 1rem; margin-bottom: .55rem; }
+.lesson-notes p, .lesson-notes li { color: var(--dim); }
+.lesson-notes p:last-child { margin-bottom: 0; }
+.lesson-notes ul, .lesson-notes ol { margin: 0; }
+.lesson-notes pre { margin: .5rem 0; padding: .6rem .75rem; overflow-x: auto; background: var(--bg); border: 1px solid var(--soft-line); border-radius: 10px; font-size: .8rem; }
+.book-next { padding-top: 2rem; border-top: 1px solid var(--line); }
+
+/* The shelf at /books/. */
+.shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin-top: 2rem; }
+.shelf-book { display: grid; grid-template-rows: auto 1fr; gap: 1rem; text-decoration: none; color: var(--ink); }
+.shelf-cover { position: relative; aspect-ratio: 3 / 3.2; border-radius: 6px 14px 14px 6px; padding: 12% 10%; display: grid; align-content: start; color: var(--c-ink); background: var(--c); box-shadow: inset 10px 0 0 rgba(0,0,0,.14), 0 14px 26px rgba(0,0,0,.18); transition: transform .2s ease; }
+.shelf-book:hover .shelf-cover, .shelf-book:focus-visible .shelf-cover { transform: translateY(-5px) rotate(-.6deg); }
+.shelf-label { background: #fbf6ea; color: var(--c-ink); border: 3px solid var(--c-ink); border-radius: 12px; padding: .9rem .9rem 1rem; text-align: center; }
+.shelf-label small { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.shelf-label strong { display: block; margin-top: .3rem; font: 700 clamp(1.15rem, 2.2vw, 1.55rem)/1.1 ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.shelf-beginner { --c: #f08c12; --c-ink: #5a2f00; }
+.shelf-intermediate { --c: #2c64c0; --c-ink: #0d244a; }
+.shelf-advanced { --c: #3b3e47; --c-ink: #15161a; }
+.shelf-text h2 { font-size: 1.3rem; margin: 0 0 .35rem; }
+.shelf-text p { color: var(--dim); font-size: .95rem; margin: 0 0 .5rem; }
+.shelf-text .shelf-for { color: var(--ink); font-weight: 600; font-size: .88rem; }
+
+@media (max-width: 900px) {
+  /* minmax(0, ...) so a long line in a code block scrolls instead of widening the page */
+  .lesson { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .lesson-notes { grid-template-columns: minmax(0, 1fr); }
+  .shelf { grid-template-columns: 1fr; max-width: 30rem; }
+  .shelf-book { grid-template-columns: 9rem 1fr; grid-template-rows: none; align-items: start; }
+}
+
+/* ---------------------------------------------------------------- live */
+
+html.bk-live .lesson-figure > .figure-steps,
+html.bk-live .lesson-figure > figcaption,
+html.bk-live .lesson-figure > .big-idea,
+html.bk-live .lesson-figure > .figure-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.bk-announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+html.bk-3d .book-page main > .book-intro,
+html.bk-3d .book-page main > .lesson,
+html.bk-3d .book-page main > .book-next { display: none; }
+html.bk-3d .book-page main { padding-bottom: 0; }
+.bk-stage { position: relative; height: calc(100svh - 83px); min-height: 560px; overflow: hidden; background: #e4d5bb; }
+.bk-stage[hidden] { display: none; }
+.bk-gl, .bk-css3d { position: absolute; inset: 0; }
+.bk-gl { display: block; }
+
+.bk-page, .bk-rpage { width: 600px; height: 780px; color: var(--ink); }
+.bk-page { padding: 46px 52px 28px; overflow: auto; scrollbar-width: thin; font-size: 15.5px; line-height: 1.48; }
+.bk-page .lesson-page h2 { font-size: 30px; line-height: 1.12; margin: 0 0 12px; }
+.bk-page .kicker { font-size: 12.5px; }
+.bk-page p { margin: 0 0 10px; }
+.bk-page .rule { margin: 14px 0; padding: 10px 14px; }
+.bk-page .predict { margin-top: 16px; padding: 10px 12px 12px; }
+.bk-page .predict label { padding: 4px 8px; }
+.bk-page.is-intro { padding: 64px 60px; }
+.bk-page.is-intro .book-eyebrow { font-size: 13px; }
+.bk-page.is-intro h1 { font-size: 50px; margin: 0 0 16px; }
+.bk-page.is-intro .lede { font-size: 19px; }
+.bk-page.is-intro .book-toc { columns: 1; margin-top: 18px; }
+.bk-page.is-intro .book-toc li { margin-bottom: 5px; font-size: 15.5px; }
+.bk-page.is-intro .book-how { display: none; }
+.book-beginner .bk-page { font-size: 16.5px; }
+.book-beginner .bk-page .lesson-page h2 { font-size: 32px; }
+.book-advanced .bk-page { font-size: 14.8px; }
+
+.bk-rpage { position: relative; transition: opacity .25s ease; }
+.bk-rpage.is-fading { opacity: 0; }
+.bk-ui-top { position: absolute; top: 24px; left: 26px; right: 26px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.bk-badge { font-size: 11px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; border: 1.5px solid currentColor; color: var(--dim); }
+.bk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.bk-chip { display: inline-flex; gap: 6px; align-items: baseline; padding: 4px 10px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
+.bk-chip-k { color: var(--dim); }
+.bk-chip-v { font-weight: 700; font-variant-numeric: tabular-nums; }
+.bk-steps { position: absolute; left: 22px; top: 86px; width: 152px; margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.bk-steps li { margin: 0; }
+.bk-step { width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--card); color: var(--ink); font: 650 14px/1.2 ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: left; cursor: default; }
+.bk-step-n { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12.5px; background: var(--bg); border: 1.5px solid var(--line); }
+.bk-step[data-state="next"] { cursor: pointer; border-color: var(--brand); background: var(--accent-fill); color: #1d1d1f; box-shadow: 0 3px 0 #a65a00; }
+.bk-step[data-state="next"] .bk-step-n { background: #fff; border-color: #a65a00; color: #1d1d1f; }
+.bk-step[data-state="next"]:hover { background: #ffb340; }
+.bk-step[data-state="running"] { border-color: var(--brand); background: var(--tint); }
+.bk-step[data-state="done"] { opacity: .78; }
+.bk-step[data-state="done"] .bk-step-n { font-size: 0; background: var(--good); border-color: var(--good); }
+.bk-step[data-state="done"] .bk-step-n::after { content: ""; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2.5px 2.5px; transform: translateY(-1px) rotate(-45deg); }
+.bk-step[data-state="later"] { opacity: .45; }
+.bk-step:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.bk-ui-bottom { position: absolute; left: 26px; right: 26px; bottom: 24px; display: grid; gap: 9px; }
+.bk-caption { margin: 0; min-height: 4.4em; font-size: 15px; line-height: 1.45; }
+.bk-caption strong { color: var(--accent); }
+.bk-verdict { margin: 0; font-weight: 700; font-size: 14.5px; color: var(--warn); }
+.bk-next { margin: 0; font-size: 14px; }
+.bk-step[aria-disabled="true"] { cursor: default; }
+/* a prediction's answer waits for its figure */
+.bk-wait { margin: .45rem 0 0; color: var(--dim); font-size: .92em; font-style: italic; }
+.bk-verdict[data-right="true"] { color: var(--good); }
+.bk-bigidea { margin: 0; padding: 9px 12px; border-radius: 12px; background: var(--tint); font-weight: 650; font-size: 15px; line-height: 1.35; }
+.bk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.bk-actions button, .bk-btn { white-space: nowrap; min-height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: 560 14px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; cursor: pointer; }
+.bk-actions button:hover:not(:disabled), .bk-btn:hover:not(:disabled) { border-color: var(--brand); }
+.bk-actions button:disabled, .bk-btn:disabled { opacity: .45; cursor: default; }
+.bk-actions button:focus-visible, .bk-btn:focus-visible, .bk-menu-item:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.bk-slider { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
+.bk-slider input { width: 100%; accent-color: var(--accent-fill); }
+.bk-slider-out { font-variant-numeric: tabular-nums; min-width: 4.5em; text-align: right; }
+
+.bk-label { --z: var(--bk-zoom, 1); padding: calc(3px * var(--z)) calc(9px * var(--z)); border-radius: 999px; background: #fffaf0; color: #2b2620; border: 1.5px solid #2b2620; font: 650 calc(13px * var(--z))/1.25 ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; white-space: nowrap; pointer-events: none !important; transition: opacity .2s ease; }
+.bk-label.is-big { font-size: calc(16px * var(--z)); padding: calc(4px * var(--z)) calc(11px * var(--z)); }
+.bk-label.is-small { font-size: calc(11px * var(--z)); padding: calc(2px * var(--z)) calc(7px * var(--z)); }
+.bk-label.is-accent { background: #ff9500; color: #1d1d1f; }
+.bk-label.is-blue { background: #2a64c9; color: #fff; border-color: #0d244a; }
+.bk-label.is-green { background: #1b6e3e; color: #fff; border-color: #0b3a20; }
+.bk-label.is-red { background: #d8432e; color: #fff; border-color: #5a1208; }
+.bk-label.is-plain { background: transparent; border-color: transparent; }
+.bk-label.is-hidden { opacity: 0 !important; }
+.bk-say { font: 800 30px/1 ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", -apple-system, BlinkMacSystemFont, sans-serif; color: #ff9500; -webkit-text-stroke: 1.5px #2b2620; paint-order: stroke fill; text-shadow: 2px 2px 0 #2b2620; letter-spacing: .02em; white-space: nowrap; pointer-events: none !important; }
+.bk-say.is-blue { color: #6ea2ff; }
+.bk-say.is-green { color: #7ad69a; }
+.bk-say.is-red { color: #ff7a63; }
+
+.bk-barwrap { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 5; max-width: calc(100% - 24px); }
+.bk-bar { display: flex; align-items: center; gap: 6px; padding: 6px; background: var(--header); border: 1px solid var(--soft-line); border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.14); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.bk-b-prev, .bk-b-next { width: 40px; padding: 0; font-size: 24px; line-height: 1; }
+.bk-where { display: grid; text-align: center; min-width: 200px; max-width: 300px; padding: 0 6px; line-height: 1.2; }
+.bk-where-num { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--dim); }
+.bk-where-title { font-size: 14px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bk-menu { position: absolute; left: 0; bottom: calc(100% + 10px); width: min(420px, calc(100vw - 24px)); max-height: min(62vh, 520px); overflow: auto; padding: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 14px 36px rgba(0,0,0,.2); }
+.bk-menu[hidden] { display: none; }
+.bk-menu-next { margin: 10px 8px 4px; font-size: 14px; }
+.bk-hint { margin: 6px 8px 2px; color: var(--dim); font-size: 13px; }
+.bk-menu-list { list-style: none; margin: 0; padding: 0; }
+.bk-menu-list li { margin: 0; }
+.bk-menu-item { width: 100%; display: grid; grid-template-columns: 2rem 1fr; gap: .4rem; align-items: baseline; padding: .55rem .7rem; border: 0; border-radius: 10px; background: none; color: var(--ink); font: 550 .95rem/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; text-align: left; cursor: pointer; }
+.bk-menu-item:hover, .bk-menu-item[aria-current="page"] { background: var(--tint); }
+.bk-menu-num { color: var(--accent); font-weight: 750; }
+.bk-notes { position: absolute; top: 14px; right: 14px; bottom: 86px; width: min(460px, 46%); z-index: 6; overflow: auto; padding: 16px 20px 20px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 14px 36px rgba(0,0,0,.2); }
+.bk-notes[hidden] { display: none; }
+.bk-notes-head { position: sticky; top: -16px; display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: -16px -20px 12px; padding: 14px 20px 10px; background: var(--card); border-bottom: 1px solid var(--soft-line); }
+.bk-notes-title { margin: 0; font-weight: 700; }
+.bk-notes .lesson-notes { display: grid; grid-template-columns: 1fr; gap: .8rem; }
+
+/* one lesson at a time, for narrow screens */
+html.bk-flat .book-page main > .book-intro:not(.is-current),
+html.bk-flat .book-page main > .lesson:not(.is-current),
+html.bk-flat .book-page main > .book-next { display: none; }
+html.bk-flat.bk-at-end .book-page main > .book-next { display: block; }
+html.bk-flat .book-page main { padding-bottom: 96px; }
+html.bk-flat .lesson { border-top: 0; padding-top: 28px; }
+html.bk-flat .bk-barwrap { position: fixed; bottom: max(10px, env(safe-area-inset-bottom)); width: min(560px, calc(100% - 16px)); max-width: none; }
+html.bk-flat .bk-bar { width: 100%; }
+html.bk-flat .bk-where { flex: 1; min-width: 0; max-width: none; }
+html.bk-flat .bk-b-notes, html.bk-flat .bk-b-sound, html.bk-flat .bk-b-view { display: none; }
+html.bk-flat .bk-where-num { white-space: nowrap; }
+.bk-menu-foot { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 4px 2px; padding-top: 8px; border-top: 1px solid var(--soft-line); }
+.bk-flatcard { margin: 0 0 1rem; }
+.bk-flatstage { position: relative; aspect-ratio: 1 / 1; max-height: 64svh; width: 100%; border-radius: 14px; overflow: hidden; background: #e4d5bb; }
+.bk-flatcard { position: relative; }
+.bk-flatui .bk-ui { position: static; }
+.bk-flatcard .bk-ui-top { position: static; margin: .6rem 0 0; }
+.bk-flatui .bk-steps { position: static; width: auto; display: flex; flex-wrap: wrap; gap: 6px; margin: .8rem 0 .6rem; }
+.bk-flatui .bk-step { width: auto; padding: 6px 10px 6px 7px; font-size: 13.5px; }
+.bk-flatui .bk-ui-bottom { position: static; }
+.bk-flatui .bk-caption { min-height: 0; }
+@media (prefers-color-scheme: dark) {
+  .bk-stage, .bk-flatstage { background: #15120f; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bk-rpage { transition: none; }
+  .shelf-cover { transition: none; }
+}
+@media print {
+  .bk-stage, .bk-barwrap, .bk-flatcard, .bk-wait { display: none !important; }
+  /* paper cannot play a pop-up, so the figure's words print in its place */
+  html.bk-live .lesson-figure > .figure-steps,
+  html.bk-live .lesson-figure > figcaption,
+  html.bk-live .lesson-figure > .big-idea,
+  html.bk-live .lesson-figure > .figure-label { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
+  html.bk-3d .book-page main > .lesson, html.bk-3d .book-page main > .book-intro,
+  html.bk-flat .book-page main > .lesson, html.bk-flat .book-page main > .book-intro { display: grid !important; }
+  .lesson { break-inside: avoid; }
 }

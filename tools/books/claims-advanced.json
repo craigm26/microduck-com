@@ -1,0 +1,498 @@
+{
+ "lessons": {
+  "intro": {
+   "ten": {
+    "count": "the lessons in this book"
+   }
+  },
+  "lesson-1": {
+   "0.99": {
+    "source": "rl-velocity",
+    "quote": "gamma=0.99"
+   },
+   "0.95": {
+    "source": "rl-velocity",
+    "quote": "lam=0.95"
+   },
+   "0.01": {
+    "source": "rl-velocity",
+    "quote": "desired_kl=0.01"
+   },
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "1": {
+    "count": "the 1 in 1/(1 − γ), the weight of a reward paid now; t + 1 is the next tick; obs[1,61] reads one observation at a time"
+   },
+   "100": {
+    "derived": "1 / (1 - 0.99)"
+   },
+   "0.37": {
+    "derived": "0.99 ** 100"
+   },
+   "2": {
+    "derived": "100 / 50"
+   },
+   "20": {
+    "derived": "1000 / 50"
+   },
+   "10": {
+    "derived": "1 / (1 - 0.9)"
+   },
+   "0.2": {
+    "derived": "10 / 50"
+   },
+   "0.9": {
+    "toy": "a lower discount for the exercise, to set beside Microduck's 0.99"
+   },
+   "300": {
+    "toy": "the largest power in the spreadsheet exercise"
+   },
+   "two": {
+    "count": "the two numbers the arithmetic starts from, γ and the 50 Hz tick"
+   },
+   "200": {
+    "editorial": "an example distance, twice the 100-tick horizon"
+   },
+   "0.13": {
+    "derived": "0.99 ** 200"
+   }
+  },
+  "lesson-2": {
+   "0.95": {
+    "source": "rl-velocity",
+    "quote": "lam=0.95"
+   },
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "0": {
+    "count": "λ = 0, the low end of λ's range, where the advantage is one-step TD"
+   },
+   "1": {
+    "count": "λ = 1, the high end of λ's range, where the advantage is the sampled return minus V; t + 1 is the next step"
+   },
+   "two": {
+    "count": "the two networks PPO trains, the actor and the critic"
+   },
+   "24": {
+    "source": "rl-velocity",
+    "quote": "num_steps_per_env=24"
+   }
+  },
+  "lesson-3": {
+   "0.2": {
+    "source": "rl-velocity",
+    "quote": "clip_param=0.2"
+   },
+   "0.01": {
+    "source": "rl-velocity",
+    "quote": "entropy_coef=0.01, num_learning_epochs=5, num_mini_batches=4, learning_rate=1.0e-3, schedule=\"adaptive\", gamma=0.99, lam=0.95, desired_kl=0.01,"
+   },
+   "5": {
+    "source": "rl-velocity",
+    "quote": "num_learning_epochs=5"
+   },
+   "4": {
+    "source": "rl-velocity",
+    "quote": "num_mini_batches=4"
+   },
+   "0.001": {
+    "source": "rl-velocity",
+    "quote": "learning_rate=1.0e-3",
+    "means": "1.0e-3 is 0.001"
+   },
+   "1.0": {
+    "source": "rl-velocity",
+    "quote": "\"init_std\": 1.0"
+   },
+   "24": {
+    "source": "rl-velocity",
+    "quote": "num_steps_per_env=24"
+   },
+   "4,096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "4096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "98,304": {
+    "derived": "4096 * 24"
+   },
+   "20": {
+    "derived": "5 * 4"
+   },
+   "1.2": {
+    "derived": "1 + 0.2"
+   },
+   "0.8": {
+    "derived": "1 - 0.2"
+   },
+   "1.3": {
+    "toy": "the example ratio in the question"
+   },
+   "1": {
+    "count": "ρ = 1, the ratio when the new policy and the old agree; Â = 1 and Â = −1 are the unit advantages of the exercise and the figure"
+   },
+   "0": {
+    "count": "the sign of the advantage, Â > 0 or Â < 0, and the zero gradient past the clip"
+   },
+   "figure": {
+    "0.8": {
+     "derived": "1 - 0.2"
+    },
+    "1": {
+     "count": "the middle tick of the ratio axis, ρ = 1, where nothing has changed"
+    },
+    "1.2": {
+     "derived": "1 + 0.2"
+    }
+   }
+  },
+  "lesson-4": {
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "3": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "13": {
+    "source": "md-robotd",
+    "quote": "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]"
+   },
+   "4": {
+    "source": "md-robotd",
+    "quote": "command = vel(3) + head(4) + body(6)"
+   },
+   "48": {
+    "source": "md-robotd",
+    "quote": "48..51 vx, vy, vyaw"
+   },
+   "60": {
+    "source": "md-robotd",
+    "quote": "60 body yaw"
+   },
+   "6": {
+    "source": "rl-velocity",
+    "quote": "up-to-6° random-axis IMU mounting error"
+   },
+   "0.015": {
+    "source": "rl-velocity",
+    "quote": "ENCODER_BIAS_RANGE = (-0.015, 0.015)"
+   },
+   "1": {
+    "source": "rl-velocity",
+    "quote": "cfg.observations[\"actor\"].terms[\"joint_vel\"].delay_min_lag = 1"
+   },
+   "0": {
+    "source": "rl-velocity",
+    "quote": "cfg.observations[\"actor\"].terms[\"base_ang_vel\"].delay_min_lag = 0"
+   },
+   "1.0": {
+    "source": "rl-velocity",
+    "quote": "joint_pos_action.scale = 1.0"
+   },
+   "512": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "256": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "128": {
+    "source": "rl-velocity",
+    "quote": "hidden_dims=(512, 256, 128)"
+   },
+   "197,774": {
+    "derived": "61*512 + 512 + 512*256 + 256 + 256*128 + 128 + 128*14 + 14"
+   },
+   "0.9": {
+    "source": "md-robotd-toml",
+    "quote": "Unset resolves per mode: 0.9 walking"
+   },
+   "two": {
+    "count": "Pollen's two repositories, microduck_rl and microduck"
+   }
+  },
+  "lesson-5": {
+   "0": {
+    "source": "rl-agents",
+    "quote": "cost functions return ≥ 0 → negative weight"
+   },
+   "4": {
+    "source": "rl-agents",
+    "quote": "the same action_rate weight is 4× weaker under a 4×-larger positive task stack"
+   },
+   "quarter": {
+    "source": "rl-agents",
+    "quote": "the same action_rate weight is 4× weaker under a 4×-larger positive task stack",
+    "means": "4× weaker is a quarter as strong: the same weight counts a quarter as much"
+   },
+   "1": {
+    "count": "t + 1, the next state in the potential difference"
+   },
+   "two": {
+    "count": "the two rewards the figure sets side by side, gated and potential, and the two states a potential difference is taken between"
+   },
+   "figure": {
+    "1": {
+     "toy": "the point the gated duck is paid each tick it stays low, in the toy picture"
+    }
+   },
+   "1999": {
+    "editorial": "the year Ng, Harada and Russell published potential-based shaping"
+   }
+  },
+  "lesson-6": {
+   "800": {
+    "source": "rl-readme",
+    "quote": "a ~800 g, ~25 cm tall bipedal robot"
+   },
+   "14": {
+    "source": "rl-agents",
+    "quote": "robot with 14 Dynamixel XL330 servos"
+   },
+   "1": {
+    "source": "rl-readme",
+    "quote": "±1° of gear play (2° total)"
+   },
+   "2": {
+    "source": "rl-readme",
+    "quote": "±1° of gear play (2° total)"
+   },
+   "figure": {
+    "6": {
+     "toy": "the drawing magnifies the gear play six times so it can be seen"
+    }
+   },
+   "51": {
+    "source": "rl-infer",
+    "quote": "Old policies (51D obs"
+   },
+   "61": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "fifteen": {
+    "source": "md-robotd",
+    "quote": "Fifteen servos and the"
+   }
+  },
+  "lesson-7": {
+   "0.7": {
+    "source": "rl-velocity",
+    "quote": "cfg.events[\"foot_friction\"].params[\"ranges\"] = (0.7, 1.3)"
+   },
+   "1.3": {
+    "source": "rl-velocity",
+    "quote": "cfg.events[\"foot_friction\"].params[\"ranges\"] = (0.7, 1.3)"
+   },
+   "15": {
+    "source": "rl-velocity",
+    "quote": "Capped at ±15 mm"
+   },
+   "5": {
+    "source": "rl-velocity",
+    "quote": "±5% applied to BOTH mass and inertia together"
+   },
+   "0.9": {
+    "source": "rl-velocity",
+    "quote": "JOINT_FRICTION_RANDOMIZATION_RANGE = (0.9, 1.1)"
+   },
+   "1.1": {
+    "source": "rl-velocity",
+    "quote": "JOINT_FRICTION_RANDOMIZATION_RANGE = (0.9, 1.1)"
+   },
+   "0.3": {
+    "source": "rl-velocity",
+    "quote": "VELOCITY_PUSH_RANGE = (-0.3, 0.3)"
+   },
+   "3": {
+    "source": "rl-velocity",
+    "quote": "Apply pushes every 3-6 seconds"
+   },
+   "6": {
+    "source": "rl-velocity",
+    "quote": "Apply pushes every 3-6 seconds"
+   },
+   "95": {
+    "source": "site-science",
+    "quote": "95 to 98% of the pre-registered short rows end within 10 cm and 15° of where they should"
+   },
+   "98": {
+    "source": "site-science",
+    "quote": "95 to 98% of the pre-registered short rows end within 10 cm and 15° of where they should"
+   },
+   "10": {
+    "source": "site-science",
+    "quote": "95 to 98% of the pre-registered short rows end within 10 cm and 15° of where they should"
+   },
+   "33": {
+    "source": "site-science",
+    "quote": "Of the packs' rows of 10 cards or more, only 33 to 42% land under randomization"
+   },
+   "42": {
+    "source": "site-science",
+    "quote": "Of the packs' rows of 10 cards or more, only 33 to 42% land under randomization"
+   },
+   "37": {
+    "source": "site-science",
+    "quote": "Long rows under randomization at 10 Hz rose from 37% to 42%"
+   },
+   "63": {
+    "source": "site-science",
+    "quote": "Long rows under randomization at 10 Hz rose from 42% to 63%"
+   },
+   "97.5": {
+    "source": "site-science",
+    "quote": "Long rows under randomization at 10 Hz rose from 63% to 97.5%"
+   },
+   "7": {
+    "source": "site-science",
+    "quote": "Long challenges play in chapters of up to 7 cards"
+   },
+   "1": {
+    "source": "site-science",
+    "quote": "the upper end of the Wilson 95% interval on the fall rate is at most 1% (with zero falls, that takes 381 rows)"
+   }
+  },
+  "lesson-8": {
+   "381": {
+    "source": "site-science",
+    "quote": "the upper end of the Wilson 95% interval on the fall rate is at most 1% (with zero falls, that takes 381 rows)"
+   },
+   "95": {
+    "source": "site-science",
+    "quote": "the upper end of the Wilson 95% interval on the fall rate is at most 1% (with zero falls, that takes 381 rows)"
+   },
+   "1": {
+    "source": "site-science",
+    "quote": "the upper end of the Wilson 95% interval on the fall rate is at most 1% (with zero falls, that takes 381 rows)"
+   },
+   "12": {
+    "source": "site-science",
+    "quote": "once per session of 12 rows, so 400 rows are about 34 ducks"
+   },
+   "400": {
+    "source": "site-science",
+    "quote": "once per session of 12 rows, so 400 rows are about 34 ducks"
+   },
+   "34": {
+    "source": "site-science",
+    "quote": "once per session of 12 rows, so 400 rows are about 34 ducks"
+   },
+   "2026": {
+    "source": "site-science",
+    "quote": "Written into docs/PACKS.md on 2026-10-15, before any result was in, and not changed since."
+   },
+   "1.96": {
+    "editorial": "z = 1.96, the standard normal quantile a two-sided 95% interval uses: a statistics constant, not a measurement"
+   },
+   "2": {
+    "editorial": "the square in the Wilson formula's z²"
+   },
+   "0.037": {
+    "derived": "1.96 ** 2 / (100 + 1.96 ** 2)"
+   },
+   "3.7": {
+    "derived": "100 * 1.96 ** 2 / (100 + 1.96 ** 2)"
+   },
+   "3": {
+    "editorial": "the rule of three, a standard rule of thumb: with zero events in n trials the 95% upper bound is near 3/n, which is 3% at n = 100"
+   },
+   "three": {
+    "editorial": "the name of the rule of three"
+   },
+   "100": {
+    "toy": "the example's row count: no falls in 100 rows; and the 100 in \"95 times in 100\", which is what 95% means"
+   },
+   "1000": {
+    "toy": "an example n in the snippet"
+   },
+   "0": {
+    "count": "zero falls, the case the bound is for"
+   },
+   "10": {
+    "derived": "1.96 * 1.96 / (34 + 1.96 * 1.96) * 100"
+   },
+   "two": {
+    "count": "the two bounds, counted by row and counted by duck"
+   }
+  },
+  "lesson-9": {
+   "five": {
+    "source": "kith-llms",
+    "quote": "a table of your own view at five rows a second"
+   },
+   "half": {
+    "source": "site-docs",
+    "quote": "This is the human-feedback half of RLHF"
+   },
+   "two": {
+    "source": "site-docs",
+    "quote": "watch two networks, motions or sequences side by side and pick the better one"
+   }
+  },
+  "lesson-10": {
+   "64": {
+    "source": "rl-agents",
+    "quote": "A 5-iteration smoke test at 64 envs catches ~95% of config errors for cents."
+   },
+   "5": {
+    "source": "rl-agents",
+    "quote": "A 5-iteration smoke test at 64 envs catches ~95% of config errors for cents."
+   },
+   "95": {
+    "source": "rl-agents",
+    "quote": "A 5-iteration smoke test at 64 envs catches ~95% of config errors for cents."
+   },
+   "61": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "14": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "1": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "4.0": {
+    "source": "rl-readme",
+    "quote": "--kind episodic --duration-s 4.0"
+   },
+   "4096": {
+    "source": "rl-readme",
+    "quote": "--env.scene.num-envs 4096"
+   },
+   "0": {
+    "source": "rl-agents",
+    "quote": "every penalty term ≤ 0"
+   }
+  }
+ }
+}

@@ -1,0 +1,190 @@
+{
+ "lessons": {
+  "intro": {
+   "7": {
+    "editorial": "the reading age the book is written for, with a grown-up"
+   },
+   "ten": {
+    "count": "the lessons in this book"
+   }
+  },
+  "lesson-1": {
+   "50": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   },
+   "14": {
+    "source": "rl-readme",
+    "quote": "Joint layout (14 servos)"
+   },
+   "15": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   },
+   "fifteen": {
+    "source": "md-readme",
+    "quote": "a 50 Hz control loop driving fifteen servos"
+   },
+   "10": {
+    "toy": "the length of the classroom activity, in seconds"
+   },
+   "500": {
+    "derived": "50 * 10"
+   },
+   "two": {
+    "source": "rl-readme",
+    "quote": "~25 cm tall bipedal robot",
+    "means": "bipedal: it walks on two legs"
+   }
+  },
+  "lesson-2": {
+   "3": {
+    "source": "site-pond",
+    "quote": "A 3 by 3 board"
+   },
+   "4": {
+    "count": "the cards in the row that reaches the pond"
+   },
+   "four": {
+    "count": "the cards that land in the figure"
+   },
+   "two": {
+    "count": "squares across to the pond in this lesson's puzzle"
+   },
+   "six": {
+    "source": "site-pond",
+    "quote": "Six challenges"
+   },
+   "quarter": {
+    "source": "site-packs",
+    "quote": "One Turn card is a quarter turn, where it stands."
+   }
+  },
+  "lesson-3": {
+   "12": {
+    "derived": "3 * 4"
+   },
+   "twelve": {
+    "count": "the cards of the long row, three for each of four sides"
+   },
+   "2": {
+    "count": "squares on each side of the square path"
+   },
+   "4": {
+    "source": "site-packs",
+    "quote": "Ten challenges on a 4 by 4 board."
+   },
+   "5": {
+    "count": "cards in the short row: Repeat, Walk forward, Walk forward, Turn left, End repeat"
+   },
+   "7": {
+    "derived": "12 - 5"
+   },
+   "four": {
+    "count": "the sides of the square"
+   },
+   "three": {
+    "count": "the cards for each side"
+   },
+   "two": {
+    "count": "the Repeat and End repeat cards, the two ends of the loop"
+   }
+  },
+  "lesson-4": {
+   "two": {
+    "count": "the two rows in the figure"
+   }
+  },
+  "lesson-5": {
+   "280": {
+    "source": "rl-velocity",
+    "quote": "a 280 g head (38% of robot mass)"
+   },
+   "38": {
+    "source": "rl-velocity",
+    "quote": "a 280 g head (38% of robot mass)"
+   },
+   "third": {
+    "source": "rl-velocity",
+    "quote": "a 280 g head (38% of robot mass)",
+    "means": "38% is more than a third, which is about 33%"
+   }
+  },
+  "lesson-6": {
+   "figure": {
+    "1": {
+     "toy": "the toy maze's point for reaching the pond"
+    }
+   }
+  },
+  "lesson-7": {
+   "1": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "2": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "4,096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "4096": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "nine": {
+    "source": "site-docs",
+    "quote": "The Learn tab is nine short lessons"
+   }
+  },
+  "lesson-8": {
+   "30": {
+    "source": "site-packs",
+    "quote": "Tape the board on the floor in 30 cm squares"
+   },
+   "two": {
+    "source": "site-packs",
+    "quote": "Walk and Turn cards on a duck are timed for now: two seconds each"
+   },
+   "4": {
+    "count": "the Walk cards in the row"
+   },
+   "5": {
+    "count": "the tries in the classroom activity"
+   }
+  },
+  "lesson-9": {
+   "0.12": {
+    "source": "kith-llms",
+    "quote": "about 0.12 m/s on the level and 0.15 at most"
+   },
+   "0.15": {
+    "source": "kith-llms",
+    "quote": "about 0.12 m/s on the level and 0.15 at most"
+   },
+   "0.14": {
+    "source": "kith-llms",
+    "quote": "an old dog (0.14 m/s, a Microduck's own pace"
+   }
+  },
+  "lesson-10": {
+   "0.31": {
+    "source": "rl-velocity",
+    "quote": "head_roll : ±0.31 rad (limit ±20°)"
+   },
+   "20": {
+    "source": "rl-velocity",
+    "quote": "head_roll : ±0.31 rad (limit ±20°)"
+   },
+   "10": {
+    "source": "rl-velocity",
+    "quote": "with ~10% safety margin"
+   },
+   "two": {
+    "count": "the second of the figure's two poses"
+   }
+  }
+ }
+}

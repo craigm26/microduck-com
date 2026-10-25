@@ -169,6 +169,62 @@
 #   * the extractor's read_closed_loop on a copy of duck-studio with the switch
 #     taken out of duck-card-loop.json: "has no enabled_on_robot switch"; and
 #     with DuckCardLoop.offNote renamed: "has no offNote".
+# PROVED ABLE TO FAIL, 2026-10-24, check_books thirty-one times, by
+# tools/books/mutate.py in a throwaway copy of the repository, one defect at a
+# time and every touched file restored byte for byte before the next; the copy
+# passed before the first and after the last:
+#   * a number with no entry in a lesson's words: "beginner lesson-2: prints
+#     '999' and the ledger does not say where it comes from".
+#   * a quote changed to words its source does not say: "'61': rl-readme does
+#     not say "61 numbers from the duck's dreams"".
+#   * 98,304 derived as 4096 * 23: "is 94208, which does not print as 98,304".
+#   * a second script on a book page: "must carry exactly <script ...>".
+#   * the books' script on the docs page: "public/docs/index.html carries a
+#     script tag; only the three book pages may". And again with the gate run
+#     from another directory. Before the gate read the pages from the
+#     repository root, run from anywhere else it read no pages and passed.
+#   * script-src added to the docs policy: "only the books may run scripts".
+#   * the books' policy deleted from _headers: "/books/beginner/ is under 0
+#     security policies in _headers, not exactly one".
+#   * 'unsafe-inline' added to the books' script-src: "the books' policy must
+#     allow the site's own scripts and nothing else".
+#   * a "! Content-Security-Policy" line: "_headers detaches
+#     Content-Security-Policy".
+#   * an https address in a comment in figure code: "names a remote address".
+#   * an em dash in a figure's label: "contains an em dash".
+#   * eval in kit.js: "evaluates code or opens a connection".
+#   * an import of a file that is not there: "imports ./nope.js, which does
+#     not exist".
+#   * "a reward model" in a comment in figure code: "claims a reward model".
+#   * one byte of the vendored three.js changed: "is not the vendored file
+#     tools/books/vendor.sha256 records".
+#   * a prediction whose answer is none of its choices: "must match exactly
+#     one of ['a', 'b', 'c']".
+#   * a prediction's details removed: "needs its answer in a details".
+#   * a lesson naming a figure the engine lacks: "figure 'nosuch' is not in
+#     figures-beginner.js".
+#   * one contents entry renamed: "the contents list does not match".
+#   * lesson-10's id broken: "not lesson-1 to lesson-10".
+#   * a seventh step: "a figure has 2 to 6 steps, not 7".
+#   * '77 feathers' in a figure's label: "figure parts prints '77' with no
+#     ledger entry".
+#   * the training chart's ticks made [0, 750, 1500]: "figure training prints
+#     '750' with no ledger entry".
+#   * a figure entry for a number no figure prints: "the ledger lists '42'
+#     under figure and figure training no longer prints it".
+#   * the "means" taken off "bipedal", which vouches for two: "the quote does
+#     not contain two".
+#   * 500 derived as 50 * 20 / 2: "is derived from 20, which this lesson does
+#     not ledger".
+#   * an entry both derived and a toy: "needs exactly one of source, derived,
+#     toy, count or editorial".
+#   * "eleven" put in a book's meta description: "the head prints 'eleven'".
+#   * 12 put on the shelf: "the shelf prints '12'".
+#   * the books' script put on the shelf: "carries a script tag".
+# Six of these PASSED the gate as it stood before that day's last rules: the
+# run from another directory, the tick, the stale figure entry, the quote
+# without its number, the loose operand and the number in the head. Each rule
+# was written for one of them.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -180,28 +236,28 @@ DUCK_STUDIO="${1:-${DUCK_STUDIO:-$HOME/projects/duck-studio}}"
 
 step() { printf '\n== %s\n' "$1"; }
 
-step "1/8 extract the pinned StudioKit values"
+step "1/9 extract the pinned StudioKit values"
 python3 scripts/extract_kit_sentences.py "$DUCK_STUDIO"
 
-step "2/8 every pinned sentence is on the site"
+step "2/9 every pinned sentence is on the site"
 bash scripts/check_site_sentences.sh
 
-step "3/8 dashes, third parties, the bundle, the shared stylesheet"
+step "3/9 dashes, third parties, the bundle, the shared stylesheet"
 bash scripts/check_site_claims.sh
 
-step "4/8 the Evaluations copy matches what a tester can open"
+step "4/9 the Evaluations copy matches what a tester can open"
 bash scripts/check_evallog_claims.sh
 
-step "5/8 every Duck Card matches the deck, StudioKit, its code and the beta"
+step "5/9 every Duck Card matches the deck, StudioKit, its code and the beta"
 python3 scripts/check_cards.py "$DUCK_STUDIO"
 
-step "6/8 every Duck Card pack is Studio's, and its pages say what it says"
+step "6/9 every Duck Card pack is Studio's, and its pages say what it says"
 python3 scripts/check_packs.py "$DUCK_STUDIO"
 
-step "7/8 every link resolves"
+step "7/9 every link resolves"
 bash scripts/check_links.sh
 
-step "8/8 every page is well formed"
+step "8/9 every page is well formed"
 if command -v xmllint >/dev/null 2>&1; then
   mapfile -d '' html_pages < <(find public -type f -name '*.html' -print0)
   xmllint --html --noout "${html_pages[@]}"
@@ -209,5 +265,8 @@ if command -v xmllint >/dev/null 2>&1; then
 fi
 python3 scripts/check_wellformed.py
 
-printf '\npredeploy: all eight gates passed. Deploy with\n'
+step "9/9 the books: their structure, their one script, and every number's source"
+python3 scripts/check_books.py
+
+printf '\npredeploy: all nine gates passed. Deploy with\n'
 printf '  npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main\n'

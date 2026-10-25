@@ -1,0 +1,15 @@
+{
+ "lessons": {
+  "shelf": {
+   "7": {
+    "editorial": "the reading age Book 1 is written for, with a grown-up"
+   },
+   "ten": {
+    "count": "the lessons in each book"
+   },
+   "three": {
+    "count": "the books on the shelf"
+   }
+  }
+ }
+}
