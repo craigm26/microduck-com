@@ -43,7 +43,7 @@
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 2 of 3 · Intermediate</p>
     <h1 id="book-title">How a Microduck Learns</h1>
     <p class="lede">What the duck's brain sees, what it does, and how thousands of pretend ducks teach it to walk. Ten lessons, with the real numbers.</p>
-    <p class="book-for"><strong>Who it is for:</strong> teens and adults, and anyone who finished Book 1. You never need to write code. Every number comes from the code that trains the real robot, and the notes say where.</p>
+    <p class="book-for"><strong>Who it is for:</strong> teens and adults, and anyone who finished Book 1. You never need to write code. Every number has a source, most of them Pollen's training code, and the notes say where.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>Observe, act, score, repeat</span></a></li>
       <li><a href="#lesson-2"><span>61 numbers</span></a></li>
@@ -66,7 +66,7 @@
     <h2 id="lesson-1-title">Observe, act, score, repeat</h2>
     <p>Every reinforcement learning problem has the same shape. An <strong>agent</strong>, here the duck's brain, gets an <strong>observation</strong> of the world and picks an <strong>action</strong>. The world moves on, and hands back the next observation and a <strong>reward</strong>: one number saying how good that moment was.</p>
     <p>The duck's loop runs 50 times a second. One turn of it is a <strong>step</strong>. The steps from a reset until the duck falls, or time runs out, make an <strong>episode</strong>.</p>
-    <p>The agent is not trying to win one step. It is trying to collect as much reward as it can over the whole episode. That is why a duck learns to take a small loss now, like a careful step, for more later.</p>
+    <p>The agent is not trying to win one step. It is trying to collect as much reward as it can from the steps ahead, counting near ones more than far ones. With Pollen's settings, about the next 2 seconds count most. That is why a duck learns to take a small loss now, like a careful step, for more later.</p>
     <p class="rule">observation → action → next observation and reward → again</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -97,7 +97,7 @@
     <section>
       <h3>For parents and teachers</h3>
       <p>The words in bold are the whole vocabulary of reinforcement learning. A good check: ask a student to name the agent, the observation, the action and the reward in a game they play.</p>
-      <p>A reset is the simulator putting the duck back on its feet. Real robots cannot reset, which is one reason the learning happens in simulation (lesson 6).</p>
+      <p>A reset is the simulator putting the duck back on its feet. A real robot cannot reset in a blink: someone, or its stand-up skill, gets it up, and every fall wears it. That is one reason the learning happens in simulation (lesson 6).</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -115,7 +115,7 @@
     <h2 id="lesson-2-title">61 numbers</h2>
     <p>The duck's brain never sees the room. It sees a list of 61 numbers, 50 times a second.</p>
     <p>3 say how fast its body is turning (a gyroscope) and 3 which way is down. 14 say where each joint is, 14 how fast each is moving, and 14 repeat the actions the brain chose last step. The last 13 are its orders: how fast to walk and turn (3), where to point its head (4), and how to hold its body (6).</p>
-    <p>Every walking, standing and trick brain Pollen Robotics trains reads this same list in the same order, so the robot can swap brains in the middle of a move.</p>
+    <p>Every walking, standing and trick brain Pollen Robotics trains reads this same list in the same order, so the robot can hand over from one brain to another, say from walking to a kick.</p>
     <p>Some things are missing on purpose: the robot has no direct way to measure its own speed, and the ball-kicking brain never sees the ball.</p>
     <p class="rule">3 + 3 + 14 + 14 + 14 + 13 = 61</p>
     <fieldset class="predict" data-answer="b">
@@ -165,7 +165,7 @@
     <h2 id="lesson-3-title">14 motors, 14 numbers</h2>
     <p>Each step, the brain answers with 14 numbers, one per motor, always in the same order: the left leg's 5 joints, then 4 in the neck and head, then the right leg's 5.</p>
     <p>A number is not a speed or a push. It is where the joint should go, measured from a home pose. The motor's own small controller then drives the joint toward that target.</p>
-    <p>Real motors are not instant. They lag behind their orders, their gears have a little slack, and they get weaker as the battery runs down and as they spin faster. The simulator models every one of those, because at this size, the motor is most of the difference between pretend and real.</p>
+    <p>Real motors are not instant. They lag behind their orders, their gears have a little slack, and they get weaker as the battery runs down and as they spin faster. The simulator models the lag and the weakening, and every main task has a twin that adds the gear slack, because at this size, the motor is most of the difference between pretend and real.</p>
     <p class="rule">target = home pose + action</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -214,7 +214,7 @@
     <h2 id="lesson-4-title">A brain made of sums</h2>
     <p>The duck's brain is a <strong>policy</strong>: a function that turns 61 numbers into 14. Pollen's is a small neural network: 61 inputs, three layers of 512, 256 and 128 units, then 14 outputs.</p>
     <p>Each unit multiplies its inputs by <strong>weights</strong>, adds them up with a bias, and bends the total with a simple curve. That is all a unit does. About 198,000 weights and biases, set by training, are the difference between a duck that falls and one that walks.</p>
-    <p>Before the numbers go in, each is shifted and scaled by the average and spread it had in training, so a joint angle and a spin speed count the same. That rescaling is part of the brain, so it is built into the file the robot runs.</p>
+    <p>Before the numbers go in, each is shifted and scaled by the average and spread it had in training, so a joint angle and a spin speed arrive on a similar scale. That rescaling is part of the brain, so it is built into the file the robot runs.</p>
     <p class="rule">61 → 512 → 256 → 128 → 14</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -222,7 +222,7 @@
       <label><input type="radio" name="predict-4" value="a"> The number of layers.</label>
       <label><input type="radio" name="predict-4" value="b"> The weights and biases.</label>
       <label><input type="radio" name="predict-4" value="c"> The 61 inputs.</label>
-      <details><summary>Check your prediction</summary><p><strong>The weights and biases.</strong> The shape is chosen before training and never changes. Training only turns the dials.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>The weights and biases.</strong> The shape is chosen before training and never changes. Training turns the dials, and keeps the rescaling's averages up to date.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -245,7 +245,7 @@
     <section>
       <h3>For parents and teachers</h3>
       <p>The curve each unit uses is called ELU. Without a curve, the three layers would collapse into one big multiplication and the network could only draw straight lines.</p>
-      <p>The network actually outputs an average for each of its 14 numbers, plus how widely to wander around it while practising. On the robot, the average is used.</p>
+      <p>The network actually outputs 14 averages. While practising, the duck tries numbers around them, by a spread it also learns, one per motor. On the robot, the average is used.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -262,7 +262,7 @@
     <p class="kicker">Lesson 5 · The reward</p>
     <h2 id="lesson-5-title">Points for what you want</h2>
     <p>Nobody writes the walk. They write the score, and training finds a walk that earns it.</p>
-    <p>The walking duck's score is a sum of terms, worked out every step. It earns points for matching the speed it was asked for, keeping its body upright, lifting its feet, and pointing its head where asked. It loses points for jerky actions, sliding its feet, and its legs knocking into each other.</p>
+    <p>The walking duck's score is a sum of terms, worked out every step. It earns points for matching the speed it was asked for, keeping its body upright, lifting its feet, and pointing its head where asked. It loses points for jerky actions, sliding its feet, and its legs knocking into its body.</p>
     <p>Get the score wrong and the duck finds the loophole. When its trainers charged for every wobble of its heavy head, the best score came from not walking at all. So it stood still.</p>
     <p class="rule">"RL optimizes the letter of the reward."</p>
     <fieldset class="predict" data-answer="b">
@@ -271,19 +271,19 @@
       <label><input type="radio" name="predict-5" value="a"> A smooth walk.</label>
       <label><input type="radio" name="predict-5" value="b"> Standing still.</label>
       <label><input type="radio" name="predict-5" value="c"> A faster walk.</label>
-      <details><summary>Check your prediction</summary><p><strong>Standing still.</strong> The wobble could not be escaped while walking, so the cheapest way to avoid the charge was to stop. The fix charged only for the steady droop the duck could correct, and the walk came back.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Standing still.</strong> The wobble could not be escaped while walking, so the cheapest way to avoid the charge was to stop. The fix charges only for the steady droop the duck can correct, so a good walk pays nothing for it.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
     <p class="figure-label">The pop-up</p>
     <ol class="figure-steps">
       <li><strong>Earn.</strong> Bars rise for the terms that pay: speed, turning, upright, feet, head.</li>
-      <li><strong>Pay.</strong> Bars drop for the costs: jerky actions, sliding feet, knocking legs.</li>
+      <li><strong>Pay.</strong> Bars drop for the costs: jerky actions, sliding feet, legs knocking the body.</li>
       <li><strong>Add up.</strong> The step's score is the sum, and training wants it high over the episode.</li>
       <li><strong>Too strict.</strong> The head charge tightens. The duck slows, its feet stop leaving the ground, and it stands.</li>
-      <li><strong>The fix.</strong> Charge only the steady droop. The duck walks again.</li>
+      <li><strong>The fix.</strong> Charge only the steady droop, which a good walk does not pay. The duck can walk again.</li>
     </ol>
-    <figcaption>The terms and their weights are the walking task's own. The bar heights move for the lesson.</figcaption>
+    <figcaption>The walking task's main terms, with their weights; the full score has a few more, such as charges for feet that skim the floor. The bar heights move for the lesson.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> a reward is a wish written in arithmetic. The robot will grant exactly what it says.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 5">
@@ -342,12 +342,12 @@
 <pre><code>git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl
 uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre>
-      <p>No graphics card: add <code>--hf-jobs</code> to run it on Hugging Face Jobs. Always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
+      <p>No graphics card: add <code>--hf-jobs</code> to run it on Hugging Face Jobs, billed to your Hugging Face account. Always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
       <p>The walking settings allow up to 50,000 iterations, a ceiling rather than a target. In September 2026, the walking brain Pollen had deployed was traced to a checkpoint at iteration 3,750.</p>
-      <p>"Watch the duck" is a rule in Pollen's guide: "Report what rollouts actually show", not "it works!".</p>
+      <p>Watching the duck is a rule in Pollen's guide: "Report what rollouts actually show", not "it works!".</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -366,7 +366,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
     <p>After each round of practice, the brain is nudged so that actions that went better than expected become more likely, and actions that went worse become less likely.</p>
     <p>The method is <strong>PPO</strong>, proximal policy optimization. Proximal means near: it will not move the policy far in one go. Once a change would make an action more than 20% more or less likely than before, the update stops pushing it.</p>
     <p>Why so careful? The practice was done by the old brain. Change the brain too much and that practice no longer describes it, and learning falls apart.</p>
-    <p class="rule">Change any action's probability by at most 20% per update.</p>
+    <p class="rule">Past a 20% change in an action's likelihood, an update gains nothing more.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>Why does PPO take small steps?</p>
@@ -410,17 +410,17 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · Sim to real</p>
     <h2 id="lesson-8-title">Train on many worlds</h2>
-    <p>A brain trained on one perfect world learns that world, flaws and all. So every pretend duck gets a slightly different world, every time it starts over. This is <strong>domain randomization</strong>.</p>
-    <p>The floor's grip ranges from 0.7 to 1.3 times normal. Weight and its spread change by 5% either way, and the body's balance point shifts by up to 15 mm. Every 3 to 6 seconds the duck is shoved, by up to 0.3 m/s. Its tilt sensor is mounted wrong by up to 6°, and each joint reading is off by a small, fixed amount.</p>
+    <p>A brain trained on one perfect world learns that world, flaws and all. So every pretend duck gets a slightly different world. Some differences are drawn once for each duck, and some again each time it starts over. This is <strong>domain randomization</strong>.</p>
+    <p>The floor's grip ranges from 0.7 to 1.3 times normal. The main body's weight changes by 5% either way, and the body's balance point shifts by up to 15 mm. Every 3 to 6 seconds the duck is shoved, by up to 0.3 m/s. Its tilt sensor is mounted wrong by up to 6°, and each joint reading is off by a small, fixed amount.</p>
     <p>A brain that walks in all of these treats the real robot as one more variation.</p>
     <p class="rule">Train on a spread of worlds, so the real one falls inside it.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>The real duck's tilt sensor sits 5° off, always the same way. Does the randomization take care of that?</p>
       <label><input type="radio" name="predict-8" value="a"> Yes, completely.</label>
-      <label><input type="radio" name="predict-8" value="b"> No: it trains tolerance to errors in random directions, and a fixed offset is corrected on the robot.</label>
+      <label><input type="radio" name="predict-8" value="b"> No: it trains tolerance to errors in random directions. A fixed offset has to be corrected on the robot.</label>
       <label><input type="radio" name="predict-8" value="c"> It makes it worse.</label>
-      <details><summary>Check your prediction</summary><p><strong>No.</strong> The training errors point every which way and average out, so they teach the brain to cope with an error's size, not a steady tilt one way. The robot's own software corrects its known offset before the brain sees the numbers.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>No.</strong> Each pretend duck's sensor is tipped a fixed amount in a random direction, so the brain learns to cope with an error of that size, not with one steady tilt that every duck shares. Pollen's training settings leave the real board's steady offset to be corrected on the robot, before the brain sees the numbers.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -432,7 +432,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <li><strong>Shoves.</strong> Every few seconds, a shove from a random side.</li>
       <li><strong>Senses.</strong> Each duck's tilt sensor is tipped a different way.</li>
     </ol>
-    <figcaption>The ranges are the walking task's own. Which duck gets which is drawn at random.</figcaption>
+    <figcaption>The ranges are the walking task's own, and the tilts are drawn three times larger so you can see them. Which duck gets which is drawn at random.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> robustness is trained, by refusing to let the brain get used to any one world.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 8">
@@ -469,7 +469,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <label><input type="radio" name="predict-9" value="a"> It is faster.</label>
       <label><input type="radio" name="predict-9" value="b"> The script builds in the input rescaling. Without it, the brain sees numbers of the wrong size.</label>
       <label><input type="radio" name="predict-9" value="c"> For the licence.</label>
-      <details><summary>Check your prediction</summary><p><strong>The rescaling.</strong> In the simulator it is applied anyway, so a hand-converted file looks fine there and fails on the robot. That is why there is exactly one safe path.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>The rescaling.</strong> Training's own playback applies it anyway, so the brain looks fine there. A file without it fails wherever it runs alone, on the robot or in the rehearsal script. That is why there is exactly one safe path.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -489,8 +489,8 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <h3>Try it for real</h3>
 <pre><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --wandb-run-path &lt;...&gt;
 uv run scripts/infer_policy.py --walking output.onnx
-uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --kind episodic --duration-s 4.0</code></pre>
-      <p>Then on a robot: <code>sudo robotctl policy add &lt;name&gt; &lt;user&gt;/microduck-&lt;name&gt;</code> and <code>robotctl robot do &lt;name&gt;</code>. In Studio, <a href="/docs/#policies">open the .onnx</a> from Files or a direct link.</p>
+uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --kind perpetual --slot walk</code></pre>
+      <p>Then on a robot, a new walk goes into the walk slot: <code>sudo robotctl policy load walk &lt;user&gt;/microduck-&lt;name&gt;</code>. In Studio, <a href="/docs/#policies">open the .onnx</a> from Files or a direct link.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
@@ -511,7 +511,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
   <div class="lesson-page">
     <p class="kicker">Lesson 10 · Your project</p>
     <h2 id="lesson-10-title">Your first project: bounce a ball</h2>
-    <p>Here is a project from the community: teach the duck to bounce a small ball off its beak. A good first project changes as little as possible.</p>
+    <p>Here is a first project to try: teach the duck to bounce a small ball off its beak. A good first project changes as little as possible.</p>
     <p><strong>Start from what exists.</strong> Pollen's kicking task already puts a 70 mm, 15 g ball in front of the duck, and the ground-pick task already bends it to touch the floor with its beak.</p>
     <p><strong>Change one thing at a time.</strong> The kicker cannot see the ball; bouncing needs to know where it is, so the brain needs new inputs. Reward each upward bounce off the beak, not the ball being high, or the duck may learn to balance the ball on its head.</p>
     <p>Then expect loopholes. Pollen's guide expects 2 to 5 rounds of fixing them.</p>
@@ -540,11 +540,11 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
   <aside class="lesson-notes" aria-label="Notes for lesson 10">
     <section>
       <h3>Try it for real</h3>
-      <p>Clone <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, copy <code>microduck_ball_kick_env_cfg.py</code> to a new task, register it, and run the 5-iteration smoke test at 64 envs before anything long. Share what you find in an issue on the repository.</p>
+      <p>Clone <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, copy <code>microduck_ball_kick_env_cfg.py</code> to a new task, register it, and run the 5-iteration smoke test at 64 envs before anything long. Share what you find in an issue on <a href="https://github.com/craigm26/microduck-com">this site's repository</a>.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>An honest limit: the real robot has no way to sense a ball yet, so "the operator aims the robot at the ball". A brain that needs the ball's position will run in simulation until the robot can see it, and a brain whose inputs are not the shared 61 cannot be swapped in by the robot's runtime as it is.</p>
+      <p>An honest limit: the kicking brain is never shown the ball, so "the operator aims the robot at the ball". A brain that needs the ball's position will run in simulation until the robot can see it, and a brain whose inputs are not the shared 61 cannot be swapped in by the robot's runtime as it is.</p>
       <p>The kicker's critic does see the ball, during training only. Book 3, lesson 2 explains why that helps.</p>
     </section>
     <section>

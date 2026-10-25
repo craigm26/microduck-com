@@ -99,7 +99,7 @@
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>Sense, think, act is the oldest idea in robotics, and it is the shape of everything later in these books. The duck has 15 motors: 14 for its legs, neck and head, which its walking brain moves, and one that opens its beak.</p>
+      <p>Sense, think, act is one of the oldest ideas in robotics, and it is the shape of everything later in these books. The duck has 15 motors: 14 for its legs, neck and head, which its walking brain moves, and one that opens its beak.</p>
       <p>The paper duck in the pictures is our own drawing with the robot's joints, not Pollen Robotics' design.</p>
     </section>
     <section>
@@ -123,7 +123,7 @@
     <p class="rule">One Walk card is one square. One Turn card is a quarter turn.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
-      <p>The duck is in the bottom corner, facing up. The pond is one square up and two squares to the right. How many cards get it there?</p>
+      <p>The duck is in the bottom corner, facing up. The pond is one square up and two squares to the right. How many Walk and Turn cards get it there, at the fewest?</p>
       <label><input type="radio" name="predict-2" value="a"> 3 cards</label>
       <label><input type="radio" name="predict-2" value="b"> 4 cards</label>
       <label><input type="radio" name="predict-2" value="c"> 6 cards</label>
@@ -200,7 +200,7 @@
     <section>
       <h3>For parents and teachers</h3>
       <p>Ask what changes if the dance repeats once more: in the long row it is three more cards, in the loop it is one number. That is why programmers love loops.</p>
-      <p>A loop can also hide a bug in one place where everyone can find it. Put a wrong card inside the loop and the duck repeats the mistake four times, which makes it easy to spot.</p>
+      <p>A loop also keeps a bug in one place. Put a wrong card inside the loop and the duck repeats the mistake four times, which makes it easy to spot, and there is one card to fix.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -266,7 +266,7 @@
     <p>Stand on one foot. Feel the wobble? You are balancing.</p>
     <p>Every body has a middle point, where all its weight seems to sit. It is called the <strong>center of mass</strong>. To stay up, that point has to stay above your feet.</p>
     <p>The duck's head is heavy: more than a third of the whole duck. When its head swings, its middle point moves, and the duck has to keep it over its feet.</p>
-    <p>Walking is even harder. A walking body leans forward on purpose, starts to fall, and catches itself with the next step. Over and over.</p>
+    <p>Walking is even harder. A walking body moves its middle point ahead of its feet on purpose, starts to fall, and catches itself with the next step. Over and over.</p>
     <p class="rule">Keep your middle point over your feet.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -412,27 +412,27 @@
     <p class="kicker">Lesson 8 · Sim to real</p>
     <h2 id="lesson-8-title">Pretend is not perfect</h2>
     <p>The pretend world is close to the real one, but it is not the same. A real floor can be more slippery. A real battery gets tired. Every real motor is a tiny bit different from the next.</p>
-    <p>So while the ducks practise, the pretend world is shaken up on purpose. Some ducks get slippery floors and some get grippy ones. Some get a little push. A duck that learned on all of them is ready for a floor it has never met.</p>
+    <p>So while the ducks practise, the pretend world is shaken up on purpose. Some ducks get slippery floors and some get grippy ones. Every duck gets a little push now and then. A duck that learned on all of them is ready for a floor it has never met.</p>
     <p>Even so, a real duck drifts. For now, a Walk card on a real duck is timed: it walks for two seconds, and it does not land exactly on a square.</p>
     <p class="rule">Practise on many different pretend worlds, so the real one is just one more.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
-      <p>A real duck walks a row of 4 Walk cards across the floor. Where does it end up?</p>
+      <p>A duck that practised in the pretend world walks a row of 4 Walk cards on a floor it has never met. Each card is meant to go one square. Where does it end up?</p>
       <label><input type="radio" name="predict-8" value="a"> Exactly on the fourth square.</label>
       <label><input type="radio" name="predict-8" value="b"> Near the fourth square, a little off.</label>
       <label><input type="radio" name="predict-8" value="c"> Back where it started.</label>
-      <details><summary>Check your prediction</summary><p><strong>Near the fourth square, a little off.</strong> Each card adds a small miss, and the misses add up. The longer the row, the farther off it ends.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Near the fourth square, a little off.</strong> Each step goes a little wrong, and the error grows the longer it walks. The longer the row, the farther off it ends.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
     <p class="figure-label">The pop-up</p>
     <ol class="figure-steps">
-      <li><strong>Pretend.</strong> The pretend duck walks 4 squares and lands exactly on the last one.</li>
-      <li><strong>Real.</strong> A real duck walks 4 timed cards. Each card misses a little, and the misses add up.</li>
+      <li><strong>Pretend.</strong> In the world it practised in, the duck walks 4 squares and lands exactly on the last one.</li>
+      <li><strong>New floor.</strong> On a floor it never practised on, each step goes a little wrong, and the errors add up as it walks.</li>
       <li><strong>Shake it up.</strong> In practice, the floors change: slippery, grippy, a push from the side.</li>
-      <li><strong>Ready.</strong> A duck that practised on every kind of floor walks steadily on a new one.</li>
+      <li><strong>Ready.</strong> A duck that practised on every kind of floor copes better with a new one.</li>
     </ol>
-    <figcaption>A toy picture of drift: the size of each miss here is made up, and the real misses depend on the floor, the duck and its battery.</figcaption>
+    <figcaption>A toy picture of drift: the size of each miss here is made up. Real misses depend on the floor, the duck and its battery.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> a robot that practised in many slightly wrong worlds copes with the real one.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 8">
@@ -443,8 +443,8 @@
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>Shaking up the pretend world is called domain randomization. The duck's trainers change the floor's grip, the duck's weight, little delays in its senses and more, every time a pretend duck starts over.</p>
-      <p>Microduck Studio tested cards that walk exactly one square, in Pollen Robotics' own simulator, and published every result. Short rows nearly pass; long rows do not yet, because small errors add up with time. <a href="/science/">The evidence page</a> has every number.</p>
+      <p>Shaking up the pretend world is called domain randomization. Each pretend duck gets its own floor grip, body weight and sensor errors for the whole of training. Its balance point, its motors' strength and little delays in its senses change again each time it starts over, and every duck gets pushed now and then.</p>
+      <p>Microduck Studio tested cards meant to walk one square, in Pollen Robotics' own simulator, and published every result. Short rows nearly pass; long rows do not yet, because small errors add up with time. <a href="/science/">The evidence page</a> has every number.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -461,7 +461,7 @@
     <p class="kicker">Lesson 9 · Living with people</p>
     <h2 id="lesson-9-title">Kind company</h2>
     <p>A robot that lives with people needs more than legs. It needs good manners.</p>
-    <p><strong>Kith</strong> is a game you play in a web browser. You walk with Microducks through a paper valley, or along a real park path. The ducks walk at the real robot's pace, which is slow: about as fast as a very old dog. A good friend walks at their pace.</p>
+    <p><strong>Kith</strong> is a game you play in a web browser. You walk with Microducks through a paper valley, or along a real park path. In Kith's park, the ducks keep the real robot's pace, as measured in simulation. It is slow: about as fast as a very old dog. A good friend walks at their pace.</p>
     <p>When a duck comes to steps it cannot climb, it stops and asks for help, and a person lifts it over. Waiting, asking and helping are skills too, and the duck can practise them.</p>
     <p class="rule">Keep pace, wait, ask for help, and help back.</p>
     <fieldset class="predict" data-answer="b">
@@ -482,7 +482,7 @@
       <li><strong>Steps.</strong> The duck reaches steps it cannot climb. It stops and asks.</li>
       <li><strong>Lifted over.</strong> The person lifts the duck over the steps and sets it down. On they go.</li>
     </ol>
-    <figcaption>A walk in Kith, sped up. The real robot walks about 0.12 metres a second on the level.</figcaption>
+    <figcaption>A walk in Kith, sped up. Measured in simulation, the real robot walks about 0.12 metres a second on the level.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> good company is a skill: match the pace, wait, ask, help.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 9">
@@ -493,7 +493,7 @@
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>Kith gives points for keeping company: a little every moment the duck stays near the traveler. Walks people choose to give become an open set of examples that real Microducks can learn from.</p>
+      <p>Kith gives points for keeping company: a little every moment the duck stays near the traveler. Walks people choose to give become an open set of examples a real Microduck could learn from.</p>
       <p>Kith has no chat and no names: everyone is renamed in what it records, and anyone can choose not to share their play.</p>
     </section>
     <section>
@@ -520,7 +520,7 @@
       <label><input type="radio" name="predict-10" value="a"> The head pops off.</label>
       <label><input type="radio" name="predict-10" value="b"> It stops at the limit.</label>
       <label><input type="radio" name="predict-10" value="c"> The head spins all the way round.</label>
-      <details><summary>Check your prediction</summary><p><strong>It stops at the limit.</strong> The duck's head can tip about 20 degrees each way, and the robot's own safety code keeps every joint inside its range, whatever it is asked.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>It stops at the limit.</strong> The duck's head can tip about 20 degrees each way. Studio checks every angle in a move against the robot's joints, so it never asks for more. The robot's own software only catches broken orders, so staying inside the limits is the move's job.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -543,8 +543,8 @@
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>A keyframe animation does not know about gravity. Studio's preview "interpolates your poses and times; it does not calculate whether the robot could perform the move", so a move can look fine and still topple a real duck. The physics bench answers that question.</p>
-      <p>Joint limits protect the robot. Its trainers never ask the head to go all the way, either: their head commands stop about a tenth short of each joint's real range.</p>
+      <p>A keyframe animation does not know about gravity. Studio's preview "interpolates your poses and times; it does not calculate whether the robot could perform the move", so a move can look fine and still topple a real duck. The physics bench answers that question in simulation.</p>
+      <p>The robot's safety code holds each motor inside its range of travel, which is not the same as what is safe for each joint. So a good move stays inside the joints' limits itself. Its trainers never ask the head to go all the way, either: their head commands stop about a tenth short of each joint's real range.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>

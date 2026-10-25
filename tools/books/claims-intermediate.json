@@ -19,6 +19,12 @@
    "five": {
     "source": "kith-llms",
     "quote": "a table of your own view at five rows a second"
+   },
+   "2": {
+    "derived": "1 / (1 - 0.99) / 50",
+    "with": {
+     "0.99": "gamma=0.99, the walking task's discount in its PPO settings (rl-velocity); Book 3 lesson 1 works through it"
+    }
    }
   },
   "lesson-2": {
@@ -331,6 +337,9 @@
    },
    "nine": {
     "count": "the nine ducks in the figure"
+   },
+   "three": {
+    "editorial": "the figure draws the sensor tilts three times their real size so they can be seen"
    }
   },
   "lesson-9": {
@@ -345,10 +354,6 @@
    "1": {
     "source": "rl-readme",
     "quote": "[1,61] -> [1,14]"
-   },
-   "4.0": {
-    "source": "rl-readme",
-    "quote": "--kind episodic --duration-s 4.0"
    }
   },
   "lesson-10": {

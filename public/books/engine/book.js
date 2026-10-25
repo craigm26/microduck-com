@@ -577,7 +577,7 @@ async function main() {
     const top = el('div', 'bk-ui-top');
     const badge = el('span', 'bk-badge');
     if (Ls.badge === 'toy') badge.textContent = 'Toy model';
-    else if (Ls.badge === 'real') badge.textContent = 'Real numbers';
+    else if (Ls.badge === 'real') badge.textContent = 'Real settings';
     else badge.hidden = true;
     const chips = el('div', 'bk-chips');
     top.append(badge, chips);

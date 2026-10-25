@@ -833,7 +833,7 @@ export const figures = {
     const laneB = new K.Board({ cols: 5, rows: 1, cell });
     laneB.group.position.set(0, 0, 70); group.add(laneB.group);
     const la = ctx.label('pretend', V(-205, 30, -185), { cls: 'is-blue' });
-    const lb = ctx.label('real', V(-205, 30, 5), { cls: 'is-accent' });
+    const lb = ctx.label('new floor', V(-205, 30, 5), { cls: 'is-accent' });
     const dA = new K.Duck({ scale: S }); group.add(dA.root);
     const dB = new K.Duck({ scale: S }); group.add(dB.root);
     const sA = laneA.at(0, 0).add(laneA.group.position), sB = laneB.at(0, 0).add(laneB.group.position);
@@ -896,7 +896,7 @@ export const figures = {
         { dur: 4.0, run(u) {
           walkLane(dB, pB2, u, 0.4);
           showMiss(dB.root.position, u > 0.95);
-        }, end() { dB.setJoints(dB.stand); showMiss(dB.root.position, true); ctx.say('steadier', V(targetB.x, 80, targetB.z + 30), { sound: 'ding', cls: 'is-green' }); } },
+        }, end() { dB.setJoints(dB.stand); showMiss(dB.root.position, true); ctx.say('closer', V(targetB.x, 80, targetB.z + 30), { sound: 'ding', cls: 'is-green' }); } },
       ],
     };
     api.reset();
