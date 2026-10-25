@@ -59,6 +59,12 @@
    },
    "two": {
     "count": "the two numbers the arithmetic starts from, γ and the 50 Hz tick"
+   },
+   "200": {
+    "editorial": "an example distance, twice the 100-tick horizon"
+   },
+   "0.13": {
+    "derived": "0.99 ** 200"
    }
   },
   "lesson-2": {
@@ -82,6 +88,10 @@
    },
    "two": {
     "count": "the two networks PPO trains, the actor and the critic"
+   },
+   "24": {
+    "source": "rl-velocity",
+    "quote": "num_steps_per_env=24"
    }
   },
   "lesson-3": {
@@ -218,6 +228,13 @@
    },
    "197,774": {
     "derived": "61*512 + 512 + 512*256 + 256 + 256*128 + 128 + 128*14 + 14"
+   },
+   "0.9": {
+    "source": "md-robotd-toml",
+    "quote": "Unset resolves per mode: 0.9 walking"
+   },
+   "two": {
+    "count": "Pollen's two repositories, microduck_rl and microduck"
    }
   },
   "lesson-5": {
@@ -239,6 +256,9 @@
     "1": {
      "toy": "the point the gated duck is paid each tick it stays low, in the toy picture"
     }
+   },
+   "1999": {
+    "editorial": "the year Ng, Harada and Russell published potential-based shaping"
    }
   },
   "lesson-6": {
@@ -262,6 +282,18 @@
     "6": {
      "toy": "the drawing magnifies the gear play six times so it can be seen"
     }
+   },
+   "51": {
+    "source": "rl-infer",
+    "quote": "Old policies (51D obs"
+   },
+   "61": {
+    "source": "rl-readme",
+    "quote": "[1,61] -> [1,14]"
+   },
+   "fifteen": {
+    "source": "md-robotd",
+    "quote": "Fifteen servos and the"
    }
   },
   "lesson-7": {
@@ -397,6 +429,12 @@
    },
    "0": {
     "count": "zero falls, the case the bound is for"
+   },
+   "10": {
+    "derived": "1.96 * 1.96 / (34 + 1.96 * 1.96) * 100"
+   },
+   "two": {
+    "count": "the two bounds, counted by row and counted by duck"
    }
   },
   "lesson-9": {

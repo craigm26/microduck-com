@@ -488,7 +488,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
     <section>
       <h3>Try it for real</h3>
 <pre><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --wandb-run-path &lt;...&gt;
-uv run scripts/infer_policy.py --walking output.onnx
+uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs
 uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --kind perpetual --slot walk</code></pre>
       <p>Then on a robot, a new walk goes into the walk slot: <code>sudo robotctl policy load walk &lt;user&gt;/microduck-&lt;name&gt;</code>. In Studio, <a href="/docs/#policies">open the .onnx</a> from Files or a direct link.</p>
     </section>

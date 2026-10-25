@@ -99,6 +99,8 @@ function strip(w, d, color = 0xece4d2) {
 function setText(label, text) { if (label.userData.el.textContent !== text) label.userData.el.textContent = text; }
 
 const BLUE = K.COL.blue, GREEN = 0x2f9a5c, RED = K.COL.red, ORANGE = K.COL.orange;
+// the clip's two edges, 1 - eps and 1 + eps, and 1 between them, as ticks that follow the slider
+const clipTicks = (e) => [Math.round((1 - e) * 100) / 100, 1, Math.round((1 + e) * 100) / 100];
 
 export const figures = {
 
@@ -162,6 +164,9 @@ export const figures = {
     const nowLabel = ctx.label('now', V(xOf(0), 14, ROWZ + 34), { cls: 'is-small' });
     const st = { grow: 0, disc: 0, env: 0, flag: 0, stack: 0, gamma: 0.99 };
     const weight = (k) => Math.pow(st.gamma, k);
+    // the flag stands at the horizon, 1/(1 - gamma) ticks, while it fits on the row
+    const horizon = () => Math.round(1 / (1 - st.gamma));
+    const flagAt = () => Math.min(N - 1, horizon());
     const buildEnv = () => {
       if (env) { env.geometry.dispose(); envG.remove(env); }
       const pts = [];
@@ -182,15 +187,18 @@ export const figures = {
         const y = lerp(0, acc, e);
         acc += h * STACK;
         bars.set(k, x, y, z, hh, lerp(W, 26, e), lerp(9, 26, e));
-        bars.color(k, k === 100 && st.flag > 0.5 && st.stack < 0.05 ? ORANGE : st.stack > 0.3 ? BLUE : 0x5a8fd8);
+        bars.color(k, k === flagAt() && st.flag > 0.5 && st.stack < 0.05 ? ORANGE : st.stack > 0.3 ? BLUE : 0x5a8fd8);
       }
       bars.commit();
       envG.visible = st.env > 0.01;
       envG.scale.y = Math.max(0.01, st.env);
       flag.scale.setScalar(Math.max(0.01, ease.back(st.flag)));
+      const H = horizon(), at = flagAt();
+      flag.position.x = xOf(at); flagLabel.position.x = xOf(at); weightLabel.position.x = xOf(at);
       show(flagLabel, st.flag > 0.6 && st.stack < 0.3);
       show(weightLabel, st.flag > 0.6 && st.stack < 0.3);
-      setText(weightLabel, `weight ${weight(100).toFixed(2)}`);
+      setText(flagLabel, H > N - 1 ? `${H} ticks: past the row` : `${H} ticks = ${(H / 50).toLocaleString('en-US', { maximumFractionDigits: 1 })} s`);
+      setText(weightLabel, `weight ${weight(at).toFixed(2)}`);
       show(gLabel, st.stack > 0.95);
       gLabel.position.y = acc + 24;
       show(nowLabel, st.grow > 0.05 && st.stack < 0.3);
@@ -342,6 +350,7 @@ export const figures = {
     const flatLabel = ctx.label('flat: nothing more to gain', V(0, 0, 0), { cls: 'is-small', parent: chart.group });
     const draw = () => {
       const e = st.eps;
+      chart.xTicks = clipTicks(e);
       const series = [];
       if (st.good > 0) series.push({ points: curve(Lpos, e), color: '#2f9a5c', width: 3.5, upto: Math.max(2, Math.round(121 * clamp(st.good * 1.4))) });
       if (st.bad > 0) series.push({ points: curve(Lneg, e), color: '#d8432e', width: 3.5, upto: Math.max(2, Math.round(121 * clamp(st.bad * 1.4))) });
@@ -750,7 +759,7 @@ export const figures = {
     const draw = () => {
       const k = Math.floor(st.t * 2.2);
       tiles.forEach((t, i) => {
-        const g = (grip[i] + k * 0.37 * ((i % 3) + 1)) % 1;
+        const g = grip[i];
         t.material.color.setHex(st.shake > 0.05 ? gripColor(g) : 0xece4d2);
         const d = ducks[i];
         if (st.shake > 0.05) d.walkPose(st.t * 1.8 + i * 0.3, { stride: 0, lift: 8 }); else d.setJoints(d.stand);
@@ -854,7 +863,7 @@ export const figures = {
     const tickLabels = [0, 1, 2, 3, 4, 5].map((p) => ctx.label(`${p}%`, V(pct(p), 4, RZ + 34), { cls: p === 1 ? 'is-small is-red' : 'is-small' }));
     const ubLabel = ctx.label('', V(0, 46, RZ), { cls: 'is-accent' });
     const sessLabel = ctx.label('400 rows ≈ 34 ducks', V(80, 60, -150), { cls: 'is-blue' });
-    const wideLabel = ctx.label('counted by session: wider', V(0, 30, RZ - 38), { cls: 'is-small' });
+    const wideLabel = ctx.label('counted by duck: up to 10%, off the ruler', V(0, 30, RZ - 38), { cls: 'is-small' });
     const st = { n: 0, ruler: 0, sess: 0, manual: 0 };
     const draw = () => {
       const n = Math.round(st.n);
@@ -872,9 +881,12 @@ export const figures = {
       const u = ub(shownN) * 100;
       bar.scale.x = Math.max(0.5, (pct(Math.min(5, u)) - pct(0)) * ease.out(st.ruler));
       wide.visible = st.sess > 0.3;
-      wide.scale.x = Math.max(0.5, (pct(Math.min(5, u)) - pct(0)) * lerp(1, 1.9, ease.inOut(st.sess)));
+      // counted by duck: 0 falls in about 34 independent sessions bounds the rate near 10%,
+      // past the ruler's end; the honest interval lies between the two bars
+      const byDuck = ub(34) * 100;
+      wide.scale.x = Math.max(0.5, pct(Math.min(5, lerp(u, byDuck, ease.inOut(st.sess)))) - pct(0));
       tickLabels.forEach((l) => show(l, st.ruler > 0.3));
-      setText(ubLabel, `0 falls in ${n}: rate somewhere from 0 to ${u.toFixed(n >= 300 ? 2 : 1)}%`);
+      setText(ubLabel, `0 falls in ${n} rows: up to ${u.toFixed(n >= 300 ? 2 : 1)}%, counted by row`);
       ubLabel.position.x = Math.min(120, pct(Math.min(5, u)) * 0.6);
       show(ubLabel, st.ruler > 0.6);
       show(sessLabel, st.sess > 0.6);

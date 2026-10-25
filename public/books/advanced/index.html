@@ -42,7 +42,7 @@
   <div class="book-intro-page">
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 3 of 3 · Advanced</p>
     <h1 id="book-title">Training Microducks</h1>
-    <p class="lede">The reinforcement learning behind a Microduck's walk, with the settings Pollen Robotics actually train with, and the honest measuring that has to come after. Ten lessons, each with a figure to run.</p>
+    <p class="lede">The reinforcement learning behind a Microduck's walk, with the settings in Pollen Robotics' training code, and the honest measuring that has to come after. Ten lessons, each with a figure to run.</p>
     <p class="book-for"><strong>Who it is for:</strong> makers, students and club leaders who can read a little algebra and want to train a policy, or judge one. Code helps but is not required. <a href="/books/intermediate/">Book 2</a> has the same ideas without the formulas.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>States, actions, rewards, return</span></a></li>
@@ -64,9 +64,9 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 1 · The problem</p>
     <h2 id="lesson-1-title">States, actions, rewards, return</h2>
-    <p>Training a Microduck is a <strong>Markov decision process</strong>. Every tick <var>t</var> the policy reads an observation <var>o<sub>t</sub></var> of 61 numbers, chooses an action <var>a<sub>t</sub></var> of 14 joint targets, physics advances, and the environment pays a reward <var>r<sub>t</sub></var>. The policies run at 50 Hz, so a tick is 20 ms.</p>
+    <p>Training a Microduck is set up as a <strong>Markov decision process</strong>, strictly a partially observed one, since the policy sees an observation rather than the whole state. Every tick <var>t</var> the policy reads an observation <var>o<sub>t</sub></var> of 61 numbers, chooses an action <var>a<sub>t</sub></var> of 14 joint targets, physics advances, and the environment pays a reward <var>r<sub>t</sub></var>. The policies run at 50 Hz, so a tick is 20 ms.</p>
     <p>The policy is trained to raise the expected <strong>discounted return</strong>: every reward still to come, each weighted less the further away it is. With the discount <var>γ</var> = 0.99, a reward 100 ticks away weighs 0.99<sup>100</sup> ≈ 0.37 of one paid now.</p>
-    <p>So 1/(1 − <var>γ</var>) = 100 ticks is the policy's working horizon: about 2 s of the future. Whatever a reward is meant to buy has to arrive inside that window, or the policy barely notices it.</p>
+    <p>So 1/(1 − <var>γ</var>) = 100 ticks is the policy's working horizon: about 2 s of the future. The horizon is soft: a reward 200 ticks away still counts 0.13, but the further off a payoff sits, the less it shapes the policy.</p>
     <p class="rule"><var>G<sub>t</sub></var> = <var>r<sub>t</sub></var> + <var>γ</var><var>r</var><sub><var>t</var>+1</sub> + <var>γ</var><sup>2</sup><var>r</var><sub><var>t</var>+2</sub> + …, with a horizon of about 1/(1 − <var>γ</var>) ticks.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -81,8 +81,8 @@
     <p class="figure-label">The figure</p>
     <ol class="figure-steps">
       <li><strong>Ticks.</strong> A reward arrives every 20 ms tick, one bar each.</li>
-      <li><strong>Discount.</strong> Each bar shrinks by <var>γ</var> for every tick of distance. The far ones nearly vanish.</li>
-      <li><strong>Horizon.</strong> A flag at 100 ticks: the weight there is 0.37, and 100 ticks is 2 s at 50 Hz.</li>
+      <li><strong>Discount.</strong> Each bar shrinks by <var>γ</var> for every tick of distance, so the far ones count for less.</li>
+      <li><strong>Horizon.</strong> A flag at 1/(1 − <var>γ</var>) ticks: 100 ticks, 2 s at 50 Hz, where the weight is 0.37.</li>
       <li><strong>Return.</strong> The weighted bars stack into one number, the return the policy is trained to raise.</li>
     </ol>
     <figcaption>Drag <var>γ</var> to move the horizon. The rewards are made up; <var>γ</var> and the tick are Microduck's.</figcaption>
@@ -95,7 +95,7 @@
       <pre><code>gamma=0.99,
 lam=0.95,
 desired_kl=0.01,</code></pre>
-      <p>Change it on a smoke-test run of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a> and watch what the gait learns to anticipate. A smoke test is cheap; a full run needs a CUDA GPU.</p>
+      <p>Change it in the runner settings, train two full runs of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, and compare the gaits. A smoke test only checks that a task builds and runs; it learns no gait. Every run, even a smoke test, needs a CUDA GPU or Hugging Face Jobs.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -107,7 +107,7 @@ desired_kl=0.01,</code></pre>
       <ul>
         <li><var>γ</var> = 0.99: "gamma=0.99" in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>.</li>
         <li>50 Hz: policies "are trained here at 50 Hz" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>). 61 and 14: "obs[1,61] → actions[1,14]" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
-        <li>20 ms, 0.37, 100 ticks and 2 s are arithmetic on those two numbers, as are 10 ticks and 0.2 s for <var>γ</var> = 0.9.</li>
+        <li>20 ms, 0.37, 100 ticks and 2 s are arithmetic on those two numbers, as are 10 ticks and 0.2 s for <var>γ</var> = 0.9, and 0.13 at 200 ticks.</li>
       </ul>
     </section>
   </aside>
@@ -119,7 +119,7 @@ desired_kl=0.01,</code></pre>
     <h2 id="lesson-2-title">Value, advantage and GAE</h2>
     <p>PPO trains two networks. The <strong>actor</strong> is the policy. The <strong>critic</strong> learns <var>V</var>(<var>s</var>), the return the actor can expect from state <var>s</var>, so each action is judged against what was expected rather than against zero.</p>
     <p>That judgment is the <strong>advantage</strong>. One step of it is the TD error <var>δ<sub>t</sub></var>. Generalized advantage estimation blends the errors that follow, each weighted by (<var>γλ</var>)<sup><var>k</var></sup>. Microduck uses <var>λ</var> = 0.95: a low <var>λ</var> leans on the critic's guesses, a high one on what really happened.</p>
-    <p>The critic exists only in training, so it is allowed to cheat. In the walking task only the critic sees the trunk's true velocity; in the ball kick, only the critic sees the ball.</p>
+    <p>The critic exists only in training, so it is allowed to cheat. In the walking task only the critic sees the trunk's linear velocity, and every signal clean and on time; in the ball kick, only the critic sees the ball.</p>
     <p class="rule"><var>δ<sub>t</sub></var> = <var>r<sub>t</sub></var> + <var>γ</var><var>V</var>(<var>s</var><sub><var>t</var>+1</sub>) − <var>V</var>(<var>s<sub>t</sub></var>), and <var>Â<sub>t</sub></var> = Σ<sub><var>k</var></sub> (<var>γλ</var>)<sup><var>k</var></sup> <var>δ</var><sub><var>t</var>+<var>k</var></sub></p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -153,6 +153,7 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
       <h3>For teachers and mentors</h3>
       <p>Give each pair a row of rewards and a guessed <var>V</var>. Compute <var>δ</var> by hand for a few steps, then <var>Â</var> with <var>λ</var> = 0 and with <var>λ</var> = 1. The first is one-step TD; the second is the sampled return minus <var>V</var>.</p>
       <p>Asymmetric actor-critic is a general trick: train with what the simulator knows, deploy with what the robot senses.</p>
+      <p>Each advantage sums at most 24 sampled ticks, one rollout; the critic's estimate stands in for everything after. That is how the horizon of lesson 1 reaches past the end of a rollout.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -171,7 +172,7 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
     <h2 id="lesson-3-title">PPO: better, but not too much</h2>
     <p>Each PPO iteration collects a batch with the current policy, then makes several passes over it. Microduck's runner takes 24 steps from each of 4,096 environments, 98,304 transitions, and makes 5 epochs over them in 4 minibatches.</p>
     <p>Reusing data is risky: the policy could drift far from the one that collected it. PPO measures the drift per action with the ratio <var>ρ</var> = <var>π</var><sub>new</sub>(<var>a</var>|<var>o</var>) / <var>π</var><sub>old</sub>(<var>a</var>|<var>o</var>), and its clipped objective stops paying once <var>ρ</var> leaves 1 ± <var>ε</var> in the helpful direction. Microduck uses <var>ε</var> = 0.2.</p>
-    <p>Around it: a learning rate of 0.001 on an adaptive schedule that steers the KL divergence toward 0.01, an entropy bonus of 0.01, a Gaussian policy whose noise starts at a standard deviation of 1.0, and gradients clipped at norm 1.0.</p>
+    <p>Around it: a learning rate that starts at 0.001 and adapts, cut when the KL divergence runs well above its 0.01 target and raised when it runs well below, an entropy bonus of 0.01, a Gaussian policy whose noise starts at a standard deviation of 1.0, and gradients clipped at norm 1.0.</p>
     <p class="rule"><var>L</var> = E[ min( <var>ρÂ</var>, clip(<var>ρ</var>, 1 − <var>ε</var>, 1 + <var>ε</var>) <var>Â</var> ) ], with <var>ε</var> = 0.2</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -190,8 +191,8 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
       <li><strong>A bad action.</strong> For <var>Â</var> &lt; 0 the objective rises as <var>ρ</var> falls, and goes flat below 0.8.</li>
       <li><strong>The passes.</strong> 5 epochs of 4 minibatches make 20 small steps on one batch, while a meter watches the KL against its 0.01 target.</li>
     </ol>
-    <figcaption>Drag <var>ε</var> to widen or narrow the clip. The curves are the real objective for <var>Â</var> = ±1.</figcaption>
-    <p class="big-idea"><strong>Big idea:</strong> PPO takes every improvement the batch supports, and never bets the policy on any one action.</p>
+    <figcaption>Drag <var>ε</var> to widen or narrow the clip. The curves are the real objective for <var>Â</var> = ±1; the KL meter's level is drawn.</figcaption>
+    <p class="big-idea"><strong>Big idea:</strong> PPO takes the improvement the batch supports a small step at a time, and never bets the policy on any one action.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 3">
     <section>
@@ -224,23 +225,23 @@ schedule="adaptive",</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 4 · The interface</p>
     <h2 id="lesson-4-title">61 numbers in, 14 out</h2>
-    <p>Every Microduck policy has one shape, <code>obs[1,61] → actions[1,14]</code>. The robot's daemon builds one observation for all of them, in this order: gyro (3), projected gravity (3), joint positions (14), joint velocities (14), last action (14) and command (13). The shape never changes, so the runtime can hot-swap walk, stand and trick policies. An action is a joint target: the home pose plus 1.0 × the output.</p>
-    <p>Training copies the robot's flaws on purpose: joint velocity arrives 1 tick late, the IMU lags 0 to 1 tick, joint readings carry a fixed bias of up to ±0.015 rad, and the IMU a mounting tilt of up to 6°. Unused command slots stay in, zero-padded and sampled in tiny ranges so their weights stay alive.</p>
+    <p>Every Microduck policy has one shape, <code>obs[1,61] → actions[1,14]</code>. The robot's daemon builds one observation for all of them, in this order: gyro (3), projected gravity (3), joint positions (14), joint velocities (14), last action (14) and command (13). The shape never changes, so the runtime can hot-swap walk, stand and trick policies. In training, an action is a joint target: the home pose plus 1.0 × the output. The daemon's defaults differ: it scales walking actions by 0.9 and smooths the head and leg targets, so Pollen's two repositories do not agree on this yet.</p>
+    <p>Training copies the robot's flaws on purpose: joint velocity arrives 1 tick late, the IMU lags 0 to 1 tick, joint readings carry a fixed bias of up to ±0.015 rad, and the IMU a mounting tilt of up to 6°. Unused command slots stay in. Pollen's notes say to sample small values in them from the start, because a command input that is never non-zero keeps dead weights; the ball kick, for one, feeds plain zeros.</p>
     <p class="rule">The same 61 inputs and 14 outputs, in the same order, for every policy.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>Your new trick never uses the head command. What do you do with its 4 inputs?</p>
       <label><input type="radio" name="predict-4" value="a"> Delete them, to make the network smaller.</label>
-      <label><input type="radio" name="predict-4" value="b"> Keep them, zero-padded, sampled in tiny ranges.</label>
+      <label><input type="radio" name="predict-4" value="b"> Keep them, with small sampled values.</label>
       <label><input type="radio" name="predict-4" value="c"> Feed them random noise.</label>
-      <details><summary>Check your prediction</summary><p><strong>Keep them:</strong> deleting them breaks the contract, and an input that is never non-zero keeps dead weights forever.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Keep them.</strong> Deleting them breaks the contract. Pollen's notes sample small values from step 0, because an input that is never non-zero keeps dead weights forever. Big random noise is not small, and no robot will ever send it.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
     <p class="figure-label">The figure</p>
     <ol class="figure-steps">
       <li><strong>61 in.</strong> The observation lights up group by group: 3, 3, 14, 14, 14 and 13.</li>
-      <li><strong>14 out.</strong> The outputs become joint targets, the home pose plus 1.0 × the action, and the duck's joints follow.</li>
+      <li><strong>14 out.</strong> In training, the outputs become joint targets, the home pose plus 1.0 × the action, and the duck's joints follow.</li>
       <li><strong>Late on purpose.</strong> Joint velocity slides a tick behind, the IMU wobbles between 0 and 1 tick late, and the joint readings carry a small bias.</li>
       <li><strong>Hot swap.</strong> A kick policy slides in where the walk was, same plug, then hands back.</li>
     </ol>
@@ -265,7 +266,7 @@ schedule="adaptive",</code></pre>
       <h3>Where these numbers come from</h3>
       <ul>
         <li>The order, the sizes and indices 48 to 60: "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]" and "command = vel(3) + head(4) + body(6)" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
-        <li>Scale 1.0, the lags, the bias and the tilt: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>. Dead weights: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
+        <li>Scale 1.0, the lags, the bias and the tilt: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>. The daemon's 0.9: "Unset resolves per mode: 0.9 walking" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/robotd.toml">robotd.toml</a>). Dead weights: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
         <li>197,774 is 61 × 512 + 512 + 512 × 256 + 256 + 256 × 128 + 128 + 128 × 14 + 14.</li>
       </ul>
     </section>
@@ -282,7 +283,7 @@ schedule="adaptive",</code></pre>
       <li><strong>No jackpots, no gated positives.</strong> Rate-limit any "reach X" reward, and never pay for a bad state: pay the change in a potential, like Δcos(tilt). Rising pays, holding pays zero.</li>
       <li><strong>Mass, not weights.</strong> A weight is 4× weaker under 4× the task reward.</li>
     </ul>
-    <p class="rule">Pay progress, <var>Φ</var>(<var>s</var><sub><var>t</var>+1</sub>) − <var>Φ</var>(<var>s<sub>t</sub></var>), not presence.</p>
+    <p class="rule">Pay progress, <var>γ</var><var>Φ</var>(<var>s</var><sub><var>t</var>+1</sub>) − <var>Φ</var>(<var>s<sub>t</sub></var>), not presence.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>A get-up task pays a point every tick the duck is low and trying. What does PPO find?</p>
@@ -313,7 +314,7 @@ schedule="adaptive",</code></pre>
     <section>
       <h3>For teachers and mentors</h3>
       <p>Run a reward-hacking round: each group writes a reward for a trick in plain words, and another group finds the laziest way to score it. The training notes' own catches include "ballistic whip instead of a roll" and "head-tripod instead of standing".</p>
-      <p>Potential-based shaping pays only differences of a potential, so it adds the same total along every path between two states, and the best behaviour stays the best. One more rule from the same notes: add smoothness penalties only after the skill exists, or doing nothing wins.</p>
+      <p>Potential-based shaping pays <var>γ</var><var>Φ</var>(<var>s</var>′) − <var>Φ</var>(<var>s</var>). With <var>γ</var> in it, every path between two states earns the same discounted total, so the best behaviour stays the best (Ng, Harada and Russell, 1999). Pollen's upright reward pays the plain change, which is close when <var>γ</var> is near 1. One more rule from the same notes: add smoothness penalties only after the skill exists, or doing nothing wins.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -329,7 +330,7 @@ schedule="adaptive",</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 6 · Hardware</p>
     <h2 id="lesson-6-title">The actuator is most of the gap</h2>
-    <p>A Microduck is about 800 g of robot moved by 14 small Dynamixel XL330 servos. Pollen's training repository says it plainly: at this scale, "actuator fidelity is most of the sim2real gap."</p>
+    <p>A Microduck is about 800 g of robot. Its policies drive 14 small Dynamixel XL330 servos, and a 15th opens the beak. Pollen's training repository says it plainly: at this scale, "actuator fidelity is most of the sim2real gap."</p>
     <p>So instead of an ideal controller, training models each servo with BAM's M6 model: the voltage control law, back-EMF, and Coulomb, Stribeck and load-dependent friction. Back-EMF makes torque fall as the motor speeds up; friction makes a slow joint stick, then break away. Each environment draws its own battery voltage, sag, command delay and friction.</p>
     <p>Backlash variants add ±1° of gear play, 2° in all, at every servo joint, read through the play as the real encoder on the output side reads it.</p>
     <p class="rule">A servo is not an ideal PD controller: its torque falls with speed, and it sticks when slow.</p>
@@ -357,8 +358,9 @@ schedule="adaptive",</code></pre>
     <section>
       <h3>Try it for real</h3>
       <p>Rehearse one policy on a computer with and without the servo model. Pollen's rehearsal tool uses the BAM actuators by default; <code>--no-bam</code> falls back to plain PD actuators, and <code>--vin</code> pins the battery voltage:</p>
-      <pre><code>uv run scripts/infer_policy.py --walking out.onnx
-uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
+      <pre><code>uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs
+uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code></pre>
+      <p>Keep <code>--new-cmd-obs</code>: without it the tool builds the older 51-number observation, and a 61-input policy is refused.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -369,7 +371,7 @@ uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
       <h3>Where these numbers come from</h3>
       <ul>
         <li>About 800 g, the sim2real sentence, the BAM model, the randomized quantities and the backlash: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</li>
-        <li>14 Dynamixel XL330 servos: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
+        <li>14 Dynamixel XL330 servos: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>. Fifteen servos in all: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>. The 51-number observation: <code>scripts/infer_policy.py</code>.</li>
         <li>The figure's curves are drawn to show their shapes only.</li>
       </ul>
     </section>
@@ -380,8 +382,8 @@ uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 7 · Robustness</p>
     <h2 id="lesson-7-title">Randomize, then measure</h2>
-    <p>A simulator is wrong in ways nobody can list, so the walking task trains across many wrong worlds: foot friction ×0.7 to 1.3, the trunk's center of mass ramped up to ±15 mm, mass and inertia ±5%, joint friction ×0.9 to 1.1, and pushes of ±0.3 m/s every 3 to 6 s.</p>
-    <p>Randomizing is a hypothesis; measuring tests it. Studio measured cards that walk one square in Pollen's duck-sim against criteria fixed first: under randomization, 95 to 98% of short rows landed within 10 cm and 15°, but rows of 10 cards or more only 33 to 42%, as the sensed pose drifts with time.</p>
+    <p>A simulator is wrong in ways nobody can list, so the walking task trains across many wrong worlds. Each duck keeps its own foot friction (×0.7 to 1.3) and trunk mass and inertia (±5%); each reset redraws the trunk's center of mass (up to ±15 mm) and joint friction (×0.9 to 1.1); and pushes of ±0.3 m/s come every 3 to 6 s.</p>
+    <p>Randomizing is a hypothesis; measuring is its own step. Studio tested cards meant to walk one square, with Pollen's v8 policy in duck-sim, under test ranges of its own fixed first: 95 to 98% of short rows landed within 10 cm and 15°, rows of 10 cards or more only 33 to 42%. duck-sim drives plain position servos, not lesson 6's servo model.</p>
     <p>Chapters of up to 7 cards, with the duck re-seated on a nest between them, lifted long rows from 42% to 63%; a mat under each nest, to 97.5% in simulation.</p>
     <p class="rule">Randomize what you cannot know; measure against criteria fixed before looking.</p>
     <fieldset class="predict" data-answer="b">
@@ -390,7 +392,7 @@ uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
       <label><input type="radio" name="predict-7" value="a"> Long rows have more turns.</label>
       <label><input type="radio" name="predict-7" value="b"> The sensed pose drifts with time.</label>
       <label><input type="radio" name="predict-7" value="c"> The battery runs flat.</label>
-      <details><summary>Check your prediction</summary><p><strong>Drift.</strong> The duck's belief about where it is drifts with time, so a longer row ends further off.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Drift.</strong> The duck's belief about where it is drifts with time and with distance walked, so a longer row ends further off.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -398,22 +400,22 @@ uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
     <ol class="figure-steps">
       <li><strong>Shake.</strong> Every practice duck gets its own floor grip and its own pushes.</li>
       <li><strong>Drift.</strong> One long row: the duck's belief about where it is, the ghost, slides away from where it really is.</li>
-      <li><strong>Chapters.</strong> Split the row at nests. Re-seating the duck resets the drift, so the error never builds up.</li>
+      <li><strong>Chapters.</strong> Split the row at nests. Re-seating the duck resets the drift, so it builds over one chapter, not the whole row.</li>
       <li><strong>Measure.</strong> Long rows that landed, as measured: 37% for the shipped loop, 42% with merged cards, 63% with nests, 97.5% with the mat on the nest.</li>
     </ol>
-    <figcaption>Ranges from the walking task. Landing rates from the evidence page: Pollen's duck-sim, randomized physics, Studio's 10 Hz state rate.</figcaption>
+    <figcaption>Ranges from the walking task; the drift line is drawn. Landing rates from the evidence page: Pollen's duck-sim under Studio's own test ranges, at Studio's 10 Hz state rate.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> train across worlds you cannot rule out, test on conditions you fixed in advance, and report the part that fails.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 7">
     <section>
       <h3>Try it for real</h3>
       <p>Read <a href="/science/">the evidence page</a> from its criteria to its limits, then follow its <a href="/science/#reproduce">reproduce</a> section. Every raw row is published.</p>
-      <p>In the training code, each randomization is an <code>ENABLE_*</code> switch at the top of the task's settings, with its range beside it.</p>
+      <p>In the training code, most randomizations are <code>ENABLE_*</code> switches at the top of the task's settings, with their ranges beside them; the battery, sag and delay ranges live in <code>microduck_constants.py</code>.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
       <p>Before any test, have the group write down what "walks one square reliably" means, in numbers. Then compare with the evidence page's: 95% of rows within 10 cm, 95% within 15°, a fall bound of 1%, and time limits.</p>
-      <p>Note what is still open: the mat result is simulation only, and closed-loop cards stay off on real ducks. And note the randomizer rule: a draw that accumulated across resets once degraded every long run for months.</p>
+      <p>Note what is still open: the mat result is simulation only, and closed-loop cards stay off on real ducks. And note the randomizer rule: a draw that accumulated across resets once degraded every long training run for months.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -439,16 +441,16 @@ uv run scripts/infer_policy.py --walking out.onnx --no-bam</code></pre>
       <label><input type="radio" name="predict-8" value="a"> 0%.</label>
       <label><input type="radio" name="predict-8" value="b"> About 3.7%.</label>
       <label><input type="radio" name="predict-8" value="c"> About 10%.</label>
-      <details><summary>Check your prediction</summary><p><strong>About 3.7%:</strong> 1.96<sup>2</sup> / (100 + 1.96<sup>2</sup>) = 0.037. The rule of three, 3/<var>n</var>, says 3%.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>About 3.7%:</strong> 1.96<sup>2</sup> / (100 + 1.96<sup>2</sup>) = 0.037. The rule of three, 3/<var>n</var>, a one-sided bound, says 3%.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
     <p class="figure-label">The figure</p>
     <ol class="figure-steps">
       <li><strong>No falls.</strong> 100 rows, every one clean.</li>
-      <li><strong>The interval.</strong> The fall rate could still be anywhere from 0 up to 3.7%.</li>
+      <li><strong>The interval.</strong> The fall rate could plausibly be anywhere from 0 up to 3.7%.</li>
       <li><strong>More rows.</strong> The count climbs to 381, and the bar shrinks until it touches the 1% line.</li>
-      <li><strong>Sessions.</strong> The rows clump into sessions of 12 that share a duck: 400 rows are about 34 ducks, and the honest interval is wider than the row count suggests.</li>
+      <li><strong>Sessions.</strong> The rows clump into sessions of 12 that share a duck: 400 rows are about 34 ducks. Counted by duck, no falls bounds the rate at about 10%. The honest interval lies between the two.</li>
     </ol>
     <figcaption>Drag <var>n</var> to move the bound. The bound is the real Wilson formula; the sessions are the evidence page's.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> report the interval, count what is really independent, and decide what counts before you look.</p>
@@ -471,7 +473,7 @@ for n in (100, 381, 1000):
       <h3>Where these numbers come from</h3>
       <ul>
         <li>"the upper end of the Wilson 95% interval on the fall rate is at most 1% (with zero falls, that takes 381 rows)", the sessions of 12, the 400 rows and 34 ducks, the permutation test and the date: <a href="/science/">the evidence page</a>.</li>
-        <li>3.7%, 0.037 and 3% are arithmetic; 1.96 is the 95% normal quantile; 1000 in the snippet is an example.</li>
+        <li>3.7%, 0.037, 3% and the 10% for 34 ducks are arithmetic; 1.96 is the normal quantile a two-sided 95% interval uses; 1000 in the snippet is an example.</li>
       </ul>
     </section>
   </aside>
@@ -482,7 +484,7 @@ for n in (100, 381, 1000):
     <p class="kicker">Lesson 9 · People</p>
     <h2 id="lesson-9-title">Learning from people</h2>
     <p>Some of what makes a duck good company will not fit in a formula, so people supply it.</p>
-    <p><strong>Episodes.</strong> Kith records an agent's own view five rows a second: what it sensed, what it did next, and its reward under a published schedule. Walks people give are released as an open LeRobot dataset.</p>
+    <p><strong>Episodes.</strong> Kith, a web game by this site's author, records an agent's own view five rows a second: what it sensed, what it did next, and its reward under a published schedule. It can release the walks people give as an open LeRobot dataset; so far its release holds only scripted walks.</p>
     <p><strong>Picks.</strong> Studio's Compare plays two runs side by side and you pick the better. The docs call it "the human-feedback half of RLHF": the picks are labels, and nothing is trained on the phone. Off it, picks can train a <strong>scorer learned from picks</strong>, which can then shape a policy's reward.</p>
     <p><strong>Poses.</strong> Mimic puts the duck in the pose of whoever stands in front of the camera.</p>
     <p class="rule">P(A picked over B) = σ(<var>s</var><sub>A</sub> − <var>s</var><sub>B</sub>)</p>
@@ -501,7 +503,7 @@ for n in (100, 381, 1000):
       <li><strong>Episodes.</strong> A walk is recorded as rows, five a second: what the duck sensed, what it did, what it earned.</li>
       <li><strong>Picks.</strong> Two runs side by side. A person picks one, and the pick drops onto a pile of labels.</li>
       <li><strong>A scorer.</strong> Off the phone, the labels fit a curve: the more one run outscores the other, the likelier it is picked.</li>
-      <li><strong>Poses.</strong> A person strikes a pose, and the duck copies it, inside its joint limits.</li>
+      <li><strong>Poses.</strong> A person strikes a pose, and the duck copies it.</li>
     </ol>
     <figcaption>Five rows a second is Kith's. The scorer curve is the standard logistic one; Microduck Studio does not train it.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> people can teach what a reward cannot say: by walking along, by choosing, and by showing.</p>
@@ -509,7 +511,7 @@ for n in (100, 381, 1000):
   <aside class="lesson-notes" aria-label="Notes for lesson 9">
     <section>
       <h3>Try it for real</h3>
-      <p>Walk with a duck in <a href="https://kithgame.com/">Kith</a>; its <a href="https://kithgame.com/api/rewards">published rewards</a> say what each one trains on a real Microduck. Then judge two moves in <a href="/docs/#get-started">Studio's Compare</a>, and make one with <a href="/cards/#yours">Mimic</a>.</p>
+      <p>Walk with a duck in <a href="https://kithgame.com/">Kith</a>; its <a href="https://kithgame.com/api/rewards">published rewards</a> name the skill each one is meant for, and several say no policy exists yet. Then judge two moves in <a href="/docs/#get-started">Studio's Compare</a>, and make one with <a href="/cards/#yours">Mimic</a>.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -519,7 +521,7 @@ for n in (100, 381, 1000):
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>"a table of your own view at five rows a second" and the open LeRobot dataset: <a href="https://kithgame.com/llms.txt">Kith's notes for agents</a>.</li>
+        <li>"a table of your own view at five rows a second" and the open LeRobot dataset: <a href="https://kithgame.com/llms.txt">Kith's notes for agents</a>. The scripted first release: <a href="https://kithgame.com/api/dataset">Kith's dataset notes</a>.</li>
         <li>Compare, picks and Settings: <a href="/docs/#get-started">Studio's docs</a>. Mimic: <a href="/cards/#yours">Duck Cards</a>.</li>
       </ul>
     </section>
@@ -559,7 +561,7 @@ for n in (100, 381, 1000):
       <li><strong>Publish.</strong> The gate checks the shape and the outputs. A broken file is turned away; the good one goes up, private.</li>
       <li><strong>Measure.</strong> The run is scored and written to an EvalLog that anyone can check.</li>
     </ol>
-    <figcaption>The gates and their numbers are microduck_rl's and Microduck Studio's.</figcaption>
+    <figcaption>The gates and their numbers are microduck_rl's and Microduck Studio's; the run's chart is drawn.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> every gate is a cheap question asked before an expensive answer.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 10">
@@ -570,10 +572,10 @@ for n in (100, 381, 1000):
 uv run --with pytest pytest tests/
 uv run train &lt;TASK_ID&gt; --env.scene.num-envs 4096
 uv run scripts/export.py &lt;TASK_ID&gt; --wandb-run-path &lt;...&gt;
-uv run scripts/infer_policy.py --walking output.onnx
+uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs
 uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
-  --kind episodic --duration-s 4.0 --dry-run</code></pre>
-      <p>With a duck, <code>sudo robotctl policy add</code> installs a published policy. Without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
+  --kind perpetual --slot walk --dry-run</code></pre>
+      <p>That publishes a walk. A trick publishes with <code>--kind episodic --duration-s 4.0</code> instead. With a duck, <code>sudo robotctl policy load walk</code> puts a gait in the walk slot and <code>sudo robotctl policy add</code> installs a trick. Without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -583,7 +585,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>64 environments, 5 iterations and ~95%: "A 5-iteration smoke test at 64 envs catches ~95% of config errors for cents." "Report what rollouts actually show" is from the same <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
+        <li>64 environments, 5 iterations and ~95%: "A 5-iteration smoke test at 64 envs catches ~95% of config errors for cents." "Report what rollouts actually show" and the smoke-test command are from the same <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
         <li>[1,61] → [1,14], NaNs, constant outputs, private repositories, the commands and their numbers: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</li>
         <li>EvalLog: <a href="/docs/#evaluations">Studio's docs</a>.</li>
       </ul>

@@ -70,6 +70,8 @@ SOURCES = {
     "rl-ballkick": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_ball_kick_env_cfg.py",
     "md-readme": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/README.md",
     "md-robotd": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md",
+    "md-robotd-toml": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/robotd.toml",
+    "rl-infer": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/scripts/infer_policy.py",
     "kith-llms": "https://kithgame.com/llms.txt",
     "kith-rewards": "https://kithgame.com/api/rewards",
     "site-docs": "public/docs/index.html",
