@@ -939,12 +939,12 @@ export const figures = {
     const cards = [];
     for (let i = 0; i < 4; i++) { const c = K.box(36, 3, 24, 0xfff1dc); c.position.set(0, 2 + i * 3.4, 0); c.rotation.y = (i % 2 ? 0.2 : -0.15); c.visible = i < 3; pile.add(c); cards.push(c); }
     const pileLabel = ctx.label('labels', V(176, 34, -112), { cls: 'is-small' });
-    // front left: a scorer fitted to the picks, off the phone
+    // front left: a scorer fitted to the picks, on the phone (Studio's Train from your picks)
     const chart = easel(new K.Chart({ w: 210, h: 140, x: [-4, 4], y: [-0.05, 1.05], xLabel: 'score A minus score B', yLabel: 'A picked', px: 3 }), -100, 92, -0.86);
     group.add(chart.group);
     const R = K.rng(9);
     const picks = Array.from({ length: 26 }, () => { const x = (R() - 0.5) * 7.6; return [x, R() < 1 / (1 + Math.exp(-x * 1.4)) ? 1 : 0]; });
-    const offLabel = ctx.label('off the phone', V(-100, 4, 128), { cls: 'is-small' });
+    const offLabel = ctx.label('on the phone', V(-100, 4, 128), { cls: 'is-small' });
     // front right: a pose, copied
     const poseG = new THREE.Group(); group.add(poseG);
     const person = K.person({ h: 116 }); person.position.set(85, 0, 60); person.rotation.y = -0.3; poseG.add(person);

@@ -486,13 +486,13 @@ for n in (100, 381, 1000):
     <p><strong>Picks.</strong> Studio's Compare plays two runs side by side and you pick the better. The docs call it "the human-feedback half of RLHF", reinforcement learning from human feedback. Picks can train a <strong>scorer learned from picks</strong>, which can then shape a policy's reward.</p>
     <p><strong>Poses.</strong> Mimic puts the duck in the pose of whoever stands in front of the camera.</p>
     <p class="rule">P(A picked over B) = σ(<var>S</var><sub>A</sub> − <var>S</var><sub>B</sub>), where <var>S</var> is a run's score and σ is the logistic curve, which turns a gap in score into a chance.</p>
-    <fieldset class="predict" data-answer="a">
+    <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>What do your picks in Compare train on your phone?</p>
-      <label><input type="radio" name="predict-9" value="a"> Nothing; the picks are labels.</label>
-      <label><input type="radio" name="predict-9" value="b"> A scorer learned from your picks.</label>
+      <label><input type="radio" name="predict-9" value="a"> Nothing; the picks are only labels.</label>
+      <label><input type="radio" name="predict-9" value="b"> A taste that re-weights Pollen's reward.</label>
       <label><input type="radio" name="predict-9" value="c"> A walking policy tuned to your taste.</label>
-      <details><summary>Check your prediction</summary><p><strong>Nothing.</strong> The picks are labels, and nothing is trained on the phone. Off it, picks can train a scorer, but Microduck Studio does not train one. Settings decides whether the picks may be shared.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>A taste that re-weights Pollen's reward.</strong> With enough picks, Studio's Train from your picks fits your taste on the phone: a simple scorer learned from picks. It then scales Pollen's reward terms up or down, within bounds, for a training run off the phone, so it re-weights the reward Pollen wrote rather than replacing it. Settings decides whether the picks may be shared.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -500,7 +500,7 @@ for n in (100, 381, 1000):
     <ol class="figure-steps">
       <li><strong>Episodes.</strong> A walk is recorded as rows, five a second: what the duck sensed, what it did, what it earned.</li>
       <li><strong>Picks.</strong> Two runs side by side. A person picks one, and the pick drops onto a pile of labels.</li>
-      <li><strong>A scorer.</strong> Off the phone, the labels fit a curve: the more one run outscores the other, the likelier it is picked.</li>
+      <li><strong>A scorer.</strong> On the phone, the labels fit a curve: the more one run outscores the other, the likelier it is picked.</li>
       <li><strong>Poses.</strong> A person strikes a pose, and the duck copies it.</li>
     </ol>
     <figcaption>Five rows a second is Kith's. The scorer curve is the standard logistic one, not fitted to real picks.</figcaption>

@@ -111,8 +111,9 @@
       <li><strong>Be the judge.</strong> In <strong>Studio → Compare</strong>, watch two
       networks, motions or sequences side by side and pick the better one, or run a
       tournament of up to eight and crown a champion. This is the human-feedback half
-      of RLHF: your picks are the labels, and training on them happens off the phone.
-      Settings decides whether picks may be shared.</li>
+      of RLHF: your picks are the labels. With enough of them, Train from your picks
+      learns your taste on the phone and uses it to re-weight Pollen's reward for a
+      training run on Hugging Face. Settings decides whether picks may be shared.</li>
       <li><strong>Train a duck to shoot.</strong> In <strong>Studio → Play</strong>, build the
       controller that walks the duck to a ball, lines up, dribbles and switches to
       Pollen's kick, then train its numbers against goals scored in physics on your
@@ -342,8 +343,8 @@ probability without being one.</p></blockquote>
   The filename is the task slug and a short hash.</dd>
 </dl>
 
-<p>What the app does not do is run inspect-robots. An iPhone cannot run Python,
-and it has no physics engine either. The rollouts happen on a bench, the scoring
+<p>What the app does not do is run inspect-robots. An iPhone cannot run Python.
+The rollouts happen on a bench, the phone's own or one on your network, the scoring
 reads the trajectory the bench recorded, and the file is written to
 inspect-robots' schema rather than by inspect-robots' code. That distinction
 matters enough that it is tested rather than promised: a check in the app's

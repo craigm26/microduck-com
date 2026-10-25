@@ -168,9 +168,10 @@
       <caption>Each condition is fixed before its rows run</caption>
       <tr><th scope="col">Condition</th><th scope="col">What is perturbed</th></tr>
       <tr><td>nominal</td><td>Nothing. State at 20 Hz, the reader's rate.</td></tr>
-      <tr><td>randomized</td><td>Per row: floor friction ×U(0.5, 1.2); masses and inertias ×U(0.95, 1.05);
-      IMU heading bias U(-5, 5)° drifting at U(-0.5, 0.5)°/s; added state latency U(0, 0.15) s;
-      odometry noise 5 mm and 0.5° per frame; odometry scale U(0.95, 1.05). State at 20 Hz.</td></tr>
+      <tr><td>randomized</td><td>Per session of 12 rows: floor friction ×U(0.5, 1.2); masses and
+      inertias ×U(0.95, 1.05); IMU heading bias U(-5, 5)° drifting at U(-0.5, 0.5)°/s. Per row:
+      added state latency U(0, 0.15) s; odometry noise 5 mm and 0.5° per frame; odometry scale
+      U(0.95, 1.05). State at 20 Hz.</td></tr>
       <tr><td>randomized-10hz</td><td>As randomized, with state at 10 Hz, the rate Studio asks for.</td></tr>
       <tr><td>stressed-10hz</td><td>The far end of every range at once: friction ×0.5, mass ×1.05,
       bias 5° and drift 0.5°/s, latency 0.15 s, odometry scale 0.95 or 1.05. State at 10 Hz.</td></tr>
@@ -494,7 +495,7 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
       <li>No real duck has run a closed-loop card yet.</li>
       <li>duck-sim drives position servos, which are not the actuator v8 was trained with.</li>
       <li>Real floors, real IMU drift and real foot slip appear only through the randomized ranges.
-      The simulated drift is a constant rate per row; a real one wanders.</li>
+      The simulated drift is one constant rate for a whole session; a real one wanders.</li>
       <li>Rows within a 12-row session share their physics, so they are not independent samples
       (<a href="#control">control</a>).</li>
       <li>The second machine is shared hardware; its load reading covers the host, not the job.
