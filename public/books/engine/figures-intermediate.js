@@ -727,7 +727,7 @@ export const figures = {
     const stamps = names.map((_, i) => { const s = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 2, 16), K.paper(K.COL.green)); s.position.set(-21 + i * 10.5, 27, 18); s.visible = false; file.add(s); return s; });
     const checks = ['', 'normalizer built in', 'walks on a laptop', '61 in, 14 out, no NaN', 'loaded on the robot'];
     // staggered in two rows, so neighbours never print over each other
-    const checkL = checks.map((c, i) => (c ? ctx.label(c, V(xs[i] - (i === 4 ? 30 : 0), 22, i % 2 ? 150 : 188), { cls: 'is-small is-green' }) : null));
+    const checkL = checks.map((c, i) => (c ? ctx.label(c, V(xs[i], 22, i % 2 ? 150 : 188), { cls: 'is-small is-green' }) : null));
     checkL.forEach((l) => l && show(l, false));
     let t = 0, k = 0;
     const move = (from, to, u) => { file.position.set(lerp(xs[from], xs[to], ease.inOut(u)), 10, 70); };

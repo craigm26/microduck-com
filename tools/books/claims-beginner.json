@@ -13,10 +13,6 @@
     "source": "md-readme",
     "quote": "a 50 Hz control loop driving fifteen servos"
    },
-   "fifty": {
-    "source": "rl-readme",
-    "quote": "Policies are trained here at 50 Hz"
-   },
    "14": {
     "source": "rl-readme",
     "quote": "Joint layout (14 servos)"

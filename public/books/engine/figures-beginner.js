@@ -236,7 +236,7 @@ export const figures = {
     group.add(cards);
     const cardObjs = row.map((c, i) => {
       const card = K.duckCard(c, { w: 70, h: 96 });
-      card.userData.home = V(-114 + i * 76, 0, 190);
+      card.userData.home = V(-114 + i * 76, 0, 152);
       cards.add(card);
       return card;
     });

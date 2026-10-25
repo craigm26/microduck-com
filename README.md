@@ -181,6 +181,10 @@ the same lesson ledgers, a unit constant, or explained under `with`. `scripts/ch
 reads every lesson, finds every number, and rereads each quoted source. A pop-up that is a toy
 model says so on its page with `data-badge="toy"`.
 
+**Predict, play, check.** With JavaScript, a prediction's answer stays hidden until the figure's
+last step, and its options are shuffled the same way on every visit; without it, the page is the
+whole book. Book 1 opens as flat pages where its 3D pages would set the text under 13 px.
+
 **Printing.** Paper can't play a pop-up, so a book printed from the 3D view puts every page back
 in its lesson and prints every prediction's answer, every figure's steps, its caption and its big
 idea.

@@ -246,6 +246,11 @@
     "source": "rl-agents",
     "quote": "the same action_rate weight is 4× weaker under a 4×-larger positive task stack"
    },
+   "quarter": {
+    "source": "rl-agents",
+    "quote": "the same action_rate weight is 4× weaker under a 4×-larger positive task stack",
+    "means": "4× weaker is a quarter as strong: the same weight counts a quarter as much"
+   },
    "1": {
     "count": "t + 1, the next state in the potential difference"
    },
@@ -422,7 +427,7 @@
     "editorial": "the name of the rule of three"
    },
    "100": {
-    "toy": "the example's row count: no falls in 100 rows"
+    "toy": "the example's row count: no falls in 100 rows; and the 100 in \"95 times in 100\", which is what 95% means"
    },
    "1000": {
     "toy": "an example n in the snippet"

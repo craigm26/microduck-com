@@ -14,7 +14,7 @@
 <meta property="og:description" content="Ten pop-up lessons on how a robot duck senses, thinks, moves and learns.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="/assets/studio-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=48fd08703e">
+<link rel="stylesheet" href="/assets/site.css?v=a5b0c975a4">
 <script type="module" src="/books/engine/book.js"></script>
 </head>
 <body class="book-page book-beginner" data-book="beginner" data-label="Book 1 · Beginner">
@@ -67,16 +67,15 @@
     <p>The Microduck is a little robot duck, a little shorter than a school ruler is long.</p>
     <p>It has a <strong>body</strong>: two legs to walk on, a long neck, and a head with a beak.</p>
     <p>It has <strong>senses</strong>. A sensor inside its body feels which way is down, a bit like the feeling in your tummy on a swing. And every motor can feel how far it has turned.</p>
-    <p>It has a <strong>brain</strong>: a tiny computer. The brain reads the senses, decides what to do, and tells the motors to move.</p>
-    <p>Then it does it all again. And again. Fifty times every second.</p>
+    <p>It has a <strong>brain</strong>: a program on a tiny computer inside it. The brain reads the senses, decides what to do, and tells the motors to move. Then it does it all again. And again.</p>
     <p class="rule">Sense, think, move. Then do it again.</p>
-    <fieldset class="predict" data-answer="c">
+    <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
       <p>How many times does the duck sense, think and move in one second?</p>
-      <label><input type="radio" name="predict-1" value="a"> Once</label>
-      <label><input type="radio" name="predict-1" value="b"> 5 times</label>
-      <label><input type="radio" name="predict-1" value="c"> 50 times</label>
-      <details><summary>Check your prediction</summary><p><strong>50 times.</strong> That is faster than you can blink, so the duck can feel a wobble and fix it before it turns into a fall.</p></details>
+      <label><input type="radio" name="predict-1" value="a"> 50 times</label>
+      <label><input type="radio" name="predict-1" value="b"> Just once</label>
+      <label><input type="radio" name="predict-1" value="c"> 5 times</label>
+      <details><summary>Check your prediction</summary><p><strong>50 times every second.</strong> That is faster than you can blink, so the duck can feel a wobble and fix it before it turns into a fall.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -123,7 +122,7 @@
     <p class="rule">One Walk card is one square. One Turn card is a quarter turn.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
-      <p>The duck is in the bottom corner, facing up. The pond is one square up and two squares to the right. How many Walk and Turn cards get it there, at the fewest?</p>
+      <p>The duck is in the bottom left corner, facing up. The pond is one square up and two squares to the right. How many Walk and Turn cards get it there, at the fewest?</p>
       <label><input type="radio" name="predict-2" value="a"> 3 cards</label>
       <label><input type="radio" name="predict-2" value="b"> 4 cards</label>
       <label><input type="radio" name="predict-2" value="c"> 6 cards</label>
@@ -133,7 +132,7 @@
   <figure class="lesson-figure" data-badge="real">
     <p class="figure-label">The pop-up</p>
     <ol class="figure-steps">
-      <li><strong>The board.</strong> A board of 3 by 3 squares, the duck in the bottom corner facing up, and a pond.</li>
+      <li><strong>The board.</strong> A board of 3 by 3 squares, the duck in the bottom left corner facing up, and a pond.</li>
       <li><strong>The cards.</strong> Four cards land in a row: Walk forward, Turn right, Walk forward, Walk forward.</li>
       <li><strong>Run it.</strong> The duck does the cards in order, one at a time: up a square, a quarter turn, then across.</li>
       <li><strong>Splash.</strong> It ends on the pond, 4 cards later.</li>
@@ -188,7 +187,7 @@
       <li><strong>Fold it.</strong> The cards that repeat slide together. A Repeat card goes in front, and End repeat goes behind.</li>
       <li><strong>Run it again.</strong> The duck walks the same square. The counter shows each time round the loop.</li>
     </ol>
-    <figcaption>The same square walked twice: once from 12 cards, once from 5.</figcaption>
+    <figcaption>The same square walked twice: once from the long row, once from the short one.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> a loop says "again" for you. Same moves, fewer cards, fewer places for a mistake to hide.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 3">
@@ -217,26 +216,26 @@
     <p class="kicker">Lesson 4 · Events</p>
     <h2 id="lesson-4-title">When it falls</h2>
     <p>Walking robots fall. A good program says what to do when that happens.</p>
-    <p>A <strong>When it falls</strong> card starts a second row. That row waits. It does nothing at all until the duck falls over. Once the duck is back on its feet, the second row runs.</p>
+    <p>A <strong>"When it falls"</strong> card starts a second row. That row waits. It does nothing at all until the duck falls over.</p>
     <p>The real Microduck already knows how to get up. Knock it over and it stands itself up again.</p>
     <p class="rule">A When row waits for something to happen. Then it runs.</p>
-    <fieldset class="predict" data-answer="b">
+    <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
-      <p>The duck is halfway through its row when a ball knocks it over. What happens next?</p>
-      <label><input type="radio" name="predict-4" value="a"> It lies there until someone helps.</label>
-      <label><input type="radio" name="predict-4" value="b"> It gets up, then does its When it falls row.</label>
-      <label><input type="radio" name="predict-4" value="c"> It does its first row again from the start.</label>
-      <details><summary>Check your prediction</summary><p><strong>It gets up, then does its When it falls row.</strong> The second row was waiting the whole time. A fall is the thing it was waiting for.</p></details>
+      <p>The duck is halfway through its first row when a ball knocks it over. Once it is back on its feet, what does it do?</p>
+      <label><input type="radio" name="predict-4" value="a"> It finishes its first row first.</label>
+      <label><input type="radio" name="predict-4" value="b"> It starts its first row over again.</label>
+      <label><input type="radio" name="predict-4" value="c"> It does its "When it falls" row.</label>
+      <details><summary>Check your prediction</summary><p><strong>It does its "When it falls" row.</strong> Once the duck is back on its feet, the second row runs. The rest of the first row does not run. The second row was waiting the whole time, and a fall is the thing it was waiting for.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
     <p class="figure-label">The pop-up</p>
     <ol class="figure-steps">
-      <li><strong>Two rows.</strong> The first row walks. The second row starts with When it falls, then Alarm and Walk back.</li>
+      <li><strong>Two rows.</strong> The first row walks. The second row starts with "When it falls", then Alarm and Walk back.</li>
       <li><strong>Walk.</strong> The duck starts its first row. The second row waits.</li>
       <li><strong>Bump.</strong> A ball rolls in and knocks the duck over.</li>
       <li><strong>Up again.</strong> The duck stands itself back up.</li>
-      <li><strong>The When row.</strong> Now the waiting row runs: the duck sounds the alarm and steps back.</li>
+      <li><strong>Alarm.</strong> Now the waiting row runs: the duck sounds the alarm and steps back.</li>
     </ol>
     <figcaption>A row that waits for a fall. The getting-up is the duck's own; the second row is ours.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> a program can wait for something to happen, and already know what to do when it does.</p>
@@ -271,10 +270,10 @@
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>The duck leans forward more and more. When does it tip over?</p>
-      <label><input type="radio" name="predict-5" value="a"> As soon as it starts to lean.</label>
-      <label><input type="radio" name="predict-5" value="b"> When its middle point goes past its toes.</label>
-      <label><input type="radio" name="predict-5" value="c"> Never. It is a robot.</label>
-      <details><summary>Check your prediction</summary><p><strong>When its middle point goes past its toes.</strong> Leaning is fine while the middle point is still over the feet. Past the toes, nothing is holding it up.</p></details>
+      <label><input type="radio" name="predict-5" value="a"> As soon as it starts to lean forward.</label>
+      <label><input type="radio" name="predict-5" value="b"> When its middle point passes its toes.</label>
+      <label><input type="radio" name="predict-5" value="c"> When its heavy head goes past its toes.</label>
+      <details><summary>Check your prediction</summary><p><strong>When its middle point passes its toes.</strong> Leaning is fine while the middle point is still over the feet. Past the toes, nothing is holding it up.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -318,13 +317,13 @@
     <p>Robots can learn like that too. It is called <strong>reinforcement learning</strong>. The robot tries something. When it goes well, it gets points, called a <strong>reward</strong>. After many, many tries, it does more of whatever earned points.</p>
     <p>Nobody tells it how. It finds out.</p>
     <p class="rule">Try. Get points for good tries. Do more of what worked.</p>
-    <fieldset class="predict" data-answer="b">
+    <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
       <p>A duck in a little maze gets a point each time it reaches the pond. At first it wanders about. After many tries, what does it do?</p>
-      <label><input type="radio" name="predict-6" value="a"> It still wanders about.</label>
-      <label><input type="radio" name="predict-6" value="b"> It goes the short way to the pond.</label>
-      <label><input type="radio" name="predict-6" value="c"> It stops moving.</label>
-      <details><summary>Check your prediction</summary><p><strong>It goes the short way to the pond.</strong> Every try that reached the pond left a little trail of "this was good". After enough tries, the trail leads straight there.</p></details>
+      <label><input type="radio" name="predict-6" value="a"> It finds the short way to the pond.</label>
+      <label><input type="radio" name="predict-6" value="b"> It walks its first lucky path again.</label>
+      <label><input type="radio" name="predict-6" value="c"> It wanders less, but still by luck.</label>
+      <details><summary>Check your prediction</summary><p><strong>It finds the short way to the pond.</strong> Its first lucky path wandered, but every try that reached the pond left a little trail of "this was good". After enough tries, the trail leads straight there.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -362,16 +361,16 @@
     <h2 id="lesson-7-title">A practice world</h2>
     <p>Learning by trying takes an enormous number of tries, and an enormous number of falls. A real duck would wear out.</p>
     <p>So the Microduck practises in a pretend world inside a computer, called a <strong>simulation</strong>. There, falling does not hurt anything, and the pretend duck can be reset in a blink.</p>
-    <p>Better still, the computer can run 4,096 pretend ducks at the same time. Every one of them tries, falls and learns, and all of them share one brain.</p>
-    <p>A computer with a strong graphics chip can teach the pretend ducks a walk that works in about 1 to 2 hours.</p>
+    <p>Better still, the computer can run 4,096 pretend ducks.</p>
+    <p>A fast computer can teach the pretend ducks a walk that works in about 1 to 2 hours.</p>
     <p class="rule">Practise in pretend first, with lots of ducks at once.</p>
-    <fieldset class="predict" data-answer="b">
+    <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
       <p>Why practise with 4,096 ducks instead of just one?</p>
-      <label><input type="radio" name="predict-7" value="a"> So they keep each other company.</label>
-      <label><input type="radio" name="predict-7" value="b"> So 4,096 tries happen at the same time.</label>
-      <label><input type="radio" name="predict-7" value="c"> Because one duck is too small to see.</label>
-      <details><summary>Check your prediction</summary><p><strong>So 4,096 tries happen at the same time.</strong> The shared brain learns from all of them at once, so it gets its practice thousands of times faster.</p></details>
+      <label><input type="radio" name="predict-7" value="a"> So each duck learns a walk of its own.</label>
+      <label><input type="radio" name="predict-7" value="b"> So the others can copy the best duck.</label>
+      <label><input type="radio" name="predict-7" value="c"> So one brain learns from all of them.</label>
+      <details><summary>Check your prediction</summary><p><strong>So one brain learns from all of them.</strong> All 4,096 ducks try at the same time. Every one of them tries, falls and learns, and all of them share one brain. That brain learns from all their tries at once, so it gets its practice thousands of times faster.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -380,7 +379,7 @@
       <li><strong>One duck.</strong> A pretend duck tries to walk, wobbles and falls. Reset, and it tries again.</li>
       <li><strong>Copies.</strong> The page fills with pretend ducks: 4,096 of them.</li>
       <li><strong>All at once.</strong> They all try at the same moment. Some fall, some get a few steps.</li>
-      <li><strong>One brain.</strong> Everything they tried flows into the one brain they share.</li>
+      <li><strong>Gather.</strong> Everything they tried flows into the one brain they share.</li>
       <li><strong>Learned.</strong> Practice after practice, the whole crowd walks.</li>
     </ol>
     <figcaption>Real numbers: 4,096 pretend ducks, and about 1 to 2 hours on a graphics chip for a walk that works.</figcaption>
@@ -413,15 +412,14 @@
     <h2 id="lesson-8-title">Pretend is not perfect</h2>
     <p>The pretend world is close to the real one, but it is not the same. A real floor can be more slippery. A real battery gets tired. Every real motor is a tiny bit different from the next.</p>
     <p>So while the ducks practise, the pretend world is shaken up on purpose. Some ducks get slippery floors and some get grippy ones. Every duck gets a little push now and then. A duck that learned on all of them is ready for a floor it has never met.</p>
-    <p>Even so, a real duck drifts. For now, a Walk card on a real duck is timed: it walks for two seconds, and it does not land exactly on a square.</p>
     <p class="rule">Practise on many different pretend worlds, so the real one is just one more.</p>
-    <fieldset class="predict" data-answer="b">
+    <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
       <p>A duck that practised in the pretend world walks a row of 4 Walk cards on a floor it has never met. Each card is meant to go one square. Where does it end up?</p>
-      <label><input type="radio" name="predict-8" value="a"> Exactly on the fourth square.</label>
-      <label><input type="radio" name="predict-8" value="b"> Near the fourth square, a little off.</label>
-      <label><input type="radio" name="predict-8" value="c"> Back where it started.</label>
-      <details><summary>Check your prediction</summary><p><strong>Near the fourth square, a little off.</strong> Each step goes a little wrong, and the error grows the longer it walks. The longer the row, the farther off it ends.</p></details>
+      <label><input type="radio" name="predict-8" value="a"> Near the fourth square, a little off.</label>
+      <label><input type="radio" name="predict-8" value="b"> Right on the fourth square, as in practice.</label>
+      <label><input type="radio" name="predict-8" value="c"> It falls over before the second square.</label>
+      <details><summary>Check your prediction</summary><p><strong>Near the fourth square, a little off.</strong> Even after all that practice, a real duck slowly wanders off its path. Each step goes a little wrong, and the error grows the longer it walks. The longer the row, the farther off it ends. For now, a Walk card on a real duck is timed: it walks for two seconds, and it does not land exactly on a square.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -461,16 +459,16 @@
     <p class="kicker">Lesson 9 · Living with people</p>
     <h2 id="lesson-9-title">Kind company</h2>
     <p>A robot that lives with people needs more than legs. It needs good manners.</p>
-    <p><strong>Kith</strong> is a game you play in a web browser, made by the same person as this site. You walk with Microducks through a paper valley, or along a real park path. In Kith's park, the ducks keep the real robot's pace, as measured in simulation. It is slow: about as fast as a very old dog. A good friend walks at their pace.</p>
-    <p>When a duck comes to steps it cannot climb, it stops and asks for help, and a person lifts it over. Waiting, asking and helping are skills too, and the duck can practise them.</p>
-    <p class="rule">Keep pace, wait, ask for help, and help back.</p>
-    <fieldset class="predict" data-answer="b">
+    <p><strong>Kith</strong> is a game you play in a web browser, made by the same person as this site. You walk with Microducks through a paper valley, or along a real park path. In Kith's park, the ducks keep the real robot's pace, as measured in simulation. It is slow: about as fast as a very old dog. A good friend slows down to walk with you.</p>
+    <p>Good manners are skills too, and the duck can practise them.</p>
+    <p class="rule">Keep pace, and wait for each other.</p>
+    <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
       <p>The duck comes to steps it cannot climb. What is the clever, kind thing for it to do?</p>
-      <label><input type="radio" name="predict-9" value="a"> Keep bumping into the steps.</label>
-      <label><input type="radio" name="predict-9" value="b"> Stop and ask for help.</label>
-      <label><input type="radio" name="predict-9" value="c"> Turn round and go home.</label>
-      <details><summary>Check your prediction</summary><p><strong>Stop and ask for help.</strong> In Kith the duck asks with a quack, the person lifts it over the steps and sets it down, and they carry on together.</p></details>
+      <label><input type="radio" name="predict-9" value="a"> Keep trying to hop up, again and again.</label>
+      <label><input type="radio" name="predict-9" value="b"> Wait quietly until someone sees it.</label>
+      <label><input type="radio" name="predict-9" value="c"> Stop and ask a person for help.</label>
+      <details><summary>Check your prediction</summary><p><strong>Stop and ask for help.</strong> In Kith the duck stops and asks with a quack. The person lifts it over the steps and sets it down, and they carry on together. Waiting, asking and helping are all skills the duck can practise: keep pace, wait, ask for help, and help back.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -480,9 +478,9 @@
       <li><strong>Too fast.</strong> The person hurries ahead. The gap grows, and the duck cannot keep up.</li>
       <li><strong>Wait.</strong> The person stops and waits. They walk on together.</li>
       <li><strong>Steps.</strong> The duck reaches steps it cannot climb. It stops and asks.</li>
-      <li><strong>Lifted over.</strong> The person lifts the duck over the steps and sets it down. On they go.</li>
+      <li><strong>On they go.</strong> The person lifts the duck over the steps and sets it down, and they walk on together.</li>
     </ol>
-    <figcaption>A walk in Kith, sped up. Measured in simulation, the real robot walks about 0.12 metres a second on the level.</figcaption>
+    <figcaption>A walk in Kith, sped up. Measured in simulation, on the level, the real robot walks about 0.12 metres a second, about the length of your hand each second.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> good company is a skill: match the pace, wait, ask, help.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 9">
@@ -510,17 +508,17 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 10 · Making</p>
     <h2 id="lesson-10-title">Your duck, your idea</h2>
-    <p>The best Duck Cards are the ones you invent. The deck comes with blank cards, each with a code of its own, for moves your class makes up.</p>
+    <p>The best Duck Cards are the ones you invent. The deck comes with blank cards, for moves you make up. Each one has its own little square code.</p>
     <p>To make a move, pose the duck a few times. Each pose is a <strong>keyframe</strong>: where every joint should be, and when. The duck moves smoothly from one keyframe to the next.</p>
     <p>Every joint has a limit, like your elbow. A good move stays inside the limits. Microduck Studio checks every angle in a move against the real duck's joints.</p>
     <p class="rule">A move is poses in time, inside the joints' limits.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
       <p>You try to tip the duck's head sideways much farther than it can go. What happens?</p>
-      <label><input type="radio" name="predict-10" value="a"> The head pops off.</label>
-      <label><input type="radio" name="predict-10" value="b"> It stops at the limit.</label>
-      <label><input type="radio" name="predict-10" value="c"> The head spins all the way round.</label>
-      <details><summary>Check your prediction</summary><p><strong>It stops at the limit.</strong> The duck's head can tip about 20 degrees each way. Studio checks every angle in a move against the robot's joints, so it never asks for more. The robot's own software only catches broken orders, so staying inside the limits is the move's job.</p></details>
+      <label><input type="radio" name="predict-10" value="a"> The whole duck tips over sideways.</label>
+      <label><input type="radio" name="predict-10" value="b"> The head stops at its limit.</label>
+      <label><input type="radio" name="predict-10" value="c"> Studio throws the whole move away.</label>
+      <details><summary>Check your prediction</summary><p><strong>The head stops at its limit.</strong> The duck's head can tip about 20 degrees each way. Studio checks every angle in a move against the robot's joints, so it never asks for more. The robot's own software only catches broken orders, so staying inside the limits is the move's job.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -532,7 +530,7 @@
       <li><strong>Too far.</strong> Ask the head to tip past its limit. The joint stops at the edge and glows red.</li>
       <li><strong>Name it.</strong> A blank card gets the move's name: Bow.</li>
     </ol>
-    <figcaption>Drag the head-tip slider past the limit to see the joint stop.</figcaption>
+    <figcaption>Drag the head-tip slider past the limit to see what the joint does.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> you can invent a move: poses in time, inside the limits. Then give it a card.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 10">
