@@ -1,0 +1,39 @@
+name: A lesson in the books
+description: Something in one of the three books was unclear, wrong, or did not work with your group.
+title: "Book ?, lesson ?: "
+labels: ["books"]
+body:
+  - type: dropdown
+    id: book
+    attributes:
+      label: Which book?
+      options:
+        - "Book 1: Meet the Microduck"
+        - "Book 2: How a Microduck Learns"
+        - "Book 3: Training Microducks"
+    validations:
+      required: true
+  - type: input
+    id: lesson
+    attributes:
+      label: Which lesson?
+      placeholder: "5"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What was unclear or wrong, and where on the page or in the pop-up. A screenshot helps.
+    validations:
+      required: true
+  - type: textarea
+    id: who
+    attributes:
+      label: Who was reading?
+      description: Optional. For example a parent and a seven-year-old, a class, or one adult. Please do not include children's names.
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: iPad, Safari

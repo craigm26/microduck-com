@@ -200,6 +200,20 @@ console error, a step-count mismatch, a left page that overflows, or a mesh that
 frames; `python3 tools/books/montage.py <stills dir>` tiles them per lesson. After changing
 `check_books.py` itself, run `python3 tools/books/mutate.py` and add a case for the new rule.
 
+## Feedback
+
+Every way in is listed on [/feedback/](public/feedback/index.html) and lands in one inbox:
+
+- **Email** to `feedback@microduckstudio.com`, which Cloudflare Email Routing forwards to the
+  developer's own address. Every book lesson carries a link that fills in its book and lesson,
+  in the grown-ups' section of its notes. Every footer links the feedback page.
+- **GitHub issue forms** in `.github/ISSUE_TEMPLATE/`: a book lesson, or something on the site.
+- **Hugging Face discussions and TestFlight feedback**, mailed to the same inbox by the Worker in
+  [`inbox/`](inbox/README.md).
+
+Email Address Obfuscation stays off for this zone: it rewrites every `mailto:` link and adds a
+script to decode them, which this site's security policy blocks everywhere but the books.
+
 ## Deploy
 
 ```sh

@@ -98,6 +98,7 @@
       <h3>For parents and teachers</h3>
       <p>The words in bold are the whole vocabulary of reinforcement learning. A good check: ask a student to name the agent, the observation, the action and the reward in a game they play.</p>
       <p>A reset is the simulator putting the duck back on its feet. A real robot cannot reset in a blink: someone, or its stand-up skill, gets it up, and every fall wears it. That is one reason the learning happens in simulation (lesson 6).</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%201%3A%20Observe%2C%20act%2C%20score%2C%20repeat">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -148,6 +149,7 @@
       <h3>For parents and teachers</h3>
       <p>A useful exercise: list what you would want to know to keep your balance, then cross out everything a small robot cannot measure. What is left is close to this list.</p>
       <p>In the body pose, x, y and yaw are always zero on the robot today, and the rest are zero unless body pose is in use. Keeping the slots means one layout fits every brain.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%202%3A%2061%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -195,6 +197,7 @@
       <h3>For parents and teachers</h3>
       <p>The robot has 15 motors. The fifteenth opens the beak, and the walking brains never move it.</p>
       <p>The motor model in training is called BAM, from Rhoban. It models a Dynamixel XL330's voltage, the back-EMF that weakens a spinning motor, and its friction. Book 3, lesson 6 goes inside it.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%203%3A%2014%20motors%2C%2014%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -245,6 +248,7 @@
       <h3>For parents and teachers</h3>
       <p>The curve each unit uses is called ELU. Without a curve, the three layers would collapse into one big multiplication and the network could only draw straight lines.</p>
       <p>The network actually outputs 14 averages. While practising, the duck tries numbers around them, by a spread it also learns, one per motor. On the robot, the average is used.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%204%3A%20A%20brain%20made%20of%20sums">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -294,6 +298,7 @@
       <h3>For parents and teachers</h3>
       <p>How much each term counts in the picture: speed 2.0, turning 2.0, upright 2.0, feet in the air 3.0, pose 1.0 and head 2.0 pay; jerky actions cost from 0.1 rising to 1.0 as training goes on, sliding feet 0.1, and legs knocking the body 1.0.</p>
       <p>The head story in the code: a stricter head term made the duck stop walking "by iter 300". The fix was "L1 on a 1 s EMA of the error": charge the average droop, not each wobble.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%205%3A%20Points%20for%20what%20you%20want">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -347,6 +352,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <h3>For parents and teachers</h3>
       <p>The walking settings allow up to 50,000 iterations, a ceiling rather than a target. In September 2026, the walking brain Pollen had deployed was traced to a checkpoint at iteration 3,750.</p>
       <p>Watching the duck is a rule in Pollen's guide: "Report what rollouts actually show", not "it works!".</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%206%3A%20Practice%2C%20at%20scale">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -394,6 +400,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <h3>For parents and teachers</h3>
       <p>Each batch of practice is reused 5 times, in 4 slices, before new practice is collected. A small bonus for staying unpredictable, called entropy, keeps the duck exploring instead of settling early.</p>
       <p>"Better than expected" needs an expectation. A second network, the critic, learns how much reward to expect from each moment. Book 3, lesson 2 opens it.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%207%3A%20Small%20steps%20uphill">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -442,6 +449,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <h3>For parents and teachers</h3>
       <p>Randomization is not free. Pollen once let the balance point shift by up to 30 mm, more than the 20 mm from ankle to heel, and walking got worse; the cap is now 15 mm. Too wide a spread teaches a nervous walk.</p>
       <p>The pushes used to reach 0.5 m/s, faster than the duck's top commanded walk of 0.4 m/s, which "trains a permanently nervous fall-recovery gait".</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%208%3A%20Train%20on%20many%20worlds">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -494,6 +502,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
       <h3>For parents and teachers</h3>
       <p>Repos are created private by default, and publishing will not overwrite an existing file without being told to. Studio checks a network's input and output widths and says exactly why it refuses one.</p>
       <p>No robot yet? Pollen's microduck repository has a simulated duck, <code>scripts/duck-sim</code>, that runs the robot's real daemons against a body in MuJoCo.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%209%3A%20From%20training%20to%20a%20robot">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -545,6 +554,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
       <h3>For parents and teachers</h3>
       <p>An honest limit: the kicking brain is never shown the ball, so "the operator aims the robot at the ball". A brain that needs the ball's position will run in simulation until the robot can see it, and a brain whose inputs are not the shared 61 cannot be swapped in by the robot's runtime as it is.</p>
       <p>The kicker's critic does see the ball, during training only. Book 3, lesson 2 explains why that helps.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%2010%3A%20Your%20first%20project%3A%20bounce%20a%20ball">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -580,7 +590,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
         <a href="/science/">Evidence</a>
         <a href="/privacy/">Privacy</a>
         <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
-        <a href="mailto:craigm26@gmail.com">Contact</a>
+        <a href="/feedback/">Feedback</a>
       </nav>
     </div>
   </div>
