@@ -17,6 +17,13 @@ out to what is printed. The quotes are checked against the sources at the
 commits the links pin, so a source that moves on cannot make a quote stale
 without the gate noticing. Like check_links.sh it needs the network.
 
+THE TRAINING GUIDE IS HELD THE SAME WAY. /train/ walks a beginner through
+Pollen's own tools on a home PC, so its numbers come from Pollen's challenges
+and training code, pinned, and from the Microsoft and NVIDIA pages it leans
+on; tools/books/claims-train.json ledgers them as a lesson's are, and the shelf
+and the guide go through the same plain-page check. A source that is a web
+page is read for its words, not its markup, so a tag cannot split a quote.
+
 THE ONE PLACE SCRIPTS RUN. The rest of the site has no JavaScript and a policy
 that forbids it. The books are the exception, so this gate also holds the
 exception to its edges: one module script tag on each book page and nowhere
@@ -82,7 +89,19 @@ SOURCES = {
     "site-maze": "public/cards/packs/duck-maze/index.html",
     "site-loop": "public/cards/packs/loop-the-course/index.html",
     "site-home": "public/index.html",
+    # the training guide, /train/: Pollen's challenges, pinned, and the platform pages it leans on
+    "ch-sprint": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/src/microduck_challenges/sprint_2m/AGENTS.md",
+    "ms-wsl": "https://learn.microsoft.com/en-us/windows/wsl/install",
+    "ms-wslg": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps",
+    "nvidia-wsl": "https://docs.nvidia.com/cuda/archive/13.2.2/wsl-user-guide/index.html",
 }
+
+# Plain pages: no lessons and no figures, but every number ledgered all the same.
+# (page under public/, its ledger under tools/books/, the ledger's key, what messages call it)
+PLAIN = (
+    ("books/index.html", "claims-shelf.json", "shelf", "the shelf"),
+    ("train/index.html", "claims-train.json", "train", "the training guide"),
+)
 
 WORDS = ("two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
          "sixteen seventeen eighteen nineteen twenty thirty forty fifty sixty seventy eighty ninety "
@@ -269,6 +288,9 @@ def source_text(key: str) -> str | None:
     if where.startswith("http"):
         got = subprocess.run(["curl", "-s", "-L", "--max-time", "30", where], capture_output=True, text=True)
         text = got.stdout if got.returncode == 0 else ""
+        if re.search(r"<html\b", text[:4000], flags=re.I):
+            # a web page: read its words, not its markup, so a tag cannot split a quote
+            text = flatten(text)
         if where.endswith(".py"):
             # a quote from a comment may run across lines; read the comment, not its markers
             text = re.sub(r"(?m)^\s*#\s?", "", text)
@@ -545,31 +567,38 @@ def check_headers() -> None:
             fail.append(f"{url}: its policy must start from default-src 'none'")
 
 
-def check_shelf(list_only: bool) -> None:
-    page = (PUBLIC / "books/index.html").read_text(encoding="utf-8")
+def check_plain(rel: str, ledger: str, key_name: str, label: str, list_only: bool) -> int:
+    """A plain page: every number in its main and its head ledgered, and no script."""
+    path = PUBLIC / rel
+    if not path.is_file():
+        fail.append(f"public/{rel} is missing")
+        return 0
+    page = path.read_text(encoding="utf-8")
     m = re.search(r"<main\b.*?</main>", page, flags=re.S)
     found = numbers_in(flatten(m.group(0) if m else ""))
-    claims = json.loads((TOOLS / "claims-shelf.json").read_text(encoding="utf-8"))["lessons"]["shelf"]
+    claims = json.loads((TOOLS / ledger).read_text(encoding="utf-8"))["lessons"][key_name]
     if list_only:
-        print(f"shelf: {sorted(found)}")
-        return
+        print(f"{key_name}: {sorted(found)}")
+        return len(claims)
     for key in sorted(found - set(claims)):
-        fail.append(f"the shelf prints {key!r} and tools/books/claims-shelf.json does not say where it comes from")
+        fail.append(f"{label} prints {key!r} and tools/books/{ledger} does not say where it comes from")
     for key in sorted(set(claims) - found):
-        fail.append(f"tools/books/claims-shelf.json lists {key!r} and the shelf no longer prints it")
+        fail.append(f"tools/books/{ledger} lists {key!r} and {label} no longer prints it")
     ledgered = set().union(*(forms(k) for k in claims)) if claims else set()
     for key, value in claims.items():
-        check_entry("shelf", key, value, ledgered)
+        check_entry(key_name, key, value, ledgered)
     for key in sorted(head_numbers(page)):
         if not forms(key) & ledgered:
-            fail.append(f"the shelf's head prints {key!r} and tools/books/claims-shelf.json does not say where it comes from")
+            fail.append(f"{label}'s head prints {key!r} and tools/books/{ledger} does not say where it comes from")
     if "<script" in page:
-        fail.append("the shelf carries a script; it is a plain page")
+        fail.append(f"{label} carries a script; it is a plain page")
+    return len(claims)
 
 
 def main() -> int:
     list_only = "--list" in sys.argv[1:]
-    check_shelf(list_only)
+    plain = {key_name: check_plain(rel, ledger, key_name, label, list_only)
+             for rel, ledger, key_name, label in PLAIN}
     for book in BOOKS:
         if (PUBLIC / "books" / book / "index.html").is_file():
             check_book(book, list_only)
@@ -585,7 +614,8 @@ def main() -> int:
         return 1
     count = sum(len(json.loads((TOOLS / f"claims-{b}.json").read_text())["lessons"]) for b in BOOKS)
     print(f"check_books: three books, thirty lessons, every number in {count} ledgers sourced, "
-          "derived or labelled, and scripts only where the policy allows them")
+          f"derived or labelled, the training guide's {plain['train']} as well, "
+          "and scripts only where the policy allows them")
     return 0
 
 

@@ -258,10 +258,24 @@ td code { white-space: normal; }
   .docs-content .lede { font-size: 1.05rem; }
   .privacy-wrap { padding-top: 2.5rem; }
 }
-@media (max-width: 380px) {
+/* Between a phone and a laptop the header is still one row: brand and seven links
+   ran past the edge from 641px (by 103px there; by 41px with six links before). */
+@media (min-width: 641px) and (max-width: 900px) {
+  .header-inner { gap: 1rem; }
+  .site-nav { gap: 1rem; }
+  .site-nav a { font-size: .8rem; }
+  .site-nav .nav-source { padding: .35rem .8rem; }
+}
+/* The tight nav up to 420px, not 380px: with seven links (Train joined in October 2026)
+   the 640px spacing ran 21px past a 390px phone's edge. */
+@media (max-width: 420px) {
   .site-nav { gap: .5rem; }
   .site-nav a { font-size: .72rem; }
   .site-nav .nav-source { padding: .2rem .6rem; }
+}
+/* On the narrowest phones seven links do not fit one row at a legible size: they wrap. */
+@media (max-width: 359px) {
+  .site-nav { flex-wrap: wrap; justify-content: flex-start; column-gap: .75rem; row-gap: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }

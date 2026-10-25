@@ -225,6 +225,19 @@
 # run from another directory, the tick, the stale figure entry, the quote
 # without its number, the loose operand and the number in the head. Each rule
 # was written for one of them.
+# PROVED ABLE TO FAIL, 2026-10-25, check_books six more times, on the training
+# guide at /train/, by the same harness, each restored; the copy passed before
+# the first and after the last:
+#   * a number with no entry: "the training guide prints '999' and
+#     tools/books/claims-train.json does not say where it comes from".
+#   * an entry the page no longer prints: "claims-train.json lists '250' and
+#     the training guide no longer prints it".
+#   * a quote the pinned challenges file does not contain: "ch-sprint does not
+#     say ...".
+#   * a quote a web page does not contain, read through its markup: "ms-wsl
+#     does not say ...".
+#   * a number in its title: "the training guide's head prints '9'".
+#   * a script on the page: "the training guide carries a script".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

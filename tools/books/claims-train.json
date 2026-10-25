@@ -1,0 +1,84 @@
+{
+ "lessons": {
+  "train": {
+   "10": {
+    "source": "ms-wsl",
+    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+   },
+   "2004": {
+    "source": "ms-wsl",
+    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+   },
+   "19041": {
+    "source": "ms-wsl",
+    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+   },
+   "11": {
+    "source": "ms-wsl",
+    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+   },
+   "19044": {
+    "source": "ms-wslg",
+    "quote": "Windows 10 Build 19044+"
+   },
+   "2": {
+    "source": "nvidia-wsl",
+    "quote": "CUDA becomes available within WSL 2"
+   },
+   "4096": {
+    "source": "ch-sprint",
+    "quote": "`num_envs` 4096, `max_iterations` 3000"
+   },
+   "3000": {
+    "source": "ch-sprint",
+    "quote": "`num_envs` 4096, `max_iterations` 3000"
+   },
+   "250": {
+    "source": "ch-sprint",
+    "quote": "checkpoints every 250 iterations"
+   },
+   "1": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "2.5": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "4.892": {
+    "source": "ch-sprint",
+    "quote": "It scores 4.892 s, 5/5, at 0.55 m/s"
+   },
+   "2048": {
+    "derived": "4096 / 2",
+    "with": {
+     "2": "half the challenge's own num_envs: the first smaller run to try when the card runs out of memory"
+    }
+   },
+   "64": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "5": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "4000": {
+    "source": "rl-agents",
+    "quote": "gaits and curriculum-heavy recovery need 4000–6000"
+   },
+   "600": {
+    "source": "rl-readme",
+    "quote": "UV_HTTP_TIMEOUT=600"
+   },
+   "two": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   }
+  }
+ }
+}

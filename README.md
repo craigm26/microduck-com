@@ -44,7 +44,8 @@ identifying Studio as an independent project.
 - `scripts/` - the gates. `tools/` is never served.
 - `tools/duckcards/` - draws the cards into the pages: `build_cards.py`, the pictures
   (`art.py`) and the AprilTag table (`tag36h11.txt`); `build_packs.py` draws the pack pages.
-- `tools/books/` - the books' numbers ledgers (`claims-<book>.json`), the vendored files'
+- `tools/books/` - the books' numbers ledgers (`claims-<book>.json`) and the training guide's
+  (`claims-train.json`), the vendored files'
   digests, a local server that applies `_headers` (`serve.py`), the stills and frame-jump
   check (`shoot.cjs`, `montage.py`), and `mutate.py`, which plants a defect at a time in a copy
   of the repository and proves `check_books.py` fails on each.
@@ -199,6 +200,21 @@ the ledger it complains about. To look at it, run `python3 tools/books/serve.py 
 console error, a step-count mismatch, a left page that overflows, or a mesh that jumps between
 frames; `python3 tools/books/montage.py <stills dir>` tiles them per lesson. After changing
 `check_books.py` itself, run `python3 tools/books/mutate.py` and add a case for the new rule.
+
+## Train your first duck
+
+[`/train/`](public/train/index.html) is the practical half of the books: a non-coder's route from
+a Windows PC with an NVIDIA card to a policy they trained, watched and entered in Pollen
+Robotics' Arena. It goes through WSL 2, the Windows NVIDIA driver, git and uv, then hands over to
+Pollen's own workshop (the **Train my own robot** line on an Arena challenge, which clones
+`microduck-challenges`), Claude Code beside it (each challenge folder has an `AGENTS.md` written
+for coding agents), the snags people hit, and `microduck_rl` for training the walk itself.
+
+Every tool on it is Pollen's; the page only adds the route. Its numbers are held like a book's:
+`tools/books/claims-train.json` quotes `microduck-challenges` at `6ff4070`, `microduck_rl` at
+`b02fdea`, and the Microsoft and NVIDIA pages the Windows steps rest on, and `check_books.py` checks
+it with the shelf as a plain page. When Pollen changes the workshop or the recipe, read their
+challenge's `AGENTS.md` again, re-pin the commit in `SOURCES`, and fix what the gate reports.
 
 ## Feedback
 

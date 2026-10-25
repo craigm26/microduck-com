@@ -260,6 +260,39 @@ def _():
     sub("public/books/index.html", "</head>", '<script type="module" src="/books/engine/book.js"></script>\n</head>')
 
 
+T = "public/train/index.html"
+
+
+@case("a number in the training guide with no entry", [T], "the training guide prints '999'")
+def _():
+    sub(T, "saves a checkpoint every 250", "saves a checkpoint every 999")
+
+
+@case("a training-guide entry the page no longer prints", [T], "claims-train.json lists '250' and the training guide no longer prints it")
+def _():
+    sub(T, "saves a checkpoint every 250", "saves a checkpoint now and then")
+
+
+@case("a training-guide quote a pinned source does not say", ["tools/books/claims-train.json"], "ch-sprint does not say")
+def _():
+    ledger("train", lambda L: L["train"]["4096"].update(quote="`num_envs` 8192, `max_iterations` 3000"))
+
+
+@case("a training-guide quote a web page does not say", ["tools/books/claims-train.json"], "ms-wsl does not say")
+def _():
+    ledger("train", lambda L: L["train"]["19041"].update(quote="Build 19041 and higher) or Windows 12"))
+
+
+@case("a number in the training guide's head", [T], "the training guide's head prints '9'")
+def _():
+    sub(T, "<title>Train your first duck, Microduck Studio</title>", "<title>Train your first duck in 9 steps, Microduck Studio</title>")
+
+
+@case("a script on the training guide", [T], "the training guide carries a script")
+def _():
+    sub(T, "</head>", '<script type="module" src="/books/engine/book.js"></script>\n</head>')
+
+
 def main():
     if COPY == SRC or SRC in COPY.parents or COPY in SRC.parents:
         raise SystemExit("mutate: that copy would land on the repository itself; name another WORKDIR")
