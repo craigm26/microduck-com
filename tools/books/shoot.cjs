@@ -84,4 +84,5 @@ fs.mkdirSync(out, { recursive: true });
   console.log(JSON.stringify(report));
   console.log(problems.length ? problems.join('\n') : 'no problems');
   await browser.close();
+  if (problems.length) process.exitCode = 1;
 })().catch((e) => { console.error(e); process.exit(1); });

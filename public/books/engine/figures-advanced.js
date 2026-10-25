@@ -213,7 +213,7 @@ export const figures = {
         const h = 1 / (1 - st.gamma);
         return [['γ', st.gamma.toFixed(3)], ['horizon', `${Math.round(h)} ticks`], ['at 50 Hz', `${(h / 50).toFixed(2)} s`]];
       },
-      reset() { Object.assign(st, { grow: 0, disc: 0, env: 0, flag: 0, stack: 0 }); buildEnv(); draw(); },
+      reset() { Object.assign(st, { grow: 0, disc: 0, env: 0, flag: 0, stack: 0, gamma: api.slider.value }); buildEnv(); draw(); },
       steps: [
         { dur: 2.6, start() { ctx.sound('pop'); }, run(u) { st.grow = ease.out(u); draw(); } },
         { dur: 2.6, run(u) { st.disc = ease.inOut(u); st.env = ease.out(seg(u, 0, 0.5)); draw(); } },
@@ -313,7 +313,7 @@ export const figures = {
       group,
       slider: { label: 'λ', min: 0, max: 1, step: 0.01, value: 0.95, format: (v) => v.toFixed(2), input(v) { st.lambda = v; draw(); } },
       chips() { return [['λ', st.lambda.toFixed(2)], ['γλ', (gamma * st.lambda).toFixed(3)]]; },
-      reset() { Object.assign(st, { posts: 0, walk: 0, blend: 0, priv: 0, fold: 0 }); draw(); },
+      reset() { Object.assign(st, { posts: 0, walk: 0, blend: 0, priv: 0, fold: 0, lambda: api.slider.value }); draw(); },
       steps: [
         { dur: 2.0, start() { ctx.sound('pop'); }, run(u) { st.posts = ease.out(u); draw(); } },
         { dur: 4.2, run(u) { st.walk = u; draw(); } },
@@ -395,7 +395,7 @@ export const figures = {
         if (st.passes > 0) out.push(['passes', `${k} of 20`]);
         return out;
       },
-      reset() { Object.assign(st, { axis: 0, good: 0, bad: 0, passes: 0 }); api._f = api._b = false; draw(); },
+      reset() { Object.assign(st, { axis: 0, good: 0, bad: 0, passes: 0, eps: api.slider.value }); api._f = api._b = false; draw(); },
       steps: [
         { dur: 1.6, start() { ctx.sound('pop'); }, run(u) { st.axis = u; draw(); }, end() { st.axis = 1; draw(); } },
         { dur: 3.2, run(u) { st.good = u; draw(); say1(api, '_f', u > 0.62, () => ctx.say('clip!', V(90, 150, 30), { cls: 'is-green', sound: 'tick' })); } },
@@ -694,7 +694,7 @@ export const figures = {
     const api = {
       group,
       slider: { label: 'Battery', min: 70, max: 100, step: 1, value: 100, format: (v) => `${v.toFixed(0)}%`, input(v) { st.volt = v / 100; draw(); } },
-      reset() { Object.assign(st, { ideal: 0, emf: 0, fric: 0, lash: 0 }); api._s = api._p = false; draw(); },
+      reset() { Object.assign(st, { ideal: 0, emf: 0, fric: 0, lash: 0, volt: api.slider.value / 100 }); api._s = api._p = false; draw(); },
       steps: [
         { dur: 2.2, start() { ctx.sound('pop'); }, run(u) { st.ideal = u; draw(); } },
         { dur: 3.0, run(u) { st.emf = u; draw(); } },
@@ -896,7 +896,7 @@ export const figures = {
     };
     const api = {
       group,
-      slider: { label: 'Rows n', min: 20, max: 400, step: 1, value: 100, format: (v) => String(Math.round(v)), input(v) { st.n = v; if (st.ruler < 1) st.ruler = 1; draw(); } },
+      slider: { label: 'Rows n', min: 20, max: 400, step: 1, value: 100, format: (v) => String(Math.round(v)), input(v) { st.n = v; if (st.ruler < 1) st.ruler = 1; draw(); }, get: () => Math.round(st.n) },
       chips() {
         const n = Math.round(st.n);
         if (n < 1) return [];

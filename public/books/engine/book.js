@@ -698,6 +698,9 @@ async function main() {
       const sl = fig.obj.slider;
       fig.ui.slider.input.value = sl.value;
       fig.ui.slider.out.textContent = sl.format ? sl.format(Number(sl.value)) : String(sl.value);
+      // each figure's reset() puts its slider's parameter back to that value;
+      // a slider the steps move is shown afresh from get() on the next tick
+      fig.sliderShown = undefined;
     }
     unreveal();
     fig.ui.update();
