@@ -1,0 +1,20 @@
+name = "duck-inbox"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# The address mail comes from, on the zone whose Email Routing is on, and where it goes.
+# TO must be a verified destination in Email Routing; the binding refuses anything else.
+[vars]
+FROM = "inbox@microduckstudio.com"
+TO = "craigm26@gmail.com"
+
+[[send_email]]
+name = "INBOX"
+destination_address = "craigm26@gmail.com"
+
+# Secrets, set with `wrangler secret put` and never written here:
+#   HF_WEBHOOK_SECRET        the secret given to the Hugging Face webhook
+#   APPSTORE_WEBHOOK_SECRET  the secret given to the App Store Connect webhook
+# Optional, as a var or secret:
+#   IGNORE_HF_AUTHOR_IDS     comma-separated Hugging Face user ids whose posts are not mailed

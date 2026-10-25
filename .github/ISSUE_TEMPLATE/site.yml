@@ -1,0 +1,23 @@
+name: Something on the site
+description: A wrong fact, a broken link, or a page that does not work on your device.
+labels: ["site"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Which page?
+      placeholder: https://microduckstudio.com/docs/
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is wrong?
+      description: Quote the sentence if it is a wrong fact, and say how you know.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: iPhone, Safari

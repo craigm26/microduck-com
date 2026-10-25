@@ -100,6 +100,7 @@ desired_kl=0.01,</code></pre>
       <h3>For teachers and mentors</h3>
       <p>Have the group compute 0.99<sup><var>k</var></sup> for <var>k</var> = 10, 50, 100 and 300 in a spreadsheet, then imagine a duck with <var>γ</var> = 0.9: its horizon is 10 ticks, 0.2 s. What could it never learn to set up?</p>
       <p>The horizon is a property of the training objective, not of the network: the deployed policy just maps an observation to an action.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%201%3A%20States%2C%20actions%2C%20rewards%2C%20return">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -153,6 +154,7 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
       <p>Give each pair a row of rewards and a guessed <var>V</var>. Compute <var>δ</var> by hand for a few steps, then <var>Â</var> with <var>λ</var> = 0 and with <var>λ</var> = 1. The first is one-step TD; the second is the sampled return minus <var>V</var>.</p>
       <p>Asymmetric actor-critic is a general trick: train with what the simulator knows, deploy with what the robot senses.</p>
       <p>Each advantage sums at most 24 sampled ticks, one rollout; the critic's estimate stands in for everything after. That is how the horizon of lesson 1 reaches past the end of a rollout.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%202%3A%20Value%2C%20advantage%20and%20GAE">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -208,6 +210,7 @@ schedule="adaptive",</code></pre>
       <h3>For teachers and mentors</h3>
       <p>Draw min(<var>ρÂ</var>, clip(<var>ρ</var>, 0.8, 1.2)<var>Â</var>) for <var>Â</var> = 1 and <var>Â</var> = −1 on squared paper. Ask which side of each curve goes flat, and why that is the safe side.</p>
       <p>The entropy bonus is a reward for staying uncertain. Without it a policy can stop exploring before it has found a gait.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%203%3A%20PPO%3A%20better%2C%20but%20not%20too%20much">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -260,6 +263,7 @@ schedule="adaptive",</code></pre>
       <h3>For teachers and mentors</h3>
       <p>Lay the 61 slots out on squared paper with their index ranges. The command is velocity 3, head 4 and body 6, at indices 48 to 60, as the daemon's own notes list it. Joint velocity is a tick old because the servo firmware computes it as a moving average.</p>
       <p>The actor behind the plug is small: hidden layers of 512, 256 and 128 units, 197,774 weights and biases in all.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%204%3A%2061%20numbers%20in%2C%2014%20out">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -314,6 +318,7 @@ schedule="adaptive",</code></pre>
       <h3>For teachers and mentors</h3>
       <p>Run a reward-hacking round: each group writes a reward for a trick in plain words, and another group finds the laziest way to score it. The training notes' own catches include "ballistic whip instead of a roll" and "head-tripod instead of standing".</p>
       <p>Potential-based shaping pays <var>γ</var><var>Φ</var>(<var>s</var>′) − <var>Φ</var>(<var>s</var>). With <var>γ</var> in it, every path between two states earns the same discounted total, so the best behaviour stays the best (Ng, Harada and Russell, 1999). Pollen's upright reward pays the plain change, which is close when <var>γ</var> is near 1. One more rule from the same notes: add smoothness penalties only after the skill exists, or doing nothing wins.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%205%3A%20The%20reward%20is%20the%20specification">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -365,6 +370,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
       <h3>For teachers and mentors</h3>
       <p>Compare a spring with a heavy box. A spring pushes back the moment you move it, like an ideal controller. A box does not move at all until you push hard enough, then lurches: that is friction, and slow joints live in it.</p>
       <p>BAM is Rhoban's open project, "better actuator models".</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%206%3A%20The%20actuator%20is%20most%20of%20the%20gap">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -414,6 +420,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
       <h3>For teachers and mentors</h3>
       <p>Before any test, have the group write down what "walks one square reliably" means, in numbers. Then compare with the evidence page's: 95% of rows within 10 cm, 95% within 15°, a fall bound of 1%, and time limits.</p>
       <p>Note what is still open: the mat result is simulation only, and closed-loop cards stay off on real ducks. And note the randomizer rule: a draw that accumulated across resets once degraded every long training run for months.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%207%3A%20Randomize%2C%20then%20measure">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -466,6 +473,7 @@ for n in (100, 381, 1000):
       <h3>For teachers and mentors</h3>
       <p>Before an experiment, have the group write the criteria and the analysis on paper, seal it, and open it afterward. Pre-registration is that envelope.</p>
       <p>The rule of three is a quick check for zero events; Wilson is what the evidence page uses.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%208%3A%20Honest%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -515,6 +523,7 @@ for n in (100, 381, 1000):
       <h3>For teachers and mentors</h3>
       <p>Run a pick tournament: two moves on a screen, a show of hands, a tally. Then ask what the tally would teach a scorer, and what it would miss.</p>
       <p>A scorer learned from picks inherits the pickers' blind spots. A policy trained against it can exploit them, exactly like a hand-written reward.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%209%3A%20Learning%20from%20people">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -579,6 +588,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
       <h3>For teachers and mentors</h3>
       <p>Put the gates on the wall as a checklist, and make "what did the rollout actually show?" the first question at every review, before anyone says "it works".</p>
       <p>An EvalLog carries its whole specification beside its results, so a number can be traced to the run that made it.</p>
+      <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%2010%3A%20Ship%20it%2C%20and%20say%20what%20it%20does">Tell us about it</a>.</p>
     </section>
     <section>
       <h3>Where these numbers come from</h3>
@@ -615,7 +625,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
         <a href="/science/">Evidence</a>
         <a href="/privacy/">Privacy</a>
         <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
-        <a href="mailto:craigm26@gmail.com">Contact</a>
+        <a href="/feedback/">Feedback</a>
       </nav>
     </div>
   </div>

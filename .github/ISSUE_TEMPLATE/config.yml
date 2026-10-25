@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Email instead
+    url: https://microduckstudio.com/feedback/#email
+    about: No GitHub account, or something you would rather not post in public? Email feedback@microduckstudio.com.
+  - name: A bug in the app
+    url: https://github.com/craigm26/duck-studio/issues/new
+    about: Microduck Studio itself lives in the duck-studio repository.
+  - name: A policy, dataset or challenge entry
+    url: https://huggingface.co/craigm26
+    about: Use the Community tab on its page on Hugging Face.
