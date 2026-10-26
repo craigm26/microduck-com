@@ -17,12 +17,15 @@ out to what is printed. The quotes are checked against the sources at the
 commits the links pin, so a source that moves on cannot make a quote stale
 without the gate noticing. Like check_links.sh it needs the network.
 
-THE TRAINING GUIDE IS HELD THE SAME WAY. /train/ walks a beginner through
-Pollen's own tools on a home PC, so its numbers come from Pollen's challenges
-and training code, pinned, and from the Microsoft and NVIDIA pages it leans
-on; tools/books/claims-train.json ledgers them as a lesson's are, and the shelf
-and the guide go through the same plain-page check. A source that is a web
-page is read for its words, not its markup, so a tag cannot split a quote.
+THE TRAINING GUIDES ARE HELD THE SAME WAY. /train/ picks a machine and
+/train/windows/, /train/linux/, /train/mac/ and /train/iphone/ walk a beginner
+through Pollen's own tools and Microduck Studio on it, so their numbers come
+from Pollen's challenges, training code and Arena, from Studio's own source,
+all pinned to a commit, and from the Microsoft and NVIDIA pages they lean on.
+tools/books/claims-train.json ledgers each page under its own key, as a
+lesson's are, and the shelf and the guides go through the same plain-page
+check. A source that is a web page is read for its words, not its markup, so a
+tag cannot split a quote.
 
 THE ONE PLACE SCRIPTS RUN. The rest of the site has no JavaScript and a policy
 that forbids it. The books are the exception, so this gate also holds the
@@ -94,13 +97,27 @@ SOURCES = {
     "ms-wsl-gpu": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gpu-compute",
     "ms-wslg": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps",
     "nvidia-wsl": "https://docs.nvidia.com/cuda/archive/13.2.2/wsl-user-guide/index.html",
+    # the Mac and iPhone guides: what Pollen's tools install on a Mac and how they rent a card,
+    # and Microduck Studio's own words at 8e9e9bf, the commit of build 85, the beta
+    "ch-lock": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/uv.lock",
+    "rl-hfjobs": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/scripts/hf/README.md",
+    "arena-training": "https://raw.githubusercontent.com/pollen-robotics/microduck-arena/d7571179242140cefd788639a23195bd56575490/arena/workshop/training.py",
+    "studio-project": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/DuckStudio/project.yml",
+    "studio-hub": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/HubTraining.swift",
+    "studio-hubview": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/DuckStudio/Sources/HubTrainingView.swift",
+    "studio-prefs": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/PreferenceModel.swift",
+    "studio-weights": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/WeightSearch.swift",
 }
 
 # Plain pages: no lessons and no figures, but every number ledgered all the same.
 # (page under public/, its ledger under tools/books/, the ledger's key, what messages call it)
 PLAIN = (
     ("books/index.html", "claims-shelf.json", "shelf", "the shelf"),
-    ("train/index.html", "claims-train.json", "train", "the training guide"),
+    ("train/index.html", "claims-train.json", "train", "the training chooser"),
+    ("train/windows/index.html", "claims-train.json", "windows", "the Windows guide"),
+    ("train/linux/index.html", "claims-train.json", "linux", "the Linux guide"),
+    ("train/mac/index.html", "claims-train.json", "mac", "the Mac guide"),
+    ("train/iphone/index.html", "claims-train.json", "iphone", "the iPhone guide"),
 )
 
 WORDS = ("two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
@@ -613,8 +630,9 @@ def main() -> int:
             print("check_books: " + problem, file=sys.stderr)
         return 1
     count = sum(len(json.loads((TOOLS / f"claims-{b}.json").read_text())["lessons"]) for b in BOOKS)
+    guides = sum(n for key, n in plain.items() if key != "shelf")
     print(f"check_books: three books, thirty lessons, every number in {count} ledgers sourced, "
-          f"derived or labelled, the training guide's {plain['train']} as well, "
+          f"derived or labelled, the training pages' {guides} as well, "
           "and scripts only where the policy allows them")
     return 0
 

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train your first duck on an iPhone or iPad, Microduck Studio</title>
+<meta name="description" content="With Microduck Studio: judge, tune and search a Microduck network on the device itself, then train one with Pollen Robotics' trainer on a graphics card rented from Hugging Face, step by step. No computer, robot or coding needed.">
+<link rel="canonical" href="https://microduckstudio.com/train/iphone/">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=4d3840d903">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/cards/">Cards</a>
+      <a href="/books/">Books</a>
+      <a href="/train/" aria-current="page">Train</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="privacy-wrap">
+
+<header class="privacy-header">
+  <h1>Train your first duck on an iPhone or iPad</h1>
+  <p class="lede">An iPhone or iPad cannot run Pollen's trainer, but Microduck Studio does a good deal of training
+  work on the device itself, and rents a graphics card from Hugging Face for the part that needs one. You do not
+  need a computer, a robot or code. <a href="/train/">On another machine?</a></p>
+</header>
+
+<main id="main" tabindex="-1">
+
+<div class="note">
+  <p><strong>Microduck Studio is ours</strong>, an independent app for iPhone, iPad and Mac. The trainer it rents a
+  card for is Pollen Robotics': PPO in mjlab, run by our recipe on Pollen's own networks. Where this goes wrong for
+  you, <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20an%20iPhone">tell us
+  which step</a>.</p>
+</div>
+
+<nav aria-label="On this page">
+  <ul>
+    <li><a href="#need">What you need</a></li>
+    <li><a href="#install">Install Studio and turn on the tools</a></li>
+    <li><a href="#judge">Be the judge</a></li>
+    <li><a href="#device">Train on the device</a></li>
+    <li><a href="#rent">Train with Pollen's trainer on a rented card</a></li>
+    <li><a href="#drive">Drive what you trained</a></li>
+    <li><a href="#fixes">When something goes wrong</a></li>
+  </ul>
+</nav>
+
+<h2 id="need">What you need</h2>
+
+<ul>
+  <li><strong>An iPhone or iPad on iOS or iPadOS 17 or later</strong>, with Apple's free TestFlight app.</li>
+  <li><strong>For the rented training only, a free Hugging Face account with credit on it.</strong> Hugging Face
+  Jobs runs for any account with a positive credit balance, which you add with a card in
+  <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>; a PRO plan's monthly
+  credits count too. The card Studio rents, one NVIDIA L4, is $0.80 an hour, billed by the minute.</li>
+</ul>
+
+<p>Everything else on this page is free, and runs on the device: MuJoCo, the physics engine Pollen trains in, runs
+inside Studio.</p>
+
+<h2 id="install">Install Studio and turn on the tools</h2>
+
+<ol>
+  <li>Install Apple's TestFlight app, then
+  <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>. There is
+  no App Store release yet.</li>
+  <li>Open <strong>Learn</strong> and work through it: each lesson has a button that opens the real screen. The
+  training tools stay hidden until its last lesson, <strong>Show every tool</strong>, turns them on.
+  <strong>Settings</strong>, then <strong>Detail</strong>, turns them on as well.</li>
+</ol>
+
+<h2 id="judge">Be the judge</h2>
+
+<p>In <strong>Studio</strong>, under <strong>Make</strong>, <strong>Compare</strong> plays two networks walking under
+the same command, and you pick the better one. Your picks are the human feedback in RLHF: labels for what a good
+walk looks like to you. With a hundred picks between networks, Studio can learn your taste on the device and
+use it for a rented training run: see <a href="#picks">Train from your picks</a>.</p>
+
+<h2 id="device">Train on the device</h2>
+
+<p>Under <strong>Train and measure</strong>, these improve a network on the device itself, against physics it runs,
+with nothing sent anywhere:</p>
+
+<ul>
+  <li><strong>Tune it on this phone</strong> nudges a network toward a command, and keeps what scores better on
+  Pollen's own reward.</li>
+  <li><strong>Search its weights on this phone</strong> searches all 197,774 numbers in a network. Each generation
+  tries pairs of small random changes, scores every one, and steps toward the better change of each pair.</li>
+  <li><strong>Search a move's keyframes</strong> searches the poses and timing of a move you made.</li>
+</ul>
+
+<p>And under <strong>Play</strong>, <strong>Train a duck to shoot</strong> builds the controller that walks the duck
+to a ball and joins Pollen's walker to its kick, then trains its numbers on goals scored. None of these learns a
+network from nothing: they start from one that already walks or kicks. The device is a bench already; for a faster
+one, run the free <a href="/docs/#bench">desk bench</a> on a Mac, PC or Raspberry Pi of yours.</p>
+
+<h2 id="rent">Train with Pollen's trainer on a rented card</h2>
+
+<p><strong>Train a network on Hugging Face</strong>, under <strong>Train and measure</strong>, runs PPO, the
+reinforcement learning Pollen trains the Microduck's own networks with, on a rented card, with a reward you set on
+the device, and brings the network back. In Studio's own words, it is simulation only: it fine-tunes Pollen's own
+walking network, distilled to a smaller student, it is not a gait learned from nothing, and a pass is not a claim
+about a physical duck.</p>
+
+<ol>
+  <li>On Hugging Face, add credit in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
+  settings</a>, and make a token with write access at
+  <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Write, because
+  the job uploads its records with it.</li>
+  <li>In Studio, open <strong>Train a network on Hugging Face</strong>. Paste the token under <strong>Your Hugging
+  Face token</strong> and tap <strong>Check this token</strong>. Studio says which account it signed in as: jobs are
+  billed to that account. The token goes to Hugging Face as a job secret, never into the job's environment or its
+  log.</li>
+  <li>Under <strong>The reward</strong>, name the run and leave <strong>Full run</strong> off. Your first is a pilot:
+  100 iterations, about a quarter of an hour, judged only on whether it runs. A full run is 1,500 iterations, about
+  an hour and a half. <strong>Pay for walking</strong> and <strong>Pay for turning</strong> set how much the reward
+  pays for going, and nothing pays for standing still; leave them at 1 for now.</li>
+  <li><strong>Records dataset</strong> is filled in as your account's <code>duckbatch-records</code>: the job writes
+  what it trained and measured there. Hugging Face makes a new dataset public. To keep yours private, create a
+  private dataset with that name on Hugging Face before your first run.</li>
+  <li>Tap <strong>Train on Hugging Face</strong>. The screen says <strong>Waiting for a GPU</strong>, then
+  <strong>Training</strong>. You can leave it: the job carries on at Hugging Face, and the screen picks it up when you
+  come back. <strong>Open the job and its log</strong> shows it on Hugging Face, where you can also cancel it.</li>
+  <li>When it says <strong>Finished</strong>, tap <strong>Add the trained network to Behaviours</strong>. It brings
+  back the trained network and the one it started from. Compare the two: the run is judged by you, and it passes if
+  you pick the trained one at least 12 times in 20.</li>
+</ol>
+
+<p><strong>What it costs.</strong> One L4 at $0.80 an hour, for as long as the job runs. Studio stops a pilot after
+an hour and a full run after three, so neither can run on.</p>
+
+<h3 id="picks">Train from your picks</h3>
+
+<p>With a hundred picks in Compare, <strong>Train from your picks</strong> on the same screen offers a switch to
+train from them. Studio fits your taste on the device and scales each part of Pollen's reward by it, between ×0.5
+and ×2, so the reward is still Pollen's, weighted your way. Kick duels in Compare do the same for a kick:
+<strong>Train a kick from your picks</strong> starts from Pollen's own kick. Either run is judged the same way, by
+you, against the network it started from.</p>
+
+<h2 id="drive">Drive what you trained</h2>
+
+<p>On <strong>Play</strong>, tap <strong>Show the controls</strong>. Below the <strong>Bench</strong> picker,
+<strong>Put one of your networks on this bench</strong> sends a network from Behaviours to the bench, and the sticks
+steer by it. When your duck arrives, the same app drives it through a small bridge on a computer next to it, and
+can put a policy file on that computer's disk: see <a href="/docs/#real-duck">Connect a real duck</a>.</p>
+
+<h2 id="fixes">When something goes wrong</h2>
+
+<dl class="spec">
+  <dt>The training tools are not in Studio</dt>
+  <dd>They are hidden in Simple. <strong>Settings</strong>, then <strong>Detail</strong>: choose
+  <strong>Everything</strong>. Or finish Learn.</dd>
+  <dt><strong>Train on Hugging Face</strong> stays grey</dt>
+  <dd>The line under it says why: check the token first, name a records dataset, or wait for the run before it to
+  finish.</dd>
+  <dt>Hugging Face refuses the job</dt>
+  <dd>Studio shows Hugging Face's answer. The usual reason is no credit on the account: add some in
+  <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>.</dd>
+  <dt>The job stopped with an error</dt>
+  <dd>Its log on Hugging Face says where: <strong>Open the job and its log</strong>. A token without write access
+  passes <strong>Check this token</strong> and fails later, so make one with write access.</dd>
+</dl>
+
+<h2 id="next">Then</h2>
+
+<p>The <a href="/books/">books</a> explain what is happening while it trains. On a Mac, the same app does everything
+here, and the <a href="/train/mac/">Mac guide</a> adds Pollen's own workshop, which trains for the Arena. Stuck on a
+step, or found a better way?
+<a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20an%20iPhone">Tell us</a>, and
+say which step.</p>
+
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p><strong>This is not the official Microduck app.</strong> Pollen Robotics make the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Studio</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/cards/">Duck Cards</a>
+        <a href="/books/">Books</a>
+        <a href="/train/">Train a duck</a>
+        <a href="/science/">Evidence</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="/feedback/">Feedback</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

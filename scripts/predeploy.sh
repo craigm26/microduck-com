@@ -238,6 +238,21 @@
 #     "ms-wsl-gpu does not say ...".
 #   * a number in its title: "the training guide's head prints '9'".
 #   * a script on the page: "the training guide carries a script".
+# The same day the guide moved to /train/windows/, /train/ became the chooser
+# and /train/linux/, /train/mac/ and /train/iphone/ arrived. The six cases above
+# were rerun against the moved guide ("the Windows guide ...") and seven more
+# failed for the planted reason, with the whole harness, 44 of 44:
+#   * a number in the chooser's title: "the training chooser's head prints '4'".
+#   * a Linux quote the sprint guide does not contain: "linux: '2': ch-sprint
+#     does not say ...".
+#   * a number with no entry on the Mac guide: "the Mac guide prints '24'".
+#   * a Mac quote Pollen's Arena does not contain: "mac: 'two': arena-training
+#     does not say ...".
+#   * a number with no entry on the iPhone guide: "the iPhone guide prints
+#     '25'".
+#   * an iPhone quote Studio's source does not contain: "iphone: '197,774':
+#     studio-weights does not say ...".
+#   * a training page deleted: "public/train/linux/index.html is missing".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
