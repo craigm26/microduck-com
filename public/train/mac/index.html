@@ -84,7 +84,7 @@
 <p>Pollen trains the Microduck with <a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>, which
 needs an NVIDIA graphics card to train: its README says macOS is supported for evaluation only. So both routes below
 send the training to <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face Jobs</a>
-and keep the rest on the Mac: choosing what to train, judging what comes back, watching it walk and publishing
+and do the rest on the Mac: choosing what to train, judging what comes back, watching it walk and publishing
 it.</p>
 
 <h2 id="studio">With Microduck Studio</h2>
@@ -104,14 +104,15 @@ it.</p>
 </ol>
 
 <p>The <a href="/train/iphone/">iPhone and iPad guide</a> takes each of these step by step, the rented training
-above all; on a Mac they have the same names, with Mac in place of phone. Studio's training starts from Pollen's
-own walking network and fine-tunes it. To train a gait from nothing, or to race in Pollen's Arena, use the
+above all; on a Mac they have the same names, with Mac in place of phone. Studio's training starts from a smaller
+network distilled from Pollen's own walking network, and fine-tunes that. To train a gait from nothing, or to race in Pollen's Arena, use the
 workshop.</p>
 
 <h2 id="tools">With Pollen's workshop: git and uv</h2>
 
 <p>Pollen's tools run in <strong>Terminal</strong>, which is in Applications, in Utilities. First Apple's command
-line tools, which include git. A window asks to install them; choose Install:</p>
+line tools, which include git. A window asks to install them: choose Install, and wait until it says the software
+was installed.</p>
 
 <pre tabindex="0" role="region" aria-label="Installing Apple's command line tools, in Terminal"><code>xcode-select --install</code></pre>
 
@@ -122,7 +123,7 @@ need:</p>
 git config --global user.email "you@example.com"
 curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-<p>Put your own name and email in the <code>git config</code> lines: git signs every change with them, and the
+<p>Put your own name and email in the <code>git config</code> lines: git puts them on every change it records, and the
 workshop commits each change before it trains. Close the Terminal window and open a new one, so that it finds
 <code>uv</code>. Then <code>uv --version</code> prints a version number.</p>
 
@@ -141,9 +142,18 @@ in your browser; if no browser opens, open that address yourself. <strong>Leave 
 the workshop runs in it until you press Ctrl-C there. Open a new window for anything else.</p>
 
 <p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
-billing, your fork of the challenges on GitHub, and an NVIDIA card. On a Mac the card stays unticked, so the
+billing, your fork of the challenges on GitHub, and an NVIDIA card. On a Mac the list has no NVIDIA line, so the
 billing line is the one that matters; it and the fork line say how to set them up. Log in to Hugging Face with the
 button at the top right. Run the same line on another day and it reopens the same work.</p>
+
+<p>The fork line's <strong>Push</strong> sends your commits to your fork, so a policy you publish links to the code
+that trained it. Without it, publishing still works and the link is missing. To push, git has to be signed in to
+GitHub. GitHub's own tool does that: install <a href="https://brew.sh/" rel="noopener">Homebrew</a> as its page
+says, then install the tool and log in, choosing HTTPS and yes when it asks to authenticate Git with your GitHub
+credentials.</p>
+
+<pre tabindex="0" role="region" aria-label="Signing git in to GitHub, in Terminal"><code>brew install gh
+gh auth login</code></pre>
 
 <h2 id="first">Your first training</h2>
 
@@ -151,7 +161,8 @@ button at the top right. Run the same line on another day and it reopens the sam
   <li>On the challenge's page, choose <strong>New training</strong>, and <strong>Hugging Face Jobs</strong>. This
   machine is not an option: the workshop says there is no NVIDIA card here. Leave the knobs (Follow the speed order,
   Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>The workshop asks to commit the challenge, then sends the training to Hugging Face and gives it a ticket. The
+  <li>If you changed a knob, the workshop commits that change first. Then it sends the training to Hugging Face
+  and gives it a ticket. The
   recipe runs 3000 iterations and saves a checkpoint every 250. Pollen's notes put it at about 1 to 2.5 hours on the
   L4, at $0.80 per hour.</li>
   <li>Every two minutes the workshop brings the new checkpoints back to your Mac, and scores each one with the
@@ -162,8 +173,11 @@ button at the top right. Run the same line on another day and it reopens the sam
 </ol>
 
 <p><strong>The time on your Mac is a guide.</strong> Pollen's notes say simulations on different processors drift
-apart after a few seconds, and the Arena times every entry on its own machines. To end a training early, and its
-bill, press <strong>Stop</strong> on its ticket: a stopped job cannot be resumed.</p>
+apart after a few seconds, and the Arena times every entry on its own machines. <strong>Closing the workshop does not stop
+a training on Hugging Face</strong>: it runs, and bills, until it ends or reaches its 12-hour limit, $9.60 at the
+L4's price. To end one sooner, open the workshop again and press <strong>Stop</strong> on its ticket, or cancel it on
+your <a href="https://huggingface.co/settings/jobs" rel="noopener">Jobs page</a> at Hugging Face. A stopped job cannot
+be resumed.</p>
 
 <div class="note">
   <p><strong>The bar to beat.</strong> Pollen's
@@ -214,9 +228,13 @@ mechanics. That split is Pollen's rule, in the same file.</p>
   <dd>Close the Terminal window and open a new one. The installer adds uv for new windows.</dd>
   <dt>The first install stops with a timeout</dt>
   <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
-  again. Pollen's README suggests the same setting for the same first download.</dd>
+  again. Pollen's README suggests the same setting for its own first install.</dd>
   <dt>Git says "Author identity unknown"</dt>
   <dd>Run the <code>git config</code> lines from <a href="#tools">git and uv</a>, with your own name and email.</dd>
+    <dt>Hugging Face answers 403 when a job starts</dt>
+  <dd>The token can log in but not start Jobs. Make a Write one at
+  <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>, or tick the Jobs
+  permissions on a fine-grained one, then log in with it: <code>uv run hf auth login --force</code>.</dd>
   <dt>Hugging Face Jobs will not start</dt>
   <dd>The account needs a card on file and credit on it; add both in
   <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>. The workshop's
@@ -228,7 +246,8 @@ mechanics. That split is Pollen's rule, in the same file.</p>
 <p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
 its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>,
 and send each training to Hugging Face with <code>--hf-jobs</code>. In a new Terminal window, fetch it and log in to
-Hugging Face. The login asks for an access token: make one with write access at
+Hugging Face. If you logged in with the workshop's button, the login says you are in already. If not, it asks for
+an access token: make a Write one at
 <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>.</p>
 
 <pre tabindex="0" role="region" aria-label="Fetching microduck_rl and logging in, in Terminal"><code>cd ~
@@ -243,8 +262,8 @@ uv run hf auth login</code></pre>
 <p>If you belong to a Hugging Face organization, it first asks which account to bill; choose yours. Pollen's notes
 say a gait needs 4000 iterations or more. It prints the address of a private repository on your account where the
 checkpoints land, then follows the job's log. Ctrl-C
-stops following and leaves the job running; the job stops itself after 12 hours at most, and you can cancel it
-sooner on its page at Hugging Face. Bring the checkpoints back, with that repository's name in place of
+stops following and leaves the job running; the job stops itself after 12 hours at most, $9.60 at the L4's price,
+and you can cancel it sooner on its page at Hugging Face. Bring the checkpoints back, with that repository's name in place of
 <code>&lt;you&gt;/&lt;repo&gt;</code>:</p>
 
 <pre tabindex="0" role="region" aria-label="Bringing the checkpoints back to the Mac"><code>uv run hf download &lt;you&gt;/&lt;repo&gt; --local-dir logs/rsl_rl

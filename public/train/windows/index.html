@@ -126,7 +126,7 @@ git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-<p>Put your own name and email in the <code>git config</code> lines: git signs every change with them, and the
+<p>Put your own name and email in the <code>git config</code> lines: git puts them on every change it records, and the
 workshop commits each change before it trains. Close Ubuntu and open it again, so that it finds <code>uv</code>.
 Then <code>uv --version</code> prints a version number.</p>
 
@@ -150,13 +150,22 @@ up. Training needs the card or the billing, not both. Log in to Hugging Face wit
 same line on another day and it reopens the same work; if it says its port is busy, the workshop is already open in
 another window.</p>
 
+<p>The fork line's <strong>Push</strong> sends your commits to your fork, so a policy you publish links to the code
+that trained it. Without it, publishing still works and the link is missing. To push, git has to be signed in to
+GitHub. GitHub's own tool does that: install it, then log in, choosing HTTPS and yes when it asks to authenticate
+Git with your GitHub credentials.</p>
+
+<pre tabindex="0" role="region" aria-label="Signing git in to GitHub, in Ubuntu"><code>sudo apt install -y gh
+gh auth login</code></pre>
+
 <h2 id="first">Your first training</h2>
 
 <ol>
   <li>On the challenge's page, choose <strong>New training</strong>, and train on this machine. Leave the knobs
   (Follow the speed order, Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>The workshop asks to commit the challenge, then trains and gives the training a ticket. The recipe runs 3000
-  iterations and saves a checkpoint every 250. How long that takes depends on your card.</li>
+  <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit. Then
+  it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250. How
+  long that takes depends on your card.</li>
   <li>Every checkpoint is scored with the Arena's own rules as it arrives, and the training's page replays any of
   them. Pick 5/5 finishes first, then the lowest time. The best checkpoint is often not the last.</li>
   <li>When one is good enough, <strong>Publish and compete</strong> puts it on your Hugging Face account, in public,
@@ -175,6 +184,11 @@ another window.</p>
 <p>On the challenge's page, choose Hugging Face Jobs instead of this machine. It trains on Hugging Face's GPUs and
 bills your Hugging Face account, which needs credit on it. Pollen's notes give the default GPU, one NVIDIA L4, as
 $0.80 per hour, and the recipe as about 1 to 2.5 hours on it. You choose it for each training.</p>
+
+<p><strong>Closing the workshop does not stop a training on Hugging Face.</strong> It runs, and bills, until it ends
+or reaches its 12-hour limit, $9.60 at that price. To end one sooner, open the workshop again and press
+<strong>Stop</strong> on its ticket, or cancel it on your <a href="https://huggingface.co/settings/jobs"
+rel="noopener">Jobs page</a> at Hugging Face. A stopped job cannot be resumed.</p>
 
 <h2 id="claude">Claude beside you</h2>
 
@@ -223,7 +237,7 @@ mechanics. That split is Pollen's rule, in the same file.</p>
   <dd>Close Ubuntu and open it again. The installer adds uv for new windows.</dd>
   <dt>The first install stops with a timeout</dt>
   <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
-  again. Pollen's README suggests the same setting for the same first download.</dd>
+  again. Pollen's README suggests the same setting for its own first install.</dd>
   <dt>Git says "Author identity unknown"</dt>
   <dd>Run the <code>git config</code> lines from <a href="#tools">Install git and uv</a>, with your own name and
   email.</dd>
@@ -249,6 +263,11 @@ In a new Ubuntu window, fetch it into your home folder:</p>
 git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl</code></pre>
 
+<p><strong>No usable NVIDIA card?</strong> The quick test and the real run below both need one. Log in to
+Hugging Face first, as at the end of this section, then skip the quick test and add <code>--hf-jobs --no-wandb</code>
+to the end of the real run: it trains on Hugging Face's L4 instead, and the
+<a href="/train/mac/#further">Mac guide</a> shows how to bring its checkpoints back into Ubuntu.</p>
+
 <p>A quick test first. It catches most mistakes before the long run, and the first time it also installs this
 repository's own copy of everything:</p>
 
@@ -261,7 +280,8 @@ repository's own copy of everything:</p>
 <p><code>--agent.logger tensorboard</code> keeps the logs on your PC; without it, training uses Weights &amp; Biases,
 which asks you to log in. Pollen's README puts a usable gait at about one to two hours with 4096 simulated ducks,
 and its notes say a gait needs 4000 iterations or more. A checkpoint lands every 250 iterations, in a folder under
-<code>logs/rsl_rl/velocity/</code> named for the date and time and ending in <code>_velocity</code>. To see them:</p>
+<code>logs/rsl_rl/velocity/</code> named for the date and time and ending in <code>_velocity</code>. The quick test made one too; the later one is
+the real run. To see them:</p>
 
 <pre tabindex="0" role="region" aria-label="Listing the checkpoints"><code>ls logs/rsl_rl/velocity/*/</code></pre>
 
@@ -282,8 +302,9 @@ feeds it the old one and stops.</p>
 
 <pre tabindex="0" role="region" aria-label="Driving the exported policy"><code>uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs</code></pre>
 
-<p>To share a gait, run <code>uv run hf auth login</code> once. It asks for an access token: make one with write
-access at <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then,
+<p>To share a gait, log in to Hugging Face with <code>uv run hf auth login</code>. If you logged in with the
+workshop's button, it says you are logged in already. If not, it asks for an access token: make a Write one at
+<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then,
 with your Hugging Face username in place of <code>&lt;you&gt;</code>:</p>
 
 <pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>
@@ -294,8 +315,8 @@ name.</p>
 <h2 id="next">Then</h2>
 
 <p>The <a href="/books/">books</a> explain what is happening while it trains. Have an iPhone, iPad or Mac as well?
-<a href="/train/iphone/">Microduck Studio</a> opens an <code>.onnx</code> file like the one you export and shows
-what is inside it. Stuck on a step, or found a better way?
+<a href="/docs/#policies">Microduck Studio</a> opens an <code>.onnx</code> file like the one you export and,
+with every tool on, shows what is inside it. Stuck on a step, or found a better way?
 <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">Tell us</a>, and say which
 step.</p>
 

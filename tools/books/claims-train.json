@@ -80,6 +80,14 @@
    "two": {
     "source": "rl-readme",
     "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "12": {
+    "source": "rl-hfjobs-ws",
+    "quote": "DEFAULT_TIMEOUT = \"12h\"",
+    "means": "the workshop's Hugging Face training passes no --timeout, so microduck_rl's default limit applies"
+   },
+   "9.60": {
+    "derived": "12 * 0.80"
    }
   },
   "linux": {
@@ -140,6 +148,14 @@
    "2": {
     "source": "ch-sprint",
     "quote": "Walk 2 m on a flat lane as fast as possible."
+   },
+   "12": {
+    "source": "rl-hfjobs-ws",
+    "quote": "DEFAULT_TIMEOUT = \"12h\"",
+    "means": "the workshop's Hugging Face training passes no --timeout, so microduck_rl's default limit applies"
+   },
+   "9.60": {
+    "derived": "12 * 0.80"
    }
   },
   "mac": {
@@ -195,6 +211,13 @@
    "12": {
     "source": "rl-hfjobs",
     "quote": "`--timeout 12h` (default)"
+   },
+   "9.60": {
+    "derived": "12 * 0.80"
+   },
+   "403": {
+    "source": "rl-hfjobs-py",
+    "quote": "Hugging Face Jobs permission error (403)"
    }
   },
   "iphone": {
@@ -258,6 +281,10 @@
    "2": {
     "source": "studio-hubview",
     "quote": "Each multiplier scales Pollen's weight for that part of the reward, between ×0.5 and ×2."
+   },
+   "403": {
+    "source": "rl-hfjobs-py",
+    "quote": "Hugging Face Jobs permission error (403)"
    }
   }
  }

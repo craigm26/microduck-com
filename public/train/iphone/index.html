@@ -44,8 +44,9 @@
 
 <div class="note">
   <p><strong>Microduck Studio is ours</strong>, an independent app for iPhone, iPad and Mac. The trainer it rents a
-  card for is Pollen Robotics': PPO in mjlab, run by our recipe on Pollen's own networks. Where this goes wrong for
-  you, <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20an%20iPhone">tell us
+  card for is Pollen Robotics': PPO in mjlab, run by our recipe, starting from Pollen's own networks or a smaller
+  one distilled from them. Where this goes wrong for you,
+  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20an%20iPhone">tell us
   which step</a>.</p>
 </div>
 
@@ -80,7 +81,7 @@ inside Studio.</p>
   <li>Install Apple's TestFlight app, then
   <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>. There is
   no App Store release yet.</li>
-  <li>Open <strong>Learn</strong> and work through it: each lesson has a button that opens the real screen. The
+  <li>Open <strong>Learn</strong> and work through it: most lessons have a button that opens the real screen. The
   training tools stay hidden until its last lesson, <strong>Show every tool</strong>, turns them on.
   <strong>Settings</strong>, then <strong>Detail</strong>, turns them on as well.</li>
 </ol>
@@ -100,13 +101,17 @@ with nothing sent anywhere:</p>
 <ul>
   <li><strong>Tune it on this phone</strong> nudges a network toward a command, and keeps what scores better on
   Pollen's own reward.</li>
-  <li><strong>Search its weights on this phone</strong> searches all 197,774 numbers in a network. Each generation
-  tries pairs of small random changes, scores every one, and steps toward the better change of each pair.</li>
-  <li><strong>Search a move's keyframes</strong> searches the poses and timing of a move you made.</li>
+  <li><strong>Search its weights on this phone</strong> searches every number in a network, all 197,774 of them in
+  Pollen's walker. Each generation tries pairs of small random changes, scores every one, and steps toward the
+  better change of each pair.</li>
 </ul>
 
-<p>And under <strong>Play</strong>, <strong>Train a duck to shoot</strong> builds the controller that walks the duck
-to a ball and joins Pollen's walker to its kick, then trains its numbers on goals scored. None of these learns a
+<p><strong>Search a move's keyframes</strong>, beside them, works on a move rather than a network: it starts from a
+published stairs-challenge move and searches its poses and timing on the challenge's own grid. Studio says plainly
+that this is not training: it keeps the version that scored best.</p>
+
+<p>And in Studio, under <strong>Play</strong>, <strong>Train a duck to shoot</strong> builds the controller that
+walks the duck to a ball and joins Pollen's walker to its kick, then trains its numbers on goals scored. None of these learns a
 network from nothing: they start from one that already walks or kicks. The device is a bench already; for a faster
 one, run the free <a href="/docs/#bench">desk bench</a> on a Mac, PC or Raspberry Pi of yours.</p>
 
@@ -120,13 +125,14 @@ about a physical duck.</p>
 
 <ol>
   <li>On Hugging Face, add credit in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
-  settings</a>, and make a token with write access at
-  <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Write, because
-  the job uploads its records with it.</li>
+  settings</a>, and make a token at
+  <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>: a Write one, or
+  a fine-grained one with the Jobs permissions and write access to your repositories. The job is started with it,
+  and uploads its records with it.</li>
   <li>In Studio, open <strong>Train a network on Hugging Face</strong>. Paste the token under <strong>Your Hugging
   Face token</strong> and tap <strong>Check this token</strong>. Studio says which account it signed in as: jobs are
-  billed to that account. The token goes to Hugging Face as a job secret, never into the job's environment or its
-  log.</li>
+  billed to that account. Studio sends the token as a job secret, which Hugging Face encrypts and keeps out of
+  the job's visible settings; the job uses it to upload its records and does not print it.</li>
   <li>Under <strong>The reward</strong>, name the run and leave <strong>Full run</strong> off. Your first is a pilot:
   100 iterations, about a quarter of an hour, judged only on whether it runs. A full run is 1,500 iterations, about
   an hour and a half. <strong>Pay for walking</strong> and <strong>Pay for turning</strong> set how much the reward
@@ -138,8 +144,10 @@ about a physical duck.</p>
   <strong>Training</strong>. You can leave it: the job carries on at Hugging Face, and the screen picks it up when you
   come back. <strong>Open the job and its log</strong> shows it on Hugging Face, where you can also cancel it.</li>
   <li>When it says <strong>Finished</strong>, tap <strong>Add the trained network to Behaviours</strong>. It brings
-  back the trained network and the one it started from. Compare the two: the run is judged by you, and it passes if
-  you pick the trained one at least 12 times in 20.</li>
+  back the trained network and the one it started from, and asks you to Compare the two: the trained one should win
+  at least 12 of 20 picks. A pilot only has to run. A full run is also judged on pass lines written into its job
+  file before it started (<strong>Show the job file</strong>, on the same screen), which the job measures
+  itself.</li>
 </ol>
 
 <p><strong>What it costs.</strong> One L4 at $0.80 an hour, for as long as the job runs. Studio stops a pilot after
@@ -155,7 +163,7 @@ you, against the network it started from.</p>
 
 <h2 id="drive">Drive what you trained</h2>
 
-<p>On <strong>Play</strong>, tap <strong>Show the controls</strong>. Below the <strong>Bench</strong> picker,
+<p>On the <strong>Play</strong> tab, tap <strong>Show the controls</strong>. Below the <strong>Bench</strong> picker,
 <strong>Put one of your networks on this bench</strong> sends a network from Behaviours to the bench, and the sticks
 steer by it. When your duck arrives, the same app drives it through a small bridge on a computer next to it, and
 can put a policy file on that computer's disk: see <a href="/docs/#real-duck">Connect a real duck</a>.</p>
@@ -170,11 +178,14 @@ can put a policy file on that computer's disk: see <a href="/docs/#real-duck">Co
   <dd>The line under it says why: check the token first, name a records dataset, or wait for the run before it to
   finish.</dd>
   <dt>Hugging Face refuses the job</dt>
-  <dd>Studio shows Hugging Face's answer. The usual reason is no credit on the account: add some in
-  <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>.</dd>
+  <dd>Studio shows Hugging Face's answer. A 403 means the token can sign in but not start Jobs: make one as in
+  step 1 of the rented training, and paste it in again. An answer about credit or billing means the account needs
+  credit: add some in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
+  settings</a>.</dd>
   <dt>The job stopped with an error</dt>
-  <dd>Its log on Hugging Face says where: <strong>Open the job and its log</strong>. A token without write access
-  passes <strong>Check this token</strong> and fails later, so make one with write access.</dd>
+  <dd>Its log on Hugging Face says where: <strong>Open the job and its log</strong>. A token that cannot write to
+  your repositories passes <strong>Check this token</strong> and fails at the end, when the job uploads its records;
+  make one as in step 1.</dd>
 </dl>
 
 <h2 id="next">Then</h2>
