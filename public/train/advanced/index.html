@@ -194,8 +194,9 @@ your key.</p>
 <pre tabindex="0" role="region" aria-label="Watching the duck's loop, on the duck"><code>robotctl monitor</code></pre>
 
 <p>It shows what was asked for beside what was applied, every joint, and the IMU's view of which way is down. Press
-<strong>c</strong> for a frame from the head camera, and <strong>t</strong> for the 8×8 depth grid on a duck that
-has the depth sensor. To keep the whole state, 50 times a second, for comparing a real walk with the
+<strong>c</strong> for a frame from the head camera, and <strong>t</strong> for the 8×8 depth grid, which also shows
+whether your duck has the depth sensor: Pollen's robot docs say most ducks so far have none fitted, while its mapping
+post describes the duck with one in its head. To keep the whole state, 50 times a second, for comparing a real walk with the
 simulator's:</p>
 
 <pre tabindex="0" role="region" aria-label="Recording the duck's state to a file, on the duck"><code>robotctl monitor --json --hz 50 &gt; run.jsonl</code></pre>
@@ -204,6 +205,13 @@ simulator's:</p>
 pad page</a> describes the 28-byte datagram and has a complete sender in Python: it stands the duck up, turns the
 walk on and walks it forward for three seconds. A sensor that steers the duck sends the same datagrams with
 different stick values. With a gamepad plugged into a laptop, <code>duckctl udp-pad</code> sends them for you.</p>
+
+<p>Pollen's own <a href="https://pollen-robotics.com/microduck/blog/microduck-slam/">mapping post</a> shows these
+channels working together. Its service, <code>mapd</code>, builds a map of the room from the 8×8 depth sensor, a little
+at each stop, and finds the duck again after someone carries it, all on the duck's own processor. Odometry alone,
+the post measured, drifts about 2.4 cm for every metre walked. The mapper is not in a release yet; a version of it is
+on the <code>maploc-v2</code> branch of Pollen's microduck repository, and the recordings it was tested on, with ground
+truth, are public on Hugging Face as <code>pollen-robotics/SLAM_JJ_Salon_with_GT</code>.</p>
 
 <h2 id="qwiic">The spare Qwiic port</h2>
 

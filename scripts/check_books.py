@@ -141,6 +141,7 @@ SOURCES = {
     "md-udp-pad": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/udp-pad.md",
     "md-duckctl": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/duckctl.md",
     "md-architecture": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/architecture.md",
+    "pollen-slam": "https://pollen-robotics.com/microduck/blog/microduck-slam/",
     "db-cli": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/cli.py",
     "hat-readme": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md",
     "hat-bom": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/production/ASE01187-D1_elec_RPI_Robot_HAT_BOM.csv",

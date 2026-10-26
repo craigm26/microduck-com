@@ -42,6 +42,10 @@
     "source": "db-b003b-pilot",
     "quote": "100 PPO iterations × 2,048 envs, 224.7 s of training"
    },
+   "2.4": {
+    "source": "pollen-slam",
+    "quote": "about 2.4 cm of error for every metre walked"
+   },
    "224.7": {
     "source": "db-b003b-pilot",
     "quote": "100 PPO iterations × 2,048 envs, 224.7 s of training"
