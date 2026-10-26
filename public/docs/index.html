@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Documentation | Microduck Studio</title>
-<meta name="description" content="Get started with Microduck Studio. Learn to inspect policies, author motions, connect a physics bench, reproduce challenge scores and work with open file formats.">
+<meta name="description" content="How to use Microduck Studio: drive a duck in physics on your phone, inspect a policy, write a motion, run the physics bench, and reproduce a challenge score from the open files.">
 <link rel="canonical" href="https://microduckstudio.com/docs/">
 <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
@@ -82,64 +82,67 @@
   <article class="docs-content" id="main" tabindex="-1">
     <div class="docs-intro">
       <h1>Microduck Studio docs</h1>
-      <p class="lede">From your first policy to a result someone else can reproduce.
-      Guides for exploring Microduck on your phone, and measuring its motions in physics.</p>
+      <p class="lede">A preview shows what you asked a duck to do, and a measurement in physics
+      shows what a simulated duck does with it. These docs take you from your first policy on
+      the phone to a measured result that someone else can reproduce.</p>
     </div>
 
     <h2 id="get-started">Getting started</h2>
-    <p>You can start with the policies and recorded motions included in the app.
-    No robot, account or network connection is needed to explore them.</p>
+    <p>You do not need a robot, an account or a network connection to start: the policies
+    and recorded motions that come with the app are enough to explore.</p>
 
     <ol class="guide-steps">
-      <li><strong>Install the beta.</strong> Get Apple's free TestFlight app, then
+      <li><strong>Install the beta.</strong> There is no App Store release yet, so get Apple's
+      free TestFlight app and then
       <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>
-      on your iPhone, iPad or Mac. There is no App Store release yet.</li>
-      <li><strong>Drive it.</strong> The app opens on <strong>Play</strong>. Push the
-      left stick to walk and the right one to turn; the buttons between them play
-      moves Pollen trained, like the roulade. It all runs in physics on your phone.
-      The app has five tabs: <strong>Play</strong>, <strong>Learn</strong>,
-      <strong>Behaviours</strong>, <strong>Studio</strong> and <strong>My Microduck</strong>.</li>
+      on your iPhone, iPad or Mac.</li>
+      <li><strong>Drive it.</strong> The app opens on <strong>Play</strong>, where the left stick
+      walks the duck, the right one turns it, and the buttons between them play moves Pollen
+      trained, like the roulade. It all runs in physics on your phone. The app has five tabs:
+      <strong>Play</strong>, <strong>Learn</strong>, <strong>Behaviours</strong>,
+      <strong>Studio</strong> and <strong>My Microduck</strong>.</li>
       <li><strong>Follow Learn.</strong> The <strong>Learn</strong> tab is nine short
-      lessons, from driving to how Microduck is trained to tuning a network, each
-      with a button that opens the real screen. The last one turns on every tool.</li>
+      lessons, from driving to how Microduck is trained to tuning a network. Each one has
+      a button that opens the real screen, and the last one turns on every tool.</li>
       <li><strong>Explore a policy.</strong> Open <strong>Behaviours</strong> and
       choose a policy from <strong>Released by Pollen Robotics</strong>.
       With every tool on, its detail shows the network's structure, and
       <strong>Probe this network</strong> shows how its inputs affect its actions.</li>
       <li><strong>Play or make a motion.</strong> Open <strong>Studio</strong> to
-      find motions and scenes. Play a recorded motion, or create a draft and edit
-      its keyframes. A preview shows the poses you asked for.</li>
+      find motions and scenes, then play a recorded motion or create a draft and edit
+      its keyframes. The preview shows the poses you asked for, not what a robot would
+      do with them.</li>
       <li><strong>Be the judge.</strong> In <strong>Studio → Compare</strong>, watch two
       networks, motions or sequences side by side and pick the better one, or run a
       tournament of up to eight and crown a champion. This is the human-feedback half
-      of RLHF: your picks are the labels. With enough of them, Train from your picks
-      learns your taste on the phone and uses it to re-weight Pollen's reward for a
-      training run on Hugging Face. Settings decides whether picks may be shared.</li>
+      of RLHF: your picks are the labels. Once you have enough of them, Train from your
+      picks learns your taste on the phone and uses it to re-weight Pollen's reward for a
+      training run on Hugging Face, and Settings decides whether picks may be shared.</li>
       <li><strong>Train a duck to shoot.</strong> In <strong>Studio → Play</strong>, build the
       controller that walks the duck to a ball, lines up, dribbles and switches to
       Pollen's kick, then train its numbers against goals scored in physics on your
       phone. It is a search over the controller, not reinforcement learning:
       Pollen's networks never change.</li>
-      <li><strong>Play Duck Soccer.</strong> A proper pitch, smarter teams that pass,
-      press and make runs, and a camera that keeps your duck and the ball in view.
-      Put your own motions, sequences or trained shooter on Shoot, Pass, Special and
-      Celebrate. Practice mode has five skill challenges with stars, and the water polo
-      finale floods the last minute: ducks swim and the beak peck shoots.</li>
+      <li><strong>Play Duck Soccer.</strong> It has a proper pitch, smarter teams that pass,
+      press and make runs, and a camera that keeps your duck and the ball in view. Put your
+      own motions, sequences or trained shooter on Shoot, Pass, Special and Celebrate.
+      Practice mode has five skill challenges with stars, and the water polo finale floods
+      the last minute, so the ducks swim and the beak peck shoots.</li>
       <li><strong>Measure it in physics.</strong> Your phone is a bench already. For a
       faster one, follow <a href="#bench">the bench setup guide</a> to run it on a
-      computer, then enter the address it prints in the app.</li>
+      computer, then type the address it prints into the app.</li>
     </ol>
 
     <div class="note">
-      <p><strong>Simulation comes first.</strong> Nothing here has run on hardware.
-      The policy inspector, motion previews and physics bench answer different
-      questions. Read <a href="#honest">what the results mean</a> before treating
-      a preview or a score as evidence about a real robot.</p>
+      <p><strong>Simulation comes first.</strong> Nothing here has run on hardware, and the
+      policy inspector, the motion previews and the physics bench each answer a different
+      question. Read <a href="#honest">what the results mean</a> before you treat a preview
+      or a score as evidence about a real robot.</p>
     </div>
 
     <h2 id="real-duck">Connect a real duck</h2>
-    <p>The same app drives a real Microduck, through a small bridge on a computer next to
-    the duck (often the duck's own). The bridge comes with
+    <p>The same app drives a real Microduck through a small bridge on a computer next to
+    the duck, often the duck's own. The bridge comes with
     <a href="https://pypi.org/project/opencastor/" rel="noopener">OpenCastor</a>, version 3.7
     or newer.</p>
 
@@ -148,8 +151,9 @@
       <pre><code>pip install -U "opencastor&gt;=3.7"
 castor duck               # finds the duck, checks it, configures it
 castor duck --bridge      # the bridge the app connects to, port 7788</code></pre>
-      <code>castor up --archetype microduck</code> installs it as a service that starts on its
-      own. The bridge prints a token, also saved in <code>~/.microduck-bridge-token</code>.</li>
+      To have it start on its own, <code>castor up --archetype microduck</code> installs it as
+      a service. The bridge prints a token and also saves it in
+      <code>~/.microduck-bridge-token</code>.</li>
       <li><strong>Connect.</strong> In the app, open <strong>My Microduck → Connect to your duck's
       computer</strong>, type the computer's address (for example <code>duck.local</code>) and
       the token, and tap <strong>Connect</strong>. The sticks on <strong>Play</strong> now
@@ -172,94 +176,93 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
 
     <h3 id="dream">Dream-1, with your own key</h3>
     <p>Dream Labs' <a href="https://dreamlabs.ai" rel="noopener">Dream-1</a> drives a robot
-    from its camera and a task you type, such as "walk to the red mat". It is optional, it
-    uses your own Dream Labs account, and your key is billed by Dream Labs.</p>
+    from its camera and a task you type, such as "walk to the red mat". It is optional and
+    uses your own Dream Labs account, so Dream Labs bills your key.</p>
     <ul>
       <li><strong>What you need.</strong> A Dream Labs key (<code>dl_live_...</code>) from
       platform.dreamlabs.ai, a connected duck, and a Dream-1
       model fine-tuned on recordings of your duck, because Dream-1's public model drives robot
-      arms, not ducks. A duck model reads the head camera, with the walk command (vx, vy,
-      vyaw) as its state and its action. The app shows only models that fit a duck.</li>
+      arms, not ducks. A duck model reads the head camera and takes the walk command (vx, vy,
+      vyaw) as both its state and its action, and the app shows only models that fit a duck.</li>
       <li><strong>Save the key, once, in one of two places.</strong>
         <ul>
           <li><strong>On this device</strong> (from build 88): <strong>Settings → Dream-1</strong>,
-          paste it, tap <strong>Check and save the key</strong>. It is checked with Dream Labs,
-          kept in the Keychain and sent only to Dream Labs. Nothing about Dream is needed on the
-          duck's computer.</li>
+          paste it, tap <strong>Check and save the key</strong>. The app checks it with Dream Labs,
+          keeps it in the Keychain and sends it only to Dream Labs, so nothing about Dream is
+          needed on the duck's computer.</li>
           <li><strong>On the duck's computer</strong> (OpenCastor 3.7 or newer): in the
           <strong>Dream-1</strong> section of the screen you connected on. The duck's computer
-          checks it and keeps it in <code>~/.dreamlabs/credentials</code>, and the app does not
-          store it. There, <code>castor dream key</code> does the same, and <code>castor dream
+          checks the key and keeps it in <code>~/.dreamlabs/credentials</code>, and the app does
+          not store it. There, <code>castor dream key</code> does the same, and <code>castor dream
           check --duck</code> lists the models a duck can run.</li>
         </ul>
       A key on this device is used first.</li>
       <li><strong>Run it.</strong> Show the camera, pick your model under
       <strong>Dream-1</strong>, type a task, and tap <strong>Run Dream-1 on the duck</strong>.
-      Every step is held to the sticks' speeds; the duck stands still while a model starts;
-      a run ends at 60 seconds, when you tap <strong>Stop</strong>, or on anything unexpected,
-      and always with the duck told to stop.</li>
+      Every step is held to the sticks' speeds, and the duck stands still while a model starts.
+      A run ends at 60 seconds, when you tap <strong>Stop</strong>, or on anything unexpected,
+      and it always ends with the duck told to stop.</li>
       <li><strong>No duck model yet? Record one</strong> (from build 88). Under <strong>Record for
       Dream-1</strong>, type what you are showing the duck (for example "walk to the red mat"), tap
       <strong>Start a run</strong>, drive it there with the sticks, and tap <strong>End the
-      run</strong>. Each run is one example; record a few dozen, varied. The app writes what the
-      camera saw and what you told the duck, ten times a second, and keeps the runs on this device.
-      <strong>Export for Dream Labs</strong> makes a .zip. On a computer, unzip it and open
-      platform.dreamlabs.ai, Fine-tuning: under <strong>New configuration</strong> choose the
-      folder, name the state part and the action part <code>velocity</code> (3 values each) and give
-      the camera the role <code>head</code>; then <strong>Upload data</strong> with the same folder
-      and start a job. Dream Labs charges for the fine-tune. When it finishes, the model appears in
-      Dream-1 here.</li>
+      run</strong>. Each run is one example, so record a few dozen and vary them. The app writes
+      what the camera saw and what you told the duck, ten times a second, and keeps the runs on
+      this device. <strong>Export for Dream Labs</strong> makes a .zip, and the rest happens on a
+      computer: unzip it, open platform.dreamlabs.ai and go to Fine-tuning. Under <strong>New
+      configuration</strong> choose the folder, name the state part and the action part
+      <code>velocity</code> (3 values each) and give the camera the role <code>head</code>; then
+      <strong>Upload data</strong> with the same folder and start a job. Dream Labs charges for the
+      fine-tune, and when it finishes the model appears in Dream-1 here.</li>
       <li><strong>No robot? Use the simulated duck</strong> (iOS 18 or macOS 15). On
       <strong>Play</strong>, with the simulated duck, tap <strong>Dream-1</strong>: the app draws
       what the duck's head camera would see on a practice mat with a red mat, a blue mat and a ball,
-      from the real camera's position. Recording and Dream-1 work on it exactly as on a robot. A
-      model trained only on these pictures learns this mat, not your floor.</li>
-      <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever holds the key sends
-      Dream Labs the duck's last few camera pictures, its last walk command and your task,
-      about every two seconds; nothing when it is not running. See the
+      from the real camera's position. Recording and Dream-1 work on it exactly as on a robot, but
+      a model trained only on these pictures learns this mat, not your floor.</li>
+      <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever device holds the key
+      sends Dream Labs the duck's last few camera pictures, its last walk command and your task,
+      about every two seconds, and it sends nothing when Dream-1 is not running. See the
       <a href="/privacy/">privacy policy</a>.</li>
     </ul>
 
-    <p class="meta">The app collects no data. Network requests happen when you
-    choose to fetch, publish, draft with a service or use a bench. Read the
-    <a href="/privacy/">privacy policy</a> for where those requests go.</p>
+    <p class="meta">The app collects no data. It makes network requests when you choose to
+    fetch, publish, draft with a service or use a bench, and the
+    <a href="/privacy/">privacy policy</a> says where each of them goes.</p>
 
     <h2 id="policies">Inspect a policy</h2>
-    <p>Start in <strong>Behaviours</strong>. Policies are grouped by their
-    provenance: <strong>Released by Pollen Robotics</strong> and
-    <strong>From elsewhere</strong>. The app checks the network's fingerprint;
-    renaming a file does not make it an official release.</p>
+    <p>Start in <strong>Behaviours</strong>, which groups policies by where they came
+    from: <strong>Released by Pollen Robotics</strong> and <strong>From elsewhere</strong>.
+    The app checks the network's fingerprint, so renaming a file does not make it an
+    official release.</p>
 
     <h3>Bring your own network</h3>
     <p>Open an <code>.onnx</code> file from Files, AirDrop it to your device, or
-    import a public model using its HTTPS URL. Use a direct download URL for the
-    model file. A repository's web page is not the model itself.</p>
-    <p>If the file is refused, it stays in your library. Open its detail to read
-    the reason alongside the operations, layer widths, parameter count and tensor
-    names the app found. That gives you something concrete to check in your export.</p>
+    import a public model from its HTTPS URL. The URL has to be a direct download of
+    the model file, because a repository's web page is not the model itself.</p>
+    <p>A file the app refuses stays in your library. Its detail gives the reason beside
+    the operations, layer widths, parameter count and tensor names the app found, which
+    gives you something concrete to check in your export.</p>
 
     <h3>Probe what it listens to</h3>
-    <p>Choose <strong>Probe this network</strong> and start from an observation
-    preset. Change an input and compare the actions, joint targets and travel
-    limits. The input's z-score shows how far it sits from the network's training
-    distribution; the sensitivity ranking shows which inputs affect its output.</p>
-    <p>This is a forward pass through the network. To see a policy walk in a
-    simulated world, run it on <a href="#bench">the physics bench</a>.</p>
+    <p>Choose <strong>Probe this network</strong>, start from an observation preset,
+    then change an input and compare the actions, joint targets and travel limits.
+    The input's z-score shows how far it sits from the network's training
+    distribution, and the sensitivity ranking shows which inputs affect its output.</p>
+    <p>A probe is a forward pass through the network, not a walk. To see a policy walk in
+    a simulated world, run it on <a href="#bench">the physics bench</a>.</p>
 
     <h2 id="motions">Write a motion</h2>
-    <p>In <strong>Studio</strong>, create a motion by posing the robot and editing
-    its keyframes. Or open <strong>Draft with words</strong>, choose <strong>Motion</strong>
+    <p>In <strong>Studio</strong> you can create a motion by posing the robot and editing
+    its keyframes, or open <strong>Draft with words</strong>, choose <strong>Motion</strong>
     and describe what you want. The model's draft goes through the same joint and
-    travel checks as a motion you write yourself, then opens for you to edit.</p>
-    <p>Choose a scene and preview the result. The preview interpolates your poses
-    and times; it does not calculate whether the robot could perform the move.
-    The motion's <strong>Sim to real</strong> row records whether it has been
-    written, previewed or run on a bench.</p>
-    <p>Export your authored motion as <code>.duckmove</code> to keep a copy or
-    share it. A <code>.duckintent</code> holds a recorded policy run in physics.
-    See <a href="#formats">file formats</a> for the distinction, and
-    <a href="#reproduce">reproduce a published number</a> when you are ready
-    to check a measured result.</p>
+    travel checks as a motion you write yourself, and then it opens for you to edit.</p>
+    <p>Then choose a scene and preview the result: the preview interpolates your poses and
+    times, but it does not calculate whether the robot could perform the move. The
+    motion's <strong>Sim to real</strong> row records how far it has got: written,
+    previewed or run on a bench.</p>
+    <p>Export a motion you wrote as <code>.duckmove</code> to keep a copy or share it.
+    A <code>.duckintent</code> is a different thing, a recorded policy run in physics, and
+    <a href="#formats">file formats</a> has the distinction. When you are ready to check a
+    measured result, <a href="#reproduce">reproduce a published number</a>.</p>
 
 <h2 id="evaluations">Evaluations</h2>
 
@@ -271,9 +274,9 @@ somebody else can check.</p>
 
 <p>Microduck Studio takes its evaluation vocabulary from
 <a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
-an open source framework for evaluating physical AI. Its one big idea is that a
+an open source framework for evaluating physical AI, whose one big idea is that a
 robotics evaluation has two swappable inputs where a language model evaluation
-has one. A <strong>policy</strong> turns an observation into actions. An
+has one. A <strong>policy</strong> turns an observation into actions, and an
 <strong>embodiment</strong> is the body and the world that executes them. A
 <strong>task</strong> is defined against neither: it is a set of scenes, a set of
 scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
@@ -282,20 +285,21 @@ scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
 whole plan rather than a starting point. Picking one fills the scenes, what
 varies between the epochs of a scene, the rule for reducing them, the horizon
 and the scorers. Two of the four walk a network under a command schedule from
-drop heights it was never tuned on. The other two run one episode per published
+drop heights it was never tuned on, and the other two run one episode per published
 cell of a challenge grid, scored by the challenge harness rather than by the
 app.</p>
 
-<p>What is left to pick is the thing being evaluated and where it runs. The
+<p>That leaves two things to pick: the thing being evaluated and where it runs. The
 thing being evaluated is a network from your library, named by digest, or a
-published challenge entrant. Where it runs is an embodiment: a bench on your
+published challenge entrant. Where it runs is an embodiment, either a bench on your
 network, named and carrying its world's digest, or this phone's own bench. A
-real Microduck is on that list and cannot be chosen yet: an evaluation needs a
+real Microduck is on that list and cannot be chosen yet, because an evaluation needs a
 world it can reset and score, and a real duck on a floor is not that.</p>
 
-<p>There is no epoch count, no reducer picker and no seed field on that screen.
-A control that could disagree with the preset would be a second opinion about
-what the preset means, and the four presets are the whole argument.</p>
+<p>So where do you set the number of epochs, the reducer or the seed? You don't. There
+is no epoch count, no reducer picker and no seed field on that screen, because a control
+that could disagree with the preset would be a second opinion about what the preset
+means, and the four presets are the whole argument.</p>
 
 <p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
 carries the whole specification beside the results, so a number can always be
@@ -344,7 +348,7 @@ probability without being one.</p></blockquote>
   The filename is the task slug and a short hash.</dd>
 </dl>
 
-<p>What the app does not do is run inspect-robots. An iPhone cannot run Python.
+<p>What the app does not do is run inspect-robots, because an iPhone cannot run Python.
 The rollouts happen on a bench, the phone's own or one on your network, the scoring
 reads the trajectory the bench recorded, and the file is written to
 inspect-robots' schema rather than by inspect-robots' code. That distinction
@@ -357,17 +361,16 @@ naming Microduck Studio and saying that no inspect-robots ran. Their own viewer
 prints that field in its header, so a stranger who renders one of these logs is
 told, in their own report, what wrote it.</p>
 
-<p>An evaluation you have run can be saved, exported as its JSON, rendered as a
-self contained report the app draws itself, sent through the share sheet, or
-published to a Hugging Face dataset under your own account. A log written
-somewhere else can be opened on the phone. On a computer,
+<p>You can save an evaluation you have run, export it as its JSON, render it as a
+self contained report the app draws itself, send it through the share sheet, or
+publish it to a Hugging Face dataset under your own account, and a log written
+somewhere else opens on the phone too. On a computer,
 <code>inspect-robots view LOG.json</code> renders the same file as a standalone
 HTML report, and <code>read_eval_log</code> will refuse it outright if the schema
 is wrong, which is the point of writing the real one.</p>
 
-<p>An EvalLog is a record and not a submission. The two challenge screens are
-the only path onto either leaderboard, and a log of a challenge run does not put
-anything on one.</p>
+<p>An EvalLog is a record, not a submission. The two challenge screens are the only
+path onto either leaderboard, and a log of a challenge run puts nothing on one.</p>
 
 </div>
 <!-- EVALSTATE:SECTION:END -->
@@ -380,17 +383,17 @@ endorsed by, or affiliated with it.</p>
 
 <h2 id="bench">The bench</h2>
 
-<p>This is the piece that turns a preview into a measurement. It is a small Node
+<p>The bench is the piece that turns a preview into a measurement: a small Node
 program that runs MuJoCo on a computer you already own, a Mac, a PC or a
-Raspberry Pi, and the app talks to it over your own network.</p>
+Raspberry Pi, and that the app talks to over your own network.</p>
 
 <p>
   <a class="cta" href="/duckbench-bundle.zip">Download the bench, 11.7&nbsp;MB</a>
   <span class="meta"><a href="/duckbench-bundle.zip.sha256" aria-label="sha256 checksum for the bench bundle">sha256</a></span>
 </p>
 
-<p class="hair">It is a desktop download. It runs on a Mac, a PC or a Raspberry
-Pi, and it does not run on the phone.</p>
+<p class="hair">It is a desktop download for a Mac, a PC or a Raspberry Pi, and it
+does not run on the phone.</p>
 
 <h3>Starting it</h3>
 <pre tabindex="0" role="region" aria-label="Starting the bench, as a shell command"><code># Windows: right-click start.ps1, then Run with PowerShell
@@ -398,8 +401,8 @@ Pi, and it does not run on the phone.</p>
 ./start.sh</code></pre>
 
 <p class="hair">The first start installs MuJoCo and onnxruntime and takes a
-couple of minutes. Every start after that is seconds. It prints the address to
-type into the app, or to curl.</p>
+couple of minutes, and every start after that takes seconds. It prints the address
+to type into the app, or to curl.</p>
 
 <div class="note">
   <p><strong>Use the Tailscale address it prints, not a Wi-Fi one.</strong> A
@@ -410,9 +413,9 @@ type into the app, or to curl.</p>
 
 <h3>What travels with it</h3>
 <p>The bundle carries <code>scene.mjb</code>, the physics world every
-measurement is made against, and its digest. A number measured against a
-different world is not comparable to one measured here, which is why the world
-ships with the code rather than just its filename.</p>
+measurement is made against, and its digest. Why ship the world and not just its
+filename? Because a number measured against a different world is not comparable to
+one measured here.</p>
 
 <p><code>3f8c9ab9b409ba74c73c30179d5f7c12b025f631693f9eec78d80dca242547be</code></p>
 
@@ -421,23 +424,22 @@ against. It is printed in full rather than shortened, because a shortened digest
 is a digest nobody can compare.</p>
 
 <h3>The bench inside the phone</h3>
-<p>The app also carries the bench, served to itself over HTTP on 127.0.0.1, so
-that it has one client for one protocol rather than two. Its speed on a phone
+<p>The app also carries the bench and serves it to itself over HTTP on 127.0.0.1,
+so that it has one client for one protocol rather than two. Its speed on a phone
 has never been measured. The figure that gets quoted for the core came off a
 desktop browser on a Raspberry Pi 5, which is not an iPhone, so the app reports
 the tick its own bench measures wherever it actually runs rather than quoting
 somebody else's machine.</p>
 
-<p>You can drive the same core in Safari without the app. The
+<p>You can drive the same core in Safari without the app, and the
 <a href="https://microduck-sim.pages.dev/phonebench/" rel="noopener">phone bench probe</a>
 tells you what your own phone can and cannot do with it. It is a probe and not a
-bench: it is there so you find out before the app asks you to trust a
-number.</p>
+bench, there so you find out before the app asks you to trust a number.</p>
 
 <h2 id="challenges">Challenges</h2>
 
-<p class="standfirst">Two published challenges. Both open, both unmet, both
-scored against the same compiled world by the harness in
+<p class="standfirst">There are two published challenges, both still open and unmet,
+and both scored against the same compiled world by the harness in
 <a href="https://github.com/craigm26/duckbench" rel="noopener">duckbench</a>.</p>
 
 <h3>Stairs</h3>
@@ -489,8 +491,8 @@ shaped sum of nine weighted terms is not a thing a person can hold in their
 head, and a leaderboard sorted on it would reward a duck that stands beautifully
 still.</p>
 
-<p>One caveat this challenge carries. The kick config was trained against a
-70 mm, 15 g ball. This plant's ball is 100 mm and 30 g, so a speed in metres per
+<p>This challenge carries one caveat: the kick config was trained against a
+70 mm, 15 g ball and this plant's ball is 100 mm and 30 g, so a speed in metres per
 second measured here is not comparable with anything Pollen published.</p>
 
 <p>Both grids, both entrant corpora and every published score live in the
@@ -518,14 +520,14 @@ device and nothing is sent until you pick where it goes.</p>
 
 <p>Where it goes is a
 <a href="https://github.com/craigm26/duckbench/issues/new" rel="noopener">GitHub issue on duckbench</a>
-with the file attached. That is the submission a maintainer sees. Publishing the
+with the file attached, which is the submission a maintainer sees. Publishing the
 same file to a Hugging Face dataset under your own account, under CC BY 4.0, is
-your archive and submits nothing to anyone.</p>
+your archive, and it submits nothing to anyone.</p>
 
 <h2 id="packs">Packs and Measure my duck</h2>
-<p>A pack is a game for <a href="/cards/">Duck Cards</a>, set for a grade band: a board,
+<p>A pack is a game for <a href="/cards/">Duck Cards</a> set for a grade band: a board,
 the cards in play, challenges that ramp from easy to hard, and lessons. Four ship with the
-app, from PreK to grade 8; the <a href="/cards/packs/">pack pages</a> print them.</p>
+app, from PreK to grade 8, and the <a href="/cards/packs/">pack pages</a> print them.</p>
 
 <ol class="guide-steps">
   <li><strong>Play a challenge.</strong> Open <strong>Packs</strong>, choose a pack and a
@@ -535,35 +537,35 @@ app, from PreK to grade 8; the <a href="/cards/packs/">pack pages</a> print them
   as a plan. On a real duck its Walk and Turn cards are timed, and the screen says so: a timed
   card does not land on a square.</li>
   <li><strong>Long rows play in chapters.</strong> A row of more than 7 Walk and Turn cards is
-  split into chapters. The board rings each <strong>nest</strong>, the square the duck goes
+  split into chapters, and the board rings each <strong>nest</strong>, the square the duck goes
   back on, and which way it faces. Run on the duck stops at each nest until you put the duck
   there and press <strong>The duck is on the nest</strong>.</li>
-  <li><strong>Design a level.</strong> Tap squares for the start, goal, walls and gates; par is
-  worked out for you. Challenges save into your class pack, which shares as a
+  <li><strong>Design a level.</strong> Tap squares for the start, goal, walls and gates, and par
+  is worked out for you. Challenges save into your class pack, which shares as a
   <code>.duckpack</code>.</li>
   <li><strong>Measure my duck.</strong> Packs, then <strong>Measure my duck</strong>, is the
   one screen that runs closed-loop cards on a robot, and it opens by saying it is a test. Tape a
-  grid of 30 cm squares, five long and three wide; the duck walks one to four squares and turns
-  four quarter turns; you type where it ended from the tape. It judges your marks against the
-  same criteria as the simulator and shares a <code>duck-measure/0</code> report.</li>
+  grid of 30 cm squares, five long and three wide. The duck walks one to four squares and turns
+  four quarter turns, and you type where it ended, read off the tape. It judges your marks
+  against the same criteria as the simulator and shares a <code>duck-measure/0</code> report.</li>
 </ol>
 
-<p>Why closed-loop cards are off on real ducks, with every number and every row:
+<p>For why closed-loop cards are off on real ducks, with every number and every row, read
 <a href="/science/">the evidence</a>.</p>
 
 <h2 id="reproduce">Reproduce a published number</h2>
 
-<p class="standfirst">Five steps, and no app required.</p>
+<p class="standfirst">Five steps, and none of them needs the app.</p>
 
 <ol>
   <li><strong>Get the bench and check it.</strong> Download the bundle above, run
   <code>shasum -a 256 duckbench-bundle.zip</code>, and compare the answer with
   the digest linked beside the download.</li>
-  <li><strong>Start it.</strong> <code>./start.sh</code> on macOS or Linux. The
+  <li><strong>Start it.</strong> Run <code>./start.sh</code> on macOS or Linux; the
   first start installs MuJoCo and onnxruntime.</li>
-  <li><strong>Check the plant.</strong> <code>curl -s http://ADDRESS/health</code>
+  <li><strong>Check the plant.</strong> Run <code>curl -s http://ADDRESS/health</code>
   and read the plant name and digest out of the answer. If the digest is not the
-  one printed above, stop. Whatever you measure will not be comparable with
+  one printed above, stop, because whatever you measure will not be comparable with
   anything on this page, and the honest thing to do with an incomparable number
   is not to publish it.</li>
   <li><strong>Get an entrant.</strong> The published intents live in the two
@@ -573,7 +575,7 @@ app, from PreK to grade 8; the <a href="/cards/packs/">pack pages</a> print them
   to <code>/climb</code> or <code>/chase</code> one cell at a time, taking the
   cell list from <code>/climb/grid</code> or <code>/chase/grid</code>, or run the
   harness directly. The stairs table ranks on cleared core cells and prints the
-  stable count beside it; the ball table ranks on chased and prints stable beside
+  stable count beside it, and the ball table ranks on chased and prints stable beside
   it. Quoting one without the other is quoting a number the table does not rank
   by.</li>
 </ol>
@@ -584,8 +586,8 @@ a route that exists on one bench and not the other cannot hide.</p>
 
 <h2 id="formats">File formats</h2>
 
-<p>The app reads back every format it writes. That was not always true and
-fixing it is why these are documented.</p>
+<p>The app reads back every format it writes. That was not always true, and
+fixing it is why we document them here.</p>
 
 <div class="scroller" role="region" aria-label="File formats" tabindex="0">
 <table>
@@ -627,17 +629,17 @@ fixing it is why these are documented.</p>
 
 <h2 id="honest">What is honest about this</h2>
 
-<p>Two claims are easy to make about a robot app and neither one is made here,
-and there are four more things worth saying out loud.</p>
+<p>Two claims are easy to make about a robot app, and this page makes neither of
+them. There are four more things worth saying out loud.</p>
 
 <p><strong>A preview is not a result.</strong> A preview on a phone is what you
-asked for, not what the robot would do. The bench was asked, and the four
+asked for, not what the robot would do. We asked the bench, and the four
 authored stair motions in this app get up their flight 0 times in 16. Nothing on
 a phone screen would ever have told you that.</p>
 
 <p><strong>A success rate is not an answer.</strong> The bench's criterion is
-"ends standing", which a duck standing perfectly still passes every time. So the
-distance travelled is shown beside the rate, always, and a leaderboard is never
+"ends standing", which a duck standing perfectly still passes every time, so the
+distance travelled is always shown beside the rate, and a leaderboard is never
 sorted on a shaped sum of reward terms.</p>
 
 <p><strong>Nothing here has run on hardware.</strong> Every number on this page
@@ -647,7 +649,7 @@ transfers for free.</p>
 
 <p><strong>The bench inside the phone has never been speed measured on a
 phone.</strong> The figure that gets quoted for the core was measured in a
-desktop browser on a Raspberry Pi 5. That is not an iPhone, and the app does not
+desktop browser on a Raspberry Pi 5, which is not an iPhone, and the app does not
 pretend otherwise: it reports the tick its own bench measures where it actually
 runs.</p>
 
@@ -657,21 +659,21 @@ and 30 g, so a speed measured here is not comparable with anything Pollen
 published.</p>
 
 <p><strong>This site borrows a framework's vocabulary, one way.</strong>
-Microduck Studio adopts inspect-robots' evaluation vocabulary and log format. It
+Microduck Studio adopts inspect-robots' evaluation vocabulary and log format, but it
 is not made by, endorsed by, or affiliated with inspect-robots, and no
 inspect-robots code runs in the app.</p>
 
 <h2 id="links">Downloads and links</h2>
 
-<p>Everything is public. Our four repositories, the two challenge datasets, the
+<p>Everything is public: our four repositories, the two challenge datasets, the
 bench bundle, the phone bench probe, and the two projects this one stands
 on.</p>
 
 <h3>Get the app</h3>
 <ul>
   <li><a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">TestFlight beta</a>
-  Free. iPhone and iPad (iOS 17 or later) and Mac (macOS 14 or later). Needs Apple's
-  TestFlight app.</li>
+  Free, for iPhone and iPad (iOS 17 or later) and Mac (macOS 14 or later), through
+  Apple's TestFlight app.</li>
   <li>App Store: not yet, and there is no date.</li>
 </ul>
 
@@ -684,11 +686,11 @@ on.</p>
   The Microduck as pure Swift: its joints, their travel, its kinematics. The app
   pins a released tag of it.</li>
   <li><a href="https://github.com/craigm26/duckbench" rel="noopener">duckbench</a>
-  The bench and the challenge harness. The physics, and the scoring functions the
+  The bench and the challenge harness: the physics, and the scoring functions the
   challenge numbers came out of.</li>
   <li><a href="https://github.com/craigm26/microduck-com" rel="noopener">microduck-com</a>
-  This site. Static HTML and CSS with no build step, so you can read the
-  whole thing.</li>
+  This site: static HTML and CSS, plus the books' own scripts, with no build step,
+  so you can read the whole thing.</li>
 </ul>
 
 <h3>The data</h3>
@@ -699,7 +701,7 @@ on.</p>
   <li><a href="https://huggingface.co/datasets/craigm26/microduck-ball-challenge" rel="noopener">Ball challenge</a>
   The grid, the entrants and the published scores.</li>
   <li><a href="https://github.com/craigm26/duckbench/issues/new" rel="noopener">Submit a result</a>
-  An issue on duckbench with the submission file attached. That is the path a
+  An issue on duckbench with the submission file attached, which is the path a
   maintainer sees.</li>
 </ul>
 
@@ -707,8 +709,8 @@ on.</p>
 <ul>
   <li><a href="/duckbench-bundle.zip">The bench bundle</a> 11.7&nbsp;MB, with its
   <a href="/duckbench-bundle.zip.sha256" aria-label="sha256 checksum for the bench bundle, in the links section">sha256</a>.
-  MuJoCo, onnxruntime, and the compiled world every number is measured against. A
-  desktop download; it does not run on the phone.</li>
+  MuJoCo, onnxruntime and the compiled world every number is measured against, as a
+  desktop download that does not run on the phone.</li>
   <li><a href="https://microduck-sim.pages.dev/phonebench/" rel="noopener">Phone bench probe</a>
   The same core in Safari, so you can see what your own phone manages before you
   trust a number from it.</li>
