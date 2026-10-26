@@ -10,6 +10,13 @@ predeploy.sh runs it too, so the stricter tool is used where it exists.
 VOID ELEMENTS are the whole subtlety: `<meta>` and `<br>` never close, and a
 parser that expects them to would report every page as broken and be switched
 off within a week.
+
+THE NOT-FOUND PAGE IS THE ONE PAGE THE SITEMAP MUST NOT LIST. Cloudflare Pages
+serves public/404.html, with a 404, for any path that is not a file. Without it,
+Pages takes the site for a single-page app and answers every unknown path with
+the home page and a 200, so a broken link looks like a working copy of the home
+page to a search engine (found 2026-10-26). So the page must exist, must say
+noindex, and must stay out of the sitemap; every other page must be in it.
 """
 
 from __future__ import annotations
@@ -81,6 +88,13 @@ def main() -> int:
         parser.close()
         problems.extend(parser.finish())
 
+    not_found = pathlib.Path("public/404.html")
+    if str(not_found) not in pages:
+        problems.append("public/404.html is missing: without it Cloudflare Pages answers every "
+                        "unknown path with the home page and a 200")
+    elif '<meta name="robots" content="noindex">' not in pages[str(not_found)]:
+        problems.append("public/404.html must carry <meta name=\"robots\" content=\"noindex\">")
+
     sitemap = pathlib.Path("public/sitemap.xml")
     if not sitemap.is_file():
         problems.append("public/sitemap.xml is missing")
@@ -94,7 +108,11 @@ def main() -> int:
                     problems.append(f"public/sitemap.xml names a missing local page: {location.text}")
                 else:
                     listed.add(target)
-            missing = {pathlib.Path(name).resolve() for name in pages} - listed
+            if not_found.resolve() in listed:
+                problems.append("public/sitemap.xml lists the not-found page, which no search "
+                                "engine should index")
+            missing = {pathlib.Path(name).resolve() for name in pages
+                       if pathlib.Path(name) != not_found} - listed
             if missing:
                 problems.append("public/sitemap.xml omits " + ", ".join(str(p) for p in sorted(missing)))
         except (ET.ParseError, ValueError) as why:
@@ -105,7 +123,7 @@ def main() -> int:
             print("check_wellformed: " + problem, file=sys.stderr)
         return 1
     print(f"check_wellformed: {len(pages)} pages close every element with unique ids, "
-          "and the sitemap covers every page")
+          "and the sitemap covers every page but the not-found one")
     return 0
 
 

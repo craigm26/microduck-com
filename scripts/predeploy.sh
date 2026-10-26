@@ -272,6 +272,16 @@
 #   * the guide's cost worked from the wrong rate: "1.5 * 0.85 is 1.275, which
 #     does not print as 1.20".
 #   * the guide deleted: "public/train/advanced/index.html is missing".
+# PROVED ABLE TO FAIL, 2026-10-26, check_wellformed four times on the not-found
+# page, in a throwaway copy, each restored; the copy passed before and after:
+#   * noindex removed from public/404.html: "public/404.html must carry <meta
+#     name="robots" content="noindex">".
+#   * the page listed in the sitemap: "public/sitemap.xml lists the not-found
+#     page, which no search engine should index".
+#   * the page deleted: "public/404.html is missing: without it Cloudflare Pages
+#     answers every unknown path with the home page and a 200".
+#   * another new page left out of the sitemap: "public/sitemap.xml omits ...",
+#     so the exception is the one page and no other.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
