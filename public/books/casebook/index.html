@@ -44,7 +44,7 @@
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 4 of 4 · Casebook</p>
     <h1 id="book-title">How a Policy Became</h1>
     <p class="lede">Why does a trained duck do what it does? Real training runs answer from their notes and logs. Ten lessons, each with a figure to run.</p>
-    <p class="book-for"><strong>Who it is for:</strong> readers of <a href="/books/advanced/">Book 3</a>, and anyone who wants to know why a trained policy turned out the way it did. The runs are this site's author's, made with <a href="https://github.com/craigm26/duckbatch">duckbatch</a>, an open project that fine-tunes, in simulation, Pollen's kick and a walk distilled from Pollen's. None of them has run on a physical duck.</p>
+    <p class="book-for"><strong>Who it is for:</strong> readers of <a href="/books/advanced/">Book 3</a>, and anyone who wants to know why a trained policy turned out the way it did. The runs are ours, made with <a href="https://github.com/craigm26/duckbatch">duckbatch</a>, an open project that fine-tunes, in simulation, Pollen's kick and a walk distilled from Pollen's, and none of them has run on a physical duck.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>The walk that learned to stand</span></a></li>
       <li><a href="#lesson-2"><span>Pay for going</span></a></li>
@@ -57,7 +57,7 @@
       <li><a href="#lesson-9"><span>A new sense on the bus</span></a></li>
       <li><a href="#lesson-10"><span>The contract travels</span></a></li>
     </ol>
-    <p class="book-how">How a lesson works: read the left page and commit to a prediction. Then run the figure on the right page one step at a time, and check yourself. Each lesson ends with something to try, notes for whoever is teaching it, and the source of every number.</p>
+    <p class="book-how">How a lesson works: read the left page and commit to a prediction, then run the figure on the right page one step at a time and check yourself. Each lesson ends with something to try, notes for whoever is teaching it, and the source of every number.</p>
   </div>
 </section>
 
@@ -65,9 +65,9 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 1 · b003, the kernel</p>
     <h2 id="lesson-1-title">The walk that learned to stand</h2>
-    <p>Asked to walk at 0.10 m/s, Pollen's walker moves at 0.002 m/s and duckbatch's 26,254-parameter student at 0.007: both stand still. Asked to turn on the spot at 1.0 rad/s, the student manages 0.211. The first fine-tune, <strong>b003</strong>, set out to close this <strong>dead band</strong>.</p>
-    <p>The walking task pays for tracking its command with a kernel, exp(−<var>e</var><sup>2</sup>/<var>σ</var><sup>2</sup>) of the gap <var>e</var>. At Pollen's width, <var>σ</var> = 0.316 m/s, standing still when asked for 0.10 collects about 90% of the pay. So b003 narrowed <var>σ</var> to 0.1, narrowed turning's width too, and fine-tuned for 1,500 iterations.</p>
-    <p>The duck stood more: 0.060 m/s when asked for 0.30, against the student's 0.108, and 0.017 rad/s of turning. Yet its logged tracking reward rose over the run. At <var>σ</var> = 0.1, managing 0.10 of a 0.30 command earns exp(−4) ≈ 0.018 of the pay, and standing exp(−9) ≈ 0.0001. A first step paid nothing, and other terms still paid for standing.</p>
+    <p>Ask either walker for 0.10 m/s and it stands still: Pollen's walker moves at 0.002 m/s, and duckbatch's 26,254-parameter student at 0.007. Asked to turn on the spot at 1.0 rad/s, the student manages 0.211. Our first fine-tune, <strong>b003</strong>, set out to close this <strong>dead band</strong>.</p>
+    <p>The walking task pays for tracking its command with a kernel, exp(−<var>e</var><sup>2</sup>/<var>σ</var><sup>2</sup>) of the gap <var>e</var>, and at Pollen's width, <var>σ</var> = 0.316 m/s, standing still when asked for 0.10 collects about 90% of the pay. So b003 narrowed <var>σ</var> to 0.1, narrowed turning's width too, and fine-tuned for 1,500 iterations.</p>
+    <p>The duck stood more: 0.060 m/s when asked for 0.30, against the student's 0.108, and 0.017 rad/s of turning, yet its logged tracking reward rose over the run. At <var>σ</var> = 0.1, managing 0.10 of a 0.30 command earns exp(−4) ≈ 0.018 of the pay, and standing exp(−9) ≈ 0.0001, so a first step paid nothing while other terms still paid for standing.</p>
     <p class="rule">pay = <var>w</var> · exp(−<var>e</var><sup>2</sup>/<var>σ</var><sup>2</sup>): the narrower <var>σ</var>, the less a step toward the command pays.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -75,7 +75,7 @@
       <label><input type="radio" name="predict-1" value="a"> Walked closer to 0.30 than the student did.</label>
       <label><input type="radio" name="predict-1" value="b"> Moved at 0.060, slower than the student.</label>
       <label><input type="radio" name="predict-1" value="c"> Kept the student's 0.108.</label>
-      <details><summary>Check your prediction</summary><p><strong>Moved at 0.060, slower than the student.</strong> A narrow kernel pays almost nothing until the duck is near the command, so its first steps earned nothing and PPO followed the terms that pay for standing. The close note's reading of the rising log: near-zero commands dominate it, and standing meets them.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Moved at 0.060, slower than the student.</strong> A narrow kernel pays almost nothing until the duck is near the command, so its first steps earned nothing and PPO followed the terms that pay for standing. As for the rising log, the close note's reading is that near-zero commands dominate it, and standing meets them.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -93,13 +93,13 @@
   <aside class="lesson-notes" aria-label="Notes for lesson 1">
     <section>
       <h3>Try it for real</h3>
-      <p>Chart the kernel yourself: for a 0.30 m/s command, compute exp(−(0.30 − <var>v</var>)<sup>2</sup>/<var>σ</var><sup>2</sup>) for speeds from standing still up to the command, once at <var>σ</var> = 0.316 and once at 0.1. Then read b003 the way it was written: <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">the plan</a>, committed before the run, and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md">the verdict</a> after it. The menu that ran is in duckbatch's <code>menus/</code> folder, and any menu runs again on Hugging Face Jobs, billed to you, from a copy of duckbatch with your Hugging Face token in <code>HF_TOKEN</code>. <a href="/train/advanced/#change">Go further</a> has the steps:</p>
+      <p>Chart the kernel yourself: for a 0.30 m/s command, compute exp(−(0.30 − <var>v</var>)<sup>2</sup>/<var>σ</var><sup>2</sup>) for speeds from standing still up to the command, once at <var>σ</var> = 0.316 and once at 0.1, and watch where the slope goes. Then read b003 the way we wrote it: <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">the plan</a>, committed before the run, and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md">the verdict</a> after it. The menu that ran is in duckbatch's <code>menus/</code> folder, and any menu runs again on Hugging Face Jobs, billed to you, from a copy of duckbatch with your Hugging Face token in <code>HF_TOKEN</code>. <a href="/train/advanced/#change">Go further</a> has the steps:</p>
       <pre><code>uv run duckbatch hf-job menus/b003-dead-band.yaml \
   --run finetune --dataset &lt;you&gt;/duckbatch-records</code></pre>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Show the rising log first and ask whether the run worked. Then show the speeds. Ask what a log would have needed to catch it: tracking at the slow commands on their own, not averaged with the stand commands that standing already meets.</p>
+      <p>Show the rising log first and ask whether the run worked, and only then show the speeds. End on what a log would have needed to catch it: tracking at the slow commands on their own, not averaged with the stand commands that standing already meets.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%201%3A%20The%20walk%20that%20learned%20to%20stand">Tell us about it</a>.</p>
     </section>
     <section>
@@ -117,9 +117,9 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 2 · b003b, a progress term</p>
     <h2 id="lesson-2-title">Pay for going</h2>
-    <p>b003's note named the fix: keep the kernel's slope and stop paying for standing. <strong>b003b</strong> put Pollen's widths back and added two <strong>progress terms</strong>, weight 1.0 each: the share of the commanded speed, and of the commanded turn, that the duck achieves. Standing when told to move earns 0 from them; half the command earns 0.5.</p>
-    <p>A 100-iteration pilot ran first, to check that the terms run. They did, and it was worse than the student, 0.96 falls a minute against 0.36. The note called that the usual early cost of a warm start, though not yet known to be only that, and the pre-registered full 1,500 went ahead.</p>
-    <p>The full run turned on the spot at 0.456 rad/s, 2.2× the student, and reached 0.183 m/s when asked for 0.40, past Pollen's walker. At 0.10 m/s it moved at 0.008, against the student's 0.007: no change. At 0.30 it reached 0.1199 against a line of 0.12, inside the run-to-run noise, and the note recorded a fail.</p>
+    <p>b003's note named the fix: keep the kernel's slope, and stop paying for standing. So <strong>b003b</strong> put Pollen's widths back and added two <strong>progress terms</strong> at weight 1.0 each: the share of the commanded speed, and of the commanded turn, that the duck achieves. Standing when told to move earns 0 from them; half the command earns 0.5.</p>
+    <p>We ran a 100-iteration pilot first, to check that the terms run. They did, but it fell more than the student, 0.96 times a minute against 0.36. The note called that the usual early cost of a warm start, though not yet known to be only that, and the pre-registered full 1,500 went ahead.</p>
+    <p>The full run turned on the spot at 0.456 rad/s, 2.2× the student, and reached 0.183 m/s when asked for 0.40, which is past Pollen's walker. At 0.10 m/s it still stood, at 0.008 against the student's 0.007. At 0.30 it reached 0.1199 against a line of 0.12, inside the run-to-run noise, and the note recorded a fail.</p>
     <p class="rule">progress = clip(<var>v</var> · <var>ĉ</var>, 0, |<var>c</var>|) / |<var>c</var>|: pay in proportion to the share of the command achieved, and nothing for standing.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -127,7 +127,7 @@
       <label><input type="radio" name="predict-2" value="a"> Walked at 0.05 m/s or more.</label>
       <label><input type="radio" name="predict-2" value="b"> Moved at 0.008, about the student's speed.</label>
       <label><input type="radio" name="predict-2" value="c"> Fell over trying.</label>
-      <details><summary>Check your prediction</summary><p><strong>Moved at 0.008, about the student's speed.</strong> A reward for going slowly was there, and PPO did not find a slow gait. Above the dead band everything improved, with falls unchanged. The note credits the progress terms, though no run tried Pollen's widths without them.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Moved at 0.008, about the student's speed.</strong> A reward for going slowly was there, but PPO did not find a slow gait. Above the dead band everything improved and falls stayed the same, and the note credits the progress terms for that, though no run tried Pollen's widths without them.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -149,7 +149,7 @@
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>The pilot is worth a discussion of its own: it was worse than the student, and the full run went ahead anyway. Ask why that was the honest call. The pass lines were written before either result, and a pilot that only has to run cannot be judged on them.</p>
+      <p>The pilot is worth a discussion of its own, because it fell more than the student and the full run went ahead anyway. Ask why that was the honest call: the pass lines were written before either result, and a pilot that only has to run cannot be judged on them.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%202%3A%20Pay%20for%20going">Tell us about it</a>.</p>
     </section>
     <section>
@@ -165,9 +165,9 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 3 · b003c, the practice mix</p>
     <h2 id="lesson-3-title">More practice, more standing</h2>
-    <p>Perhaps the duck rarely practised walking slowly. Pollen's task draws most walking commands evenly from ±0.4 m/s forward and ±0.3 sideways, and a fifth straight ahead at 0.3 or more, so only about 12% land under 0.15 m/s. <strong>b003c</strong> changed one thing from b003b: 35% of the envs neither standing nor turning in place got a slow command, 0.05 to 0.25 m/s.</p>
-    <p>The duck stood more. At 0.10 m/s it moved at −0.001. Turning on the spot fell from 0.456 to 0.299 rad/s, and walking at 0.30 m/s from 0.120 to 0.066.</p>
-    <p>The close note did the sums. At a 0.10 command, the tracking term, weight 2.0, pays exp(−0.01/0.1) ≈ 0.90 of itself for standing still: 1.8 a step, against at most 3.0 for walking perfectly. More practice in the band was more practice at a choice standing nearly wins.</p>
+    <p>Was the duck short of practice at walking slowly? Pollen's task draws most walking commands evenly from ±0.4 m/s forward and ±0.3 sideways, and a fifth straight ahead at 0.3 or more, so only about 12% land under 0.15 m/s. <strong>b003c</strong> changed one thing from b003b: 35% of the envs neither standing nor turning in place got a slow command, 0.05 to 0.25 m/s.</p>
+    <p>The duck stood more: at 0.10 m/s it moved at −0.001, turning on the spot fell from 0.456 to 0.299 rad/s, and walking at 0.30 m/s from 0.120 to 0.066.</p>
+    <p>The close note did the sums: at a 0.10 command the tracking term, weight 2.0, pays exp(−0.01/0.1) ≈ 0.90 of itself for standing still, which is 1.8 a step against at most 3.0 for walking perfectly, so more practice in the band was more practice at a choice standing nearly wins.</p>
     <p class="rule">At 0.10 m/s, standing earns 2.0 × 0.90 = 1.8 a step; walking it perfectly earns 2.0 + 1.0 = 3.0, before any risk.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -175,7 +175,7 @@
       <label><input type="radio" name="predict-3" value="a"> Walked at 0.05 m/s, at last.</label>
       <label><input type="radio" name="predict-3" value="b"> Stood: −0.001 m/s.</label>
       <label><input type="radio" name="predict-3" value="c"> Kept b003b's 0.008.</label>
-      <details><summary>Check your prediction</summary><p><strong>Stood: −0.001 m/s.</strong> The note's verdict: the dead band is not short of practice; standing is too well paid there. And b003b's turning and fast walking were lost, which the note put down, as far as its numbers went, to less practice above the band.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Stood: −0.001 m/s.</strong> The note's verdict was that the dead band is not short of practice, but that standing is too well paid there. b003b's turning and fast walking were lost too, which the note put down, as far as its numbers went, to less practice above the band.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -192,11 +192,11 @@
   <aside class="lesson-notes" aria-label="Notes for lesson 3">
     <section>
       <h3>Try it for real</h3>
-      <p>Check the 12% yourself: the boxed commands are drawn evenly over a rectangle 0.8 m/s by 0.6 m/s, the slow ones fall inside a circle of radius 0.15, and the fifth sent straight ahead are never slow. Then read b003c's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-close.md">close</a> notes, and find the sentence that named the next suspect.</p>
+      <p>Check the 12% yourself, since b003c's own design note said 15%: the boxed commands are drawn evenly over a rectangle 0.8 m/s by 0.6 m/s, the slow ones fall inside a circle of radius 0.15, and the fifth sent straight ahead are never slow. Then read b003c's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-close.md">close</a> notes, and find the sentence that named the next suspect.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Ask the group for a fix before the reveal. More practice is the instinctive answer, and it is wrong here for a reason they can compute: write down what standing and walking each earn at 0.10 m/s, then decide what to change.</p>
+      <p>Ask the group for a fix before the reveal. More practice is the instinctive answer, and it is wrong here for a reason they can compute, so have them write down what standing and walking each earn at 0.10 m/s before they decide what to change.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%203%3A%20More%20practice%2C%20more%20standing">Tell us about it</a>.</p>
     </section>
     <section>
@@ -213,8 +213,8 @@
     <p class="kicker">Lesson 4 · What ran</p>
     <h2 id="lesson-4-title">Read the run, not the menu</h2>
     <p>Each run leaves its records beside its verdict: the menu that asked for it, a TensorBoard log of every reward term and of the settings the curriculum manages, a checkpoint every 250 iterations, and the exported network with its measurements. Where the log records a setting, it says what actually ran.</p>
-    <p>The menus of b003, b003b and b003c each set <code>rel_standing_envs: 0.05</code>: 5% of the practice told to stand still. b003d's design note found that the log's <code>Curriculum/standing_envs</code> read 0.25, at every iteration. Pollen's walking task has a curriculum for that share, which sets it at every reset, so the menu's value never took effect.</p>
-    <p>About a fifth of all practice had been "do not move", in runs meant to teach moving slowly. b003d, b003e and b003f kept 0.25 on purpose, and said so, so that each still changed one thing. b003g, in lesson 7, finally ran the 5%.</p>
+    <p>The menus of b003, b003b and b003c each set <code>rel_standing_envs: 0.05</code>, 5% of the practice told to stand still, but b003d's design note found that the log's <code>Curriculum/standing_envs</code> read 0.25 at every iteration. Pollen's walking task has a curriculum for that share, which sets it at every reset, so the menu's value never took effect.</p>
+    <p>So about a fifth of all practice had been "do not move", in runs meant to teach moving slowly. We kept 0.25 on purpose in b003d, b003e and b003f, and said so, so that each still changed one thing, and b003g, in lesson 7, finally ran the 5%.</p>
     <p class="rule">Where the log records a setting, the log is what ran, not the menu. Read those values before the results.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -222,7 +222,7 @@
       <label><input type="radio" name="predict-4" value="a"> 5%, as asked.</label>
       <label><input type="radio" name="predict-4" value="b"> 25%, at every iteration.</label>
       <label><input type="radio" name="predict-4" value="c"> None: the curriculum switched standing off.</label>
-      <details><summary>Check your prediction</summary><p><strong>25%, at every iteration.</strong> The task's curriculum set the share at every reset, over the menu's value. Nothing failed, and the menu still said 5%; the log is where it showed. Turning in place then took a quarter of the envs, which left about 19% standing.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>25%, at every iteration.</strong> The task's curriculum set the share at every reset, over the menu's value, and nothing failed: the menu still said 5%, and only the log showed what ran. Turning in place then took a quarter of the envs, which left about 19% standing.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -239,12 +239,12 @@
   <aside class="lesson-notes" aria-label="Notes for lesson 4">
     <section>
       <h3>Try it for real</h3>
-      <p>duckbatch's records are a public dataset on Hugging Face, <code>craigm26/duckbatch-records</code>, one folder per job. Download b003's and open its log:</p>
+      <p>duckbatch's records are a public dataset on Hugging Face, <code>craigm26/duckbatch-records</code>, with one folder per job. Download b003's and open its log:</p>
       <pre><code>uvx --from huggingface_hub hf download craigm26/duckbatch-records \
   --repo-type dataset --include "jobs/6ab6d30b6b030d633f69210a/*" \
   --local-dir records
 uvx tensorboard --logdir records/jobs</code></pre>
-      <p>Find <code>Curriculum/standing_envs</code> before any reward. The fix is in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/finetune.py"><code>finetune.py</code></a>, with a comment that tells the story.</p>
+      <p>Look for <code>Curriculum/standing_envs</code> before you look at any reward. The fix is in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/finetune.py"><code>finetune.py</code></a>, with a comment that tells the story.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -264,9 +264,9 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 5 · b003d and b003e, the stride</p>
     <h2 id="lesson-5-title">One change at a time</h2>
-    <p>From b003c on, each run was planned in a design note first: one change from a named earlier run, usually b003b, the best so far; the series' pass lines; and an expectation to beat. <strong>b003d</strong> judged tracking relative to the command, so standing at 0.10 m/s paid 0.20 of the term instead of 0.90. Its note said, "I expect it to pass." It moved at 0.004.</p>
-    <p>Its close note found a candidate. The tracking error is taken on the duck's instantaneous velocity, and a stride sways the body 0.10 to 0.15 m/s, mostly sideways: more than the command. Under b003d's width, stepping in place, the first move away from standing, paid less than standing. The first step was downhill.</p>
-    <p><strong>b003e</strong> judged the velocity averaged over 0.5 s, where the sway falls to 0.03 to 0.05 m/s. Its design added a weaker bar, 0.02 m/s at 0.10, for whether the idea took at all. It did not: 0.003. But it turned on the spot at 0.525 rad/s, the first run to pass that line.</p>
+    <p>From b003c on, we planned each run in a design note first: one change from a named earlier run, usually b003b, the best so far; the series' pass lines; and an expectation to beat. <strong>b003d</strong> judged tracking relative to the command, so standing at 0.10 m/s paid 0.20 of the term instead of 0.90. Its note said, "I expect it to pass." It moved at 0.004.</p>
+    <p>Its close note found a candidate: the tracking error is taken on the duck's instantaneous velocity, and a stride sways the body 0.10 to 0.15 m/s, mostly sideways, which is more than the command. So under b003d's width, stepping in place, the first move away from standing, paid less than standing. The first step was downhill.</p>
+    <p><strong>b003e</strong> judged the velocity averaged over 0.5 s, where the sway falls to 0.03 to 0.05 m/s, and its design added a weaker bar, 0.02 m/s at 0.10, for whether the idea took at all. It did not, at 0.003, but it turned on the spot at 0.525 rad/s, the first run to pass that line.</p>
     <p class="rule">One change per run, the same lines, and an expectation written down first: then even a failure says something.</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -274,7 +274,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
       <label><input type="radio" name="predict-5" value="a"> Yes, at 0.05 m/s or more.</label>
       <label><input type="radio" name="predict-5" value="b"> Barely: 0.02, the weaker bar.</label>
       <label><input type="radio" name="predict-5" value="c"> No: 0.003, though it turned better than any run before.</label>
-      <details><summary>Check your prediction</summary><p><strong>No: 0.003, though it turned better than any run before.</strong> A diagnosis can be right and still not be the blocker. With the dip gone and the band still shut, the reward was no longer the likeliest suspect, as b003e's design had said in advance.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>No: 0.003, though it turned better than any run before.</strong> A diagnosis can be right and still not be the blocker: with the dip gone and the band still shut, the reward was no longer the likeliest suspect, as b003e's design had said in advance.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -291,11 +291,11 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 5">
     <section>
       <h3>Try it for real</h3>
-      <p>duckbatch's stride term keeps the last 0.5 s of each env's velocity, 25 steps at 50 Hz, and refills it at the start of each episode. Read b003d's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-close.md">close</a>, then b003e's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003e-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003e-close.md">close</a>. The tables of what each term pays along the way, from standing to the command, are the heart of it.</p>
+      <p>duckbatch's stride term keeps the last 0.5 s of each env's velocity, 25 steps at 50 Hz, and refills it at the start of each episode. Read b003d's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-close.md">close</a>, then b003e's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003e-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003e-close.md">close</a>, and spend your time on their tables of what each term pays along the way, from standing to the command, which are the heart of it.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Before each close note, have the group write their own expectation and a number they would bet on. Then compare with the note's. b003d's author expected a pass and wrote so; that sentence is the most useful one in the series. Then point out that the sway was measured on faster walkers, and the note itself says a real slow gait's might be smaller: ask what that does to the argument.</p>
+      <p>Before each close note, have the group write down their own expectation and a number they would bet on, then compare it with the note's. We expected b003d to pass and wrote so, and that sentence is the most useful one in the series. Then point out that the sway was measured on faster walkers, and that the note itself says a real slow gait's might be smaller, and ask what that does to the argument.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%205%3A%20One%20change%20at%20a%20time">Tell us about it</a>.</p>
     </section>
     <section>
@@ -311,7 +311,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 6 · b002 and b003f, the teacher</p>
     <h2 id="lesson-6-title">The teacher's pull</h2>
-    <p>Every walking run started from duckbatch's student: 61 inputs, two layers of 128, 14 outputs, 26,254 parameters, 7.5× smaller than Pollen's 197,774-parameter walker. It was <strong>distilled</strong>: the student drove, and the teacher labelled every state its mistakes led to. It tracks speed within 5% of the teacher and turning within 11%, and falls about three times as often under pushes.</p>
+    <p>Every walking run started from duckbatch's student: 61 inputs, two layers of 128, 14 outputs and 26,254 parameters, 7.5× smaller than Pollen's 197,774-parameter walker. It was <strong>distilled</strong>: the student drove, and the teacher labelled every state its mistakes led to. It tracks speed within 5% of the teacher and turning within 11%, but falls about three times as often under pushes.</p>
     <p>Fine-tuning kept it tied to the teacher by an <strong>anchor</strong>: after every PPO update, a pass that pulls the student's actions toward the teacher's, at weight 1.0 on fallen frames and 0.2 on upright frames commanded to walk at 0.35 m/s or more, or to stand. The dead band was left free.</p>
     <p><strong>b003f</strong> set the upright weight to 0. Turning on the spot went from 0.456 to 0.806 rad/s, 2.6× Pollen's walker, with recovery at 99.6%. The dead band did not move: 0.004 m/s. The note's reading: the teacher had been a ceiling on turning, not the lock on walking slowly.</p>
     <p class="rule">anchor = <var>w</var> · mean((<var>π</var>(<var>o</var>) − <var>π</var><sub>teacher</sub>(<var>o</var>))<sup>2</sup>): it keeps the teacher's skills, and its limits.</p>
@@ -344,7 +344,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Name the trade before the reveal: the pull on fallen frames is there so the student keeps getting up. Ask what the pull on upright frames protects, and what it might cost. Then show the turning numbers.</p>
+      <p>Name the trade before the reveal: the pull on fallen frames is there so the student keeps getting up. Ask what the pull on upright frames protects and what it might cost, and only then show the turning numbers.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%206%3A%20The%20teacher%27s%20pull">Tell us about it</a>.</p>
     </section>
     <section>
@@ -361,8 +361,8 @@ uvx tensorboard --logdir records/jobs</code></pre>
     <p class="kicker">Lesson 7 · b003g, the scorecard</p>
     <h2 id="lesson-7-title">Seven lines of eight</h2>
     <p><strong>b003g</strong> made the menus' 5% standing real, and its log read 0.0500 throughout, so the run counted. By the letter of its lines it passed seven of eight: 0.057 m/s at a 0.10 command and 0.038 at 0.05, turning at 0.699 rad/s, 0.136 at 0.30, and the best falls of any fine-tune, 0.22 a minute. Only planar error failed.</p>
-    <p>Then the note reported what the lines did not ask. On straight commands the duck turned at about −0.21 rad/s at every speed: it walked clockwise circles, about 0.27 m in radius at 0.10 m/s. Told to stand, it kept stepping, a foot in the air 38% of the time against the student's 8%, and drifted at 0.106 m/s.</p>
-    <p>The band had opened by stepping all the time on a curve, not by learning a slow straight walk. The verdict: this network is nobody's slow walker. Later runs are to add two lines, for yaw on a straight command and for drift on a stand.</p>
+    <p>Then the note reported what the lines did not ask. On straight commands the duck turned at about −0.21 rad/s at every speed, so it walked clockwise circles, about 0.27 m in radius at 0.10 m/s. Told to stand, it kept stepping, with a foot in the air 38% of the time against the student's 8%, and drifted at 0.106 m/s.</p>
+    <p>So the band had opened by stepping all the time on a curve, not by learning a slow straight walk. The verdict: this network is nobody's slow walker. Later runs are to add two lines, for yaw on a straight command and for drift on a stand.</p>
     <p class="rule">A pass line measures what it asks and nothing more. For every way a duck could pass and still be wrong, write another line.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -370,7 +370,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
       <label><input type="radio" name="predict-7" value="a"> It walked slowly and straight.</label>
       <label><input type="radio" name="predict-7" value="b"> It walked in clockwise circles and could not stand still.</label>
       <label><input type="radio" name="predict-7" value="c"> It fell more than any run before.</label>
-      <details><summary>Check your prediction</summary><p><strong>Clockwise circles, and no standing still.</strong> Its falls were the series' best, so falling was not the problem. The speed lines asked only for forward speed. Nothing asked about yaw on a straight command, and standing showed only inside the averaged planar error, the one line that failed.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Clockwise circles, and no standing still.</strong> Its falls were the series' best, so falling was not the problem, and the speed lines asked only for forward speed. Nothing asked about yaw on a straight command, and standing showed only inside the averaged planar error, the one line that failed.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -387,7 +387,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 7">
     <section>
       <h3>Try it for real</h3>
-      <p>Read b003g's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003g-close.md">close note</a>: its table of checkpoints shows the clockwise turn arriving late, at the same time as the slow walking. The note's next step is labelled a hypothesis, not a finding: nothing in duckbatch's PPO keeps a gait mirror-symmetric. Its premise, that Pollen trains this walk with a symmetry term, does not hold at the code the runs used: Pollen's walking task sets <code>symmetry_cfg=None</code>.</p>
+      <p>Read b003g's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003g-close.md">close note</a>, whose table of checkpoints shows the clockwise turn arriving late, at the same time as the slow walking. The note's next step is labelled a hypothesis, not a finding: nothing in duckbatch's PPO keeps a gait mirror-symmetric. We got its premise wrong, though: the note assumes Pollen trains this walk with a symmetry term, and at the code the runs used, Pollen's walking task sets <code>symmetry_cfg=None</code>.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -407,9 +407,9 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · k001, the kick</p>
     <h2 id="lesson-8-title">Aim, not distance</h2>
-    <p>Pollen's right kick sends the ball 5.064 m, 8.0° off line on average. For shooting, aim matters more than distance. <strong>k001</strong> kept Pollen's task and reward and added one term: the ball's speed across the kick line, at weight −12.0, the rate Pollen pays for speed along it, up to 1.0 m/s.</p>
-    <p>Its lines guarded the trade: 4.0° or straighter, at least 0.95 of Pollen's distance, falls and hopping held, and installable with Pollen's own checks. After 1,000 iterations from Pollen's kick it went 3.4° off line, 0.999 of the distance, with falls unchanged. Every line passed.</p>
-    <p>It also held on the backlash twin, an actuator model it never trained on: 3.7° against Pollen's 8.6°. One number moved that no line covered: the ball's peak speed along the line, 1.34 to 1.28 m/s. The notes do not test why.</p>
+    <p>Pollen's right kick sends the ball 5.064 m, but 8.0° off line on average. For shooting, aim matters more than distance. <strong>k001</strong> kept Pollen's task and reward and added one term: the ball's speed across the kick line, at weight −12.0, the rate Pollen pays for speed along it, up to 1.0 m/s.</p>
+    <p>Its lines guarded the trade: 4.0° or straighter, at least 0.95 of Pollen's distance, falls and hopping held, and installable with Pollen's own checks. After 1,000 iterations from Pollen's kick it went 3.4° off line with 0.999 of the distance and falls unchanged, and every line passed.</p>
+    <p>It held on the backlash twin too, an actuator model it never trained on, at 3.7° against Pollen's 8.6°. One number moved that no line covered, the ball's peak speed along the line, from 1.34 to 1.28 m/s. The notes do not test why.</p>
     <p class="rule">pay = 12 · min(<var>v</var><sub>along</sub>, 1.0) − 4 · max(0, <var>v</var><sub>along</sub> − 1.0) − 12 · |<var>v</var><sub>across</sub>|: speed across always costs; along pays only up to 1.0 m/s.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -434,7 +434,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 8">
     <section>
       <h3>Try it for real</h3>
-      <p>The term is <code>ball_lateral_speed</code> in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/rewards.py"><code>rewards.py</code></a>, and the menu adds it to Pollen's task without touching anything else. Read k001's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-k001-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-03-k001-close.md">close</a>: Pollen's <code>check_onnx</code>, <code>smoke_run_onnx</code> and <code>validate_manifest</code> all passed on the exported network.</p>
+      <p>The term is <code>ball_lateral_speed</code> in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/rewards.py"><code>rewards.py</code></a>, and the menu adds it to Pollen's task without touching anything else. Then read k001's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-k001-design.md">design</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-03-k001-close.md">close</a>, where Pollen's <code>check_onnx</code>, <code>smoke_run_onnx</code> and <code>validate_manifest</code> all passed on the exported network.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -455,8 +455,8 @@ uvx tensorboard --logdir records/jobs</code></pre>
     <p class="kicker">Lesson 9 · The Qwiic port</p>
     <h2 id="lesson-9-title">A new sense on the bus</h2>
     <p>The walk reads 61 numbers, though the duck senses more: a camera in its head and, on some ducks, an 8×8 depth sensor. Pollen has said in its Discord that the duck's board has an unused <strong>Qwiic</strong> connector: a 3.3 V I²C socket, the plug Adafruit calls STEMMA QT.</p>
-    <p>Pollen's open board, the Robot HAT, has four, J5 to J8. J5 shares the main I²C bus, header pins 3 and 5, with the board's IMU and audio codec; the others' buses depend on the computer. On Zero 3W ducks the depth sensor, where fitted, plugs into J5, on a 400 kHz bus with the codec at 0x18 and the sensor at 0x29: a new device needs its own address.</p>
-    <p>A sense reaches behaviour two ways. As a <strong>command</strong>: a program reads it and steers the walk, changing no policy. Or as an <strong>observation</strong>: a network trained with more than 61 inputs. Either way, the module's weight changes the body the walk learned.</p>
+    <p>Pollen's open board, the Robot HAT, has four, J5 to J8. J5 shares the main I²C bus, header pins 3 and 5, with the board's IMU and audio codec, and the others' buses depend on the computer. On Zero 3W ducks the depth sensor, where fitted, plugs into J5, on a 400 kHz bus with the codec at 0x18 and the sensor at 0x29, so a new device needs its own address.</p>
+    <p>So how does a new sense reach behaviour? As a <strong>command</strong>, a program reads it and steers the walk, changing no policy; or as an <strong>observation</strong>, a network is trained with more than 61 inputs. Either way, the module's weight changes the body the walk learned.</p>
     <p class="rule">A sense joins as a command, through a program, or as an observation, through retraining.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -464,7 +464,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
       <label><input type="radio" name="predict-9" value="a"> Retrain the walk with the sensor as a 62nd input.</label>
       <label><input type="radio" name="predict-9" value="b"> A program that reads it and steers the walk.</label>
       <label><input type="radio" name="predict-9" value="c"> None: the walk will notice it.</label>
-      <details><summary>Check your prediction</summary><p><strong>A program that reads it and steers the walk.</strong> The walk's inputs are fixed; it never sees the sensor. A program that turns readings into commands changes no policy. Then weigh the module and measure the walk again: a heavier head is a different body.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>A program that reads it and steers the walk.</strong> The walk's inputs are fixed and it never sees the sensor, but a program that turns readings into commands changes no policy. Then weigh the module and measure the walk again, because a heavier head is a different body.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -505,9 +505,9 @@ sudo systemctl stop tofd</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 10 · Other simulators</p>
     <h2 id="lesson-10-title">The contract travels</h2>
-    <p>Every run in this book trained in mjlab, which joins Isaac Lab's way of writing tasks to MuJoCo Warp's GPU physics. Others are open: MuJoCo Playground, on MuJoCo MJX; Isaac Lab itself; and Open Duck Playground, for the Open Duck Mini, which Hugging Face and Pollen sponsored.</p>
-    <p>The duck checks only the contract: an ONNX file taking obs[1,61] and returning actions[1,14], 50 times a second, usually beside a manifest. It refuses other sizes, in the file or its manifest. It cannot see a policy that reads its 61 numbers in another order, unit or scale: it loads, runs, and is a different policy.</p>
-    <p>So check a port twice. The export: the trained network and its file must agree on the same inputs, as b003d's did, a largest difference of 0 on 256 random inputs. The meaning: your trainer and Pollen's must build the same 61 numbers from the same recorded states. A swapped input passes the first and fails the second.</p>
+    <p>Every run in this book trained in mjlab, which joins Isaac Lab's way of writing tasks to MuJoCo Warp's GPU physics, and others are open: MuJoCo Playground, on MuJoCo MJX; Isaac Lab itself; and Open Duck Playground, for the Open Duck Mini, which Hugging Face and Pollen sponsored.</p>
+    <p>The duck checks only the contract, an ONNX file taking obs[1,61] and returning actions[1,14], 50 times a second, usually beside a manifest, and it refuses other sizes, in the file or its manifest. But it cannot see a policy that reads its 61 numbers in another order, unit or scale: it loads, runs, and is a different policy.</p>
+    <p>So check a port twice. The export: the trained network and its file must agree on the same inputs, as b003d's did, with a largest difference of 0 on 256 random inputs. The meaning: your trainer and Pollen's must build the same 61 numbers from the same recorded states. A swapped input passes the first check and fails the second.</p>
     <p class="rule">Prove the file and the 61 numbers, not just the shapes.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -515,7 +515,7 @@ sudo systemctl stop tofd</code></pre>
       <label><input type="radio" name="predict-10" value="a"> Nothing: the shapes match.</label>
       <label><input type="radio" name="predict-10" value="b"> Every input's and output's order, units and scale.</label>
       <label><input type="radio" name="predict-10" value="c"> The simulator's version.</label>
-      <details><summary>Check your prediction</summary><p><strong>Every input's and output's order, units and scale.</strong> Shapes are what the robot can check. Meaning is what you check: the same recorded states, turned into 61 numbers by your trainer and by Pollen's, must agree.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Every input's and output's order, units and scale.</strong> Shapes are what the robot can check, and meaning is what you check: the same recorded states, turned into 61 numbers by your trainer and by Pollen's, must agree.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
