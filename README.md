@@ -3,7 +3,7 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Twenty-eight HTML pages and a shared stylesheet, with no build step at deploy time, bundler or npm
+Twenty-eight HTML pages, a not-found page and a shared stylesheet, with no build step at deploy time, bundler or npm
 dependency. There is no JavaScript anywhere except the four books under `/books/`, which run
 the site's own scripts and nothing else's (see "The books" below). The visual theme follows
 Pollen Robotics' warm orange accents, spacious typography and rounded panels while clearly
@@ -12,6 +12,9 @@ identifying Studio as an independent project.
 - `public/index.html` - the product overview and downloads.
 - `public/docs/index.html` - getting started, policy and motion guides, bench setup,
   evaluations, challenge criteria, reproducibility, file formats and resources.
+- `public/404.html` - the not-found page. Cloudflare Pages serves it, with a 404, for any path that
+  is not a file; without it, Pages answers every unknown path with the home page and a 200. It says
+  noindex and stays out of the sitemap, and `check_wellformed.py` holds both.
 - `public/privacy/index.html` - the privacy policy the App Store listing links to. Its URL
   is on the listing for app 6806299485, so the path, filename and trailing slash never change.
 - `public/cards/` - Duck Cards, a printable deck for classrooms: the deck and its lessons
