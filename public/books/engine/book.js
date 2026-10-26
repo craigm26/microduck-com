@@ -19,8 +19,8 @@ const TILT = 0.032;            // pages slope down toward their outer edges
 const BLOCK = 24;              // pages in the whole book, as a thickness
 // Where a figure stands on its page: right of the steps, above the caption.
 const STAGE = { x: 82, z: -62, w: 420, d: 470 };
-const COVER = { beginner: 0xf08c12, intermediate: 0x2c64c0, advanced: 0x3b3e47 };
-const COVER_INK = { beginner: '#5a2f00', intermediate: '#0d244a', advanced: '#15161a' };
+const COVER = { beginner: 0xf08c12, intermediate: 0x2c64c0, advanced: 0x3b3e47, casebook: 0x2f6b4f };
+const COVER_INK = { beginner: '#5a2f00', intermediate: '#0d244a', advanced: '#15161a', casebook: '#0f2a1e' };
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const darkQuery = matchMedia('(prefers-color-scheme: dark)');

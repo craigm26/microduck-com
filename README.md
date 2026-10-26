@@ -3,8 +3,8 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Twenty HTML pages and a shared stylesheet, with no build step at deploy time, bundler or npm
-dependency. There is no JavaScript anywhere except the three books under `/books/`, which run
+Twenty-eight HTML pages and a shared stylesheet, with no build step at deploy time, bundler or npm
+dependency. There is no JavaScript anywhere except the four books under `/books/`, which run
 the site's own scripts and nothing else's (see "The books" below). The visual theme follows
 Pollen Robotics' warm orange accents, spacious typography and rounded panels while clearly
 identifying Studio as an independent project.
@@ -21,9 +21,10 @@ identifying Studio as an independent project.
   (`index.html`), each pack's page of challenge cards and lessons (`<id>/index.html`), its cut
   sheet of only the cards in play (`<id>/print/index.html`), and the pack files themselves
   (`<id>.duckpack`), byte identical to the ones StudioKit bundles.
-- `public/books/` - three reference books, ten lessons each: the shelf (`index.html`), Book 1
+- `public/books/` - four reference books, ten lessons each: the shelf (`index.html`), Book 1
   for readers 7 and up with a grown-up (`beginner/`), Book 2 for teens and adults
-  (`intermediate/`) and Book 3 for people who train robots (`advanced/`). Each page is the whole
+  (`intermediate/`), Book 3 for people who train robots (`advanced/`) and Book 4, real runs
+  traced from their notes and logs (`casebook/`). Each page is the whole
   book as a document; `engine/book.js` lays it onto a 3D pop-up book, `engine/kit.js` is the
   shared paper kit, `engine/figures-<book>.js` holds each lesson's pop-up, and `vendor/` is
   three.js r170 with its licence.
@@ -163,7 +164,7 @@ TestFlight build, so the pack pages go live with that build and not before.
 
 ## The books
 
-Three books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
+Four books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
 (`.lesson-page`, with a prediction to commit to), the right page is a pop-up figure played one
 step at a time (`figure.lesson-figure`, whose `ol.figure-steps` the engine turns into the step
 buttons, so every word the figure shows is in the HTML), and `aside.lesson-notes` holds Try it
@@ -181,6 +182,17 @@ in `means` how it yields it ("bipedal" is two legs). A derived number's operands
 the same lesson ledgers, a unit constant, or explained under `with`. `scripts/check_books.py`
 reads every lesson, finds every number, and rereads each quoted source. A pop-up that is a toy
 model says so on its page with `data-badge="toy"`.
+
+**Book 4 reads real runs.** [`/books/casebook/`](public/books/casebook/index.html), *How a Policy
+Became*, traces this site's author's fine-tunes in [duckbatch](https://github.com/craigm26/duckbatch):
+the b003 series, seven runs that set out to teach the duck to walk slowly and turn on the spot, and
+k001, a straighter kick. Its numbers are quoted from the design and close notes written before and
+after each run, and from duckbatch's code, all pinned to commit `1f476e4`. Lesson 9 adds a sense
+through the Qwiic sockets on Pollen's open [Robot HAT](https://github.com/pollen-robotics/elec_RPI_Robot_HAT)
+(pinned to `6de8628`) and its I²C bus in Pollen's robot code; lesson 10 carries a policy to other
+simulators, from the pinned READMEs of mjlab, MuJoCo Playground, Isaac Lab, Open Duck Playground and
+Open Duck Mini. The runs' records are a public Hugging Face dataset, named in the text but never
+linked, because the site links only the two challenge datasets.
 
 **Predict, play, check.** With JavaScript, a prediction's answer stays hidden until the figure's
 last step, and its options are shuffled the same way on every visit; without it, the page is the
@@ -217,6 +229,14 @@ have and sends you to one of four guides, each a non-coder's route to a policy t
   Compare, the on-device tune and weight search, and **Train a network on Hugging Face**, which
   rents the card with the user's own token.
 
+After the first duck, [`/train/advanced/`](public/train/advanced/index.html) is the advanced
+track's guide, beside Book 4: download a real run's records from Hugging Face and read its
+TensorBoard log, run one change of your own with duckbatch on Hugging Face Jobs (`--inline`, so
+the menu travels with the job and the code stays duckbatch's), and reach the duck's ports and
+channels: ssh, Pollen's console on 8080, the UDP pad, `robotctl monitor`, and the spare Qwiic socket.
+It says plainly what Pollen's own notes say: the console and the UDP pad ask for no password, and Bluetooth's
+factory PIN is 000000.
+
 The PC and Mac guides hand over to Pollen's own workshop (the **Train my own robot** line on an
 Arena challenge, which clones `microduck-challenges`), Claude Code beside it (each challenge folder
 has an `AGENTS.md` written for coding agents), the snags people hit, and `microduck_rl` for training
@@ -226,7 +246,8 @@ Every training tool on them is Pollen's, and Studio is ours; the pages only add 
 numbers are held like a book's: `tools/books/claims-train.json` keeps one key per page and quotes
 `microduck-challenges` at `6ff4070` (its sprint `AGENTS.md` and its `uv.lock`), `microduck_rl` at
 `b02fdea`, Pollen's Arena at `d757117` (v0.5.0), `duck-studio` at `8e9e9bf` (build 85, the beta),
-and the Microsoft and NVIDIA pages the Windows steps rest on, and `check_books.py` checks every page
+the Microsoft and NVIDIA pages the Windows steps rest on, and, for the advanced guide, `duckbatch`
+at `1f476e4`, Pollen's `microduck` at `942e58e` and the Robot HAT at `6de8628`; `check_books.py` checks every page
 with the shelf as a plain page. When Pollen changes the workshop or the recipe, or Studio changes a screen the guides
 name, read the source again, re-pin the commit in `SOURCES`, and fix what the gate reports.
 
@@ -262,7 +283,7 @@ gate fails until every page carries the current stamp.
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
 GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,
 `/cards/`, `/cards/print/`, `/cards/spec/`, `/cards/duck-cards.json`, `/cards/packs/`, each
-pack's page, cut sheet and `.duckpack`, `/books/` and the three books all return 200, a book's
+pack's page, cut sheet and `.duckpack`, `/books/` and the four books all return 200, a book's
 response carries the books' `script-src 'self'` policy and every other page carries none, the
 stylesheet and icon load, the zip is 11666886 bytes, the CSP header is present, and the docs
 carry exactly one `id="evallog-..."` marker matching the receipt.

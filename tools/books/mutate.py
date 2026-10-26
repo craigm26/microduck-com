@@ -11,7 +11,7 @@ Each case edits files in the copy, runs the gate, and restores every touched
 file byte for byte before the next. A case passes only if the gate exits 1 AND
 one of the lines it adds over the baseline contains the expected words. The
 copy is run before the first case and after the last; both runs must give the
-same lines (none, once all three books are in).
+same lines (none, once all four books are in).
 """
 import json
 import pathlib
@@ -29,7 +29,7 @@ COPY = WORK / "microduck-com"
 def run(cwd=None):
     got = subprocess.run([sys.executable, str(COPY / "scripts/check_books.py")],
                          cwd=str(cwd or COPY), capture_output=True, text=True)
-    lines = {l for l in (got.stdout + got.stderr).splitlines() if l.startswith("check_books: ") and "three books, thirty lessons" not in l}
+    lines = {l for l in (got.stdout + got.stderr).splitlines() if l.startswith("check_books: ") and "four books, forty lessons" not in l}
     return got.returncode, lines
 
 
@@ -252,7 +252,7 @@ def _():
 
 @case("a number on the shelf with no entry", ["public/books/index.html"], "the shelf prints '12'")
 def _():
-    sub("public/books/index.html", "Three books, one little robot", "Three books, 12 drawings, one little robot")
+    sub("public/books/index.html", "Four books, one little robot", "Four books, 12 drawings, one little robot")
 
 
 @case("a script on the shelf", ["public/books/index.html"], "carries a script")
@@ -333,6 +333,59 @@ def _():
 @case("a training page that is gone", [TL], "public/train/linux/index.html is missing")
 def _():
     (COPY / TL).unlink()
+
+
+CB = "public/books/casebook/index.html"
+CBJ = "tools/books/claims-casebook.json"
+FCB = "public/books/engine/figures-casebook.js"
+
+
+@case("a number in a casebook lesson with no entry", [CB], "casebook lesson-3: prints '0.37'")
+def _():
+    sub(CB, "so only about 12% land under 0.15 m/s.", "so only about 12% land under 0.15 m/s, and 0.37 of those turn.")
+
+
+@case("a casebook quote duckbatch's close note does not say", [CBJ], "db-b003-close does not say")
+def _():
+    ledger("casebook", lambda L: L["lesson-1"]["0.108"].update(quote="| vx 0.30 | 0.119 | 0.109 | 0.060 |"))
+
+
+@case("a casebook figure that prints a number with no entry", [FCB], "figure scorecard prints '0.33'")
+def _():
+    sub(FCB, "'walk at 0.30'", "'walk at 0.33'")
+
+
+@case("a Qwiic quote the Robot HAT's bill of materials does not say", [CBJ], "hat-bom does not say")
+def _():
+    ledger("casebook", lambda L: L["lesson-9"]["four"].update(quote='"J5, J6, J7",JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical,3,JST SH,C160390'))
+
+
+@case("the casebook gone", [CB], "public/books/casebook/index.html is missing")
+def _():
+    (COPY / CB).unlink()
+
+
+TA = "public/train/advanced/index.html"
+
+
+@case("a number in the advanced guide with no entry", [TA], "the advanced guide prints '6006'")
+def _():
+    sub(TA, "with the port from the\n  page's address", "with the port from the\n  page's address, 6006 for TensorBoard")
+
+
+@case("an advanced-guide quote Pollen's pad page does not say", [TJ], "md-udp-pad does not say")
+def _():
+    ledger("train", lambda L: L["advanced"]["4210"].update(quote="| `port` | `4211` | the UDP port, bound on IPv4 `0.0.0.0` |"))
+
+
+@case("an advanced-guide cost that does not add up", [TJ], "does not print as 1.20")
+def _():
+    ledger("train", lambda L: L["advanced"]["1.20"].update(derived="1.5 * 0.85"))
+
+
+@case("the advanced guide gone", [TA], "public/train/advanced/index.html is missing")
+def _():
+    (COPY / TA).unlink()
 
 
 def main():

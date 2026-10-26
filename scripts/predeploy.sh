@@ -253,6 +253,25 @@
 #   * an iPhone quote Studio's source does not contain: "iphone: '197,774':
 #     studio-weights does not say ...".
 #   * a training page deleted: "public/train/linux/index.html is missing".
+# PROVED ABLE TO FAIL, 2026-10-26, check_books nine more times, on Book 4 (the
+# casebook) and the advanced guide at /train/advanced/, by the same harness,
+# each restored, with the whole harness at 53 of 53:
+#   * a number in a casebook lesson with no entry: "casebook lesson-3: prints
+#     '0.37' and the ledger does not say where it comes from".
+#   * a casebook quote duckbatch's close note does not contain: "db-b003-close
+#     does not say ...".
+#   * a number in a casebook figure with no entry: "figure scorecard prints
+#     '0.33' with no ledger entry".
+#   * a Qwiic quote the Robot HAT's bill of materials does not contain:
+#     "hat-bom does not say ...".
+#   * the casebook deleted: "public/books/casebook/index.html is missing".
+#   * a number in the advanced guide with no entry: "the advanced guide prints
+#     '6006'".
+#   * a guide quote Pollen's UDP pad page does not contain: "md-udp-pad does not
+#     say ...".
+#   * the guide's cost worked from the wrong rate: "1.5 * 0.85 is 1.275, which
+#     does not print as 1.20".
+#   * the guide deleted: "public/train/advanced/index.html is missing".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

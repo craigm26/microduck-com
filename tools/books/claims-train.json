@@ -10,6 +10,107 @@
     "quote": "Picks come from Compare: two networks walking under the same command."
    }
   },
+  "advanced": {
+   "0.05": {
+    "source": "db-b003-menu",
+    "quote": "rel_standing_envs: 0.05"
+   },
+   "0.25": {
+    "source": "db-b003g-design",
+    "quote": "Every run from b003 to b003f asked for `rel_standing_envs: 0.05` and trained at 25%.",
+    "means": "25% is the 0.25 that b003's Curriculum/standing_envs logs at every iteration"
+   },
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "000000": {
+    "source": "md-duckctl",
+    "quote": "defaults to `DUCK_PIN`, then to `000000`."
+   },
+   "1,500": {
+    "source": "db-b003-close",
+    "quote": "1,500 PPO iterations × 2,048 envs, 54.6 min"
+   },
+   "1.20": {
+    "derived": "1.5 * 0.80",
+    "with": {
+     "1.5": "an hour and a half, Studio's time for a full run with setup and measuring"
+    }
+   },
+   "100": {
+    "source": "db-b003b-pilot",
+    "quote": "100 PPO iterations × 2,048 envs, 224.7 s of training"
+   },
+   "224.7": {
+    "source": "db-b003b-pilot",
+    "quote": "100 PPO iterations × 2,048 envs, 224.7 s of training"
+   },
+   "250": {
+    "source": "db-b003-menu",
+    "quote": "save_interval: 250"
+   },
+   "28": {
+    "source": "md-udp-pad",
+    "quote": "Every field is little-endian, and the packet is 28 bytes:"
+   },
+   "3": {
+    "source": "md-i2c",
+    "quote": "Hardware I2C3 (M0 pinmux) on header pins 3/5"
+   },
+   "3.3": {
+    "source": "hat-readme",
+    "quote": "**expension Qwiic connectors**, 1 mm/3V3.",
+    "means": "3V3 is how boards write 3.3 V"
+   },
+   "4210": {
+    "source": "md-udp-pad",
+    "quote": "| `port` | `4210` | the UDP port, bound on IPv4 `0.0.0.0` |"
+   },
+   "5": {
+    "source": "md-i2c",
+    "quote": "Hardware I2C3 (M0 pinmux) on header pins 3/5"
+   },
+   "50": {
+    "source": "md-cheatsheet",
+    "quote": "robotctl monitor --json --hz 50 > run.jsonl"
+   },
+   "54.6": {
+    "source": "db-b003-close",
+    "quote": "1,500 PPO iterations × 2,048 envs, 54.6 min"
+   },
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "8": {
+    "source": "md-cheatsheet",
+    "quote": "An 8×8 depth matrix from the head sensor."
+   },
+   "8080": {
+    "source": "md-architecture",
+    "quote": "TCP: the console and PNG `GET /frame` on `:8080`, signalling on `:8443`"
+   },
+   "8443": {
+    "source": "md-architecture",
+    "quote": "TCP: the console and PNG `GET /frame` on `:8080`, signalling on `:8443`"
+   },
+   "four": {
+    "source": "hat-bom",
+    "quote": "\"J5, J6, J7, J8\",JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical,4,JST SH,C160390"
+   },
+   "half": {
+    "source": "studio-hub",
+    "quote": "A pilot takes about a quarter of an hour, a full run about an hour and a half, setup and measuring included."
+   },
+   "three": {
+    "source": "md-udp-pad",
+    "quote": "walks forward for three seconds"
+   },
+   "two": {
+    "count": "the two notes b003 was judged by: its design note, written before the run, and its close note after"
+   }
+  },
   "windows": {
    "10": {
     "source": "ms-wsl-gpu",

@@ -105,11 +105,11 @@ HOSTS = ("fonts.googleapis", "fonts.gstatic", "googletagmanager",
 assets = {str(path): path.read_text(encoding="utf-8")
           for path in pathlib.Path("public").rglob("*")
           if path.suffix.lower() in (".css", ".svg")}
-# THE BOOKS ARE THE ONE EXCEPTION. Each of the three book pages may carry this
+# THE BOOKS ARE THE ONE EXCEPTION. Each of the four book pages may carry this
 # exact module tag and nothing else; scripts/check_books.py holds the rest of the
 # exception to its edges (the policy in _headers, the books' own code, the
 # vendored library byte for byte).
-BOOK_PAGE = re.compile(r"public/books/(beginner|intermediate|advanced)/index\.html$")
+BOOK_PAGE = re.compile(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$")
 BOOK_TAG = '<script type="module" src="/books/engine/book.js"></script>'
 for name, text in (pages | assets).items():
     parsed = Markup(text) if not name.endswith(".css") else None
