@@ -57,7 +57,7 @@
       <li><a href="#lesson-9"><span>From training to a robot</span></a></li>
       <li><a href="#lesson-10"><span>Your first project: bounce a ball</span></a></li>
     </ol>
-    <p class="book-how">How a lesson works: commit to a prediction on the left page, then run the steps on the right one at a time. The notes go further, into what to try in Microduck Studio, Kith or Pollen Robotics' training code and where every number comes from.</p>
+    <p class="book-how">How a lesson works: read the left page and commit to a prediction, then run the steps on the right one at a time. The notes under each lesson go further, into what to try in Microduck Studio, Kith or Pollen Robotics' training code and where every number comes from.</p>
   </div>
 </section>
 
@@ -98,7 +98,7 @@
     <section>
       <h3>For parents and teachers</h3>
       <p>The words in bold are the whole vocabulary of reinforcement learning. A good check is to ask a student to name the agent, the observation, the action and the reward in a game they play.</p>
-      <p>A picture for the 2 seconds: a cyclist steers by the road a few metres ahead rather than the patch under the front wheel, and those seconds are the duck's few metres.</p>
+      <p>A picture for the 2 seconds: a cyclist cares most about the next few metres of road and hardly at all about a bend far ahead, and those seconds are the duck's few metres.</p>
       <p>A reset is the simulator putting the duck back on its feet. A real robot cannot reset in a blink: someone, or its stand-up skill, has to get it up, and every fall wears it. That is one reason the learning happens in simulation (lesson 6).</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%201%3A%20Observe%2C%20act%2C%20score%2C%20repeat">Tell us about it</a>.</p>
     </section>
@@ -317,7 +317,7 @@
     <p class="kicker">Lesson 6 · Training</p>
     <h2 id="lesson-6-title">Practice, at scale</h2>
     <p>Training runs 4,096 pretend ducks at once on a graphics card. Each duck takes 24 steps, then the brain learns from all of them together, and that is one <strong>iteration</strong>: 98,304 steps of experience.</p>
-    <p>A usable walk takes about 1 to 2 hours. Pollen's guide says simple tricks need about 1,000 iterations, while walking and getting up need 4,000 to 6,000, and a copy of the brain is saved every 250 iterations.</p>
+    <p>A usable walk takes about 1 to 2 hours. Pollen's guide says simple tricks need about 1,000 iterations, while walking and getting up need 4,000 to 6,000. A copy of the brain is saved every 250 iterations.</p>
     <p>Trainers watch the score climb, and they watch the duck too, because the score can climb while the trick never happens.</p>
     <p class="rule">4,096 ducks × 24 steps = 98,304 steps per iteration</p>
     <fieldset class="predict" data-answer="a">
@@ -348,7 +348,7 @@
 <pre><code>git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl
 uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre>
-      <p>No graphics card? Add <code>--hf-jobs</code> to run it on Hugging Face Jobs, billed to your Hugging Face account, and always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
+      <p>No graphics card? Add <code>--hf-jobs</code> to run it on Hugging Face Jobs, billed to your Hugging Face account. Always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>

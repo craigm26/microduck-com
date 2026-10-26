@@ -43,7 +43,7 @@
   <div class="book-intro-page">
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 3 of 4 · Advanced</p>
     <h1 id="book-title">Training Microducks</h1>
-    <p class="lede">A Microduck's walk comes from reinforcement learning and the settings in Pollen Robotics' training code, so this book reads those settings, then measures honestly what comes out. Ten lessons, each with a figure to run.</p>
+    <p class="lede">A Microduck's walk comes from reinforcement learning and the settings in Pollen Robotics' training code. This book covers both, and the honest measuring that has to come after. Ten lessons, each with a figure to run.</p>
     <p class="book-for"><strong>Who it is for:</strong> makers, students and club leaders who can read a little algebra and want to train a policy, or judge one. Code helps but is not required, and <a href="/books/intermediate/">Book 2</a> has the same ideas without the formulas.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>States, actions, rewards, return</span></a></li>
@@ -95,7 +95,7 @@
       <pre><code>gamma=0.99,
 lam=0.95,
 desired_kl=0.01,</code></pre>
-      <p>Change it there, train two full runs of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, and compare the gaits. A smoke test is no use for this, since it only checks that a task builds and runs and learns no gait. Every run needs a CUDA GPU or Hugging Face Jobs, even a smoke test.</p>
+      <p>Change it there, train two full runs of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, and compare the gaits. A smoke test is no use for this: it only checks that a task builds and runs, and it learns no gait. Every run needs a CUDA GPU or Hugging Face Jobs, even a smoke test.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -128,7 +128,7 @@ desired_kl=0.01,</code></pre>
       <label><input type="radio" name="predict-2" value="a"> Both networks.</label>
       <label><input type="radio" name="predict-2" value="b"> Only the critic.</label>
       <label><input type="radio" name="predict-2" value="c"> Only the actor.</label>
-      <details><summary>Check your prediction</summary><p><strong>Only the actor.</strong> The critic exists only in training, so it is allowed to cheat, and the exported graph is the actor alone, 61 inputs to 14 outputs. The critic's privileged inputs never have to exist on the robot, which is exactly why it can be given them.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Only the actor.</strong> The critic exists only in training, so it is allowed to cheat, and the exported graph is the actor, 61 inputs to 14 outputs. The critic's privileged inputs never have to exist on the robot, which is exactly why it can be given them.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -210,7 +210,7 @@ schedule="adaptive",</code></pre>
     <section>
       <h3>For teachers and mentors</h3>
       <p>Draw min(<var>ρÂ</var>, clip(<var>ρ</var>, 0.8, 1.2)<var>Â</var>) for <var>Â</var> = 1 and <var>Â</var> = −1 on squared paper, then ask which side of each curve goes flat, and why that is the safe side.</p>
-      <p>The clip works like a bonus with a ceiling: past it, more of the same earns nothing, but nothing is clawed back either. The entropy bonus is a reward for staying uncertain, and without it a policy can stop exploring before it has found a gait.</p>
+      <p>The clip works like a bonus with a ceiling, set on how far one update moves the policy: once the probability ratio passes 1 ± ε in the helpful direction, moving it further earns nothing, but nothing is clawed back either. The entropy bonus is a reward for staying uncertain, and without it a policy can stop exploring before it has found a gait.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%203%3A%20PPO%3A%20better%2C%20but%20not%20too%20much">Tell us about it</a>.</p>
     </section>
     <section>
@@ -237,7 +237,7 @@ schedule="adaptive",</code></pre>
       <label><input type="radio" name="predict-4" value="a"> Delete them, to make the network smaller.</label>
       <label><input type="radio" name="predict-4" value="b"> Keep them, and feed them plain zeros.</label>
       <label><input type="radio" name="predict-4" value="c"> Keep them, with small sampled values.</label>
-      <details><summary>Check your prediction</summary><p><strong>Keep them, with small sampled values.</strong> Deleting them breaks the contract, so unused command slots stay in, and Pollen's notes say to sample small values in them from step 0, because a command input that is never non-zero keeps dead weights forever. Not every task follows the note (the ball kick feeds plain zeros), and big random noise is no answer either, since it is not small and no robot will ever send it.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Keep them, with small sampled values.</strong> Deleting them breaks the contract, so unused command slots stay in, and Pollen's notes say to sample small values in them from step 0, because a command input that is never non-zero keeps dead weights forever, though the ball kick, for one, feeds plain zeros. Big random noise is no answer either, since it is not small and no robot will ever send it.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -421,7 +421,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
     <section>
       <h3>For teachers and mentors</h3>
       <p>Before any test, have the group write down what "walks one square reliably" means, in numbers, then compare with the evidence page's: 95% of rows within 10 cm, 95% within 15°, a fall bound of 1%, and time limits.</p>
-      <p>Randomization is a flight simulator's trick: a pilot meets every kind of weather in training, because nobody knows which one the real flight will bring. Be clear about what is still open, too: the mat result is simulation only, and closed-loop cards stay off on real ducks.</p>
+      <p>Randomization is a flight simulator's trick: a pilot trains in many kinds of weather, because nobody knows which one the real flight will bring. Be clear about what is still open, too: the mat result is simulation only, and closed-loop cards stay off on real ducks.</p>
       <p>And note the randomizer rule: a draw that accumulated across resets once degraded every long training run for months.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%207%3A%20Randomize%2C%20then%20measure">Tell us about it</a>.</p>
     </section>
@@ -439,7 +439,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · Evidence</p>
     <h2 id="lesson-8-title">Honest numbers</h2>
-    <p>No falls in 100 rows (a row is a program of Duck Cards) does not mean a fall rate of zero, so how many clean rows does it take? The Wilson 95% interval is a range that should hold the true rate 95 times in 100, and with 0 falls, bounding it at 1% takes 381 rows.</p>
+    <p>No falls in 100 rows (a row is a program of Duck Cards) does not mean a fall rate of zero, so how many clean rows does it take to bound the rate at 1%? The Wilson 95% interval is a range that should hold the true rate 95 times in 100, and with 0 falls, that takes 381 rows.</p>
     <p>Rows are rarely independent, either. On the evidence page each condition's physics is drawn once per session of 12 rows, "so 400 rows are about 34 ducks", and intervals that count rows come out too narrow, so later candidates were judged by a permutation test over sessions.</p>
     <p>And decide what counts before you look: those criteria were written down on 2026-10-15, "before any result was in, and not changed since."</p>
     <p class="rule">For 0 events in <var>n</var> trials, the Wilson 95% upper bound is <var>z</var><sup>2</sup>/(<var>n</var> + <var>z</var><sup>2</sup>), with <var>z</var> = 1.96.</p>

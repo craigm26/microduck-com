@@ -99,7 +99,7 @@
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Show the rising log first and ask whether the run worked, and only then show the speeds. End on what a log would have needed to catch it: tracking at the slow commands on their own, not averaged with the stand commands that standing already meets.</p>
+      <p>Show the rising log first and ask whether the run worked, and only then show the speeds. Then ask what a log would have needed to catch it: tracking at the slow commands on their own, not averaged with the stand commands that standing already meets.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%201%3A%20The%20walk%20that%20learned%20to%20stand">Tell us about it</a>.</p>
     </section>
     <section>
@@ -118,7 +118,7 @@
     <p class="kicker">Lesson 2 · b003b, a progress term</p>
     <h2 id="lesson-2-title">Pay for going</h2>
     <p>b003's note named the fix: keep the kernel's slope, and stop paying for standing. So <strong>b003b</strong> put Pollen's widths back and added two <strong>progress terms</strong> at weight 1.0 each: the share of the commanded speed, and of the commanded turn, that the duck achieves. Standing when told to move earns 0 from them; half the command earns 0.5.</p>
-    <p>We ran a 100-iteration pilot first, to check that the terms run. They did, but it fell more than the student, 0.96 times a minute against 0.36. The note called that the usual early cost of a warm start, though not yet known to be only that, and the pre-registered full 1,500 went ahead.</p>
+    <p>We ran a 100-iteration pilot first, to check that the terms run. They did, but it was worse than the student, 0.96 falls a minute against 0.36. The note called that the usual early cost of a warm start, though not yet known to be only that, and the pre-registered full 1,500 went ahead.</p>
     <p>The full run turned on the spot at 0.456 rad/s, 2.2× the student, and reached 0.183 m/s when asked for 0.40, which is past Pollen's walker. At 0.10 m/s it still stood, at 0.008 against the student's 0.007. At 0.30 it reached 0.1199 against a line of 0.12, inside the run-to-run noise, and the note recorded a fail.</p>
     <p class="rule">progress = clip(<var>v</var> · <var>ĉ</var>, 0, |<var>c</var>|) / |<var>c</var>|: pay in proportion to the share of the command achieved, and nothing for standing.</p>
     <fieldset class="predict" data-answer="b">
@@ -149,7 +149,7 @@
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>The pilot is worth a discussion of its own, because it fell more than the student and the full run went ahead anyway. Ask why that was the honest call: the pass lines were written before either result, and a pilot that only has to run cannot be judged on them.</p>
+      <p>The pilot is worth a discussion of its own, because it was worse than the student and the full run went ahead anyway. Ask why that was the honest call: the pass lines were written before either result, and a pilot that only has to run cannot be judged on them.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%204%2C%20lesson%202%3A%20Pay%20for%20going">Tell us about it</a>.</p>
     </section>
     <section>
@@ -222,7 +222,7 @@
       <label><input type="radio" name="predict-4" value="a"> 5%, as asked.</label>
       <label><input type="radio" name="predict-4" value="b"> 25%, at every iteration.</label>
       <label><input type="radio" name="predict-4" value="c"> None: the curriculum switched standing off.</label>
-      <details><summary>Check your prediction</summary><p><strong>25%, at every iteration.</strong> The task's curriculum set the share at every reset, over the menu's value, and nothing failed: the menu still said 5%, and only the log showed what ran. Turning in place then took a quarter of the envs, which left about 19% standing.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>25%, at every iteration.</strong> The task's curriculum set the share at every reset, over the menu's value, and nothing failed: the menu still said 5%, and the log is where it showed. Turning in place then took a quarter of the envs, which left about 19% standing.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -407,7 +407,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · k001, the kick</p>
     <h2 id="lesson-8-title">Aim, not distance</h2>
-    <p>Pollen's right kick sends the ball 5.064 m, but 8.0° off line on average. For shooting, aim matters more than distance. <strong>k001</strong> kept Pollen's task and reward and added one term: the ball's speed across the kick line, at weight −12.0, the rate Pollen pays for speed along it, up to 1.0 m/s.</p>
+    <p>On average, Pollen's right kick sends the ball 5.064 m, 8.0° off line. For shooting, aim matters more than distance. <strong>k001</strong> kept Pollen's task and reward and added one term: the ball's speed across the kick line, at weight −12.0, the rate Pollen pays for speed along it, up to 1.0 m/s.</p>
     <p>Its lines guarded the trade: 4.0° or straighter, at least 0.95 of Pollen's distance, falls and hopping held, and installable with Pollen's own checks. After 1,000 iterations from Pollen's kick it went 3.4° off line with 0.999 of the distance and falls unchanged, and every line passed.</p>
     <p>It held on the backlash twin too, an actuator model it never trained on, at 3.7° against Pollen's 8.6°. One number moved that no line covered, the ball's peak speed along the line, from 1.34 to 1.28 m/s. The notes do not test why.</p>
     <p class="rule">pay = 12 · min(<var>v</var><sub>along</sub>, 1.0) − 4 · max(0, <var>v</var><sub>along</sub> − 1.0) − 12 · |<var>v</var><sub>across</sub>|: speed across always costs; along pays only up to 1.0 m/s.</p>
