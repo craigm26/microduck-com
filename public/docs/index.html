@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Documentation | Microduck Studio</title>
-<meta name="description" content="How to use Microduck Studio: drive a duck in physics on your phone, inspect a policy, write a motion, run the physics bench, and reproduce a challenge score from the open files.">
+<meta name="description" content="How to use Microduck Studio: drive a duck in physics on your phone, inspect a policy, write a motion, run the physics bench, and reproduce a challenge score, and work with the open file formats.">
 <link rel="canonical" href="https://microduckstudio.com/docs/">
 <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
@@ -218,7 +218,7 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
       what the duck's head camera would see on a practice mat with a red mat, a blue mat and a ball,
       from the real camera's position. Recording and Dream-1 work on it exactly as on a robot, but
       a model trained only on these pictures learns this mat, not your floor.</li>
-      <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever device holds the key
+      <li><strong>What leaves your home.</strong> While Dream-1 runs, whichever of the two holds the key
       sends Dream Labs the duck's last few camera pictures, its last walk command and your task,
       about every two seconds, and it sends nothing when Dream-1 is not running. See the
       <a href="/privacy/">privacy policy</a>.</li>
@@ -259,7 +259,7 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
     times, but it does not calculate whether the robot could perform the move. The
     motion's <strong>Sim to real</strong> row records how far it has got: written,
     previewed or run on a bench.</p>
-    <p>Export a motion you wrote as <code>.duckmove</code> to keep a copy or share it.
+    <p>Export your authored motion as <code>.duckmove</code> to keep a copy or share it.
     A <code>.duckintent</code> is a different thing, a recorded policy run in physics, and
     <a href="#formats">file formats</a> has the distinction. When you are ready to check a
     measured result, <a href="#reproduce">reproduce a published number</a>.</p>
@@ -525,7 +525,7 @@ same file to a Hugging Face dataset under your own account, under CC BY 4.0, is
 your archive, and it submits nothing to anyone.</p>
 
 <h2 id="packs">Packs and Measure my duck</h2>
-<p>A pack is a game for <a href="/cards/">Duck Cards</a> set for a grade band: a board,
+<p>A pack is a game for <a href="/cards/">Duck Cards</a>, set for a grade band: a board,
 the cards in play, challenges that ramp from easy to hard, and lessons. Four ship with the
 app, from PreK to grade 8, and the <a href="/cards/packs/">pack pages</a> print them.</p>
 
@@ -629,8 +629,8 @@ fixing it is why we document them here.</p>
 
 <h2 id="honest">What is honest about this</h2>
 
-<p>Two claims are easy to make about a robot app, and this page makes neither of
-them. There are four more things worth saying out loud.</p>
+<p>Two claims are easy to make about a robot app, and neither one is made
+here. There are four more things worth saying out loud.</p>
 
 <p><strong>A preview is not a result.</strong> A preview on a phone is what you
 asked for, not what the robot would do. We asked the bench, and the four
