@@ -282,6 +282,15 @@
 #     answers every unknown path with the home page and a 200".
 #   * another new page left out of the sitemap: "public/sitemap.xml omits ...",
 #     so the exception is the one page and no other.
+# PROVED ABLE TO FAIL, 2026-10-26, on the not-found page's security policy, after
+# the live site showed none on it (a /404.html section never applies: Pages answers
+# that address with a 308 to /404, and serves unknown paths under /* alone):
+#   * check_wellformed three times, in a throwaway copy, each restored: the meta
+#     policy removed, a script-src added to it, and default-src 'self' in place of
+#     'none', each "public/404.html must carry its own policy, from default-src
+#     'none' and with no script-src ...".
+#   * check_books once more, by the harness, with the whole harness at 54 of 54:
+#     the section named /404.html again, "/404 is under 0 security policies".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

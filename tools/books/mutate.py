@@ -111,6 +111,14 @@ def _():
     write(H, s[:j] + "script-src 'self'; " + s[j:])
 
 
+@case("the not-found section named by its file, which Pages redirects away from", [H],
+      "/404 is under 0 security policies")
+def _():
+    s = text(H)
+    i = s.index("\n/404\n")
+    write(H, s[:i] + "\n/404.html\n" + s[i + len("\n/404\n"):])
+
+
 @case("the books' policy deleted", [H], "/books/beginner/ is under 0 security policies")
 def _():
     s = text(H)

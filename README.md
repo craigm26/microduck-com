@@ -14,7 +14,9 @@ identifying Studio as an independent project.
   evaluations, challenge criteria, reproducibility, file formats and resources.
 - `public/404.html` - the not-found page. Cloudflare Pages serves it, with a 404, for any path that
   is not a file; without it, Pages answers every unknown path with the home page and a 200. It says
-  noindex and stays out of the sitemap, and `check_wellformed.py` holds both.
+  noindex, stays out of the sitemap and sets its own security policy in a meta tag, because for
+  an unknown path Pages serves it under `/*` alone; `check_wellformed.py` holds all three, and
+  `_headers` gives it the full policy at `/404`, the address Pages serves it at by name.
 - `public/privacy/index.html` - the privacy policy the App Store listing links to. Its URL
   is on the listing for app 6806299485, so the path, filename and trailing slash never change.
 - `public/cards/` - Duck Cards, a printable deck for classrooms: the deck and its lessons

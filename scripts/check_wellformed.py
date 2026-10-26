@@ -17,6 +17,11 @@ Pages takes the site for a single-page app and answers every unknown path with
 the home page and a 200, so a broken link looks like a working copy of the home
 page to a search engine (found 2026-10-26). So the page must exist, must say
 noindex, and must stay out of the sitemap; every other page must be in it.
+
+AND IT CARRIES ITS OWN SECURITY POLICY. For a path that is not a file, Pages serves
+the page under the /* section of _headers alone, which sets no policy (a policy on
+/* would be joined to the books' and block their scripts). So the page sets one in
+a meta tag: from default-src 'none', and with no script-src, because it runs none.
 """
 
 from __future__ import annotations
@@ -94,6 +99,14 @@ def main() -> int:
                         "unknown path with the home page and a 200")
     elif '<meta name="robots" content="noindex">' not in pages[str(not_found)]:
         problems.append("public/404.html must carry <meta name=\"robots\" content=\"noindex\">")
+    else:
+        import re
+        policy = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]*)">',
+                           pages[str(not_found)])
+        if not policy or not policy.group(1).startswith("default-src 'none'") or "script-src" in policy.group(1):
+            problems.append("public/404.html must carry its own policy, from default-src 'none' and with no "
+                            "script-src, in <meta http-equiv=\"Content-Security-Policy\">: for a path that is "
+                            "not a file, Pages serves it under /* alone, which sets none")
 
     sitemap = pathlib.Path("public/sitemap.xml")
     if not sitemap.is_file():
