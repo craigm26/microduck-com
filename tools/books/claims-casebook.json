@@ -1,0 +1,745 @@
+{
+ "lessons": {
+  "intro": {
+   "ten": {
+    "count": "the lessons in this book"
+   }
+  },
+  "lesson-1": {
+   "0.10": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.10 | 0.002 | 0.007 | 0.002 |"
+   },
+   "0.002": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.10 | 0.002 | 0.007 | 0.002 |"
+   },
+   "0.007": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.10 | 0.002 | 0.007 | 0.002 |"
+   },
+   "0.30": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.30 | 0.119 | 0.108 | 0.060 |"
+   },
+   "0.108": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.30 | 0.119 | 0.108 | 0.060 |"
+   },
+   "0.060": {
+    "source": "db-b003-close",
+    "quote": "| vx 0.30 | 0.119 | 0.108 | 0.060 |"
+   },
+   "1.0": {
+    "source": "db-b003-close",
+    "quote": "| wz 1.0 | 0.307 | 0.211 | 0.017 |"
+   },
+   "0.211": {
+    "source": "db-b003-close",
+    "quote": "| wz 1.0 | 0.307 | 0.211 | 0.017 |"
+   },
+   "0.017": {
+    "source": "db-b003-close",
+    "quote": "| wz 1.0 | 0.307 | 0.211 | 0.017 |"
+   },
+   "26,254": {
+    "source": "db-b003-design",
+    "quote": "PPO starting from the b002 128-128 student (26,254 params)"
+   },
+   "0.316": {
+    "source": "db-b003-close",
+    "quote": "b003 cut std from 0.316 to 0.1 (linear) and from 0.707 to 0.3 (yaw)"
+   },
+   "0.1": {
+    "source": "db-b003-close",
+    "quote": "b003 cut std from 0.316 to 0.1 (linear) and from 0.707 to 0.3 (yaw)"
+   },
+   "90": {
+    "source": "db-b003-design",
+    "quote": "standing still when asked for 0.1 m/s earns about 90% of it."
+   },
+   "1,500": {
+    "source": "db-b003-close",
+    "quote": "1,500 PPO iterations × 2,048 envs"
+   },
+   "4": {
+    "source": "db-b003-close",
+    "quote": "earns exp(−4) ≈ 0.018 for managing 0.1 m/s and exp(−9) ≈ 0.0001 for standing still"
+   },
+   "9": {
+    "source": "db-b003-close",
+    "quote": "earns exp(−4) ≈ 0.018 for managing 0.1 m/s and exp(−9) ≈ 0.0001 for standing still"
+   },
+   "0.018": {
+    "source": "db-b003-close",
+    "quote": "earns exp(−4) ≈ 0.018 for managing 0.1 m/s and exp(−9) ≈ 0.0001 for standing still"
+   },
+   "0.0001": {
+    "source": "db-b003-close",
+    "quote": "earns exp(−4) ≈ 0.018 for managing 0.1 m/s and exp(−9) ≈ 0.0001 for standing still"
+   },
+   "0.41": {
+    "derived": "2.718281828 ** (-(0.3 * 0.3) / (0.316 * 0.316))",
+    "with": {
+     "2.718281828": "e, the base of the kernel's exponential"
+    }
+   },
+   "0.67": {
+    "derived": "2.718281828 ** (-(0.3 - 0.1) * (0.3 - 0.1) / (0.316 * 0.316))",
+    "with": {
+     "2.718281828": "e, the base of the kernel's exponential"
+    }
+   },
+   "2": {
+    "count": "the power in the kernel: the gap and the width are both squared"
+   },
+   "25": {
+    "editorial": "the window, in iterations, that the figure's log is averaged over"
+   },
+   "three": {
+    "count": "the ducks in the figure, one for each way to answer the command"
+   },
+   "figure": {
+    "0": {
+     "editorial": "the origin of the figure's axes"
+    },
+    "0.2": {
+     "editorial": "a tick on the kernel chart's speed axis"
+    },
+    "0.3": {
+     "source": "db-b003-close",
+     "quote": "b003 cut std from 0.316 to 0.1 (linear) and from 0.707 to 0.3 (yaw)"
+    },
+    "0.4": {
+     "editorial": "the end of the kernel chart's speed axis"
+    },
+    "0.25": {
+     "editorial": "a tick on the logged reward's axis"
+    },
+    "0.5": {
+     "editorial": "a tick on the logged reward's axis"
+    }
+   }
+  },
+  "lesson-2": {
+   "0": {
+    "source": "db-b003b-design",
+    "quote": "Standing when told to move now earns 0 from these, and half the commanded speed earns 0.5."
+   },
+   "0.5": {
+    "source": "db-b003b-design",
+    "quote": "Standing when told to move now earns 0 from these, and half the commanded speed earns 0.5."
+   },
+   "half": {
+    "source": "db-b003b-design",
+    "quote": "Standing when told to move now earns 0 from these, and half the commanded speed earns 0.5."
+   },
+   "1.0": {
+    "source": "db-b003b-design",
+    "quote": "`command_progress_linear` (weight 1.0)"
+   },
+   "two": {
+    "source": "db-b003b-design",
+    "quote": "**Two new terms**"
+   },
+   "2.0": {
+    "source": "db-b003b-design",
+    "quote": "The tracking terms (weight 2.0 each) still pay for accuracy."
+   },
+   "100": {
+    "source": "db-b003b-pilot",
+    "quote": "100 PPO iterations × 2,048 envs"
+   },
+   "0.96": {
+    "source": "db-b003b-pilot",
+    "quote": "| falls/min | 0.12 | 0.36 | 0.96 |"
+   },
+   "0.36": {
+    "source": "db-b003b-pilot",
+    "quote": "| falls/min | 0.12 | 0.36 | 0.96 |"
+   },
+   "1,500": {
+    "source": "db-b003b-close",
+    "quote": "1,500 PPO iterations × 2,048 envs, 54.8 min"
+   },
+   "0.456": {
+    "source": "db-b003b-close",
+    "quote": "| wz 1.0 | 0.306 | 0.209 | 0.017 | **0.456** |"
+   },
+   "2.2": {
+    "source": "db-b003b-close",
+    "quote": "That is still 2.2× the student and 1.5× the teacher."
+   },
+   "0.183": {
+    "source": "db-b003b-close",
+    "quote": "| vx 0.40 | 0.162 | 0.157 | 0.124 | **0.183** |"
+   },
+   "0.40": {
+    "source": "db-b003b-close",
+    "quote": "| vx 0.40 | 0.162 | 0.157 | 0.124 | **0.183** |"
+   },
+   "0.008": {
+    "source": "db-b003b-close",
+    "quote": "| vx 0.10 | 0.002 | 0.008 | 0.002 | 0.008 |"
+   },
+   "0.10": {
+    "source": "db-b003b-close",
+    "quote": "| vx 0.10 | 0.002 | 0.008 | 0.002 | 0.008 |"
+   },
+   "0.30": {
+    "source": "db-b003b-close",
+    "quote": "4. cmd 0.30 → ≥ 0.12: **failed** by 0.0001 (0.1199)."
+   },
+   "0.12": {
+    "source": "db-b003b-close",
+    "quote": "4. cmd 0.30 → ≥ 0.12: **failed** by 0.0001 (0.1199)."
+   },
+   "0.1199": {
+    "source": "db-b003b-close",
+    "quote": "4. cmd 0.30 → ≥ 0.12: **failed** by 0.0001 (0.1199)."
+   },
+   "figure": {
+    "0.0001": {
+     "source": "db-b003b-close",
+     "quote": "4. cmd 0.30 → ≥ 0.12: **failed** by 0.0001 (0.1199)."
+    },
+    "0.1": {
+     "editorial": "a tick on the chart's speed axis"
+    },
+    "0.2": {
+     "editorial": "a tick on the chart's speed axis"
+    },
+    "0.3": {
+     "editorial": "a tick on the chart's speed axis"
+    },
+    "0.4": {
+     "editorial": "the end of the chart's speed axis"
+    },
+    "0.108": {
+     "source": "db-b003b-close",
+     "quote": "| vx 0.30 | 0.119 | 0.108 | 0.060 | 0.120 |"
+    },
+    "0.157": {
+     "source": "db-b003b-close",
+     "quote": "| vx 0.40 | 0.162 | 0.157 | 0.124 | **0.183** |"
+    },
+    "0.209": {
+     "source": "db-b003b-close",
+     "quote": "| wz 1.0 | 0.306 | 0.209 | 0.017 | **0.456** |"
+    }
+   }
+  },
+  "lesson-3": {
+   "0.4": {
+    "source": "db-b003c-design",
+    "quote": "VelStand samples planar commands uniformly in ±0.4 × ±0.3 m/s, so only about 15% land under 0.15 m/s."
+   },
+   "0.3": {
+    "source": "db-b003c-design",
+    "quote": "VelStand samples planar commands uniformly in ±0.4 × ±0.3 m/s, so only about 15% land under 0.15 m/s."
+   },
+   "15": {
+    "source": "db-b003c-design",
+    "quote": "VelStand samples planar commands uniformly in ±0.4 × ±0.3 m/s, so only about 15% land under 0.15 m/s."
+   },
+   "0.15": {
+    "source": "db-b003c-design",
+    "quote": "VelStand samples planar commands uniformly in ±0.4 × ±0.3 m/s, so only about 15% land under 0.15 m/s."
+   },
+   "35": {
+    "source": "db-b003c-design",
+    "quote": "Then 35% of the envs that are neither standing nor turning in place get a planar speed uniform in [0.05, 0.25] m/s"
+   },
+   "0.05": {
+    "source": "db-b003c-design",
+    "quote": "Then 35% of the envs that are neither standing nor turning in place get a planar speed uniform in [0.05, 0.25] m/s"
+   },
+   "0.25": {
+    "source": "db-b003c-design",
+    "quote": "Then 35% of the envs that are neither standing nor turning in place get a planar speed uniform in [0.05, 0.25] m/s"
+   },
+   "0.001": {
+    "source": "db-b003c-close",
+    "quote": "| vx 0.10 | 0.002 | 0.007 | 0.008 | −0.001 |"
+   },
+   "0.10": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "0.456": {
+    "source": "db-b003c-close",
+    "quote": "| wz 1.0 | 0.310 | 0.210 | 0.456 | 0.299 |"
+   },
+   "0.299": {
+    "source": "db-b003c-close",
+    "quote": "| wz 1.0 | 0.310 | 0.210 | 0.456 | 0.299 |"
+   },
+   "0.120": {
+    "source": "db-b003c-close",
+    "quote": "| vx 0.30 | 0.120 | 0.108 | 0.120 | 0.066 |"
+   },
+   "0.066": {
+    "source": "db-b003c-close",
+    "quote": "| vx 0.30 | 0.120 | 0.108 | 0.120 | 0.066 |"
+   },
+   "0.30": {
+    "source": "db-b003c-close",
+    "quote": "| vx 0.30 | 0.120 | 0.108 | 0.120 | 0.066 |"
+   },
+   "2.0": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "0.90": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "1.8": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "3.0": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "0": {
+    "source": "db-b003c-close",
+    "quote": "At a 0.10 m/s command, mjlab's tracking term (std √0.1) pays exp(−0.01/0.1) ≈ 0.90 of its weight 2.0 for standing still. That is 1.8 per step, against at most 3.0 for walking it perfectly"
+   },
+   "1.0": {
+    "source": "db-b003b-design",
+    "quote": "`command_progress_linear` (weight 1.0)"
+   },
+   "0.8": {
+    "derived": "0.4 + 0.4"
+   },
+   "0.6": {
+    "derived": "0.3 + 0.3"
+   },
+   "figure": {
+    "0.008": {
+     "source": "db-b003c-close",
+     "quote": "| vx 0.10 | 0.002 | 0.007 | 0.008 | −0.001 |"
+    }
+   }
+  },
+  "lesson-4": {
+   "0.05": {
+    "source": "db-b003d-design",
+    "quote": "Their menus set `rel_standing_envs: 0.05`."
+   },
+   "0.25": {
+    "source": "db-b003d-design",
+    "quote": "TensorBoard's `Curriculum/standing_envs` reads 0.25 at every iteration of b003b and b003c"
+   },
+   "25": {
+    "source": "db-b003d-design",
+    "quote": "Turn-in-place then takes 25% and un-marks them, which leaves about 19% standing."
+   },
+   "19": {
+    "source": "db-b003d-design",
+    "quote": "Turn-in-place then takes 25% and un-marks them, which leaves about 19% standing."
+   },
+   "quarter": {
+    "source": "db-b003d-design",
+    "quote": "All three ran with a quarter of the envs drawn standing."
+   },
+   "250": {
+    "source": "db-b003-menu",
+    "quote": "save_interval: 250"
+   },
+   "5": {
+    "source": "db-b003g-design",
+    "quote": "practise standing 5% of the time, as the menus always said"
+   },
+   "1,500": {
+    "source": "db-b003-close",
+    "quote": "1,500 PPO iterations × 2,048 envs"
+   },
+   "hundred": {
+    "count": "the figure's scale: the practice mix drawn per hundred envs"
+   },
+   "figure": {
+    "0": {
+     "editorial": "the origin of the log's axes"
+    }
+   }
+  },
+  "lesson-5": {
+   "0.20": {
+    "source": "db-b003d-design",
+    "quote": "Standing pays exp(−1.6) ≈ 0.20 of the weight at every command (0.90 at 0.10 before)"
+   },
+   "0.90": {
+    "source": "db-b003d-design",
+    "quote": "Standing pays exp(−1.6) ≈ 0.20 of the weight at every command (0.90 at 0.10 before)"
+   },
+   "0.10": {
+    "source": "db-b003d-close",
+    "quote": "Within a stride, the body velocity varies by 0.10–0.15 m/s (std), mostly sideways sway at 0.09–0.13 m/s."
+   },
+   "0.15": {
+    "source": "db-b003d-close",
+    "quote": "Within a stride, the body velocity varies by 0.10–0.15 m/s (std), mostly sideways sway at 0.09–0.13 m/s."
+   },
+   "0.004": {
+    "source": "db-b003d-close",
+    "quote": "1. Dead band (cmd 0.10 → ≥ 0.05; cmd 0.05 → ≥ 0.02): **failed** (0.004, −0.000)."
+   },
+   "0.09": {
+    "source": "db-b003d-close",
+    "quote": "Stepping in place, the first move away from standing, pays 0.09–0.17 against standing's 0.20, so it is downhill."
+   },
+   "0.17": {
+    "source": "db-b003d-close",
+    "quote": "Stepping in place, the first move away from standing, pays 0.09–0.17 against standing's 0.20, so it is downhill."
+   },
+   "0.5": {
+    "source": "db-b003e-design",
+    "quote": "On the planar velocity averaged over 0.5 s the sway falls to 0.03–0.05 m/s."
+   },
+   "0.03": {
+    "source": "db-b003e-design",
+    "quote": "On the planar velocity averaged over 0.5 s the sway falls to 0.03–0.05 m/s."
+   },
+   "0.05": {
+    "source": "db-b003e-design",
+    "quote": "On the planar velocity averaged over 0.5 s the sway falls to 0.03–0.05 m/s."
+   },
+   "0.21": {
+    "source": "db-b003e-design",
+    "quote": "The measured strides then pay 0.21–0.25 for stepping in place and 0.81–0.93 for the command, against 0.20 for standing"
+   },
+   "0.25": {
+    "source": "db-b003e-design",
+    "quote": "The measured strides then pay 0.21–0.25 for stepping in place and 0.81–0.93 for the command, against 0.20 for standing"
+   },
+   "0.02": {
+    "source": "db-b003e-design",
+    "quote": "the final network at cmd 0.10 ≥ 0.02 m/s on the job's 512-env speed curve"
+   },
+   "0.003": {
+    "source": "db-b003e-close",
+    "quote": "(cmd 0.10 → ≥ 0.02 on the 512-env curve): **failed** (0.003)."
+   },
+   "0.525": {
+    "source": "db-b003e-close",
+    "quote": "2. wz 1.0 → ≥ 0.5 rad/s: **passed** (0.525). This is the first run in the series to pass it."
+   },
+   "25": {
+    "source": "db-b003e-design",
+    "quote": "(25 env steps)"
+   },
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "figure": {
+    "0": {
+     "editorial": "the bottom of the pay axis"
+    },
+    "1": {
+     "editorial": "the top of the pay axis: all of the term"
+    }
+   }
+  },
+  "lesson-6": {
+   "61": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "128": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "14": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "26,254": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "197,774": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "7.5": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "5": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher"
+   },
+   "two": {
+    "source": "db-readme",
+    "quote": "A **26,254-parameter** student (61-128-128-14, **7.5x smaller** than Pollen's 197,774-parameter default walker, **2.7x faster** per step) tracks velocity within 5% (planar) and 11% (yaw) of the teacher",
+    "means": "61-128-128-14 is 61 inputs, two hidden layers of 128 and 14 outputs"
+   },
+   "three": {
+    "source": "db-readme",
+    "quote": "It **falls about 3x as often** under pushes"
+   },
+   "1.0": {
+    "source": "db-b003-design",
+    "quote": "behaviour-cloned to the teacher on fallen frames (weight 1.0), so recovery is not unlearned;"
+   },
+   "0.2": {
+    "source": "db-b003-design",
+    "quote": "a light pull (0.2) when upright and commanded 0.35 m/s or more, or standing still;"
+   },
+   "0.35": {
+    "source": "db-b003-design",
+    "quote": "a light pull (0.2) when upright and commanded 0.35 m/s or more, or standing still;"
+   },
+   "0": {
+    "source": "db-b003f-design",
+    "quote": "`anchor.coef_walk: 0.0`, from 0.2."
+   },
+   "1": {
+    "source": "db-finetune",
+    "quote": "loss = (weight[sel] * (pred - target[sel]).pow(2).mean(dim=1)).mean()"
+   },
+   "2": {
+    "source": "db-finetune",
+    "quote": "loss = (weight[sel] * (pred - target[sel]).pow(2).mean(dim=1)).mean()"
+   },
+   "35": {
+    "source": "db-b003-menu",
+    "quote": "gate_tilt_deg: 35.0"
+   },
+   "0.456": {
+    "source": "db-b003f-close",
+    "quote": "turn-in-place went 0.456 → 0.806 on the same reward."
+   },
+   "0.806": {
+    "source": "db-b003f-close",
+    "quote": "turn-in-place went 0.456 → 0.806 on the same reward."
+   },
+   "2.6": {
+    "source": "db-b003f-close",
+    "quote": "That is 3.8× the student and 2.6× velstand."
+   },
+   "99.6": {
+    "source": "db-b003f-close",
+    "quote": "recovery (99.6%, above the teacher) **passed**"
+   },
+   "0.004": {
+    "source": "db-b003f-close",
+    "quote": "| vx 0.10 | 0.002 | 0.008 | 0.008 | 0.003 | 0.004 |"
+   },
+   "0.312": {
+    "source": "db-b003f-close",
+    "quote": "| wz 1.0 | 0.312 | 0.210 | 0.456 | 0.525 | **0.806** |"
+   },
+   "0.31": {
+    "derived": "0.312"
+   }
+  },
+  "lesson-7": {
+   "5": {
+    "source": "db-b003g-design",
+    "quote": "practise standing 5% of the time, as the menus always said"
+   },
+   "0.0500": {
+    "source": "db-b003g-close",
+    "quote": "`Curriculum/standing_envs` read 0.0500 throughout."
+   },
+   "0.057": {
+    "source": "db-b003g-close",
+    "quote": "1. Dead band: cmd 0.10 → 0.057 (≥ 0.05) and cmd 0.05 → 0.038 (≥ 0.02): **passed**."
+   },
+   "0.10": {
+    "source": "db-b003g-close",
+    "quote": "1. Dead band: cmd 0.10 → 0.057 (≥ 0.05) and cmd 0.05 → 0.038 (≥ 0.02): **passed**."
+   },
+   "0.038": {
+    "source": "db-b003g-close",
+    "quote": "1. Dead band: cmd 0.10 → 0.057 (≥ 0.05) and cmd 0.05 → 0.038 (≥ 0.02): **passed**."
+   },
+   "0.05": {
+    "source": "db-b003g-close",
+    "quote": "yaw on straight commands |wz| ≤ 0.05, and stand drift at cmd 0 |v| ≤ 0.05"
+   },
+   "0.699": {
+    "source": "db-b003g-close",
+    "quote": "2. wz 1.0 → 0.699 (≥ 0.5): **passed**."
+   },
+   "0.136": {
+    "source": "db-b003g-close",
+    "quote": "4. cmd 0.30 → 0.136 (≥ 0.12): **passed**."
+   },
+   "0.30": {
+    "source": "db-b003g-close",
+    "quote": "4. cmd 0.30 → 0.136 (≥ 0.12): **passed**."
+   },
+   "0.22": {
+    "source": "db-b003g-close",
+    "quote": "| falls/min | 0.16 | 0.42 | 0.39 | 0.40 | **0.22** |"
+   },
+   "seven": {
+    "source": "db-b003g-close",
+    "quote": "By the letter of the pre-registered lines, b003g passes 7 of 8."
+   },
+   "eight": {
+    "source": "db-b003g-close",
+    "quote": "By the letter of the pre-registered lines, b003g passes 7 of 8."
+   },
+   "0.21": {
+    "source": "db-b003g-close",
+    "quote": "It is about −0.21 rad/s at every speed: the duck walks clockwise circles, about 0.27 m radius at 0.10 m/s."
+   },
+   "0.27": {
+    "source": "db-b003g-close",
+    "quote": "It is about −0.21 rad/s at every speed: the duck walks clockwise circles, about 0.27 m radius at 0.10 m/s."
+   },
+   "38": {
+    "source": "db-b003g-close",
+    "quote": "At cmd 0 the final network steps (38% of the time a foot is in the air, against the student's 8%), drifts at 0.106 m/s, and rotates at −0.156 rad/s."
+   },
+   "8": {
+    "source": "db-b003g-close",
+    "quote": "At cmd 0 the final network steps (38% of the time a foot is in the air, against the student's 8%), drifts at 0.106 m/s, and rotates at −0.156 rad/s."
+   },
+   "0.106": {
+    "source": "db-b003g-close",
+    "quote": "At cmd 0 the final network steps (38% of the time a foot is in the air, against the student's 8%), drifts at 0.106 m/s, and rotates at −0.156 rad/s."
+   },
+   "two": {
+    "source": "db-b003g-close",
+    "quote": "Future runs in this series add two lines"
+   },
+   "figure": {
+    "ten": {
+     "count": "the eight lines and the two that b003g's close note adds"
+    }
+   }
+  },
+  "lesson-8": {
+   "5.064": {
+    "source": "db-k001-close",
+    "quote": "| **mean** | **5.064 m / 1.34 / 8.0° / 0.13% / 97.4%** | **5.058 m / 1.28 / 3.4° / 0.13% / 97.2%** |"
+   },
+   "8.0": {
+    "source": "db-k001-close",
+    "quote": "| **mean** | **5.064 m / 1.34 / 8.0° / 0.13% / 97.4%** | **5.058 m / 1.28 / 3.4° / 0.13% / 97.2%** |"
+   },
+   "3.4": {
+    "source": "db-k001-close",
+    "quote": "| **mean** | **5.064 m / 1.34 / 8.0° / 0.13% / 97.4%** | **5.058 m / 1.28 / 3.4° / 0.13% / 97.2%** |"
+   },
+   "12.0": {
+    "source": "db-k001-design",
+    "quote": "`ball_lateral_speed`, |ball velocity · perp(kick direction)|, weight −12.0. That is equal and opposite to Pollen's `ball_forward_velocity` weight of 12.0"
+   },
+   "12": {
+    "source": "db-k001-design",
+    "quote": "`ball_lateral_speed`, |ball velocity · perp(kick direction)|, weight −12.0. That is equal and opposite to Pollen's `ball_forward_velocity` weight of 12.0"
+   },
+   "4.0": {
+    "source": "db-k001-design",
+    "quote": "1. **Straighter:** angle off line ≤ 4.0°."
+   },
+   "0.95": {
+    "source": "db-k001-design",
+    "quote": "2. **Not weaker:** ball travel ≥ 0.95 × Pollen's."
+   },
+   "1,000": {
+    "source": "db-k001-close",
+    "quote": "1,000 PPO iterations × 2,048 envs, 28.3 min"
+   },
+   "0.999": {
+    "source": "db-k001-close",
+    "quote": "travel ≥ 0.95× Pollen's (got 0.999×): **passed**."
+   },
+   "3.8": {
+    "source": "db-k001-close",
+    "quote": "| k001 | 5.218 m | 3.8° | 0.13% | 96.9% |"
+   },
+   "8.6": {
+    "source": "db-k001-close",
+    "quote": "| Pollen | 5.147 m | 8.6° | 0.0% | 97.4% |"
+   },
+   "1.34": {
+    "source": "db-k001-close",
+    "quote": "Peak ball speed fell slightly (1.34 → 1.28 m/s). No line covered it."
+   },
+   "1.28": {
+    "source": "db-k001-close",
+    "quote": "Peak ball speed fell slightly (1.34 → 1.28 m/s). No line covered it."
+   }
+  },
+  "lesson-9": {
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "1": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "8": {
+    "source": "md-cheatsheet",
+    "quote": "An 8×8 depth matrix from the head sensor."
+   },
+   "3.3": {
+    "source": "hat-readme",
+    "quote": "**expension Qwiic connectors**, 1 mm/3V3.",
+    "means": "3V3 is how boards write 3.3 V"
+   },
+   "four": {
+    "source": "hat-bom",
+    "quote": "\"J5, J6, J7, J8\",JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical,4,JST SH,C160390"
+   },
+   "3": {
+    "source": "md-i2c",
+    "quote": "Hardware I2C3 (M0 pinmux) on header pins 3/5"
+   },
+   "5": {
+    "source": "md-i2c",
+    "quote": "Hardware I2C3 (M0 pinmux) on header pins 3/5"
+   },
+   "400": {
+    "source": "md-i2c",
+    "quote": "Bus speed: 400 kHz"
+   },
+   "two": {
+    "count": "the two ways a new sense can reach behaviour, as a command or as an observation"
+   }
+  },
+  "lesson-10": {
+   "61": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "1": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "14": {
+    "source": "md-robotd",
+    "quote": "obs[1,61] → actions[1,14]"
+   },
+   "50": {
+    "source": "rl-readme",
+    "quote": "Policies are trained here at 50 Hz"
+   },
+   "0": {
+    "source": "db-b003d-close",
+    "quote": "the final one reproduces the exported ONNX exactly (max difference 0 on 256 random inputs)"
+   },
+   "256": {
+    "source": "db-b003d-close",
+    "quote": "the final one reproduces the exported ONNX exactly (max difference 0 on 256 random inputs)"
+   },
+   "two": {
+    "count": "the two inputs the figure swaps"
+   }
+  }
+ }
+}

@@ -69,7 +69,7 @@ from site_helpers import flatten  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / "public"
-BOOKS = ("beginner", "intermediate", "advanced")
+BOOKS = ("beginner", "intermediate", "advanced", "casebook")
 TOOLS = ROOT / "tools/books"
 SCRIPT_TAG = '<script type="module" src="/books/engine/book.js"></script>'
 
@@ -107,6 +107,41 @@ SOURCES = {
     "studio-hubview": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/DuckStudio/Sources/HubTrainingView.swift",
     "studio-prefs": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/PreferenceModel.swift",
     "studio-weights": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/WeightSearch.swift",
+    # Book 4, the casebook: duckbatch's runs, read from the notes written before and after
+    # each one and from the code that ran, all at one pinned commit
+    "db-b003-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md",
+    "db-b003-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md",
+    "db-b003b-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-design.md",
+    "db-b003b-pilot": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-pilot.md",
+    "db-b003b-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003b-close.md",
+    "db-b003c-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-design.md",
+    "db-b003c-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003c-close.md",
+    "db-b003d-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-design.md",
+    "db-b003d-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003d-close.md",
+    "db-b003e-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003e-design.md",
+    "db-b003e-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003e-close.md",
+    "db-b003f-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003f-design.md",
+    "db-b003f-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003f-close.md",
+    "db-b003g-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003g-design.md",
+    "db-b003g-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003g-close.md",
+    "db-k001-design": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-k001-design.md",
+    "db-k001-close": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-03-k001-close.md",
+    "db-readme": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/README.md",
+    "db-finetune": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/finetune.py",
+    "db-rewards": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/rewards.py",
+    "db-b003-menu": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/menus/b003-dead-band.yaml",
+    # the duck's other senses and its I²C bus: Pollen's robot code and its open Robot HAT
+    "md-i2c": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/audio/i2c3-pihat.dts",
+    "md-cheatsheet": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/cheatsheet.md",
+    "md-manifest": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/policy-manifest.md",
+    "hat-readme": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md",
+    "hat-bom": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/production/ASE01187-D1_elec_RPI_Robot_HAT_BOM.csv",
+    # the other open simulators a policy can be trained in
+    "stack-mjlab": "https://raw.githubusercontent.com/mujocolab/mjlab/8bb2bc9e187797689ec82c78c35019afd2fd0376/README.md",
+    "stack-playground": "https://raw.githubusercontent.com/google-deepmind/mujoco_playground/12ad7f3842791ced39f27e5ac96d066bbe361653/README.md",
+    "stack-isaaclab": "https://raw.githubusercontent.com/isaac-sim/IsaacLab/259e1a8cf79de53c52ca395599ac1cd9bc395b28/README.md",
+    "stack-odp": "https://raw.githubusercontent.com/apirrone/Open_Duck_Playground/b9be205ac64488c23504ca42e5ec790337adeec3/README.md",
+    "stack-odm": "https://raw.githubusercontent.com/apirrone/Open_Duck_Mini/b23317a485b3cec7d8417f352478778b3475173c/README.md",
 }
 
 # Plain pages: no lessons and no figures, but every number ledgered all the same.
@@ -507,12 +542,12 @@ def check_scripts() -> None:
     # keyed from the repository root, so the gate reads the same pages from any directory
     pages = {p.relative_to(ROOT).as_posix(): p.read_text(encoding="utf-8") for p in sorted(PUBLIC.rglob("*.html"))}
     for name, text in pages.items():
-        is_book = re.match(r"public/books/(beginner|intermediate|advanced)/index\.html$", name)
+        is_book = re.match(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$", name)
         tags = re.findall(r"<script\b[^>]*>", text, flags=re.I)
         if is_book:
             continue
         if tags:
-            fail.append(f"{name} carries a script tag; only the three book pages may")
+            fail.append(f"{name} carries a script tag; only the four book pages may")
     engine = PUBLIC / "books/engine"
     for js in sorted(engine.glob("*.js")):
         src = js.read_text(encoding="utf-8")
@@ -631,7 +666,7 @@ def main() -> int:
         return 1
     count = sum(len(json.loads((TOOLS / f"claims-{b}.json").read_text())["lessons"]) for b in BOOKS)
     guides = sum(n for key, n in plain.items() if key != "shelf")
-    print(f"check_books: three books, thirty lessons, every number in {count} ledgers sourced, "
+    print(f"check_books: four books, forty lessons, every number in {count} ledgers sourced, "
           f"derived or labelled, the training pages' {guides} as well, "
           "and scripts only where the policy allows them")
     return 0

@@ -4,7 +4,7 @@ The static site for Microduck Studio, served by Cloudflare Pages (project `micro
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
 Twenty HTML pages and a shared stylesheet, with no build step at deploy time, bundler or npm
-dependency. There is no JavaScript anywhere except the three books under `/books/`, which run
+dependency. There is no JavaScript anywhere except the four books under `/books/`, which run
 the site's own scripts and nothing else's (see "The books" below). The visual theme follows
 Pollen Robotics' warm orange accents, spacious typography and rounded panels while clearly
 identifying Studio as an independent project.
@@ -163,7 +163,7 @@ TestFlight build, so the pack pages go live with that build and not before.
 
 ## The books
 
-Three books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
+Four books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
 (`.lesson-page`, with a prediction to commit to), the right page is a pop-up figure played one
 step at a time (`figure.lesson-figure`, whose `ol.figure-steps` the engine turns into the step
 buttons, so every word the figure shows is in the HTML), and `aside.lesson-notes` holds Try it
@@ -181,6 +181,17 @@ in `means` how it yields it ("bipedal" is two legs). A derived number's operands
 the same lesson ledgers, a unit constant, or explained under `with`. `scripts/check_books.py`
 reads every lesson, finds every number, and rereads each quoted source. A pop-up that is a toy
 model says so on its page with `data-badge="toy"`.
+
+**Book 4 reads real runs.** [`/books/casebook/`](public/books/casebook/index.html), *How a Policy
+Became*, traces this site's author's fine-tunes in [duckbatch](https://github.com/craigm26/duckbatch):
+the b003 series, seven runs that set out to teach the duck to walk slowly and turn on the spot, and
+k001, a straighter kick. Its numbers are quoted from the design and close notes written before and
+after each run, and from duckbatch's code, all pinned to commit `1f476e4`. Lesson 9 adds a sense
+through the Qwiic sockets on Pollen's open [Robot HAT](https://github.com/pollen-robotics/elec_RPI_Robot_HAT)
+(pinned to `6de8628`) and its I²C bus in Pollen's robot code; lesson 10 carries a policy to other
+simulators, from the pinned READMEs of mjlab, MuJoCo Playground, Isaac Lab, Open Duck Playground and
+Open Duck Mini. The runs' records are a public Hugging Face dataset, named in the text but never
+linked, because the site links only the two challenge datasets.
 
 **Predict, play, check.** With JavaScript, a prediction's answer stays hidden until the figure's
 last step, and its options are shuffled the same way on every visit; without it, the page is the
@@ -262,7 +273,7 @@ gate fails until every page carries the current stamp.
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
 GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,
 `/cards/`, `/cards/print/`, `/cards/spec/`, `/cards/duck-cards.json`, `/cards/packs/`, each
-pack's page, cut sheet and `.duckpack`, `/books/` and the three books all return 200, a book's
+pack's page, cut sheet and `.duckpack`, `/books/` and the four books all return 200, a book's
 response carries the books' `script-src 'self'` policy and every other page carries none, the
 stylesheet and icon load, the zip is 11666886 bytes, the CSP header is present, and the docs
 carry exactly one `id="evallog-..."` marker matching the receipt.
