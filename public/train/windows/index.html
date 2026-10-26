@@ -35,8 +35,9 @@
 
 <header class="privacy-header">
   <h1>Train your first duck on a Windows PC</h1>
-  <p class="lede">From a Windows PC with an NVIDIA graphics card to a walking policy you trained yourself, watched,
-  and entered in Pollen Robotics' Microduck Arena. You do not need a robot, and you do not need to code.
+  <p class="lede">Pollen's tools run on Linux, so on a Windows PC they run in WSL 2, Windows' own Linux, and train on
+  your NVIDIA graphics card through it. This guide goes from that PC to a walking policy you trained yourself,
+  watched, and entered in Pollen Robotics' Microduck Arena. You do not need a robot, and you do not need to code.
   <a href="/train/">On another machine?</a></p>
 </header>
 
@@ -45,8 +46,8 @@
 <div class="note">
   <p><strong>The training tools here are Pollen Robotics'</strong>: their code, their challenges and their Arena,
   built on mjlab and MuJoCo. This page is an independent owner's route to them on a home PC, through Windows' own
-  Linux, a few free tools and, if you like, Claude. Where it goes wrong for you,
-  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">tell us which step</a>.</p>
+  Linux, a few free tools and, if you like, Claude, so if a step goes wrong for you,
+  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">tell us which one</a>.</p>
 </div>
 
 <nav aria-label="On this page">
@@ -67,15 +68,16 @@
 
 <ul>
   <li><strong>A Windows PC with an NVIDIA graphics card</strong> from NVIDIA's Volta generation or newer, which for a
-  home PC means Turing or newer: every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch the
-  training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>,
+  home PC means Turing or newer, so every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch
+  the training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>
   such as Pascal's GTX ones, even though WSL can still see them. No NVIDIA card, or an older one? The workshop can
   rent a Hugging Face one instead: see <a href="#no-gpu">No NVIDIA card, or an older one</a>.</li>
   <li><strong>Windows 11, or Windows 10 version 21H2 (build 19044) or later.</strong> That is Microsoft's minimum for
   using the graphics card from Linux, and for the windows Linux programs open.</li>
   <li><strong>A free Hugging Face account</strong>, which holds the policies you publish, and <strong>a free GitHub
   account</strong> for your fork of Pollen's challenges, where a published policy's link to its code points.</li>
-  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code. The free Claude plan does not include it.</li>
+  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code, which the free Claude plan does not
+  include.</li>
 </ul>
 
 <p><strong>You do not need Isaac Sim or Isaac Lab.</strong> Pollen trains the Microduck with mjlab, which borrows
@@ -83,27 +85,28 @@ Isaac Lab's way of describing a task but simulates with MuJoCo Warp, and the wor
 
 <h2 id="wsl">Linux inside Windows</h2>
 
-<p>Pollen's tools run on Linux. WSL 2 runs Linux inside Windows, so the PC stays yours for everything else.</p>
+<p>Pollen's tools run on Linux, and WSL 2 runs Linux inside Windows, so the PC stays yours for everything
+else.</p>
 
 <ol>
   <li>Right-click PowerShell, choose <strong>Run as administrator</strong>, and run:
 <pre tabindex="0" role="region" aria-label="Installing WSL, in PowerShell"><code>wsl --install</code></pre>
   If it only prints its help, run <code>wsl --install -d Ubuntu</code> instead.</li>
   <li>Restart the PC.</li>
-  <li>Open <strong>Ubuntu</strong> from the Start menu. The first time, it unpacks itself, then asks for a username
-  and a password. They are for Linux only. Nothing appears on screen while you type the password; that is normal.
-  Keep it: Linux asks for it when you install something.</li>
+  <li>Open <strong>Ubuntu</strong> from the Start menu. The first time, it unpacks itself and asks for a username
+  and a password, which are for Linux only. Nothing appears on screen while you type the password, which is normal.
+  Keep it, because Linux asks for it whenever you install something.</li>
 </ol>
 
 <p>Commands from here on go into that Ubuntu window, unless a step says PowerShell. Ubuntu opens in your Linux home
-folder, <code>~</code>; keep your work there. Folders under <code>/mnt/c</code> are your Windows drive, which Linux
-reaches much more slowly.</p>
+folder, <code>~</code>, and your work belongs there: folders under <code>/mnt/c</code> are your Windows drive, which
+Linux reaches much more slowly.</p>
 
 <h2 id="gpu">Let Linux see your graphics card</h2>
 
 <ol>
   <li>In Windows, install the newest driver for your card from <a href="https://www.nvidia.com/en-us/drivers/" rel="noopener">NVIDIA</a>
-  or the NVIDIA app. That one Windows driver is all WSL needs. Do not install any NVIDIA driver inside Ubuntu:
+  or the NVIDIA app; that one Windows driver is all WSL needs. Do not install any NVIDIA driver inside Ubuntu:
   <a href="https://docs.nvidia.com/cuda/wsl-user-guide/index.html" rel="noopener">NVIDIA's WSL guide</a> says not to,
   because it would replace the one Windows provides.</li>
   <li>In PowerShell, as administrator, bring WSL up to date, then restart it:
@@ -112,48 +115,53 @@ wsl --shutdown</code></pre></li>
   <li>Open Ubuntu again and check:
 <pre tabindex="0" role="region" aria-label="Checking the graphics card, in Ubuntu"><code>nvidia-smi</code></pre>
   A table with your card's name in it means Linux can use the card. If the command is not found, try
-  <code>/usr/lib/wsl/lib/nvidia-smi</code>; if that prints the table, Linux sees the card. Training also needs it to
-  be Turing or newer: an older card shows up here and still cannot train.</li>
+  <code>/usr/lib/wsl/lib/nvidia-smi</code>, and if that prints the table, Linux sees the card. An older card shows up
+  here as well and still cannot train, because training needs Turing or newer.</li>
 </ol>
 
 <h2 id="tools">Install git and uv</h2>
 
-<p><code>git</code> fetches Pollen's code and records each change you train with. <code>uv</code> installs the right
-Python and everything training needs.</p>
+<p><code>git</code> fetches Pollen's code and records each change you train with, and <code>uv</code> installs the
+right Python and everything training needs.</p>
 
 <pre tabindex="0" role="region" aria-label="Installing git and uv, in Ubuntu"><code>sudo apt update &amp;&amp; sudo apt install -y git
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-<p>Put your own name and email in the <code>git config</code> lines: git puts them on every change it records, and the
-workshop commits each change before it trains. Close Ubuntu and open it again, so that it finds <code>uv</code>.
-Then <code>uv --version</code> prints a version number.</p>
+<p>Put your own name and email in the <code>git config</code> lines, since git puts them on every change it records
+and the workshop commits each change before it trains. Then close Ubuntu and open it again so that it finds
+<code>uv</code>, and check that <code>uv --version</code> prints a version number.</p>
 
 <h2 id="workshop">Open Pollen's workshop</h2>
 
 <p>Pollen's <a href="https://pollen-robotics-microduck-arena.hf.space/" rel="noopener">Microduck Arena</a> races
 policies against a clock, and every challenge on it has a <strong>Train my own robot</strong> line. Start with the
-2 m Sprint: walk the duck down a lane as fast as it can go without falling. In Ubuntu:</p>
+2 m Sprint, which asks the duck to walk down a lane as fast as it can without falling. In Ubuntu:</p>
 
 <pre tabindex="0" role="region" aria-label="Opening the workshop on the sprint challenge, in Ubuntu"><code>cd ~
 uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py sprint-2m</code></pre>
 
-<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything: a
-big download, once. Then it prints a line that starts <code>Microduck workshop: http://127.0.0.1</code>. If no browser
-opens by itself, paste that address into your browser in Windows. <strong>Leave this Ubuntu window open</strong>: the
-workshop runs in it until you press Ctrl-C there. Open a second Ubuntu window for anything else.</p>
+<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything,
+which is a big download but only once. Then it prints a line that starts
+<code>Microduck workshop: http://127.0.0.1</code>, and if no browser opens by itself, paste that address into your
+browser in Windows.</p>
+
+<p><strong>Leave this Ubuntu window open</strong>: the workshop runs in it until you press Ctrl-C there, so open a
+second Ubuntu window for anything else.</p>
 
 <p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
-billing, your fork of the challenges on GitHub, and an NVIDIA card. The fork and billing lines say how to set them
-up. Training needs the card or the billing, not both. Log in to Hugging Face with the button at the top right. Run the
-same line on another day and it reopens the same work; if it says its port is busy, the workshop is already open in
-another window.</p>
+billing, your fork of the challenges on GitHub, and an NVIDIA card. Training needs the card or the billing, not both,
+and the fork and billing lines say how to set them up.</p>
+
+<p>Log in to Hugging Face with the button at the top right. Run the same line on another day and it reopens the same
+work; if it says its port is busy, the workshop is already open in another window.</p>
 
 <p>The fork line's <strong>Push</strong> sends your commits to your fork, so a policy you publish links to the code
-that trained it. Without it, publishing still works and the link is missing. To push, git has to be signed in to
-GitHub. GitHub's own tool does that: install it, then log in, choosing HTTPS and yes when it asks to authenticate
-Git with your GitHub credentials.</p>
+that trained it. Without it, publishing still works and the link is missing.</p>
+
+<p>To push, git has to be signed in to GitHub, and GitHub's own tool does that: install it, then log in, choosing
+HTTPS, and yes when it asks to authenticate Git with your GitHub credentials.</p>
 
 <pre tabindex="0" role="region" aria-label="Signing git in to GitHub, in Ubuntu"><code>sudo apt install -y gh
 gh auth login</code></pre>
@@ -163,9 +171,9 @@ gh auth login</code></pre>
 <ol>
   <li>On the challenge's page, choose <strong>New training</strong>, and train on this machine. Leave the knobs
   (Follow the speed order, Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit. Then
-  it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250. How
-  long that takes depends on your card.</li>
+  <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit, and
+  then it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250,
+  and how long that takes depends on your card.</li>
   <li>Every checkpoint is scored with the Arena's own rules as it arrives, and the training's page replays any of
   them. Pick 5/5 finishes first, then the lowest time. The best checkpoint is often not the last.</li>
   <li>When one is good enough, <strong>Publish and compete</strong> puts it on your Hugging Face account, in public,
@@ -181,20 +189,22 @@ gh auth login</code></pre>
 
 <h3 id="no-gpu">No NVIDIA card, or an older one</h3>
 
-<p>On the challenge's page, choose Hugging Face Jobs instead of this machine. It trains on Hugging Face's GPUs and
-bills your Hugging Face account, which needs credit on it. Pollen's notes give the default GPU, one NVIDIA L4, as
-$0.80 per hour, and the recipe as about 1 to 2.5 hours on it. You choose it for each training.</p>
+<p>On the challenge's page, choose Hugging Face Jobs instead of this machine; you make that choice for each
+training. It trains on Hugging Face's GPUs and bills your Hugging Face account, which needs credit on it.</p>
+
+<p>Pollen's notes give the default GPU, one NVIDIA L4, as $0.80 per hour, and the recipe as about 1 to 2.5 hours on
+it.</p>
 
 <p><strong>Closing the workshop does not stop a training on Hugging Face.</strong> It runs, and bills, until it ends
 or reaches its 12-hour limit, $9.60 at that price. To end one sooner, open the workshop again and press
 <strong>Stop</strong> on its ticket, or cancel it on your <a href="https://huggingface.co/settings/jobs"
-rel="noopener">Jobs page</a> at Hugging Face. A stopped job cannot be resumed.</p>
+rel="noopener">Jobs page</a> at Hugging Face, but a stopped job cannot be resumed.</p>
 
 <h2 id="claude">Claude beside you</h2>
 
 <p>Claude Code is Claude working in your terminal: it reads the files, runs commands and explains errors, and in
-its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher.
-In a second Ubuntu window, install it:</p>
+its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher,
+and you install it in a second Ubuntu window:</p>
 
 <pre tabindex="0" role="region" aria-label="Installing Claude Code, in Ubuntu"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
 
@@ -203,13 +213,12 @@ In a second Ubuntu window, install it:</p>
 <pre tabindex="0" role="region" aria-label="Starting Claude Code in the challenges folder"><code>cd ~/microduck-challenges
 claude</code></pre>
 
-<p>It asks you to log in. If no browser opens, press <kbd>c</kbd> to copy the sign-in address and open it in
-Windows; if the page then shows a code, paste it back into Ubuntu. If pasting does nothing, right-click to
-paste.</p>
+<p>It asks you to log in, and if no browser opens, press <kbd>c</kbd> to copy the sign-in address and open it in
+Windows. If the page then shows a code, paste it back into Ubuntu, with a right-click if pasting does nothing.</p>
 
-<p>Pollen wrote the challenges with this in mind. Every challenge folder has an <code>AGENTS.md</code> that tells a
-coding agent which files to change, how to run and judge a training, and the challenge's rules, and the 2 m
-Sprint's tells it never to start a paid job, publish or enter the Arena without your yes. Things to say:</p>
+<p>Pollen wrote the challenges with this in mind: every challenge folder has an <code>AGENTS.md</code> that tells a
+coding agent which files to change, how to run and judge a training, and the challenge's rules. The 2 m Sprint's
+tells it never to start a paid job, publish or enter the Arena without your yes. Things to say:</p>
 
 <ul>
   <li>"I'm new to this. Read the AGENTS.md for the 2 m Sprint and take me through my first training. Explain each
@@ -219,14 +228,14 @@ Sprint's tells it never to start a paid job, publish or enter the Arena without 
   <li>"Suggest one knob to change for the next training, and say what you expect to see."</li>
 </ul>
 
-<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published; it does the
-mechanics. That split is Pollen's rule, in the same file.</p>
+<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published, and it does
+the mechanics: that split is Pollen's rule, in the same file.</p>
 
 <h2 id="fixes">When something goes wrong</h2>
 
 <dl class="spec">
   <dt>WSL will not start, or mentions virtualization (error 0x80370102)</dt>
-  <dd>Virtualization is switched off in the PC's firmware settings (BIOS or UEFI). Turn it on there; your PC
+  <dd>Virtualization is switched off in the PC's firmware settings (BIOS or UEFI), so turn it on there; your PC
   maker's support pages say where.</dd>
   <dt><code>wsl --install</code> stalls before it downloads anything</dt>
   <dd>Run <code>wsl --install --web-download -d Ubuntu</code> instead.</dd>
@@ -234,41 +243,42 @@ mechanics. That split is Pollen's rule, in the same file.</p>
   <dd>Update the NVIDIA driver in Windows, run <code>wsl --update</code> and <code>wsl --shutdown</code> in
   PowerShell, and open Ubuntu again.</dd>
   <dt><code>uv: command not found</code></dt>
-  <dd>Close Ubuntu and open it again. The installer adds uv for new windows.</dd>
+  <dd>The installer adds uv for new windows, so close Ubuntu and open it again.</dd>
   <dt>The first install stops with a timeout</dt>
-  <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
+  <dd>It downloads a lot at once, so give it longer with <code>export UV_HTTP_TIMEOUT=600</code> and run the line
   again. Pollen's README suggests the same setting for its own first install.</dd>
   <dt>Git says "Author identity unknown"</dt>
   <dd>Run the <code>git config</code> lines from <a href="#tools">Install git and uv</a>, with your own name and
   email.</dd>
   <dt>CUDA out of memory</dt>
-  <dd>Train fewer simulated ducks at once.
+  <dd>Train fewer simulated ducks at once:
   <code>~/microduck-challenges/src/microduck_challenges/sprint_2m/challenge.toml</code> sets <code>num_envs</code> to
-  4096 under <code>[recipe]</code>; change it to 2048, or ask Claude Code to.</dd>
+  4096 under <code>[recipe]</code>, so change it to 2048, or ask Claude Code to.</dd>
   <dt>Everything is slow</dt>
   <dd>Check where you are working: under <code>~</code>, not under <code>/mnt/c</code>.</dd>
   <dt>A MuJoCo window is slow or garbled</dt>
   <dd>Under WSL, Linux windows can fall back to drawing without the graphics card, a
-  <a href="https://github.com/mujocolab/mjlab/issues/1182" rel="noopener">known mjlab issue</a>. Run
+  <a href="https://github.com/mujocolab/mjlab/issues/1182" rel="noopener">known mjlab issue</a>, so run
   <code>export GALLIUM_DRIVER=d3d12</code> before the command that opens the window.</dd>
 </dl>
 
 <h2 id="further">Going further</h2>
 
-<p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
-its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>.
-In a new Ubuntu window, fetch it into your home folder:</p>
+<p>The challenges train for the Arena's courses. So what about the skills a real Microduck runs, its walk, its
+stand and its tricks? Those you train in Pollen's
+<a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>, which you fetch into your
+home folder in a new Ubuntu window:</p>
 
 <pre tabindex="0" role="region" aria-label="Fetching microduck_rl, in Ubuntu"><code>cd ~
 git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl</code></pre>
 
-<p><strong>No usable NVIDIA card?</strong> The quick test and the real run below both need one. Log in to
+<p><strong>No usable NVIDIA card?</strong> The quick test and the real run below both need one, so log in to
 Hugging Face first, as at the end of this section, then skip the quick test and add <code>--hf-jobs --no-wandb</code>
-to the end of the real run: it trains on Hugging Face's L4 instead, and the
+to the end of the real run. It trains on Hugging Face's L4 instead, and the
 <a href="/train/mac/#further">Mac guide</a> shows how to bring its checkpoints back into Ubuntu.</p>
 
-<p>A quick test first. It catches most mistakes before the long run, and the first time it also installs this
+<p>Run a quick test first, which catches most mistakes before the long run and, the first time, also installs this
 repository's own copy of everything:</p>
 
 <pre tabindex="0" role="region" aria-label="A quick test of the walking task"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 64 --agent.max-iterations 5 --agent.logger tensorboard</code></pre>
@@ -279,32 +289,34 @@ repository's own copy of everything:</p>
 
 <p><code>--agent.logger tensorboard</code> keeps the logs on your PC; without it, training uses Weights &amp; Biases,
 which asks you to log in. Pollen's README puts a usable gait at about one to two hours with 4096 simulated ducks,
-and its notes say a gait needs 4000 iterations or more. A checkpoint lands every 250 iterations, in a folder under
-<code>logs/rsl_rl/velocity/</code> named for the date and time and ending in <code>_velocity</code>. The quick test made one too; the later one is
-the real run. To see them:</p>
+and its notes say a gait needs 4000 iterations or more.</p>
+
+<p>A checkpoint lands every 250 iterations, in a folder under <code>logs/rsl_rl/velocity/</code> named for the date
+and time and ending in <code>_velocity</code>. The quick test made one too, so the later folder is the real run. To
+see them:</p>
 
 <pre tabindex="0" role="region" aria-label="Listing the checkpoints"><code>ls logs/rsl_rl/velocity/*/</code></pre>
 
 <p>In the commands below, put that folder's name in place of <code>&lt;run&gt;</code> and a checkpoint's number in
-place of <code>&lt;N&gt;</code>, without the angle brackets. Watch a checkpoint in your browser: <code>play</code>
-prints an address to open, and runs until you press Ctrl-C.</p>
+place of <code>&lt;N&gt;</code>, without the angle brackets. To watch a checkpoint in your browser, run
+<code>play</code>, which prints an address to open and runs until you press Ctrl-C:</p>
 
 <pre tabindex="0" role="region" aria-label="Watching a checkpoint"><code>uv run play Mjlab-Velocity-Flat-MicroDuck --viewer viser --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a robot,
-because it bakes in the normalizer the policy expects:</p>
+<p>Then export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a
+robot, because it bakes in the normalizer the policy expects:</p>
 
 <pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Then drive it from the keyboard. This opens a MuJoCo window and takes your keys in the terminal.
+<p>Next, drive it from the keyboard, in a MuJoCo window that takes your keys in the terminal.
 <code>--new-cmd-obs</code> matters: this policy reads the newer layout of commands, and without the flag the script
 feeds it the old one and stops.</p>
 
 <pre tabindex="0" role="region" aria-label="Driving the exported policy"><code>uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs</code></pre>
 
-<p>To share a gait, log in to Hugging Face with <code>uv run hf auth login</code>. If you logged in with the
-workshop's button, it says you are logged in already. If not, it asks for an access token: make a Write one at
-<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then,
+<p>To share a gait, log in to Hugging Face with <code>uv run hf auth login</code>, which says you are logged in
+already if you used the workshop's button. If not, it asks for an access token: make a Write one at
+<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then publish,
 with your Hugging Face username in place of <code>&lt;you&gt;</code>:</p>
 
 <pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>

@@ -45,7 +45,7 @@
 <div class="note">
   <p><strong>Microduck Studio is ours</strong>, an independent app for iPhone, iPad and Mac. The trainer it rents a
   card for is Pollen Robotics': PPO in mjlab, run by our recipe, starting from Pollen's own networks or a smaller
-  one distilled from them. Where this goes wrong for you,
+  one distilled from them. If this goes wrong for you,
   <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20an%20iPhone">tell us
   which step</a>.</p>
 </div>
@@ -81,17 +81,19 @@ inside Studio.</p>
   <li>Install Apple's TestFlight app, then
   <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>. There is
   no App Store release yet.</li>
-  <li>Open <strong>Learn</strong> and work through it: most lessons have a button that opens the real screen. The
-  training tools stay hidden until its last lesson, <strong>Show every tool</strong>, turns them on.
+  <li>Open <strong>Learn</strong> and work through it; most lessons have a button that opens the real screen. The
+  training tools stay hidden until its last lesson, <strong>Show every tool</strong>, turns them on, and
   <strong>Settings</strong>, then <strong>Detail</strong>, turns them on as well.</li>
 </ol>
 
 <h2 id="judge">Be the judge</h2>
 
-<p>In <strong>Studio</strong>, under <strong>Make</strong>, <strong>Compare</strong> plays two networks walking under
-the same command, and you pick the better one. Your picks are the human feedback in RLHF: labels for what a good
-walk looks like to you. With a hundred picks between networks, Studio can learn your taste on the device and
-use it for a rented training run: see <a href="#picks">Train from your picks</a>.</p>
+<p>What does a good walk look like to you? In <strong>Studio</strong>, under <strong>Make</strong>,
+<strong>Compare</strong> plays two networks walking under the same command, and you pick the better one.</p>
+
+<p>Your picks are the human feedback in RLHF: labels for what a good walk looks like to you. With a hundred picks
+between networks, Studio can learn your taste on the device and use it for a rented training run: see
+<a href="#picks">Train from your picks</a>.</p>
 
 <h2 id="device">Train on the device</h2>
 
@@ -108,20 +110,23 @@ with nothing sent anywhere:</p>
 
 <p><strong>Search a move's keyframes</strong>, beside them, works on a move rather than a network: it starts from a
 published stairs-challenge move and searches its poses and timing on the challenge's own grid. Studio says plainly
-that this is not training: it keeps the version that scored best.</p>
+that this is not training, since it keeps the version that scored best.</p>
 
 <p>And in Studio, under <strong>Play</strong>, <strong>Train a duck to shoot</strong> builds the controller that
-walks the duck to a ball and joins Pollen's walker to its kick, then trains its numbers on goals scored. None of these learns a
-network from nothing: they start from one that already walks or kicks. The device is a bench already; for a faster
-one, run the free <a href="/docs/#bench">desk bench</a> on a Mac, PC or Raspberry Pi of yours.</p>
+walks the duck to a ball and joins Pollen's walker to its kick, then trains its numbers on goals scored.</p>
+
+<p>None of these learns a network from nothing: they start from one that already walks or kicks. The device is a
+bench already, and for a faster one, run the free <a href="/docs/#bench">desk bench</a> on a Mac, PC or Raspberry Pi
+of yours.</p>
 
 <h2 id="rent">Train with Pollen's trainer on a rented card</h2>
 
-<p><strong>Train a network on Hugging Face</strong>, under <strong>Train and measure</strong>, runs PPO, the
-reinforcement learning Pollen trains the Microduck's own networks with, on a rented card, with a reward you set on
-the device, and brings the network back. In Studio's own words, it is simulation only: it fine-tunes Pollen's own
-walking network, distilled to a smaller student, it is not a gait learned from nothing, and a pass is not a claim
-about a physical duck.</p>
+<p><strong>Train a network on Hugging Face</strong>, under <strong>Train and measure</strong>, runs PPO on a rented
+card with a reward you set on the device, and brings the network back. PPO is the reinforcement learning Pollen
+trains the Microduck's own networks with.</p>
+
+<p>In Studio's own words, it is simulation only: it fine-tunes Pollen's own walking network, distilled to a smaller
+student, it is not a gait learned from nothing, and a pass is not a claim about a physical duck.</p>
 
 <ol>
   <li>On Hugging Face, add credit in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
@@ -130,19 +135,20 @@ about a physical duck.</p>
   a fine-grained one with the Jobs permissions and write access to your repositories. The job is started with it,
   and uploads its records with it.</li>
   <li>In Studio, open <strong>Train a network on Hugging Face</strong>. Paste the token under <strong>Your Hugging
-  Face token</strong> and tap <strong>Check this token</strong>. Studio says which account it signed in as: jobs are
-  billed to that account. Studio sends the token as a job secret, which Hugging Face encrypts and keeps out of
+  Face token</strong> and tap <strong>Check this token</strong>, and Studio says which account it signed in as, the
+  account jobs are billed to. Studio sends the token as a job secret, which Hugging Face encrypts and keeps out of
   the job's visible settings; the job uses it to upload its records and does not print it.</li>
   <li>Under <strong>The reward</strong>, name the run and leave <strong>Full run</strong> off. Your first is a pilot:
   100 iterations, about a quarter of an hour, judged only on whether it runs. A full run is 1,500 iterations, about
   an hour and a half. <strong>Pay for walking</strong> and <strong>Pay for turning</strong> set how much the reward
   pays for going, and nothing pays for standing still; leave them at 1 for now.</li>
   <li><strong>Records dataset</strong> is filled in as your account's <code>duckbatch-records</code>: the job writes
-  what it trained and measured there. Hugging Face makes a new dataset public. To keep yours private, create a
+  what it trained and measured there. Hugging Face makes a new dataset public, so to keep yours private, create a
   private dataset with that name on Hugging Face before your first run.</li>
   <li>Tap <strong>Train on Hugging Face</strong>. The screen says <strong>Waiting for a GPU</strong>, then
-  <strong>Training</strong>. You can leave it: the job carries on at Hugging Face, and the screen picks it up when you
-  come back. <strong>Open the job and its log</strong> shows it on Hugging Face, where you can also cancel it.</li>
+  <strong>Training</strong>, and you can leave it: the job carries on at Hugging Face, and the screen picks it up when
+  you come back. <strong>Open the job and its log</strong> shows it on Hugging Face, where you can also cancel
+  it.</li>
   <li>When it says <strong>Finished</strong>, tap <strong>Add the trained network to Behaviours</strong>. It brings
   back the trained network and the one it started from, and asks you to Compare the two: the trained one should win
   at least 12 of 20 picks. A pilot only has to run. A full run is also judged on pass lines written into its job
@@ -150,42 +156,45 @@ about a physical duck.</p>
   itself.</li>
 </ol>
 
-<p><strong>What it costs.</strong> One L4 at $0.80 an hour, for as long as the job runs. Studio stops a pilot after
-an hour and a full run after three, so neither can run on.</p>
+<p><strong>What it costs.</strong> One L4 at $0.80 an hour, for as long as the job runs, and Studio stops a pilot
+after an hour and a full run after three, so neither can run on.</p>
 
 <h3 id="picks">Train from your picks</h3>
 
 <p>With a hundred picks in Compare, <strong>Train from your picks</strong> on the same screen offers a switch to
 train from them. Studio fits your taste on the device and scales each part of Pollen's reward by it, between ×0.5
-and ×2, so the reward is still Pollen's, weighted your way. Kick duels in Compare do the same for a kick:
-<strong>Train a kick from your picks</strong> starts from Pollen's own kick. Either run is judged the same way, by
-you, against the network it started from.</p>
+and ×2, so the reward is still Pollen's, weighted your way.</p>
+
+<p>Kick duels in Compare do the same for a kick, and <strong>Train a kick from your picks</strong> starts from
+Pollen's own kick. Either run is judged the same way, by you, against the network it started from.</p>
 
 <h2 id="drive">Drive what you trained</h2>
 
 <p>On the <strong>Play</strong> tab, tap <strong>Show the controls</strong>. Below the <strong>Bench</strong> picker,
 <strong>Put one of your networks on this bench</strong> sends a network from Behaviours to the bench, and the sticks
-steer by it. When your duck arrives, the same app drives it through a small bridge on a computer next to it, and
-can put a policy file on that computer's disk: see <a href="/docs/#real-duck">Connect a real duck</a>.</p>
+steer by it.</p>
+
+<p>When your duck arrives, the same app drives it through a small bridge on a computer next to it, and can put a
+policy file on that computer's disk: see <a href="/docs/#real-duck">Connect a real duck</a>.</p>
 
 <h2 id="fixes">When something goes wrong</h2>
 
 <dl class="spec">
   <dt>The training tools are not in Studio</dt>
-  <dd>They are hidden in Simple. <strong>Settings</strong>, then <strong>Detail</strong>: choose
-  <strong>Everything</strong>. Or finish Learn.</dd>
+  <dd>They are hidden in Simple, so in <strong>Settings</strong>, then <strong>Detail</strong>, choose
+  <strong>Everything</strong>, or finish Learn.</dd>
   <dt><strong>Train on Hugging Face</strong> stays grey</dt>
   <dd>The line under it says why: check the token first, name a records dataset, or wait for the run before it to
   finish.</dd>
   <dt>Hugging Face refuses the job</dt>
-  <dd>Studio shows Hugging Face's answer. A 403 means the token can sign in but not start Jobs: make one as in
-  step 1 of the rented training, and paste it in again. An answer about credit or billing means the account needs
-  credit: add some in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
+  <dd>Studio shows Hugging Face's answer. A 403 means the token can sign in but not start Jobs, so make one as in
+  step 1 of the rented training and paste it in again. An answer about credit or billing means the account needs
+  credit, which you add in <a href="https://huggingface.co/settings/billing" rel="noopener">your billing
   settings</a>.</dd>
   <dt>The job stopped with an error</dt>
   <dd>Its log on Hugging Face says where: <strong>Open the job and its log</strong>. A token that cannot write to
-  your repositories passes <strong>Check this token</strong> and fails at the end, when the job uploads its records;
-  make one as in step 1.</dd>
+  your repositories passes <strong>Check this token</strong> and fails at the end, when the job uploads its records,
+  so make one as in step 1.</dd>
 </dl>
 
 <h2 id="next">Then</h2>

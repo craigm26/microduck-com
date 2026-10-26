@@ -35,8 +35,9 @@
 
 <header class="privacy-header">
   <h1>Go further: read runs, change one thing, use every port</h1>
-  <p class="lede">For after your first duck. Read what a real training run did from its own records, run one change
-  of your own on a rented card, and reach the duck's other channels, from its camera to its spare Qwiic port.
+  <p class="lede">After your first duck, the questions change: how did a policy become what it is, and what else can
+  the duck do? This page reads a real training run from its own records, runs one change of your own on a rented
+  card, and reaches the duck's other channels, from its camera to its spare Qwiic port.
   <a href="/train/">New to this? Start with your first duck.</a></p>
 </header>
 
@@ -46,7 +47,7 @@
   <p><strong>Whose tools these are.</strong> The robot, its software and its board are Pollen Robotics'. The runs
   read here are duckbatch's, an open project by this site's author that fine-tunes, in simulation, Pollen's kick and
   smaller networks distilled from Pollen's walk.
-  <a href="/books/casebook/">Book 4, How a Policy Became</a>, tells the story behind each run. Where a step goes wrong
+  <a href="/books/casebook/">Book 4, How a Policy Became</a>, tells the story behind each run. If a step goes wrong
   for you, <a href="mailto:feedback@microduckstudio.com?subject=Go%20further%20with%20training">tell us which
   one</a>.</p>
 </div>
@@ -65,9 +66,9 @@
 
 <h2 id="read">Read a real run</h2>
 
-<p>Every fine-tuning run in Book 4 left its records in a public Hugging Face dataset,
-<code>craigm26/duckbatch-records</code>, one folder per job. b003's, the run in the book's first lesson, is a good first read. With uv, from the
-<a href="/train/">first-duck guides</a>:</p>
+<p>How do you find out what a run actually did? Every fine-tuning run in Book 4 left its records in a public
+Hugging Face dataset, <code>craigm26/duckbatch-records</code>, one folder per job, and b003's, the run in the book's
+first lesson, is a good first read. With uv, from the <a href="/train/">first-duck guides</a>:</p>
 
 <pre tabindex="0" role="region" aria-label="Downloading b003's records and opening its log"><code>uvx --from huggingface_hub hf download craigm26/duckbatch-records \
   --repo-type dataset --include "jobs/6ab6d30b6b030d633f69210a/*" \
@@ -77,28 +78,29 @@ uvx tensorboard --logdir records/jobs</code></pre>
 <p>Open the address TensorBoard prints, and read the log in this order:</p>
 
 <ol>
-  <li><strong>What it practised.</strong> The <code>Curriculum/</code> charts are the settings that actually ran.
-  <code>Curriculum/standing_envs</code> reads 0.25 at every iteration, though the run's <code>menu.yaml</code> asked
-  for 0.05. The menu is a request; the log is what ran.</li>
+  <li><strong>What it practised.</strong> The <code>Curriculum/</code> charts are the settings that actually ran,
+  and <code>Curriculum/standing_envs</code> reads 0.25 at every iteration, though the run's <code>menu.yaml</code>
+  asked for 0.05. The menu is a request; the log is what ran.</li>
   <li><strong>Each term's pay.</strong> The <code>Episode_Reward/</code> charts, one per reward term, show which term
-  moved. Here the pay for tracking the command rises over the run while the duck learns to stand. The steep
-  start is episodes growing to their full length, not learning.</li>
+  moved: here the pay for tracking the command rises over the run while the duck learns to stand. The steep start is
+  episodes growing to their full length, not learning.</li>
   <li><strong>The total, last.</strong> <code>Train/mean_reward</code> adds every term together, which hides which one
   moved.</li>
 </ol>
 
 <p>Beside the log are the menu that was asked for, <code>record.json</code> with the final evaluation, the speed
 reached at each command in <code>speed/speed_curve.json</code>, the trained network, and a checkpoint every 250
-iterations. Then read the two notes the run was judged by: the plan, written before it ran, and the verdict after.
-They are in duckbatch's
+iterations.</p>
+
+<p>Then read the two notes the run was judged by, both in duckbatch's
 <a href="https://github.com/craigm26/duckbatch/tree/1f476e486e496bdd3e3cb1806e33352daaba065b/notes">notes
-folder</a>.</p>
+folder</a>: the plan, written before it ran, and the verdict after.</p>
 
 <h2 id="change">Change one thing</h2>
 
-<p>duckbatch runs a menu, one YAML file, on Hugging Face Jobs. Copy one of its menus, change one setting, and write
-down before it runs what you expect and the lines it must pass. That written note is what turns a result into
-something you can learn from.</p>
+<p>A result is something you can learn from only when you wrote down, before it ran, what you expected and the
+lines it must pass. duckbatch runs a menu, one YAML file, on Hugging Face Jobs, so copy one of its menus, change one
+setting, and write that note first.</p>
 
 <pre tabindex="0" role="region" aria-label="Getting duckbatch and copying a menu"><code>git clone https://github.com/craigm26/duckbatch &amp;&amp; cd duckbatch
 uv sync
@@ -106,24 +108,25 @@ cp menus/b003b-progress.yaml menus/mine.yaml</code></pre>
 
 <p>Edit one line of <code>menus/mine.yaml</code>, give it a new <code>batch_id</code>, and leave it uncommitted. The
 job runs <a href="https://github.com/craigm26/duckbatch">duckbatch</a>'s own code at the commit your copy is on, and
-<code>--inline</code> sends your menu along with it. The job needs a Hugging Face token that can write, as
-<code>HF_TOKEN</code>: export it in your shell, or put the line <code>HF_TOKEN=&lt;your token&gt;</code> in a
-<code>.env</code> file in the folder, which git ignores. Look first: <code>--dry-run</code> says what it would start,
-and starts nothing.</p>
+<code>--inline</code> sends your menu along with it.</p>
+
+<p>The job needs a Hugging Face token that can write, as <code>HF_TOKEN</code>: export it in your shell, or put the
+line <code>HF_TOKEN=&lt;your token&gt;</code> in a <code>.env</code> file in the folder, which git ignores. Look
+first, because <code>--dry-run</code> says what it would start and starts nothing.</p>
 
 <pre tabindex="0" role="region" aria-label="Checking, then running, the menu on Hugging Face Jobs"><code>uv run duckbatch hf-job menus/mine.yaml --run finetune --inline \
   --dataset &lt;you&gt;/duckbatch-records --dry-run</code></pre>
 
 <p>Then run the same line without <code>--dry-run</code>. That run is billed to your Hugging Face account, which
-needs credit on it, and a fine-grained token also needs permission to start Jobs; the dry run checks neither. The job
-stops at duckbatch's default limit, <code>--timeout 4h</code>.</p>
+needs credit on it, and a fine-grained token also needs permission to start Jobs, neither of which the dry run
+checks. The job stops at duckbatch's default limit, <code>--timeout 4h</code>.</p>
 
 <ul>
   <li><strong>Pilot first.</strong> Set <code>iterations</code> to 100 and keep just one of the <code>final_seeds</code>,
-  as b003b's pilot did, for a run that only has to run. It trained for 224.7 s, and a pilot is not judged on the
+  as b003b's pilot did, for a run that only has to run: it trained for 224.7 s, and a pilot is not judged on the
   pass lines.</li>
-  <li><strong>Then the full run.</strong> b003's 1,500 iterations trained for 54.6 minutes on one L4. With setup and
-  measuring, Microduck Studio puts a full run at about an hour and a half: about $1.20, at $0.80 an hour.</li>
+  <li><strong>Then the full run.</strong> b003's 1,500 iterations trained for 54.6 minutes on one L4, and with setup
+  and measuring, Microduck Studio puts a full run at about an hour and a half, about $1.20 at $0.80 an hour.</li>
   <li><strong>A setting that looks like a lever.</strong> <code>rel_standing_envs</code> under <code>command</code>
   never took effect, as the log above shows. To change how often the duck practises standing, set
   <code>standing_envs</code> under <code>finetune</code>, the key b003g added, and check
@@ -133,7 +136,7 @@ stops at duckbatch's default limit, <code>--timeout 4h</code>.</p>
 </ul>
 
 <p>On an iPhone, iPad or Mac, Microduck Studio's <strong>Train a network on Hugging Face</strong> sends the same
-kind of request. b003b itself was launched from the request Studio builds.</p>
+kind of request, and b003b itself was launched from the request Studio builds.</p>
 
 <h2 id="cards">Other cards and services</h2>
 
@@ -142,16 +145,18 @@ default; b002, the distillation that made their starting network, ran on a lapto
 <a href="/train/windows/">Windows</a> and <a href="/train/linux/">Linux</a> guides train on an NVIDIA card in your own
 PC instead.</p>
 
-<p>Not tried here yet: another Hugging Face Jobs card, which duckbatch's <code>--flavor</code> takes by its hardware
-name, though its menus size the practice for the L4's memory; and a Linux machine with an NVIDIA card rented from
-another cloud, which should follow the Linux guide. If you try either,
+<p>We have not tried another Hugging Face Jobs card yet. duckbatch's <code>--flavor</code> takes one by its hardware
+name, though its menus size the practice for the L4's memory. Nor have we tried a Linux machine with an NVIDIA card
+rented from another cloud, which should follow the Linux guide.</p>
+
+<p>If you try either,
 <a href="mailto:feedback@microduckstudio.com?subject=Go%20further%3A%20another%20card">tell us how it went</a>, and
 this page will say so. Training in another simulator altogether is lesson 10 of Book 4.</p>
 
 <h2 id="ports">Ports between your devices</h2>
 
-<p>The duck and your computers talk over a few ports. Only ssh asks for anything: the duck account's password, or
-your key.</p>
+<p>The duck and your computers talk over a few ports, and only ssh asks for anything: the duck account's password,
+or your key.</p>
 
 <ul>
   <li><strong>A shell on the duck.</strong> <code>ssh microduck@&lt;address&gt;</code>. Pollen's
@@ -159,11 +164,12 @@ your key.</p>
   finds the address over Bluetooth, from a laptop with uv: <code>uvx duckctl --name &lt;robot-name&gt; ip</code>.</li>
   <li><strong>The console.</strong> Pollen's camera service serves a page on port 8080 that streams the head camera
   and drives the duck, and the page connects back on port 8443 to start the stream.
-  <code>uvx duckctl --name &lt;robot-name&gt; open</code> finds the duck and opens it. The same port answers <code>http://&lt;address&gt;:8080/frame</code> with one frame as a PNG, the
-  right way up.</li>
+  <code>uvx duckctl --name &lt;robot-name&gt; open</code> finds the duck and opens it, and the same port answers
+  <code>http://&lt;address&gt;:8080/frame</code> with one frame as a PNG, the right way up.</li>
   <li><strong>A pad over the network.</strong> Pollen's UDP pad, on port 4210, drives the duck the way a Bluetooth pad
-  does. It is off until you switch it on: <code>netpad.enabled</code> in <code>sudo robotctl configure</code>, then
-  <code>sudo systemctl restart padd netpadd</code>. While it is on, the Bluetooth pad does not work. It stays on, across restarts, until you switch it off.</li>
+  does. It is off until you switch it on, with <code>netpad.enabled</code> in <code>sudo robotctl configure</code> and
+  then <code>sudo systemctl restart padd netpadd</code>, and it stays on, across restarts, until you switch it off.
+  While it is on, the Bluetooth pad does not work.</li>
   <li><strong>Pages on your own computers.</strong> TensorBoard and Pollen's workshop each open a page for the machine
   they run on alone. To see one from another computer, run
   <code>ssh -L &lt;port&gt;:localhost:&lt;port&gt; you@&lt;that computer&gt;</code> on it, with the port from the
@@ -172,55 +178,64 @@ your key.</p>
 </ul>
 
 <div class="note">
-  <p><strong>Who can drive.</strong> Pollen's own notes say it plainly. Anyone on the duck's network can drive it
-  from the console and see through its camera, which
+  <p><strong>Who can drive.</strong> Pollen's own notes say it plainly: anyone on the duck's network can drive it
+  from the console and see through its camera.
   <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/remote-webrtc.md">Pollen's
-  design note</a> calls fine on a bench and in an office, not in a home, and a thing to revisit before ducks ship to
-  homes. Anyone who can reach the pad's port, once it is on, can drive it, sit it down and switch it off. Bluetooth
-  is another way in: anyone in range with duckctl and the pairing PIN, the factory 000000 until you change it with
-  <code>sudo robotctl system set-pin</code>, can stand the duck up, run a skill or load another walk, though not steer
-  it.</p>
+  design note</a> calls that fine on a bench and in an office, not in a home, and a thing to revisit before ducks ship
+  to homes. Anyone who can reach the pad's port, once it is on, can drive it, sit it down and switch it off.
+  Bluetooth is another way in: anyone in range with duckctl and the pairing PIN, the factory 000000 until you change
+  it with <code>sudo robotctl system set-pin</code>, can stand the duck up, run a skill or load another walk, though
+  not steer it.</p>
   <p>So keep the duck on a network you would let into the room with it, and never forward these ports to the
   internet. Pollen's way to reach a duck from outside its network goes through a rendezvous service that checks your
-  account at both ends and keeps the video encrypted. It stays off until the duck is signed in, and signing in stores
-  a Hugging Face token on the duck that, Pollen's notes say, can push to your repositories, start Jobs and read your
-  billing.</p>
+  account at both ends and keeps the video encrypted. That route stays off until the duck is signed in, and signing
+  in stores a Hugging Face token on the duck that, Pollen's notes say, can push to your repositories, start Jobs and
+  read your billing.</p>
 </div>
 
 <h2 id="channels">The duck's other channels</h2>
 
-<p>The walk reads 61 numbers. The duck carries more, and Pollen's <code>robotctl</code>, on the duck, shows it:</p>
+<p>The walk reads 61 numbers, but the duck carries more, and Pollen's <code>robotctl</code>, on the duck, shows
+it:</p>
 
 <pre tabindex="0" role="region" aria-label="Watching the duck's loop, on the duck"><code>robotctl monitor</code></pre>
 
 <p>It shows what was asked for beside what was applied, every joint, and the IMU's view of which way is down. Press
-<strong>c</strong> for a frame from the head camera, and <strong>t</strong> for the 8×8 depth grid, which also shows
-whether your duck has the depth sensor: Pollen's robot docs say most ducks so far have none fitted, while its mapping
-post describes the duck with one in its head. To keep the whole state, 50 times a second, for comparing a real walk with the
-simulator's:</p>
+<strong>c</strong> for a frame from the head camera, and <strong>t</strong> for the 8×8 depth grid, which also tells
+you whether your duck has the depth sensor at all: Pollen's robot docs say most ducks so far have none fitted, while
+its mapping post describes the duck with one in its head.</p>
+
+<p>To keep the whole state, 50 times a second, for comparing a real walk with the simulator's:</p>
 
 <pre tabindex="0" role="region" aria-label="Recording the duck's state to a file, on the duck"><code>robotctl monitor --json --hz 50 &gt; run.jsonl</code></pre>
 
 <p>A program can also drive. Pollen's <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/udp-pad.md">UDP
-pad page</a> describes the 28-byte datagram and has a complete sender in Python: it stands the duck up, turns the
-walk on and walks it forward for three seconds. A sensor that steers the duck sends the same datagrams with
-different stick values. With a gamepad plugged into a laptop, <code>duckctl udp-pad</code> sends them for you.</p>
+pad page</a> describes the 28-byte datagram and has a complete sender in Python, which stands the duck up, turns the
+walk on and walks it forward for three seconds.</p>
+
+<p>A sensor that steers the duck sends the same datagrams with different stick values, and with a gamepad plugged
+into a laptop, <code>duckctl udp-pad</code> sends them for you.</p>
 
 <p>Pollen's own <a href="https://pollen-robotics.com/microduck/blog/microduck-slam/">mapping post</a> shows these
 channels working together. Its service, <code>mapd</code>, builds a map of the room from the 8×8 depth sensor, a little
-at each stop, and finds the duck again after someone carries it, all on the duck's own processor. Odometry alone,
-the post measured, drifts about 2.4 cm for every metre walked. The mapper is not in a release yet; a version of it is
-on the <code>maploc-v2</code> branch of Pollen's microduck repository, and the recordings it was tested on, with ground
-truth, are public on Hugging Face as <code>pollen-robotics/SLAM_JJ_Salon_with_GT</code>.</p>
+at each stop, and finds the duck again after someone carries it, all on the duck's own processor.</p>
+
+<p>Odometry alone, the post measured, drifts about 2.4 cm for every metre walked. The mapper is not in a release yet:
+a version of it is on the <code>maploc-v2</code> branch of Pollen's microduck repository, and the recordings it was
+tested on, with ground truth, are public on Hugging Face as <code>pollen-robotics/SLAM_JJ_Salon_with_GT</code>.</p>
 
 <h2 id="qwiic">The spare Qwiic port</h2>
 
-<p>Pollen has said in its Discord that the duck's board still has an unused Qwiic connector: a small 3.3 V I²C
-socket, the plug Adafruit calls STEMMA QT. Pollen's open board, the
+<p>Can you add a sensor of your own? Pollen has said in its Discord that the duck's board still has an unused
+Qwiic connector: a small 3.3 V I²C socket, the plug Adafruit calls STEMMA QT.</p>
+
+<p>Pollen's open board, the
 <a href="https://github.com/pollen-robotics/elec_RPI_Robot_HAT/blob/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md">Robot
 HAT</a>, has four of them. Its schematic puts J5 on the bus the IMU and the audio codec use, header pins 3 and 5,
-and the other three on buses that depend on the computer underneath. Pollen says the final ducks carry an improved
-version of that board, so look at yours before trusting the open schematic.</p>
+and the other three on buses that depend on the computer underneath.</p>
+
+<p>Pollen says the final ducks carry an improved version of that board, so look at yours before trusting the open
+schematic.</p>
 
 <ol>
   <li><strong>See what answers now.</strong> On the duck, list the bus and write down every address that answers.
@@ -234,12 +249,13 @@ version of that board, so look at yours before trusting the open schematic.</p>
   <li><strong>Leave the depth sensor's service off while you experiment,</strong> which Pollen's cheatsheet calls
   safe: <code>sudo systemctl stop tofd</code>.</li>
   <li><strong>With the duck switched off, plug the sensor in.</strong> Switch it on and stop <code>tofd</code> again,
-  since it starts at boot. Then run <code>i2cdetect</code> again and look for the new address. If it is not there,
+  since it starts at boot, then run <code>i2cdetect</code> again and look for the new address. If it is not there,
   <code>i2cdetect -l</code> lists every bus, and the socket may be on another.</li>
-  <li><strong>Read it from a program, and steer with it,</strong> through the UDP pad above. That changes no policy.</li>
+  <li><strong>Read it from a program, and steer with it,</strong> through the UDP pad above, which changes no
+  policy.</li>
   <li><strong>Measure the walk again with the sensor on.</strong> Anything mounted on the duck changes the body the
-  walk was trained for. If the walk got worse, that is a case for retraining, with the sensor's weight added to the
-  simulated duck.</li>
+  walk was trained for, so if the walk got worse, that is a case for retraining, with the sensor's weight added to
+  the simulated duck.</li>
 </ol>
 
 <h2 id="next">Then</h2>

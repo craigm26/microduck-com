@@ -36,18 +36,18 @@
 <header class="privacy-header">
   <h1>Train your first duck on a Mac</h1>
   <p class="lede">A Mac cannot run Pollen's trainer itself, so the training runs on a graphics card you rent from
-  Hugging Face, and everything around it runs on your Mac. Come in through Microduck Studio, with no terminal, or
-  through Pollen's own workshop, which enters the Arena. You do not need a robot, and you do not need to code.
+  Hugging Face, and everything around it runs on your Mac. There are two ways in: Microduck Studio, with no
+  terminal, or Pollen's own workshop, which enters the Arena. You do not need a robot, and you do not need to code.
   <a href="/train/">On another machine?</a></p>
 </header>
 
 <main id="main" tabindex="-1">
 
 <div class="note">
-  <p><strong>The trainer, the challenges and the Arena are Pollen Robotics'</strong>, built on mjlab and MuJoCo.
-  Microduck Studio is ours, an independent app. This page is an independent owner's route to both on a Mac. Where
-  it goes wrong for you,
-  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20a%20Mac">tell us which step</a>.</p>
+  <p><strong>The trainer, the challenges and the Arena are Pollen Robotics'</strong>, built on mjlab and MuJoCo,
+  and Microduck Studio is ours, an independent app. This page is an independent owner's route to both on a Mac, so if
+  a step goes wrong for you,
+  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20a%20Mac">tell us which one</a>.</p>
 </div>
 
 <nav aria-label="On this page">
@@ -76,20 +76,23 @@
   credits count too. The card both routes rent, one NVIDIA L4, is $0.80 an hour, billed by the minute.</li>
   <li><strong>For the workshop, a free GitHub account</strong> for your fork of Pollen's challenges, where a
   published policy's link to its code points.</li>
-  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code. The free Claude plan does not include it.</li>
+  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code, which the free Claude plan does not
+  include.</li>
 </ul>
 
 <h2 id="why">Why the card is rented</h2>
 
-<p>Pollen trains the Microduck with <a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>, which
-needs an NVIDIA graphics card to train: its README says macOS is supported for evaluation only. So both routes below
-send the training to <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face Jobs</a>
-and do the rest on the Mac: choosing what to train, judging what comes back, watching it walk and publishing
-it.</p>
+<p>Why can a Mac not run Pollen's trainer itself? Pollen trains the Microduck with
+<a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>, which needs an NVIDIA graphics card to train:
+its README says macOS is supported for evaluation only.</p>
+
+<p>So both routes below send the training to
+<a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face Jobs</a> and do the rest on the
+Mac: choosing what to train, judging what comes back, watching it walk and publishing it.</p>
 
 <h2 id="studio">With Microduck Studio</h2>
 
-<p>No terminal and no files: Studio is a Mac app, and the same app runs on iPhone and iPad.</p>
+<p>This route needs no terminal and no files: Studio is a Mac app, and the same app runs on iPhone and iPad.</p>
 
 <ol>
   <li>Install Apple's free TestFlight app, then
@@ -104,15 +107,16 @@ it.</p>
 </ol>
 
 <p>The <a href="/train/iphone/">iPhone and iPad guide</a> takes each of these step by step, the rented training
-above all; on a Mac they have the same names, with Mac in place of phone. Studio's training starts from a smaller
-network distilled from Pollen's own walking network, and fine-tunes that. To train a gait from nothing, or to race in Pollen's Arena, use the
-workshop.</p>
+above all; on a Mac they have the same names, with Mac in place of phone.</p>
+
+<p>Studio's training starts from a smaller network distilled from Pollen's own walking network, and fine-tunes that,
+so to train a gait from nothing, or to race in Pollen's Arena, use the workshop.</p>
 
 <h2 id="tools">With Pollen's workshop: git and uv</h2>
 
-<p>Pollen's tools run in <strong>Terminal</strong>, which is in Applications, in Utilities. First Apple's command
-line tools, which include git. A window asks to install them: choose Install, and wait until it says the software
-was installed.</p>
+<p>Pollen's tools run in <strong>Terminal</strong>, which is in Applications, in Utilities. Start with Apple's
+command line tools, which include git: a window asks to install them, so choose Install and wait until it says the
+software was installed.</p>
 
 <pre tabindex="0" role="region" aria-label="Installing Apple's command line tools, in Terminal"><code>xcode-select --install</code></pre>
 
@@ -123,34 +127,40 @@ need:</p>
 git config --global user.email "you@example.com"
 curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-<p>Put your own name and email in the <code>git config</code> lines: git puts them on every change it records, and the
-workshop commits each change before it trains. Close the Terminal window and open a new one, so that it finds
-<code>uv</code>. Then <code>uv --version</code> prints a version number.</p>
+<p>Put your own name and email in the <code>git config</code> lines, since git puts them on every change it records
+and the workshop commits each change before it trains. Then close the Terminal window and open a new one so that it
+finds <code>uv</code>, and check that <code>uv --version</code> prints a version number.</p>
 
 <h2 id="workshop">Open the workshop</h2>
 
 <p>Pollen's <a href="https://pollen-robotics-microduck-arena.hf.space/" rel="noopener">Microduck Arena</a> races
 policies against a clock, and every challenge on it has a <strong>Train my own robot</strong> line. Start with the
-2 m Sprint: walk the duck down a lane as fast as it can go without falling. In Terminal:</p>
+2 m Sprint, which asks the duck to walk down a lane as fast as it can without falling. In Terminal:</p>
 
 <pre tabindex="0" role="region" aria-label="Opening the workshop on the sprint challenge, in Terminal"><code>cd ~
 uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py sprint-2m</code></pre>
 
-<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything: a
-big download, once. Then it prints a line that starts <code>Microduck workshop: http://127.0.0.1</code> and opens it
-in your browser; if no browser opens, open that address yourself. <strong>Leave this Terminal window open</strong>:
-the workshop runs in it until you press Ctrl-C there. Open a new window for anything else.</p>
+<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything,
+which is a big download but only once. Then it prints a line that starts
+<code>Microduck workshop: http://127.0.0.1</code> and opens it in your browser; if no browser opens, open that address
+yourself.</p>
+
+<p><strong>Leave this Terminal window open</strong>: the workshop runs in it until you press Ctrl-C there, so open a
+new window for anything else.</p>
 
 <p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
 billing, your fork of the challenges on GitHub, and an NVIDIA card. On a Mac the list has no NVIDIA line, so the
-billing line is the one that matters; it and the fork line say how to set them up. Log in to Hugging Face with the
-button at the top right. Run the same line on another day and it reopens the same work.</p>
+billing line is the one that matters, and it and the fork line say how to set them up.</p>
+
+<p>Log in to Hugging Face with the button at the top right. Run the same line on another day and it reopens the same
+work.</p>
 
 <p>The fork line's <strong>Push</strong> sends your commits to your fork, so a policy you publish links to the code
-that trained it. Without it, publishing still works and the link is missing. To push, git has to be signed in to
-GitHub. GitHub's own tool does that: install <a href="https://brew.sh/" rel="noopener">Homebrew</a> as its page
-says, then install the tool and log in, choosing HTTPS and yes when it asks to authenticate Git with your GitHub
-credentials.</p>
+that trained it. Without it, publishing still works and the link is missing.</p>
+
+<p>To push, git has to be signed in to GitHub, and GitHub's own tool does that: install
+<a href="https://brew.sh/" rel="noopener">Homebrew</a> as its page says, then install the tool and log in, choosing
+HTTPS, and yes when it asks to authenticate Git with your GitHub credentials.</p>
 
 <pre tabindex="0" role="region" aria-label="Signing git in to GitHub, in Terminal"><code>brew install gh
 gh auth login</code></pre>
@@ -161,10 +171,9 @@ gh auth login</code></pre>
   <li>On the challenge's page, choose <strong>New training</strong>, and <strong>Hugging Face Jobs</strong>. This
   machine is not an option: the workshop says there is no NVIDIA card here. Leave the knobs (Follow the speed order,
   Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>If you changed a knob, the workshop commits that change first. Then it sends the training to Hugging Face
-  and gives it a ticket. The
-  recipe runs 3000 iterations and saves a checkpoint every 250. Pollen's notes put it at about 1 to 2.5 hours on the
-  L4, at $0.80 per hour.</li>
+  <li>If you changed a knob, the workshop commits that change first, and then it sends the training to Hugging Face
+  and gives it a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250, and Pollen's notes put it
+  at about 1 to 2.5 hours on the L4, at $0.80 per hour.</li>
   <li>Every two minutes the workshop brings the new checkpoints back to your Mac, and scores each one with the
   Arena's own rules; the training's page replays any of them. Pick 5/5 finishes first, then the lowest time. The best
   checkpoint is often not the last.</li>
@@ -173,10 +182,12 @@ gh auth login</code></pre>
 </ol>
 
 <p><strong>The time on your Mac is a guide.</strong> Pollen's notes say simulations on different processors drift
-apart after a few seconds, and the Arena times every entry on its own machines. <strong>Closing the workshop does not stop
-a training on Hugging Face</strong>: it runs, and bills, until it ends or reaches its 12-hour limit, $9.60 at the
-L4's price. To end one sooner, open the workshop again and press <strong>Stop</strong> on its ticket, or cancel it on
-your <a href="https://huggingface.co/settings/jobs" rel="noopener">Jobs page</a> at Hugging Face. A stopped job cannot
+apart after a few seconds, and the Arena times every entry on its own machines.</p>
+
+<p><strong>Closing the workshop does not stop a training on Hugging Face</strong>: it runs, and bills, until it ends
+or reaches its 12-hour limit, $9.60 at the L4's price. To end one sooner, open the workshop again and press
+<strong>Stop</strong> on its ticket, or cancel it on your
+<a href="https://huggingface.co/settings/jobs" rel="noopener">Jobs page</a> at Hugging Face, but a stopped job cannot
 be resumed.</p>
 
 <div class="note">
@@ -188,8 +199,8 @@ be resumed.</p>
 <h2 id="claude">Claude beside you</h2>
 
 <p>Claude Code is Claude working in your terminal: it reads the files, runs commands and explains errors, and in
-its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher.
-In a new Terminal window, install it:</p>
+its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher,
+and you install it in a new Terminal window:</p>
 
 <pre tabindex="0" role="region" aria-label="Installing Claude Code, in Terminal"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
 
@@ -200,10 +211,10 @@ claude</code></pre>
 
 <p>The first time, it asks you to log in to your Claude account in your browser.</p>
 
-<p>Pollen wrote the challenges with this in mind. Every challenge folder has an <code>AGENTS.md</code> that tells a
-coding agent which files to change, how to run and judge a training, and the challenge's rules, and the 2 m
-Sprint's tells it never to start a paid job, publish or enter the Arena without your yes. On a Mac every training
-is a paid job, so expect it to ask each time. Things to say:</p>
+<p>Pollen wrote the challenges with this in mind: every challenge folder has an <code>AGENTS.md</code> that tells a
+coding agent which files to change, how to run and judge a training, and the challenge's rules. The 2 m Sprint's
+tells it never to start a paid job, publish or enter the Arena without your yes, and on a Mac every training is a
+paid job, so expect it to ask each time. Things to say:</p>
 
 <ul>
   <li>"I'm new to this, and I'm on a Mac. Read the AGENTS.md for the 2 m Sprint and take me through my first
@@ -213,41 +224,43 @@ is a paid job, so expect it to ask each time. Things to say:</p>
   <li>"Suggest one knob to change for the next training, and say what you expect to see."</li>
 </ul>
 
-<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published; it does the
-mechanics. That split is Pollen's rule, in the same file.</p>
+<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published, and it does
+the mechanics: that split is Pollen's rule, in the same file.</p>
 
 <h2 id="fixes">When something goes wrong</h2>
 
 <dl class="spec">
   <dt>The first install says a package has no wheel for this platform</dt>
-  <dd>The Mac has an Intel processor, or a macOS older than 14. Pollen's tools need Apple silicon and macOS 14 or
-  later.</dd>
+  <dd>The Mac has an Intel processor, or a macOS older than 14, and Pollen's tools need Apple silicon and macOS 14
+  or later.</dd>
   <dt><code>xcode-select</code> says the tools are already installed</dt>
   <dd>Nothing to do: git is there already.</dd>
   <dt><code>uv: command not found</code></dt>
-  <dd>Close the Terminal window and open a new one. The installer adds uv for new windows.</dd>
+  <dd>The installer adds uv for new windows, so close the Terminal window and open a new one.</dd>
   <dt>The first install stops with a timeout</dt>
-  <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
+  <dd>It downloads a lot at once, so give it longer with <code>export UV_HTTP_TIMEOUT=600</code> and run the line
   again. Pollen's README suggests the same setting for its own first install.</dd>
   <dt>Git says "Author identity unknown"</dt>
   <dd>Run the <code>git config</code> lines from <a href="#tools">git and uv</a>, with your own name and email.</dd>
     <dt>Hugging Face answers 403 when a job starts</dt>
-  <dd>The token can log in but not start Jobs. Make a Write one at
+  <dd>The token can log in but not start Jobs, so make a Write one at
   <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>, or tick the Jobs
   permissions on a fine-grained one, then log in with it: <code>uv run hf auth login --force</code>.</dd>
   <dt>Hugging Face Jobs will not start</dt>
-  <dd>The account needs a card on file and credit on it; add both in
+  <dd>The account needs a card on file and credit on it, which you add in
   <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>. The workshop's
   <strong>Ready to train?</strong> list shows whether billing is set up.</dd>
 </dl>
 
 <h2 id="further">Going further</h2>
 
-<p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
-its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>,
-and send each training to Hugging Face with <code>--hf-jobs</code>. In a new Terminal window, fetch it and log in to
-Hugging Face. If you logged in with the workshop's button, the login says you are in already. If not, it asks for
-an access token: make a Write one at
+<p>The challenges train for the Arena's courses. So what about the skills a real Microduck runs, its walk, its
+stand and its tricks? Those you train in Pollen's
+<a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>, and on a Mac you send each
+training to Hugging Face with <code>--hf-jobs</code>.</p>
+
+<p>In a new Terminal window, fetch it and log in to Hugging Face. The login says you are in already if you used the
+workshop's button, and if not, it asks for an access token: make a Write one at
 <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>.</p>
 
 <pre tabindex="0" role="region" aria-label="Fetching microduck_rl and logging in, in Terminal"><code>cd ~
@@ -259,26 +272,29 @@ uv run hf auth login</code></pre>
 
 <pre tabindex="0" role="region" aria-label="Training the walking policy on Hugging Face Jobs"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 --agent.max-iterations 4000 --agent.logger tensorboard --hf-jobs --no-wandb</code></pre>
 
-<p>If you belong to a Hugging Face organization, it first asks which account to bill; choose yours. Pollen's notes
-say a gait needs 4000 iterations or more. It prints the address of a private repository on your account where the
-checkpoints land, then follows the job's log. Ctrl-C
-stops following and leaves the job running; the job stops itself after 12 hours at most, $9.60 at the L4's price,
-and you can cancel it sooner on its page at Hugging Face. Bring the checkpoints back, with that repository's name in place of
-<code>&lt;you&gt;/&lt;repo&gt;</code>:</p>
+<p>If you belong to a Hugging Face organization, it first asks which account to bill, so choose yours. Pollen's
+notes say a gait needs 4000 iterations or more.</p>
+
+<p>It prints the address of a private repository on your account where the checkpoints land, then follows the job's
+log. Ctrl-C stops following and leaves the job running; the job stops itself after 12 hours at most, $9.60 at the
+L4's price, and you can cancel it sooner on its page at Hugging Face.</p>
+
+<p>Bring the checkpoints back, with that repository's name in place of <code>&lt;you&gt;/&lt;repo&gt;</code>:</p>
 
 <pre tabindex="0" role="region" aria-label="Bringing the checkpoints back to the Mac"><code>uv run hf download &lt;you&gt;/&lt;repo&gt; --local-dir logs/rsl_rl
 ls logs/rsl_rl/velocity/*/</code></pre>
 
 <p>The checkpoints are in a folder under <code>logs/rsl_rl/velocity/</code> named for the date and time and ending
 in <code>_velocity</code>. In the commands below, put that folder's name in place of <code>&lt;run&gt;</code> and a
-checkpoint's number in place of <code>&lt;N&gt;</code>, without the angle brackets. Watching and exporting run on
-the Mac itself. Watch a checkpoint in your browser: <code>play</code> prints an address to open, and runs until you
-press Ctrl-C.</p>
+checkpoint's number in place of <code>&lt;N&gt;</code>, without the angle brackets.</p>
+
+<p>Watching and exporting run on the Mac itself. To watch a checkpoint in your browser, run <code>play</code>, which
+prints an address to open and runs until you press Ctrl-C:</p>
 
 <pre tabindex="0" role="region" aria-label="Watching a checkpoint"><code>uv run play Mjlab-Velocity-Flat-MicroDuck --viewer viser --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a robot,
-because it bakes in the normalizer the policy expects:</p>
+<p>Then export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a
+robot, because it bakes in the normalizer the policy expects:</p>
 
 <pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
@@ -287,7 +303,7 @@ because it bakes in the normalizer the policy expects:</p>
 <pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>
 
 <p>An owner installs it on their robot with <code>sudo robotctl policy load walk</code> and the repository's
-name. Studio opens the same <code>output.onnx</code> and shows what is inside it.</p>
+name, and Studio opens the same <code>output.onnx</code> and shows what is inside it.</p>
 
 <h2 id="next">Then</h2>
 

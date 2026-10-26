@@ -35,8 +35,9 @@
 
 <header class="privacy-header">
   <h1>Train your first duck</h1>
-  <p class="lede">Pick the machine you have. Each guide trains on what that machine can do itself, and rents a
-  graphics card from Hugging Face for what it cannot. You do not need a robot, and you do not need to code.</p>
+  <p class="lede">Pollen's trainer needs an NVIDIA graphics card, and nothing around it does. So each guide below
+  trains on what its machine can do itself, and rents a card from Hugging Face only for the part it cannot. You do
+  not need a robot, and you do not need to code.</p>
 </header>
 
 <main id="main" tabindex="-1">
@@ -44,59 +45,63 @@
 <div class="feature-grid two-up">
   <div class="card">
     <h2><a href="/train/windows/">A Windows PC</a></h2>
-    <p>With a recent NVIDIA graphics card. Pollen's tools in Windows' own Linux, trained on your card.</p>
+    <p>With a recent NVIDIA graphics card, Pollen's tools run in Windows' own Linux and train on your card.</p>
   </div>
   <div class="card">
     <h2><a href="/train/linux/">A Linux PC</a></h2>
-    <p>With a recent NVIDIA graphics card. Pollen's tools as they come, trained on your card.</p>
+    <p>With a recent NVIDIA graphics card, Pollen's tools run as they come and train on your card.</p>
   </div>
   <div class="card">
     <h2><a href="/train/mac/">A Mac</a></h2>
-    <p>With Apple silicon. Microduck Studio for Mac, and Pollen's workshop, trained on a card you rent.</p>
+    <p>With Apple silicon, you come in through Microduck Studio for Mac or Pollen's workshop, and train on a card
+    you rent.</p>
   </div>
   <div class="card">
     <h2><a href="/train/iphone/">An iPhone or iPad</a></h2>
-    <p>Microduck Studio. Compare, tune and search on the device, and train with Pollen's trainer on a card you
+    <p>Microduck Studio compares, tunes and searches on the device, and trains with Pollen's trainer on a card you
     rent.</p>
   </div>
 </div>
 
-<p>A PC with no NVIDIA card, or an older one, follows its own guide all the same, and trains on a rented card
-where the guide says how.</p>
+<p>A PC with no NVIDIA card, or an older one, still follows its own guide, and the guide says where to switch to a
+rented card.</p>
 
 <h2 id="why">Why some machines rent a card</h2>
 
-<p>Pollen Robotics train the Microduck with <a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>,
-and mjlab needs an NVIDIA graphics card to train. Its
-README says macOS is supported for evaluation only, and it is Python, which an iPhone cannot run. So those machines rent the card from Hugging Face Jobs, by the minute, on your own Hugging
-Face account, which needs credit on it. The card Pollen's workshop and Microduck Studio both choose, one NVIDIA L4,
-is $0.80 an hour, at <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face's
-prices</a>.</p>
+<p>Why can a Mac or an iPhone not run Pollen's trainer itself? Pollen Robotics train the Microduck with
+<a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>, which needs an NVIDIA graphics card to train:
+its README says macOS is supported for evaluation only, and mjlab is Python, which an iPhone cannot run.</p>
+
+<p>So those machines rent the card from Hugging Face Jobs by the minute, on your own Hugging Face account, which
+needs credit on it. The card Pollen's workshop and Microduck Studio both choose, one NVIDIA L4, costs $0.80 an hour
+at <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face's prices</a>.</p>
 
 <h2 id="local">What runs where</h2>
 
-<p>Everything around the training is done on your machine: choosing what to train, judging what comes back,
-watching it walk and publishing it. Only the training itself needs the graphics card, and only the machines without
+<p>Everything around the training happens on your machine: choosing what to train, judging what comes back,
+watching it walk and publishing it. Only the training itself needs the graphics card, so only the machines without
 a suitable one send it away.</p>
 
-<p><strong>Microduck Studio works the same way.</strong> It is our app for iPhone, iPad and Mac, and it starts with
-what the device can do on its own. MuJoCo runs on it, so it compares two networks, tunes one and searches all of a
-network's weights right there, with nothing sent anywhere. It goes online only when you ask it to: to fetch a
-network or publish one, to rent a card at Hugging Face, to use a bench on your own network for faster physics, or to
-draft a motion from words with a model on another computer of yours or a service you have a key for. Drafting can
-stay on the device too, with Apple's on-device model where yours has one.</p>
+<p><strong>Microduck Studio works the same way.</strong> It is our app for iPhone, iPad and Mac, and because MuJoCo
+runs on the device, it compares two networks, tunes one and searches all of a network's weights right there, with
+nothing sent anywhere.</p>
+
+<p>It goes online only when you ask it to: to fetch a network or publish one, to rent a card at Hugging Face, to use
+a bench on your own network for faster physics, or to draft a motion from words with a model on another computer of
+yours or a service you have a key for. Drafting can stay on the device too, with Apple's on-device model where yours
+has one.</p>
 
 <div class="note">
   <p><strong>Whose tools these are.</strong> The trainer, the challenges and the Arena are Pollen Robotics',
-  built on mjlab and MuJoCo. Microduck Studio is an independent project, and so is the recipe it rents a card for:
-  it fine-tunes Pollen's kick, or a smaller network distilled from Pollen's walk, with
-  Pollen's own trainer. Where a guide goes wrong for you,
+  built on mjlab and MuJoCo. Microduck Studio is an independent project, and so is the recipe it rents a card for,
+  which fine-tunes Pollen's kick, or a smaller network distilled from Pollen's walk, with Pollen's own trainer. If a
+  guide goes wrong for you,
   <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">tell us which step</a>.</p>
 </div>
 
 <h2 id="next">Then</h2>
 
-<p>The <a href="/books/">books</a> explain what is happening while it trains: the reward, the practice worlds and
+<p>While it trains, the <a href="/books/">books</a> explain what is happening: the reward, the practice worlds and
 the trainer, with the real numbers.</p>
 
 <p>After your first duck, <a href="/train/advanced/">Go further</a> reads a real training run from its records, runs
