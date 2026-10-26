@@ -1173,13 +1173,14 @@ export const figures = {
     // three workshops that can each make the file
     const shops = new THREE.Group();
     const names = ['mjlab', 'MuJoCo Playground', 'Isaac Lab'];
-    const SX = [-84, 22, 128], SZ = -150;
+    const SX = [-100, 14, 140], SZ = -150;
     SX.forEach((x) => {
       const hut = K.box(46, 24, 30, 0xe7c47f); hut.position.set(x, 12, SZ); shops.add(hut);
       const roof = K.cone(32, 20, 0xd8432e, { seg: 4 }); roof.rotation.y = Math.PI / 4; roof.position.set(x, 34, SZ); shops.add(roof);
     });
     group.add(shops);
-    const shopLabs = names.map((n, i) => ctx.label(n, V(SX[i], 52, SZ), { cls: 'is-small' }));
+    // the middle name sits a little higher, so the long one never covers its neighbours
+    const shopLabs = names.map((n, i) => ctx.label(n, V(SX[i], i === 1 ? 66 : 52, SZ), { cls: 'is-small' }));
     const plugs = SX.map(() => { const p = K.box(18, 8, 12, 0x3c3c44); group.add(p); return p; });
     // the check: the same recorded states turned into 61 numbers by Pollen's trainer and by yours
     const BZ = 44;
