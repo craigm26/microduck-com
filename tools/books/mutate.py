@@ -270,7 +270,9 @@ def _():
 
 @case("a training-guide entry the page no longer prints", [T], "claims-train.json lists '250' and the training guide no longer prints it")
 def _():
+    # 250 is printed twice, once for the challenge and once for microduck_rl: take out both
     sub(T, "saves a checkpoint every 250", "saves a checkpoint now and then")
+    sub(T, "A checkpoint lands every 250 iterations", "A checkpoint lands now and then")
 
 
 @case("a training-guide quote a pinned source does not say", ["tools/books/claims-train.json"], "ch-sprint does not say")
@@ -278,9 +280,9 @@ def _():
     ledger("train", lambda L: L["train"]["4096"].update(quote="`num_envs` 8192, `max_iterations` 3000"))
 
 
-@case("a training-guide quote a web page does not say", ["tools/books/claims-train.json"], "ms-wsl does not say")
+@case("a training-guide quote a web page does not say", ["tools/books/claims-train.json"], "ms-wsl-gpu does not say")
 def _():
-    ledger("train", lambda L: L["train"]["19041"].update(quote="Build 19041 and higher) or Windows 12"))
+    ledger("train", lambda L: L["train"]["10"].update(quote="Ensure you are running Windows 12 or Windows 10, version 21H2 or higher"))
 
 
 @case("a number in the training guide's head", [T], "the training guide's head prints '9'")

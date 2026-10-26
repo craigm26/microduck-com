@@ -234,8 +234,8 @@
 #     the training guide no longer prints it".
 #   * a quote the pinned challenges file does not contain: "ch-sprint does not
 #     say ...".
-#   * a quote a web page does not contain, read through its markup: "ms-wsl
-#     does not say ...".
+#   * a quote a web page does not contain, read through its markup:
+#     "ms-wsl-gpu does not say ...".
 #   * a number in its title: "the training guide's head prints '9'".
 #   * a script on the page: "the training guide carries a script".
 # A gate nobody has watched fail is not a gate.

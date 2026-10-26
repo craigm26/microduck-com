@@ -2,20 +2,12 @@
  "lessons": {
   "train": {
    "10": {
-    "source": "ms-wsl",
-    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
-   },
-   "2004": {
-    "source": "ms-wsl",
-    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
-   },
-   "19041": {
-    "source": "ms-wsl",
-    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+    "source": "ms-wsl-gpu",
+    "quote": "Ensure you are running Windows 11 or Windows 10, version 21H2 or higher"
    },
    "11": {
-    "source": "ms-wsl",
-    "quote": "You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11"
+    "source": "ms-wsl-gpu",
+    "quote": "Ensure you are running Windows 11 or Windows 10, version 21H2 or higher"
    },
    "19044": {
     "source": "ms-wslg",

@@ -91,7 +91,7 @@ SOURCES = {
     "site-home": "public/index.html",
     # the training guide, /train/: Pollen's challenges, pinned, and the platform pages it leans on
     "ch-sprint": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/src/microduck_challenges/sprint_2m/AGENTS.md",
-    "ms-wsl": "https://learn.microsoft.com/en-us/windows/wsl/install",
+    "ms-wsl-gpu": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gpu-compute",
     "ms-wslg": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps",
     "nvidia-wsl": "https://docs.nvidia.com/cuda/archive/13.2.2/wsl-user-guide/index.html",
 }
