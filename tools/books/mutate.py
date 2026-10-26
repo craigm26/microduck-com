@@ -365,6 +365,29 @@ def _():
     (COPY / CB).unlink()
 
 
+TA = "public/train/advanced/index.html"
+
+
+@case("a number in the advanced guide with no entry", [TA], "the advanced guide prints '6006'")
+def _():
+    sub(TA, "forward its port over ssh, <code>ssh -L</code> with the port", "forward its port over ssh, <code>ssh -L 6006</code> with the port")
+
+
+@case("an advanced-guide quote Pollen's pad page does not say", [TJ], "md-udp-pad does not say")
+def _():
+    ledger("train", lambda L: L["advanced"]["4210"].update(quote="| `port` | `4211` | the UDP port, bound on IPv4 `0.0.0.0` |"))
+
+
+@case("an advanced-guide cost that does not add up", [TJ], "does not print as 1.20")
+def _():
+    ledger("train", lambda L: L["advanced"]["1.20"].update(derived="1.5 * 0.85"))
+
+
+@case("the advanced guide gone", [TA], "public/train/advanced/index.html is missing")
+def _():
+    (COPY / TA).unlink()
+
+
 def main():
     if COPY == SRC or SRC in COPY.parents or COPY in SRC.parents:
         raise SystemExit("mutate: that copy would land on the repository itself; name another WORKDIR")

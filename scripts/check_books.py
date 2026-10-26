@@ -19,7 +19,8 @@ without the gate noticing. Like check_links.sh it needs the network.
 
 THE TRAINING GUIDES ARE HELD THE SAME WAY. /train/ picks a machine and
 /train/windows/, /train/linux/, /train/mac/ and /train/iphone/ walk a beginner
-through Pollen's own tools and Microduck Studio on it, so their numbers come
+through Pollen's own tools and Microduck Studio on it, and /train/advanced/ goes
+further, into real runs' records and the duck's other ports, so their numbers come
 from Pollen's challenges, training code and Arena, from Studio's own source,
 all pinned to a commit, and from the Microsoft and NVIDIA pages they lean on.
 tools/books/claims-train.json ledgers each page under its own key, as a
@@ -134,6 +135,10 @@ SOURCES = {
     "md-i2c": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/audio/i2c3-pihat.dts",
     "md-cheatsheet": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/cheatsheet.md",
     "md-manifest": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/policy-manifest.md",
+    "md-udp-pad": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/udp-pad.md",
+    "md-duckctl": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/duckctl.md",
+    "md-architecture": "https://raw.githubusercontent.com/pollen-robotics/microduck/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/architecture.md",
+    "db-cli": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/cli.py",
     "hat-readme": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md",
     "hat-bom": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/production/ASE01187-D1_elec_RPI_Robot_HAT_BOM.csv",
     # the other open simulators a policy can be trained in
@@ -153,6 +158,7 @@ PLAIN = (
     ("train/linux/index.html", "claims-train.json", "linux", "the Linux guide"),
     ("train/mac/index.html", "claims-train.json", "mac", "the Mac guide"),
     ("train/iphone/index.html", "claims-train.json", "iphone", "the iPhone guide"),
+    ("train/advanced/index.html", "claims-train.json", "advanced", "the advanced guide"),
 )
 
 WORDS = ("two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "

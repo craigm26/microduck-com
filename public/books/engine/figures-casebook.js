@@ -1082,12 +1082,12 @@ export const figures = {
     const j5 = sock(0);
     const routes = [[[j5.x, j5.z], [-160, -66], [-168, -52]], [[j5.x, j5.z], [-104, -46], [-104, -22]], [[j5.x, j5.z], [-64, -46], [-34, -30]]];
     const wires = new THREE.Group();
-    routes.forEach((r) => wires.add(pathLine(r, 0x1d1d1f, 3)));
+    routes.forEach((r) => wires.add(pathLine(r, K.COL.slate, 3)));  // slate reads on light and dark paper
     group.add(wires);
     const busLabs = [
       ctx.label('IMU', V(-168, 4, -8), { cls: 'is-small' }),
-      ctx.label('codec 0x18', V(-104, 4, 24), { cls: 'is-small' }),
-      ctx.label('depth sensor 0x29', V(-30, 4, 14), { cls: 'is-small' }),
+      ctx.label('codec 0x18', V(-112, 4, 24), { cls: 'is-small' }),
+      ctx.label('depth sensor 0x29', V(-24, 4, 52), { cls: 'is-small' }),
     ];
     const pk = Array.from({ length: 6 }, () => { const d = K.packet(ORANGE, 4); d.visible = false; group.add(d); return d; });
     const pkCurves = routes.map((r) => new THREE.CatmullRomCurve3(r.map((q) => V(q[0], 8, q[1]))));

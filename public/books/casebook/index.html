@@ -93,7 +93,7 @@
   <aside class="lesson-notes" aria-label="Notes for lesson 1">
     <section>
       <h3>Try it for real</h3>
-      <p>Chart the kernel yourself: for a 0.30 m/s command, compute exp(−(0.30 − <var>v</var>)<sup>2</sup>/<var>σ</var><sup>2</sup>) for speeds from standing still up to the command, once at <var>σ</var> = 0.316 and once at 0.1. Then read b003 the way it was written: <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">the plan</a>, committed before the run, and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md">the verdict</a> after it. The menu that ran is in duckbatch's <code>menus/</code> folder, and any menu runs again on Hugging Face Jobs, billed to you:</p>
+      <p>Chart the kernel yourself: for a 0.30 m/s command, compute exp(−(0.30 − <var>v</var>)<sup>2</sup>/<var>σ</var><sup>2</sup>) for speeds from standing still up to the command, once at <var>σ</var> = 0.316 and once at 0.1. Then read b003 the way it was written: <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">the plan</a>, committed before the run, and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md">the verdict</a> after it. The menu that ran is in duckbatch's <code>menus/</code> folder, and any menu runs again on Hugging Face Jobs, billed to you, from a copy of duckbatch with your Hugging Face token in <code>HF_TOKEN</code>. <a href="/train/advanced/#change">Go further</a> has the steps:</p>
       <pre><code>uv run duckbatch hf-job menus/b003-dead-band.yaml \
   --run finetune --dataset &lt;you&gt;/duckbatch-records</code></pre>
     </section>
@@ -454,9 +454,9 @@ uvx tensorboard --logdir records</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 9 · The Qwiic port</p>
     <h2 id="lesson-9-title">A new sense on the bus</h2>
-    <p>The walk reads 61 numbers, though the duck senses more, including a camera and an 8×8 depth sensor in its head. And Pollen has said in its Discord that the duck's board still has an unused <strong>Qwiic</strong> connector: a small 3.3 V I²C socket, the plug Adafruit calls STEMMA QT.</p>
-    <p>Pollen's open board, the Robot HAT, has four, J5 to J8. J5 shares the main I²C bus, header pins 3 and 5, with the IMU and the audio codec, and Pollen's code reaches the depth sensor "via Stemma J5". The bus runs at 400 kHz, with the codec at 0x18 and the depth sensor at 0x29: a new device needs an address of its own.</p>
-    <p>A sense reaches behaviour one of two ways. As a <strong>command</strong>: a program reads it and steers the walk, and no policy changes. Or as an <strong>observation</strong>: a network trained with more than 61 inputs. Either way the module's weight changes the body the walk learned, and Pollen's own advice is to expect some retraining.</p>
+    <p>The walk reads 61 numbers, though the duck senses more, including a camera in its head and, on some ducks, an 8×8 depth sensor. And Pollen has said in its Discord that the duck's board still has an unused <strong>Qwiic</strong> connector: a small 3.3 V I²C socket, the plug Adafruit calls STEMMA QT.</p>
+    <p>Pollen's open board, the Robot HAT, has four, J5 to J8. J5 shares the main I²C bus, header pins 3 and 5, with the board's IMU and the audio codec, and Pollen's code reaches the depth sensor "via Stemma J5". The bus runs at 400 kHz, with the codec at 0x18 and the depth sensor, where fitted, at 0x29: a new device needs an address of its own.</p>
+    <p>A sense reaches behaviour one of two ways. As a <strong>command</strong>: a program reads it and steers the walk, and no policy changes. Or as an <strong>observation</strong>: a network trained with more than 61 inputs. Either way, the module's weight changes the body the walk learned.</p>
     <p class="rule">A sense joins as a command, through a program, or as an observation, through a retrained network.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -471,7 +471,7 @@ uvx tensorboard --logdir records</code></pre>
     <p class="figure-label">The figure</p>
     <ol class="figure-steps">
       <li><strong>The board.</strong> Pollen's open Robot HAT: four Qwiic sockets, J5 to J8.</li>
-      <li><strong>The bus.</strong> J5 shares the main bus, at 400 kHz, with the IMU, the codec at 0x18 and the depth sensor at 0x29.</li>
+      <li><strong>The bus.</strong> J5 shares the main bus, at 400 kHz, with the IMU, the codec at 0x18 and, where fitted, the depth sensor at 0x29.</li>
       <li><strong>A new sensor.</strong> Into a spare socket, at an address nothing else answers to.</li>
       <li><strong>Two ways in.</strong> As a command, a program steers the walk. As an observation, a network learns to read it.</li>
     </ol>
@@ -494,7 +494,7 @@ sudo systemctl stop tofd</code></pre>
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>61: "obs[1,61] → actions[1,14]" in <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd's design</a>. 8×8 and the commands: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/cheatsheet.md">Pollen's cheatsheet</a>. 3.3 V and four sockets: <a href="https://github.com/pollen-robotics/elec_RPI_Robot_HAT/blob/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md">the Robot HAT's README</a> and its bill of materials. Pins 3 and 5, 400 kHz, 0x18, 0x29 and "via Stemma J5": <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/audio/i2c3-pihat.dts">Pollen's bus overlay</a>.</li>
+        <li>61: "obs[1,61] → actions[1,14]" in <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd's design</a>. 8×8 and the commands: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/cheatsheet.md">Pollen's cheatsheet</a>. 3.3 V and four sockets: <a href="https://github.com/pollen-robotics/elec_RPI_Robot_HAT/blob/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md">the Robot HAT's README</a> and its bill of materials. Pins 3 and 5, 400 kHz, 0x18 and "via Stemma J5": <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/audio/i2c3-pihat.dts">Pollen's bus overlay</a>. 0x29: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/tof/src/link.rs">Pollen's depth-sensor code</a>, and that not every duck has the sensor: the cheatsheet.</li>
       </ul>
     </section>
   </aside>
