@@ -103,6 +103,9 @@ SOURCES = {
     "ch-lock": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/uv.lock",
     "rl-hfjobs": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/scripts/hf/README.md",
     "arena-training": "https://raw.githubusercontent.com/pollen-robotics/microduck-arena/d7571179242140cefd788639a23195bd56575490/arena/workshop/training.py",
+    "rl-hfjobs-py": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/hf_jobs.py",
+    # the microduck_rl commit the challenges lock installs, which the workshop sends to Hugging Face
+    "rl-hfjobs-ws": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/8d0dbc94cbbef3f1dcae461a4dbc1a43bb9886a0/src/mjlab_microduck/hf_jobs.py",
     "studio-project": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/DuckStudio/project.yml",
     "studio-hub": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/StudioKit/Sources/StudioKit/HubTraining.swift",
     "studio-hubview": "https://raw.githubusercontent.com/craigm26/duck-studio/8e9e9bfdd0db752a0b5a1472b36ec8d4cc7659e4/DuckStudio/Sources/HubTrainingView.swift",
