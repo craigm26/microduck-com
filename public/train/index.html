@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Train your first duck, Microduck Studio</title>
-<meta name="description" content="From a Windows PC with an NVIDIA graphics card to a Microduck policy you trained, watched and entered in Pollen Robotics' Arena, step by step. No robot and no coding needed.">
+<meta name="description" content="Step by step guides to training a Microduck policy on the machine you have: a Windows or Linux PC with an NVIDIA graphics card, a Mac, or an iPhone or iPad. No robot and no coding needed.">
 <link rel="canonical" href="https://microduckstudio.com/train/">
 <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" href="/assets/studio-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=97abdc6c55">
+<link rel="stylesheet" href="/assets/site.css?v=4d3840d903">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -35,266 +35,68 @@
 
 <header class="privacy-header">
   <h1>Train your first duck</h1>
-  <p class="lede">From a Windows PC with an NVIDIA graphics card to a walking policy you trained yourself, watched,
-  and entered in Pollen Robotics' Microduck Arena. You do not need a robot, and you do not need to code.</p>
+  <p class="lede">Pick the machine you have. Each guide trains on what that machine can do itself, and rents a
+  graphics card from Hugging Face for what it cannot. You do not need a robot, and you do not need to code.</p>
 </header>
 
 <main id="main" tabindex="-1">
 
+<div class="feature-grid two-up">
+  <div class="card">
+    <h2><a href="/train/windows/">A Windows PC</a></h2>
+    <p>With a recent NVIDIA graphics card. Pollen's tools in Windows' own Linux, trained on your card.</p>
+  </div>
+  <div class="card">
+    <h2><a href="/train/linux/">A Linux PC</a></h2>
+    <p>With a recent NVIDIA graphics card. Pollen's tools as they come, trained on your card.</p>
+  </div>
+  <div class="card">
+    <h2><a href="/train/mac/">A Mac</a></h2>
+    <p>With Apple silicon. Microduck Studio for Mac, and Pollen's workshop, trained on a card you rent.</p>
+  </div>
+  <div class="card">
+    <h2><a href="/train/iphone/">An iPhone or iPad</a></h2>
+    <p>Microduck Studio. Compare, tune and search on the device, and train with Pollen's trainer on a card you
+    rent.</p>
+  </div>
+</div>
+
+<p>A PC with no NVIDIA card, or an older one, follows its own guide all the same: the step that trains rents a
+card instead.</p>
+
+<h2 id="why">Why some machines rent a card</h2>
+
+<p>Pollen Robotics train the Microduck with <a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>,
+and mjlab needs an NVIDIA graphics card to train. Its own notes say a Mac can evaluate but not train, and an iPhone
+cannot run it at all. So those machines rent the card from Hugging Face Jobs, by the minute, on your own Hugging
+Face account, which needs credit on it. The card Pollen's workshop and Microduck Studio both choose, one NVIDIA L4,
+is $0.80 an hour, at <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face's
+prices</a>.</p>
+
+<h2 id="local">What runs where</h2>
+
+<p>Everything around the training stays on your machine: choosing what to train, judging what comes back,
+watching it walk and publishing it. Only the training itself needs the graphics card, and only the machines without
+a suitable one send it away.</p>
+
+<p><strong>Microduck Studio works the same way.</strong> It is our app for iPhone, iPad and Mac, and it starts with
+what the device can do on its own. MuJoCo runs on it, so it compares two networks, tunes one and searches all of a
+network's weights right there, with nothing sent anywhere. It goes online only when you ask it to: to fetch a
+network or publish one, to rent a card at Hugging Face, to use a bench on your own network for faster physics, or to
+draft a motion from words with a model on another computer of yours or a service you have a key for. Drafting can
+stay on the device too, with Apple's on-device model where yours has one.</p>
+
 <div class="note">
-  <p><strong>The training tools here are Pollen Robotics'</strong>: their code, their challenges and their Arena,
-  built on mjlab and MuJoCo. This page is an independent owner's route to them on a home PC, through Windows' own
-  Linux, a few free tools and, if you like, Claude. Where it goes wrong for you,
+  <p><strong>Whose tools these are.</strong> The trainer, the challenges and the Arena are Pollen Robotics',
+  built on mjlab and MuJoCo. Microduck Studio is an independent project, and so is the recipe it rents a card for:
+  it fine-tunes Pollen's own networks with Pollen's own trainer. Where a guide goes wrong for you,
   <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">tell us which step</a>.</p>
 </div>
 
-<nav aria-label="On this page">
-  <ul>
-    <li><a href="#need">What you need</a></li>
-    <li><a href="#wsl">Linux inside Windows</a></li>
-    <li><a href="#gpu">Let Linux see your graphics card</a></li>
-    <li><a href="#tools">Install git and uv</a></li>
-    <li><a href="#workshop">Open Pollen's workshop</a></li>
-    <li><a href="#first">Your first training</a></li>
-    <li><a href="#claude">Claude beside you</a></li>
-    <li><a href="#fixes">When something goes wrong</a></li>
-    <li><a href="#further">Going further</a></li>
-  </ul>
-</nav>
-
-<h2 id="need">What you need</h2>
-
-<ul>
-  <li><strong>A Windows PC with an NVIDIA graphics card</strong> from NVIDIA's Volta generation or newer, which for a
-  home PC means Turing or newer: every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch the
-  training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>,
-  such as Pascal's GTX ones, even though WSL can still see them. No NVIDIA card, or an older one? The workshop can
-  rent a Hugging Face one instead: see <a href="#no-gpu">No NVIDIA card, or an older one</a>.</li>
-  <li><strong>Windows 11, or Windows 10 version 21H2 (build 19044) or later.</strong> That is Microsoft's minimum for
-  using the graphics card from Linux, and for the windows Linux programs open.</li>
-  <li><strong>A free Hugging Face account</strong>, which holds the policies you publish, and <strong>a free GitHub
-  account</strong> for your fork of Pollen's challenges, where a published policy's link to its code points.</li>
-  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code. The free Claude plan does not include it.</li>
-</ul>
-
-<p><strong>You do not need Isaac Sim or Isaac Lab.</strong> Pollen trains the Microduck with mjlab, which borrows
-Isaac Lab's way of describing a task but simulates with MuJoCo Warp, and the workshop installs all of it for you.</p>
-
-<h2 id="wsl">Linux inside Windows</h2>
-
-<p>Pollen's tools run on Linux. WSL 2 runs Linux inside Windows, so the PC stays yours for everything else.</p>
-
-<ol>
-  <li>Right-click PowerShell, choose <strong>Run as administrator</strong>, and run:
-<pre tabindex="0" role="region" aria-label="Installing WSL, in PowerShell"><code>wsl --install</code></pre>
-  If it only prints its help, run <code>wsl --install -d Ubuntu</code> instead.</li>
-  <li>Restart the PC.</li>
-  <li>Open <strong>Ubuntu</strong> from the Start menu. The first time, it unpacks itself, then asks for a username
-  and a password. They are for Linux only. Nothing appears on screen while you type the password; that is normal.
-  Keep it: Linux asks for it when you install something.</li>
-</ol>
-
-<p>Commands from here on go into that Ubuntu window, unless a step says PowerShell. Ubuntu opens in your Linux home
-folder, <code>~</code>; keep your work there. Folders under <code>/mnt/c</code> are your Windows drive, which Linux
-reaches much more slowly.</p>
-
-<h2 id="gpu">Let Linux see your graphics card</h2>
-
-<ol>
-  <li>In Windows, install the newest driver for your card from <a href="https://www.nvidia.com/en-us/drivers/" rel="noopener">NVIDIA</a>
-  or the NVIDIA app. That one Windows driver is all WSL needs. Do not install any NVIDIA driver inside Ubuntu:
-  <a href="https://docs.nvidia.com/cuda/wsl-user-guide/index.html" rel="noopener">NVIDIA's WSL guide</a> says not to,
-  because it would replace the one Windows provides.</li>
-  <li>In PowerShell, as administrator, bring WSL up to date, then restart it:
-<pre tabindex="0" role="region" aria-label="Updating WSL, in PowerShell"><code>wsl --update
-wsl --shutdown</code></pre></li>
-  <li>Open Ubuntu again and check:
-<pre tabindex="0" role="region" aria-label="Checking the graphics card, in Ubuntu"><code>nvidia-smi</code></pre>
-  A table with your card's name in it means Linux can use the card. If the command is not found, try
-  <code>/usr/lib/wsl/lib/nvidia-smi</code>; if that prints the table, Linux sees the card. Training also needs it to
-  be Turing or newer: an older card shows up here and still cannot train.</li>
-</ol>
-
-<h2 id="tools">Install git and uv</h2>
-
-<p><code>git</code> fetches Pollen's code and records each change you train with. <code>uv</code> installs the right
-Python and everything training needs.</p>
-
-<pre tabindex="0" role="region" aria-label="Installing git and uv, in Ubuntu"><code>sudo apt update &amp;&amp; sudo apt install -y git
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
-
-<p>Put your own name and email in the <code>git config</code> lines: git signs every change with them, and the
-workshop commits each change before it trains. Close Ubuntu and open it again, so that it finds <code>uv</code>.
-Then <code>uv --version</code> prints a version number.</p>
-
-<h2 id="workshop">Open Pollen's workshop</h2>
-
-<p>Pollen's <a href="https://pollen-robotics-microduck-arena.hf.space/" rel="noopener">Microduck Arena</a> races
-policies against a clock, and every challenge on it has a <strong>Train my own robot</strong> line. Start with the
-2 m Sprint: walk the duck down a lane as fast as it can go without falling. In Ubuntu:</p>
-
-<pre tabindex="0" role="region" aria-label="Opening the workshop on the sprint challenge, in Ubuntu"><code>cd ~
-uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py sprint-2m</code></pre>
-
-<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything: a
-big download, once. Then it prints a line that starts <code>Microduck workshop: http://127.0.0.1</code>. If no browser
-opens by itself, paste that address into your browser in Windows. <strong>Leave this Ubuntu window open</strong>: the
-workshop runs in it until you press Ctrl-C there. Open a second Ubuntu window for anything else.</p>
-
-<p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
-billing, your fork of the challenges on GitHub, and an NVIDIA card. The fork and billing lines say how to set them
-up. Training needs the card or the billing, not both. Log in to Hugging Face with the button at the top right. Run the
-same line on another day and it reopens the same work; if it says its port is busy, the workshop is already open in
-another window.</p>
-
-<h2 id="first">Your first training</h2>
-
-<ol>
-  <li>On the challenge's page, choose <strong>New training</strong>, and train on this machine. Leave the knobs
-  (Follow the speed order, Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>The workshop asks to commit the challenge, then trains and gives the training a ticket. The recipe runs 3000
-  iterations and saves a checkpoint every 250. How long that takes depends on your card.</li>
-  <li>Every checkpoint is scored with the Arena's own rules as it arrives, and the training's page replays any of
-  them. Pick 5/5 finishes first, then the lowest time. The best checkpoint is often not the last.</li>
-  <li>When one is good enough, <strong>Publish and compete</strong> puts it on your Hugging Face account, in public,
-  and enters it on the Arena, which races it and opens its result. The time on your PC is a guide; the Arena's own
-  run is the one that counts.</li>
-</ol>
-
-<div class="note">
-  <p><strong>The bar to beat.</strong> Pollen's
-  <a href="https://huggingface.co/pollen-robotics/microduck-sprint-2m-reference" rel="noopener">reference policy</a>
-  scores 4.892 s on the sprint and finishes every run.</p>
-</div>
-
-<h3 id="no-gpu">No NVIDIA card, or an older one</h3>
-
-<p>On the challenge's page, choose Hugging Face Jobs instead of this machine. It trains on Hugging Face's GPUs and
-bills your Hugging Face account, which needs credit on it. Pollen's notes give the default GPU, one NVIDIA L4, as
-$0.80 per hour, and the recipe as about 1 to 2.5 hours on it. You choose it for each training.</p>
-
-<h2 id="claude">Claude beside you</h2>
-
-<p>Claude Code is Claude working in your terminal: it reads the files, runs commands and explains errors, and in
-its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher.
-In a second Ubuntu window, install it:</p>
-
-<pre tabindex="0" role="region" aria-label="Installing Claude Code, in Ubuntu"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
-
-<p>Close that window and open another, then start Claude Code in the challenges folder:</p>
-
-<pre tabindex="0" role="region" aria-label="Starting Claude Code in the challenges folder"><code>cd ~/microduck-challenges
-claude</code></pre>
-
-<p>It asks you to log in. If no browser opens, press <kbd>c</kbd> to copy the sign-in address and open it in
-Windows; if the page then shows a code, paste it back into Ubuntu. If pasting does nothing, right-click to
-paste.</p>
-
-<p>Pollen wrote the challenges with this in mind. Every challenge folder has an <code>AGENTS.md</code> that tells a
-coding agent which files to change, how to run and judge a training, and the challenge's rules, and the 2 m
-Sprint's tells it never to start a paid job, publish or enter the Arena without your yes. Things to say:</p>
-
-<ul>
-  <li>"I'm new to this. Read the AGENTS.md for the 2 m Sprint and take me through my first training. Explain each
-  command before you run it."</li>
-  <li>"That failed. Tell me in plain words what the error means, then fix it."</li>
-  <li>"Which checkpoint of my last training scored best, and why that one?"</li>
-  <li>"Suggest one knob to change for the next training, and say what you expect to see."</li>
-</ul>
-
-<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published; it does the
-mechanics. That split is Pollen's rule, in the same file.</p>
-
-<h2 id="fixes">When something goes wrong</h2>
-
-<dl class="spec">
-  <dt>WSL will not start, or mentions virtualization (error 0x80370102)</dt>
-  <dd>Virtualization is switched off in the PC's firmware settings (BIOS or UEFI). Turn it on there; your PC
-  maker's support pages say where.</dd>
-  <dt><code>wsl --install</code> stalls before it downloads anything</dt>
-  <dd>Run <code>wsl --install --web-download -d Ubuntu</code> instead.</dd>
-  <dt><code>nvidia-smi</code> is not found, or shows no card</dt>
-  <dd>Update the NVIDIA driver in Windows, run <code>wsl --update</code> and <code>wsl --shutdown</code> in
-  PowerShell, and open Ubuntu again.</dd>
-  <dt><code>uv: command not found</code></dt>
-  <dd>Close Ubuntu and open it again. The installer adds uv for new windows.</dd>
-  <dt>The first install stops with a timeout</dt>
-  <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
-  again. Pollen's README suggests the same setting for the same first download.</dd>
-  <dt>Git says "Author identity unknown"</dt>
-  <dd>Run the <code>git config</code> lines from <a href="#tools">Install git and uv</a>, with your own name and
-  email.</dd>
-  <dt>CUDA out of memory</dt>
-  <dd>Train fewer simulated ducks at once.
-  <code>~/microduck-challenges/src/microduck_challenges/sprint_2m/challenge.toml</code> sets <code>num_envs</code> to
-  4096 under <code>[recipe]</code>; change it to 2048, or ask Claude Code to.</dd>
-  <dt>Everything is slow</dt>
-  <dd>Check where you are working: under <code>~</code>, not under <code>/mnt/c</code>.</dd>
-  <dt>A MuJoCo window is slow or garbled</dt>
-  <dd>Under WSL, Linux windows can fall back to drawing without the graphics card, a
-  <a href="https://github.com/mujocolab/mjlab/issues/1182" rel="noopener">known mjlab issue</a>. Run
-  <code>export GALLIUM_DRIVER=d3d12</code> before the command that opens the window.</dd>
-</dl>
-
-<h2 id="further">Going further</h2>
-
-<p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
-its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>.
-In a new Ubuntu window, fetch it into your home folder:</p>
-
-<pre tabindex="0" role="region" aria-label="Fetching microduck_rl, in Ubuntu"><code>cd ~
-git clone https://github.com/pollen-robotics/microduck_rl
-cd microduck_rl</code></pre>
-
-<p>A quick test first. It catches most mistakes before the long run, and the first time it also installs this
-repository's own copy of everything:</p>
-
-<pre tabindex="0" role="region" aria-label="A quick test of the walking task"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 64 --agent.max-iterations 5 --agent.logger tensorboard</code></pre>
-
-<p>Then the real run:</p>
-
-<pre tabindex="0" role="region" aria-label="Training the walking policy"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 --agent.max-iterations 4000 --agent.logger tensorboard</code></pre>
-
-<p><code>--agent.logger tensorboard</code> keeps the logs on your PC; without it, training uses Weights &amp; Biases,
-which asks you to log in. Pollen's README puts a usable gait at about one to two hours with 4096 simulated ducks,
-and its notes say a gait needs 4000 iterations or more. A checkpoint lands every 250 iterations, in a folder under
-<code>logs/rsl_rl/velocity/</code> named for the date and time and ending in <code>_velocity</code>. To see them:</p>
-
-<pre tabindex="0" role="region" aria-label="Listing the checkpoints"><code>ls logs/rsl_rl/velocity/*/</code></pre>
-
-<p>In the commands below, put that folder's name in place of <code>&lt;run&gt;</code> and a checkpoint's number in
-place of <code>&lt;N&gt;</code>, without the angle brackets. Watch a checkpoint in your browser: <code>play</code>
-prints an address to open, and runs until you press Ctrl-C.</p>
-
-<pre tabindex="0" role="region" aria-label="Watching a checkpoint"><code>uv run play Mjlab-Velocity-Flat-MicroDuck --viewer viser --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
-
-<p>Export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a robot,
-because it bakes in the normalizer the policy expects:</p>
-
-<pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
-
-<p>Then drive it from the keyboard. This opens a MuJoCo window and takes your keys in the terminal.
-<code>--new-cmd-obs</code> matters: this policy reads the newer layout of commands, and without the flag the script
-feeds it the old one and stops.</p>
-
-<pre tabindex="0" role="region" aria-label="Driving the exported policy"><code>uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs</code></pre>
-
-<p>To share a gait, run <code>uv run hf auth login</code> once. It asks for an access token: make one with write
-access at <a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then,
-with your Hugging Face username in place of <code>&lt;you&gt;</code>:</p>
-
-<pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>
-
-<p>An owner installs it on their robot with <code>sudo robotctl policy load walk</code> and the repository's
-name.</p>
-
 <h2 id="next">Then</h2>
 
-<p>The <a href="/books/">books</a> explain what is happening while it trains. Stuck on a step, or found a better
-way? <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck">Tell us</a>, and say which
-step.</p>
+<p>The <a href="/books/">books</a> explain what is happening while it trains: the reward, the practice worlds and
+the trainer, with the real numbers.</p>
 
 </main>
 

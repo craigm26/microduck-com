@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train your first duck on a Mac, Microduck Studio</title>
+<meta name="description" content="From a Mac with Apple silicon to a Microduck policy you trained on a rented graphics card, judged and entered in Pollen Robotics' Arena, step by step. With Microduck Studio or Pollen's workshop. No robot and no coding needed.">
+<link rel="canonical" href="https://microduckstudio.com/train/mac/">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=4d3840d903">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/cards/">Cards</a>
+      <a href="/books/">Books</a>
+      <a href="/train/" aria-current="page">Train</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="privacy-wrap">
+
+<header class="privacy-header">
+  <h1>Train your first duck on a Mac</h1>
+  <p class="lede">A Mac cannot run Pollen's trainer itself, so the training runs on a graphics card you rent from
+  Hugging Face, and everything around it runs on your Mac. Come in through Microduck Studio, with no terminal, or
+  through Pollen's own workshop, which enters the Arena. You do not need a robot, and you do not need to code.
+  <a href="/train/">On another machine?</a></p>
+</header>
+
+<main id="main" tabindex="-1">
+
+<div class="note">
+  <p><strong>The trainer, the challenges and the Arena are Pollen Robotics'</strong>, built on mjlab and MuJoCo.
+  Microduck Studio is ours, an independent app. This page is an independent owner's route to both on a Mac. Where
+  it goes wrong for you,
+  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20a%20Mac">tell us which step</a>.</p>
+</div>
+
+<nav aria-label="On this page">
+  <ul>
+    <li><a href="#need">What you need</a></li>
+    <li><a href="#why">Why the card is rented</a></li>
+    <li><a href="#studio">With Microduck Studio</a></li>
+    <li><a href="#tools">With Pollen's workshop: git and uv</a></li>
+    <li><a href="#workshop">Open the workshop</a></li>
+    <li><a href="#first">Your first training</a></li>
+    <li><a href="#claude">Claude beside you</a></li>
+    <li><a href="#fixes">When something goes wrong</a></li>
+    <li><a href="#further">Going further</a></li>
+  </ul>
+</nav>
+
+<h2 id="need">What you need</h2>
+
+<ul>
+  <li><strong>A Mac with Apple silicon, on macOS 14 or later.</strong> Pollen's tools install a PyTorch with no
+  build for Intel Macs and an ONNX Runtime built for macOS 14 and up, and Microduck Studio for Mac needs macOS 14
+  too.</li>
+  <li><strong>A free Hugging Face account with credit on it.</strong> Hugging Face Jobs runs for any account with a
+  positive credit balance, which you add with a card in
+  <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>; a PRO plan's monthly
+  credits count too. The card both routes rent, one NVIDIA L4, is $0.80 an hour, billed by the minute.</li>
+  <li><strong>For the workshop, a free GitHub account</strong> for your fork of Pollen's challenges, where a
+  published policy's link to its code points.</li>
+  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code. The free Claude plan does not include it.</li>
+</ul>
+
+<h2 id="why">Why the card is rented</h2>
+
+<p>Pollen trains the Microduck with <a href="https://github.com/mujocolab/mjlab" rel="noopener">mjlab</a>, which
+needs an NVIDIA graphics card to train: its README says macOS is supported for evaluation only. So both routes below
+send the training to <a href="https://huggingface.co/docs/hub/en/jobs-pricing" rel="noopener">Hugging Face Jobs</a>
+and keep the rest on the Mac: choosing what to train, judging what comes back, watching it walk and publishing
+it.</p>
+
+<h2 id="studio">With Microduck Studio</h2>
+
+<p>No terminal and no files: Studio is a Mac app, and the same app runs on iPhone and iPad.</p>
+
+<ol>
+  <li>Install Apple's free TestFlight app, then
+  <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a> on your
+  Mac. There is no App Store release yet.</li>
+  <li>Open <strong>Learn</strong> and work through it. Its last lesson, <strong>Show every tool</strong>, turns on
+  the training tools; <strong>Settings</strong>, then <strong>Detail</strong>, does the same.</li>
+  <li>In <strong>Studio</strong>, under <strong>Train and measure</strong>: <strong>Tune it on this Mac</strong>
+  and <strong>Search its weights on this Mac</strong> improve a network on the Mac itself, with nothing sent
+  anywhere, and <strong>Train a network on Hugging Face</strong> rents the card and runs Pollen's trainer with a
+  reward you set. <strong>Compare</strong>, under <strong>Make</strong>, is where you judge what comes back.</li>
+</ol>
+
+<p>The <a href="/train/iphone/">iPhone and iPad guide</a> takes each of these step by step, the rented training
+above all; on a Mac they have the same names, with Mac in place of phone. Studio's training starts from Pollen's
+own walking network and fine-tunes it. To train a gait from nothing, or to race in Pollen's Arena, use the
+workshop.</p>
+
+<h2 id="tools">With Pollen's workshop: git and uv</h2>
+
+<p>Pollen's tools run in <strong>Terminal</strong>, which is in Applications, in Utilities. First Apple's command
+line tools, which include git. A window asks to install them; choose Install:</p>
+
+<pre tabindex="0" role="region" aria-label="Installing Apple's command line tools, in Terminal"><code>xcode-select --install</code></pre>
+
+<p>Then your name and email for git, and <code>uv</code>, which installs the right Python and everything the tools
+need:</p>
+
+<pre tabindex="0" role="region" aria-label="Setting up git and installing uv, in Terminal"><code>git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
+
+<p>Put your own name and email in the <code>git config</code> lines: git signs every change with them, and the
+workshop commits each change before it trains. Close the Terminal window and open a new one, so that it finds
+<code>uv</code>. Then <code>uv --version</code> prints a version number.</p>
+
+<h2 id="workshop">Open the workshop</h2>
+
+<p>Pollen's <a href="https://pollen-robotics-microduck-arena.hf.space/" rel="noopener">Microduck Arena</a> races
+policies against a clock, and every challenge on it has a <strong>Train my own robot</strong> line. Start with the
+2 m Sprint: walk the duck down a lane as fast as it can go without falling. In Terminal:</p>
+
+<pre tabindex="0" role="region" aria-label="Opening the workshop on the sprint challenge, in Terminal"><code>cd ~
+uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py sprint-2m</code></pre>
+
+<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything: a
+big download, once. Then it prints a line that starts <code>Microduck workshop: http://127.0.0.1</code> and opens it
+in your browser; if no browser opens, open that address yourself. <strong>Leave this Terminal window open</strong>:
+the workshop runs in it until you press Ctrl-C there. Open a new window for anything else.</p>
+
+<p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
+billing, your fork of the challenges on GitHub, and an NVIDIA card. On a Mac the card stays unticked, so the
+billing line is the one that matters; it and the fork line say how to set them up. Log in to Hugging Face with the
+button at the top right. Run the same line on another day and it reopens the same work.</p>
+
+<h2 id="first">Your first training</h2>
+
+<ol>
+  <li>On the challenge's page, choose <strong>New training</strong>, and <strong>Hugging Face Jobs</strong>. This
+  machine is not an option: the workshop says there is no NVIDIA card here. Leave the knobs (Follow the speed order,
+  Stay upright, Lift your feet) where Pollen set them for your first run.</li>
+  <li>The workshop asks to commit the challenge, then sends the training to Hugging Face and gives it a ticket. The
+  recipe runs 3000 iterations and saves a checkpoint every 250. Pollen's notes put it at about 1 to 2.5 hours on the
+  L4, at $0.80 per hour.</li>
+  <li>Every two minutes the workshop brings the new checkpoints back to your Mac, and scores each one with the
+  Arena's own rules; the training's page replays any of them. Pick 5/5 finishes first, then the lowest time. The best
+  checkpoint is often not the last.</li>
+  <li>When one is good enough, <strong>Publish and compete</strong> puts it on your Hugging Face account, in public,
+  and enters it on the Arena, which races it and opens its result.</li>
+</ol>
+
+<p><strong>The time on your Mac is a guide.</strong> Pollen's notes say simulations on different processors drift
+apart after a few seconds, and the Arena times every entry on its own machines. To end a training early, and its
+bill, press <strong>Stop</strong> on its ticket: a stopped job cannot be resumed.</p>
+
+<div class="note">
+  <p><strong>The bar to beat.</strong> Pollen's
+  <a href="https://huggingface.co/pollen-robotics/microduck-sprint-2m-reference" rel="noopener">reference policy</a>
+  scores 4.892 s on the sprint and finishes every run.</p>
+</div>
+
+<h2 id="claude">Claude beside you</h2>
+
+<p>Claude Code is Claude working in your terminal: it reads the files, runs commands and explains errors, and in
+its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher.
+In a new Terminal window, install it:</p>
+
+<pre tabindex="0" role="region" aria-label="Installing Claude Code, in Terminal"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
+
+<p>Close that window and open another, then start Claude Code in the challenges folder:</p>
+
+<pre tabindex="0" role="region" aria-label="Starting Claude Code in the challenges folder"><code>cd ~/microduck-challenges
+claude</code></pre>
+
+<p>The first time, it asks you to log in to your Claude account in your browser.</p>
+
+<p>Pollen wrote the challenges with this in mind. Every challenge folder has an <code>AGENTS.md</code> that tells a
+coding agent which files to change, how to run and judge a training, and the challenge's rules, and the 2 m
+Sprint's tells it never to start a paid job, publish or enter the Arena without your yes. On a Mac every training
+is a paid job, so expect it to ask each time. Things to say:</p>
+
+<ul>
+  <li>"I'm new to this, and I'm on a Mac. Read the AGENTS.md for the 2 m Sprint and take me through my first
+  training on Hugging Face Jobs. Explain each command before you run it."</li>
+  <li>"That failed. Tell me in plain words what the error means, then fix it."</li>
+  <li>"Which checkpoint of my last training scored best, and why that one?"</li>
+  <li>"Suggest one knob to change for the next training, and say what you expect to see."</li>
+</ul>
+
+<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published; it does the
+mechanics. That split is Pollen's rule, in the same file.</p>
+
+<h2 id="fixes">When something goes wrong</h2>
+
+<dl class="spec">
+  <dt>The first install says a package has no wheel for this platform</dt>
+  <dd>The Mac has an Intel processor, or a macOS older than 14. Pollen's tools need Apple silicon and macOS 14 or
+  later.</dd>
+  <dt><code>xcode-select</code> says the tools are already installed</dt>
+  <dd>Nothing to do: git is there already.</dd>
+  <dt><code>uv: command not found</code></dt>
+  <dd>Close the Terminal window and open a new one. The installer adds uv for new windows.</dd>
+  <dt>The first install stops with a timeout</dt>
+  <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
+  again. Pollen's README suggests the same setting for the same first download.</dd>
+  <dt>Git says "Author identity unknown"</dt>
+  <dd>Run the <code>git config</code> lines from <a href="#tools">git and uv</a>, with your own name and email.</dd>
+  <dt>Hugging Face Jobs will not start</dt>
+  <dd>The account needs a card on file and credit on it; add both in
+  <a href="https://huggingface.co/settings/billing" rel="noopener">your billing settings</a>. The workshop's
+  <strong>Ready to train?</strong> list shows whether billing is set up.</dd>
+</dl>
+
+<h2 id="further">Going further</h2>
+
+<p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
+its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>,
+and send each training to Hugging Face with <code>--hf-jobs</code>. In a new Terminal window, fetch it and log in to
+Hugging Face. The login asks for an access token: make one with write access at
+<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>.</p>
+
+<pre tabindex="0" role="region" aria-label="Fetching microduck_rl and logging in, in Terminal"><code>cd ~
+git clone https://github.com/pollen-robotics/microduck_rl
+cd microduck_rl
+uv run hf auth login</code></pre>
+
+<p>Then send the walking task to Hugging Face:</p>
+
+<pre tabindex="0" role="region" aria-label="Training the walking policy on Hugging Face Jobs"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 --agent.max-iterations 4000 --agent.logger tensorboard --hf-jobs --no-wandb</code></pre>
+
+<p>If you belong to a Hugging Face organization, it first asks which account to bill; choose yours. Pollen's notes
+say a gait needs 4000 iterations or more. It prints the address of a private repository on your account where the
+checkpoints land, then follows the job's log. Ctrl-C
+stops following and leaves the job running; the job stops itself after 12 hours at most, and you can cancel it
+sooner on its page at Hugging Face. Bring the checkpoints back, with that repository's name in place of
+<code>&lt;you&gt;/&lt;repo&gt;</code>:</p>
+
+<pre tabindex="0" role="region" aria-label="Bringing the checkpoints back to the Mac"><code>uv run hf download &lt;you&gt;/&lt;repo&gt; --local-dir logs/rsl_rl
+ls logs/rsl_rl/velocity/*/</code></pre>
+
+<p>The checkpoints are in a folder under <code>logs/rsl_rl/velocity/</code> named for the date and time and ending
+in <code>_velocity</code>. In the commands below, put that folder's name in place of <code>&lt;run&gt;</code> and a
+checkpoint's number in place of <code>&lt;N&gt;</code>, without the angle brackets. Watching and exporting run on
+the Mac itself. Watch a checkpoint in your browser: <code>play</code> prints an address to open, and runs until you
+press Ctrl-C.</p>
+
+<pre tabindex="0" role="region" aria-label="Watching a checkpoint"><code>uv run play Mjlab-Velocity-Flat-MicroDuck --viewer viser --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
+
+<p>Export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a robot,
+because it bakes in the normalizer the policy expects:</p>
+
+<pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
+
+<p>To share it, with your Hugging Face username in place of <code>&lt;you&gt;</code>:</p>
+
+<pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>
+
+<p>An owner installs it on their robot with <code>sudo robotctl policy load walk</code> and the repository's
+name. Studio opens the same <code>output.onnx</code> and shows what is inside it.</p>
+
+<h2 id="next">Then</h2>
+
+<p>The <a href="/books/">books</a> explain what is happening while it trains. Stuck on a step, or found a better
+way? <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20a%20Mac">Tell us</a>,
+and say which step.</p>
+
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p><strong>This is not the official Microduck app.</strong> Pollen Robotics make the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Studio</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/cards/">Duck Cards</a>
+        <a href="/books/">Books</a>
+        <a href="/train/">Train a duck</a>
+        <a href="/science/">Evidence</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="/feedback/">Feedback</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

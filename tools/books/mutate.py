@@ -260,39 +260,79 @@ def _():
     sub("public/books/index.html", "</head>", '<script type="module" src="/books/engine/book.js"></script>\n</head>')
 
 
-T = "public/train/index.html"
+T = "public/train/windows/index.html"
+TC = "public/train/index.html"
+TL = "public/train/linux/index.html"
+TM = "public/train/mac/index.html"
+TI = "public/train/iphone/index.html"
+TJ = "tools/books/claims-train.json"
 
 
-@case("a number in the training guide with no entry", [T], "the training guide prints '999'")
+@case("a number in the Windows guide with no entry", [T], "the Windows guide prints '999'")
 def _():
     sub(T, "saves a checkpoint every 250", "saves a checkpoint every 999")
 
 
-@case("a training-guide entry the page no longer prints", [T], "claims-train.json lists '250' and the training guide no longer prints it")
+@case("a Windows-guide entry the page no longer prints", [T], "claims-train.json lists '250' and the Windows guide no longer prints it")
 def _():
     # 250 is printed twice, once for the challenge and once for microduck_rl: take out both
     sub(T, "saves a checkpoint every 250", "saves a checkpoint now and then")
     sub(T, "A checkpoint lands every 250 iterations", "A checkpoint lands now and then")
 
 
-@case("a training-guide quote a pinned source does not say", ["tools/books/claims-train.json"], "ch-sprint does not say")
+@case("a Windows-guide quote a pinned source does not say", [TJ], "ch-sprint does not say")
 def _():
-    ledger("train", lambda L: L["train"]["4096"].update(quote="`num_envs` 8192, `max_iterations` 3000"))
+    ledger("train", lambda L: L["windows"]["4096"].update(quote="`num_envs` 8192, `max_iterations` 3000"))
 
 
-@case("a training-guide quote a web page does not say", ["tools/books/claims-train.json"], "ms-wsl-gpu does not say")
+@case("a Windows-guide quote a web page does not say", [TJ], "ms-wsl-gpu does not say")
 def _():
-    ledger("train", lambda L: L["train"]["10"].update(quote="Ensure you are running Windows 12 or Windows 10, version 21H2 or higher"))
+    ledger("train", lambda L: L["windows"]["10"].update(quote="Ensure you are running Windows 12 or Windows 10, version 21H2 or higher"))
 
 
-@case("a number in the training guide's head", [T], "the training guide's head prints '9'")
+@case("a number in the Windows guide's head", [T], "the Windows guide's head prints '9'")
 def _():
-    sub(T, "<title>Train your first duck, Microduck Studio</title>", "<title>Train your first duck in 9 steps, Microduck Studio</title>")
+    sub(T, "<title>Train your first duck on Windows, Microduck Studio</title>", "<title>Train your first duck on Windows in 9 steps, Microduck Studio</title>")
 
 
-@case("a script on the training guide", [T], "the training guide carries a script")
+@case("a script on the Windows guide", [T], "the Windows guide carries a script")
 def _():
     sub(T, "</head>", '<script type="module" src="/books/engine/book.js"></script>\n</head>')
+
+
+@case("a number in the training chooser's head", [TC], "the training chooser's head prints '4'")
+def _():
+    sub(TC, "<title>Train your first duck, Microduck Studio</title>", "<title>Train your first duck 4 ways, Microduck Studio</title>")
+
+
+@case("a Linux-guide quote its pinned source does not say", [TJ], "ch-sprint does not say")
+def _():
+    ledger("train", lambda L: L["linux"]["2"].update(quote="Walk 3 m on a flat lane as fast as possible."))
+
+
+@case("a number in the Mac guide with no entry", [TM], "the Mac guide prints '24'")
+def _():
+    sub(TM, "after 12 hours at most", "after 24 hours at most")
+
+
+@case("a Mac-guide quote Pollen's Arena does not say", [TJ], "arena-training does not say")
+def _():
+    ledger("train", lambda L: L["mac"]["two"].update(quote="this pulls that repo back into logs/rsl_rl/ every three minutes"))
+
+
+@case("a number in the iPhone guide with no entry", [TI], "the iPhone guide prints '25'")
+def _():
+    sub(TI, "100 iterations, about a quarter of an hour, judged", "100 iterations, about 25 minutes, judged")
+
+
+@case("an iPhone-guide quote Studio's source does not say", [TJ], "studio-weights does not say")
+def _():
+    ledger("train", lambda L: L["iphone"]["197,774"].update(quote="all 197,775 of them"))
+
+
+@case("a training page that is gone", [TL], "public/train/linux/index.html is missing")
+def _():
+    (COPY / TL).unlink()
 
 
 def main():

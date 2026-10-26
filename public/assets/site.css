@@ -115,6 +115,10 @@ h3 { font-size: 1.25rem; margin: 0 0 .75rem; }
 .feature-grid h3 { font-size: 1.3rem; margin-bottom: .9rem; }
 .feature-grid p { color: var(--dim); font-size: .94rem; margin: 0; }
 .feature-grid .card:first-child { border-top: 3px solid var(--brand); }
+/* The training chooser: four machines, two by two, in a guide's column, none of them singled out. */
+.feature-grid.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1.5rem 0; }
+.feature-grid.two-up .card:first-child { border-top: 1px solid var(--soft-line); }
+.feature-grid .card h2 { font-size: 1.25rem; margin: 0 0 .6rem; }
 .note { margin: 1.75rem 0; padding: 1rem 1.25rem; border-left: 3px solid var(--brand); color: var(--dim); background: var(--tint); border-radius: 0 12px 12px 0; font-size: .9rem; }
 .note p { margin: 0; }
 .note strong { color: var(--ink); }
@@ -232,7 +236,7 @@ td code { white-space: normal; }
   .studio-feature-copy { padding: 2rem; }
   .studio-feature-copy h2 { max-width: 16ch; font-size: 2rem; }
   .section { padding-top: 3.5rem; }
-  .feature-grid { grid-template-columns: 1fr; gap: .75rem; }
+  .feature-grid, .feature-grid.two-up { grid-template-columns: 1fr; gap: .75rem; }
   .feature-grid .card { padding: 1.5rem; }
   .feature-grid h3 { font-size: 1.2rem; }
   .docs-hub { grid-template-columns: 1fr; padding: 1.5rem; gap: 1.25rem; }

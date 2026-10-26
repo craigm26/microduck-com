@@ -1,6 +1,16 @@
 {
  "lessons": {
   "train": {
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "two": {
+    "source": "studio-hubview",
+    "quote": "Picks come from Compare: two networks walking under the same command."
+   }
+  },
+  "windows": {
    "10": {
     "source": "ms-wsl-gpu",
     "quote": "Ensure you are running Windows 11 or Windows 10, version 21H2 or higher"
@@ -70,6 +80,184 @@
    "two": {
     "source": "rl-readme",
     "quote": "~1-2 h for a usable gait at 4096 envs"
+   }
+  },
+  "linux": {
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "1": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "2.5": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "2048": {
+    "derived": "4096 / 2",
+    "with": {
+     "2": "half the challenge's own num_envs: the first smaller run to try when the card runs out of memory"
+    }
+   },
+   "250": {
+    "source": "ch-sprint",
+    "quote": "checkpoints every 250 iterations"
+   },
+   "3000": {
+    "source": "ch-sprint",
+    "quote": "`num_envs` 4096, `max_iterations` 3000"
+   },
+   "4.892": {
+    "source": "ch-sprint",
+    "quote": "It scores 4.892 s, 5/5, at 0.55 m/s"
+   },
+   "4000": {
+    "source": "rl-agents",
+    "quote": "gaits and curriculum-heavy recovery need 4000–6000"
+   },
+   "4096": {
+    "source": "ch-sprint",
+    "quote": "`num_envs` 4096, `max_iterations` 3000"
+   },
+   "5": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "600": {
+    "source": "rl-readme",
+    "quote": "UV_HTTP_TIMEOUT=600"
+   },
+   "64": {
+    "source": "rl-agents",
+    "quote": "--env.scene.num-envs 64 --agent.max_iterations 5"
+   },
+   "two": {
+    "source": "rl-readme",
+    "quote": "~1-2 h for a usable gait at 4096 envs"
+   },
+   "2": {
+    "source": "ch-sprint",
+    "quote": "Walk 2 m on a flat lane as fast as possible."
+   }
+  },
+  "mac": {
+   "14": {
+    "source": "ch-lock",
+    "quote": "onnxruntime-1.24.4-cp312-cp312-macosx_14_0_arm64.whl",
+    "means": "the lock's only ONNX Runtime wheel for a Mac is built for macOS 14 and up, on Apple silicon, and its only PyTorch wheel for a Mac is macosx_11_0_arm64: no Intel build"
+   },
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "2": {
+    "source": "ch-sprint",
+    "quote": "Walk 2 m on a flat lane as fast as possible."
+   },
+   "3000": {
+    "source": "ch-sprint",
+    "quote": "`num_envs` 4096, `max_iterations` 3000"
+   },
+   "250": {
+    "source": "ch-sprint",
+    "quote": "checkpoints every 250 iterations"
+   },
+   "1": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "2.5": {
+    "source": "ch-sprint",
+    "quote": "the 3000-iteration recipe takes about 1 to 2.5 hours"
+   },
+   "two": {
+    "source": "arena-training",
+    "quote": "this pulls that repo back into logs/rsl_rl/ every two minutes"
+   },
+   "4.892": {
+    "source": "ch-sprint",
+    "quote": "It scores 4.892 s, 5/5, at 0.55 m/s"
+   },
+   "600": {
+    "source": "rl-readme",
+    "quote": "UV_HTTP_TIMEOUT=600"
+   },
+   "4096": {
+    "source": "rl-hfjobs",
+    "quote": "--env.scene.num-envs 4096 --agent.max_iterations 4000 --hf-jobs"
+   },
+   "4000": {
+    "source": "rl-agents",
+    "quote": "gaits and curriculum-heavy recovery need 4000–6000"
+   },
+   "12": {
+    "source": "rl-hfjobs",
+    "quote": "`--timeout 12h` (default)"
+   }
+  },
+  "iphone": {
+   "17": {
+    "source": "studio-project",
+    "quote": "iOS: \"17.0\""
+   },
+   "0.80": {
+    "source": "ch-sprint",
+    "quote": "$0.80 per hour"
+   },
+   "two": {
+    "source": "studio-hubview",
+    "quote": "Picks come from Compare: two networks walking under the same command."
+   },
+   "hundred": {
+    "source": "studio-prefs",
+    "quote": "public static let minimumPicks = 100"
+   },
+   "197,774": {
+    "source": "studio-weights",
+    "quote": "all 197,774 of them"
+   },
+   "100": {
+    "source": "studio-hubview",
+    "quote": "A pilot is 100 iterations, about a quarter of an hour, judged only on whether it runs."
+   },
+   "quarter": {
+    "source": "studio-hub",
+    "quote": "A pilot takes about a quarter of an hour, a full run about an hour and a half, setup and measuring included."
+   },
+   "1,500": {
+    "source": "studio-hubview",
+    "quote": "Full run (1,500 iterations, about 1½ hours on a rented GPU)"
+   },
+   "half": {
+    "source": "studio-hub",
+    "quote": "A pilot takes about a quarter of an hour, a full run about an hour and a half, setup and measuring included."
+   },
+   "1": {
+    "source": "studio-hub",
+    "quote": "linearProgressWeight: Double = 1.0, angularProgressWeight: Double = 1.0"
+   },
+   "12": {
+    "source": "studio-hubview",
+    "quote": "Compare the two: the run is judged by you picking the trained one at least 12 times in 20."
+   },
+   "20": {
+    "source": "studio-hubview",
+    "quote": "Compare the two: the run is judged by you picking the trained one at least 12 times in 20."
+   },
+   "three": {
+    "source": "studio-hub",
+    "quote": "let hours = pilot ? 1 : 3",
+    "means": "the job's timeout in hours: 1 for a pilot, 3 for a full run"
+   },
+   "0.5": {
+    "source": "studio-hubview",
+    "quote": "Each multiplier scales Pollen's weight for that part of the reward, between ×0.5 and ×2."
+   },
+   "2": {
+    "source": "studio-hubview",
+    "quote": "Each multiplier scales Pollen's weight for that part of the reward, between ×0.5 and ×2."
    }
   }
  }
