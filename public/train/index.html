@@ -65,9 +65,11 @@
 <h2 id="need">What you need</h2>
 
 <ul>
-  <li><strong>A Windows PC with an NVIDIA graphics card</strong> from NVIDIA's Pascal generation or newer, the cards
-  WSL can use. Training runs on NVIDIA's CUDA. No NVIDIA card? The workshop can rent a Hugging Face one instead: see
-  <a href="#no-gpu">No NVIDIA card</a>.</li>
+  <li><strong>A Windows PC with an NVIDIA graphics card</strong> from NVIDIA's Volta generation or newer, which for a
+  home PC means Turing or newer: every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch the
+  training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>,
+  such as Pascal's GTX ones, even though WSL can still see them. No NVIDIA card, or an older one? The workshop can
+  rent a Hugging Face one instead: see <a href="#no-gpu">No NVIDIA card, or an older one</a>.</li>
   <li><strong>Windows 11, or Windows 10 version 21H2 (build 19044) or later.</strong> That is Microsoft's minimum for
   using the graphics card from Linux, and for the windows Linux programs open.</li>
   <li><strong>A free Hugging Face account</strong>, which holds the policies you publish, and <strong>a free GitHub
@@ -109,7 +111,8 @@ wsl --shutdown</code></pre></li>
   <li>Open Ubuntu again and check:
 <pre tabindex="0" role="region" aria-label="Checking the graphics card, in Ubuntu"><code>nvidia-smi</code></pre>
   A table with your card's name in it means Linux can use the card. If the command is not found, try
-  <code>/usr/lib/wsl/lib/nvidia-smi</code>; if that prints the table, the card is fine.</li>
+  <code>/usr/lib/wsl/lib/nvidia-smi</code>; if that prints the table, Linux sees the card. Training also needs it to
+  be Turing or newer: an older card shows up here and still cannot train.</li>
 </ol>
 
 <h2 id="tools">Install git and uv</h2>
@@ -166,7 +169,7 @@ another window.</p>
   scores 4.892 s on the sprint and finishes every run.</p>
 </div>
 
-<h3 id="no-gpu">No NVIDIA card</h3>
+<h3 id="no-gpu">No NVIDIA card, or an older one</h3>
 
 <p>On the challenge's page, choose Hugging Face Jobs instead of this machine. It trains on Hugging Face's GPUs and
 bills your Hugging Face account, which needs credit on it. Pollen's notes give the default GPU, one NVIDIA L4, as
