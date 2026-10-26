@@ -2,9 +2,9 @@
 
 <p>Microduck Studio takes its evaluation vocabulary from
 <a href="https://github.com/robocurve/inspect-robots" rel="noopener">inspect-robots</a>,
-an open source framework for evaluating physical AI. Its one big idea is that a
+an open source framework for evaluating physical AI, whose one big idea is that a
 robotics evaluation has two swappable inputs where a language model evaluation
-has one. A <strong>policy</strong> turns an observation into actions. An
+has one. A <strong>policy</strong> turns an observation into actions, and an
 <strong>embodiment</strong> is the body and the world that executes them. A
 <strong>task</strong> is defined against neither: it is a set of scenes, a set of
 scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
@@ -13,20 +13,21 @@ scorers, one horizon, and a number of epochs with a rule for reducing them.</p>
 whole plan rather than a starting point. Picking one fills the scenes, what
 varies between the epochs of a scene, the rule for reducing them, the horizon
 and the scorers. Two of the four walk a network under a command schedule from
-drop heights it was never tuned on. The other two run one episode per published
+drop heights it was never tuned on, and the other two run one episode per published
 cell of a challenge grid, scored by the challenge harness rather than by the
 app.</p>
 
-<p>What is left to pick is the thing being evaluated and where it runs. The
+<p>That leaves two things to pick: the thing being evaluated and where it runs. The
 thing being evaluated is a network from your library, named by digest, or a
-published challenge entrant. Where it runs is an embodiment: a bench on your
+published challenge entrant. Where it runs is an embodiment, either a bench on your
 network, named and carrying its world's digest, or this phone's own bench. A
-real Microduck is on that list and cannot be chosen yet: an evaluation needs a
+real Microduck is on that list and cannot be chosen yet, because an evaluation needs a
 world it can reset and score, and a real duck on a floor is not that.</p>
 
-<p>There is no epoch count, no reducer picker and no seed field on that screen.
-A control that could disagree with the preset would be a second opinion about
-what the preset means, and the four presets are the whole argument.</p>
+<p>So where do you set the number of epochs, the reducer or the seed? You don't. There
+is no epoch count, no reducer picker and no seed field on that screen, because a control
+that could disagree with the preset would be a second opinion about what the preset
+means, and the four presets are the whole argument.</p>
 
 <p>What comes back is an <strong>EvalLog</strong>: one immutable JSON file that
 carries the whole specification beside the results, so a number can always be
@@ -75,7 +76,7 @@ probability without being one.</p></blockquote>
   The filename is the task slug and a short hash.</dd>
 </dl>
 
-<p>What the app does not do is run inspect-robots. An iPhone cannot run Python.
+<p>What the app does not do is run inspect-robots, because an iPhone cannot run Python.
 The rollouts happen on a bench, the phone's own or one on your network, the scoring
 reads the trajectory the bench recorded, and the file is written to
 inspect-robots' schema rather than by inspect-robots' code. That distinction
@@ -88,16 +89,15 @@ naming Microduck Studio and saying that no inspect-robots ran. Their own viewer
 prints that field in its header, so a stranger who renders one of these logs is
 told, in their own report, what wrote it.</p>
 
-<p>An evaluation you have run can be saved, exported as its JSON, rendered as a
-self contained report the app draws itself, sent through the share sheet, or
-published to a Hugging Face dataset under your own account. A log written
-somewhere else can be opened on the phone. On a computer,
+<p>You can save an evaluation you have run, export it as its JSON, render it as a
+self contained report the app draws itself, send it through the share sheet, or
+publish it to a Hugging Face dataset under your own account, and a log written
+somewhere else opens on the phone too. On a computer,
 <code>inspect-robots view LOG.json</code> renders the same file as a standalone
 HTML report, and <code>read_eval_log</code> will refuse it outright if the schema
 is wrong, which is the point of writing the real one.</p>
 
-<p>An EvalLog is a record and not a submission. The two challenge screens are
-the only path onto either leaderboard, and a log of a challenge run does not put
-anything on one.</p>
+<p>An EvalLog is a record, not a submission. The two challenge screens are the only
+path onto either leaderboard, and a log of a challenge run puts nothing on one.</p>
 
 </div>

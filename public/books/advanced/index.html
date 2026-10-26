@@ -43,8 +43,8 @@
   <div class="book-intro-page">
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 3 of 4 · Advanced</p>
     <h1 id="book-title">Training Microducks</h1>
-    <p class="lede">The reinforcement learning behind a Microduck's walk, with the settings in Pollen Robotics' training code, and the honest measuring that has to come after. Ten lessons, each with a figure to run.</p>
-    <p class="book-for"><strong>Who it is for:</strong> makers, students and club leaders who can read a little algebra and want to train a policy, or judge one. Code helps but is not required. <a href="/books/intermediate/">Book 2</a> has the same ideas without the formulas.</p>
+    <p class="lede">A Microduck's walk comes from reinforcement learning and the settings in Pollen Robotics' training code. This book covers both, and the honest measuring that has to come after. Ten lessons, each with a figure to run.</p>
+    <p class="book-for"><strong>Who it is for:</strong> makers, students and club leaders who can read a little algebra and want to train a policy, or judge one. Code helps but is not required, and <a href="/books/intermediate/">Book 2</a> has the same ideas without the formulas.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>States, actions, rewards, return</span></a></li>
       <li><a href="#lesson-2"><span>Value, advantage and GAE</span></a></li>
@@ -57,7 +57,7 @@
       <li><a href="#lesson-9"><span>Learning from people</span></a></li>
       <li><a href="#lesson-10"><span>Ship it, and say what it does</span></a></li>
     </ol>
-    <p class="book-how">How a lesson works: read the left page and commit to a prediction. Then run the figure on the right page one step at a time, and check yourself. Each lesson ends with something to try, notes for whoever is teaching it, and the source of every number.</p>
+    <p class="book-how">How a lesson works: read the left page and commit to a prediction, then run the figure on the right page one step at a time and check yourself. Each lesson ends with something to try, notes for whoever is teaching it, and the source of every number.</p>
   </div>
 </section>
 
@@ -65,8 +65,8 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 1 · The problem</p>
     <h2 id="lesson-1-title">States, actions, rewards, return</h2>
-    <p>Training a Microduck is set up as a <strong>Markov decision process</strong>. Markov means the next moment depends only on this one and the action. Strictly it is a partially observed one, since the policy sees an observation rather than the whole state. Every tick <var>t</var> the policy reads an observation <var>o<sub>t</sub></var> of 61 numbers, chooses an action <var>a<sub>t</sub></var> of 14 joint targets, physics advances, and the environment pays a reward <var>r<sub>t</sub></var>. The policies run at 50 Hz, so a tick is 20 ms. A tick and a step mean the same thing here: one turn of this loop.</p>
-    <p>The policy is trained to raise the expected <strong>discounted return</strong>: every reward still to come, each weighted less the further away it is. With the discount <var>γ</var> = 0.99, a reward one tick further away weighs 0.99 times as much.</p>
+    <p>Training starts by writing the duck's task as a loop, set up as a <strong>Markov decision process</strong>: the next moment depends only on this one and the action. Strictly it is a partially observed one, since the policy sees an observation rather than the whole state. Every tick <var>t</var> the policy reads an observation <var>o<sub>t</sub></var> of 61 numbers and chooses an action <var>a<sub>t</sub></var> of 14 joint targets, then physics advances and the environment pays a reward <var>r<sub>t</sub></var>. The policies run at 50 Hz, so a tick, which is also a step here, lasts 20 ms.</p>
+    <p>So what is the policy trained to raise? Not the next reward but the expected <strong>discounted return</strong>, every reward still to come, each weighted less the further away it is. With the discount <var>γ</var> = 0.99, a reward one tick further away weighs 0.99 times as much.</p>
     <p class="rule"><var>G<sub>t</sub></var> = <var>r<sub>t</sub></var> + <var>γ</var><var>r</var><sub><var>t</var>+1</sub> + <var>γ</var><sup>2</sup><var>r</var><sub><var>t</var>+2</sub> + …, with a horizon of about 1/(1 − <var>γ</var>) ticks.</p>
     <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
@@ -74,7 +74,7 @@
       <label><input type="radio" name="predict-1" value="a"> About 100 ticks, 2 s.</label>
       <label><input type="radio" name="predict-1" value="b"> Just one tick, 20 ms.</label>
       <label><input type="radio" name="predict-1" value="c"> To the end of the episode.</label>
-      <details><summary>Check your prediction</summary><p><strong>About 100 ticks, 2 s.</strong> 1/(1 − <var>γ</var>) = 100 ticks is the policy's working horizon: about 2 s of the future. A reward 100 ticks away weighs 0.99<sup>100</sup> ≈ 0.37 of one paid now. The horizon is soft: a reward 200 ticks away still counts 0.13, but the further off a payoff sits, the less it shapes the policy.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>About 100 ticks, 2 s.</strong> 1/(1 − <var>γ</var>) = 100 ticks is the policy's working horizon, about 2 s of the future, and a reward 100 ticks away weighs 0.99<sup>100</sup> ≈ 0.37 of one paid now. The horizon is soft, though: a reward 200 ticks away still counts 0.13, but the further off a payoff sits, the less it shapes the policy.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -95,12 +95,12 @@
       <pre><code>gamma=0.99,
 lam=0.95,
 desired_kl=0.01,</code></pre>
-      <p>Change it in the runner settings, train two full runs of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, and compare the gaits. A smoke test only checks that a task builds and runs; it learns no gait. Every run, even a smoke test, needs a CUDA GPU or Hugging Face Jobs.</p>
+      <p>Change it there, train two full runs of <a href="https://github.com/pollen-robotics/microduck_rl">microduck_rl</a>, and compare the gaits. A smoke test is no use for this: it only checks that a task builds and runs, and it learns no gait. Every run needs a CUDA GPU or Hugging Face Jobs, even a smoke test.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Have the group compute 0.99<sup><var>k</var></sup> for <var>k</var> = 10, 50, 100 and 300 in a spreadsheet, then imagine a duck with <var>γ</var> = 0.9: its horizon is 10 ticks, 0.2 s. What could it never learn to set up?</p>
-      <p>The horizon is a property of the training objective, not of the network: the deployed policy just maps an observation to an action.</p>
+      <p>Have the group compute 0.99<sup><var>k</var></sup> for <var>k</var> = 10, 50, 100 and 300 in a spreadsheet, then imagine a duck with <var>γ</var> = 0.9, whose horizon is 10 ticks, 0.2 s. What could it never learn to set up?</p>
+      <p>A horizon is like how far down the road a driver looks: a pothole inside it gets steered around, and one far beyond it barely registers. The horizon belongs to the training objective, not to the network, since the deployed policy just maps an observation to an action.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%201%3A%20States%2C%20actions%2C%20rewards%2C%20return">Tell us about it</a>.</p>
     </section>
     <section>
@@ -118,9 +118,9 @@ desired_kl=0.01,</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 2 · Credit</p>
     <h2 id="lesson-2-title">Value, advantage and GAE</h2>
-    <p>PPO, the method in lesson 3, trains two networks. The <strong>actor</strong> is the policy. The <strong>critic</strong> learns <var>V</var>(<var>s</var>), the return the actor can expect from state <var>s</var>, so each action is judged against what was expected rather than against zero.</p>
-    <p>That judgment is the <strong>advantage</strong>. One step of it is the temporal-difference (TD) error <var>δ<sub>t</sub></var>. Generalized advantage estimation blends the errors that follow, each weighted by (<var>γλ</var>)<sup><var>k</var></sup>. Microduck uses <var>λ</var> = 0.95: a low <var>λ</var> leans on the critic's guesses, a high one on what really happened.</p>
-    <p>In the walking task only the critic sees the trunk's linear velocity, and every signal clean and on time; in the ball kick, only the critic sees the ball.</p>
+    <p>Which earlier action earned a reward? PPO, the method in lesson 3, answers with two networks: the <strong>actor</strong> is the policy, and the <strong>critic</strong> learns <var>V</var>(<var>s</var>), the return the actor can expect from state <var>s</var>, so each action is judged against what was expected rather than against zero.</p>
+    <p>That judgment is the <strong>advantage</strong>, and one step of it is the temporal-difference (TD) error <var>δ<sub>t</sub></var>. Generalized advantage estimation blends the errors that follow, each weighted by (<var>γλ</var>)<sup><var>k</var></sup>. Microduck uses <var>λ</var> = 0.95: a low <var>λ</var> leans on the critic's guesses, a high one on what really happened.</p>
+    <p>The critic may also see more than the actor. In the walking task only the critic sees the trunk's linear velocity, and it gets every signal clean and on time, while in the ball kick only the critic sees the ball.</p>
     <p class="rule"><var>δ<sub>t</sub></var> = <var>r<sub>t</sub></var> + <var>γ</var><var>V</var>(<var>s</var><sub><var>t</var>+1</sub>) − <var>V</var>(<var>s<sub>t</sub></var>), and <var>Â<sub>t</sub></var> = Σ<sub><var>k</var></sub> (<var>γλ</var>)<sup><var>k</var></sup> <var>δ</var><sub><var>t</var>+<var>k</var></sub></p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -128,7 +128,7 @@ desired_kl=0.01,</code></pre>
       <label><input type="radio" name="predict-2" value="a"> Both networks.</label>
       <label><input type="radio" name="predict-2" value="b"> Only the critic.</label>
       <label><input type="radio" name="predict-2" value="c"> Only the actor.</label>
-      <details><summary>Check your prediction</summary><p><strong>Only the actor.</strong> The critic exists only in training, so it is allowed to cheat. The exported graph is the actor, 61 inputs to 14 outputs. The critic's privileged inputs never have to exist on the robot, which is exactly why it can be given them.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Only the actor.</strong> The critic exists only in training, so it is allowed to cheat, and the exported graph is the actor, 61 inputs to 14 outputs. The critic's privileged inputs never have to exist on the robot, which is exactly why it can be given them.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -145,16 +145,16 @@ desired_kl=0.01,</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 2">
     <section>
       <h3>Try it for real</h3>
-      <p>Find the privileged terms in the training code. The walking task gives one to the critic alone:</p>
+      <p>Find the privileged terms in the training code; the walking task gives one to the critic alone:</p>
       <pre><code># Add base_lin_vel to critic only (privileged information)
 cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
-      <p>The ball kick's docstring explains its choice: the robot has no ball sensing, so the actor is ball-blind and the critic sees the ball.</p>
+      <p>The ball kick's docstring explains its own choice: the robot has no ball sensing, so the actor is ball-blind and only the critic sees the ball.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Give each pair a row of rewards and a guessed <var>V</var>. Compute <var>δ</var> by hand for a few steps, then <var>Â</var> with <var>λ</var> = 0 and with <var>λ</var> = 1. The first is one-step TD; the second is the sampled return minus <var>V</var>.</p>
-      <p>Asymmetric actor-critic is a general trick: train with what the simulator knows, deploy with what the robot senses.</p>
-      <p>Each advantage sums at most 24 sampled ticks, one rollout; the critic's estimate stands in for everything after. That is how the horizon of lesson 1 reaches past the end of a rollout.</p>
+      <p>Give each pair a row of rewards and a guessed <var>V</var>, and have them compute <var>δ</var> by hand for a few steps, then <var>Â</var> with <var>λ</var> = 0 and with <var>λ</var> = 1. The first is one-step TD, and the second is the sampled return minus <var>V</var>.</p>
+      <p>An advantage reads a step the way a coach reads a lap time, against the runner's usual rather than against zero. Asymmetric actor-critic is a general trick on top of that: train with what the simulator knows, deploy with what the robot senses.</p>
+      <p>Each advantage sums at most 24 sampled ticks, one rollout, and the critic's estimate stands in for everything after. That is how the horizon of lesson 1 reaches past the end of a rollout.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%202%3A%20Value%2C%20advantage%20and%20GAE">Tell us about it</a>.</p>
     </section>
     <section>
@@ -172,8 +172,8 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 3 · The update</p>
     <h2 id="lesson-3-title">PPO: better, but not too much</h2>
-    <p>Each PPO iteration collects a batch with the current policy, then makes several passes over it. Microduck's runner takes 24 steps from each of 4,096 environments, 98,304 transitions, and makes 5 epochs over them in 4 minibatches.</p>
-    <p>Reusing data is risky: the policy could drift far from the one that collected it. PPO measures the drift per action with the ratio <var>ρ</var> = <var>π</var><sub>new</sub>(<var>a</var>|<var>o</var>) / <var>π</var><sub>old</sub>(<var>a</var>|<var>o</var>), and its clipped objective stops paying once <var>ρ</var> leaves 1 ± <var>ε</var> in the helpful direction. Microduck uses <var>ε</var> = 0.2.</p>
+    <p>How far should one batch of experience move a policy? Each PPO iteration collects a batch with the current policy, then makes several passes over it: Microduck's runner takes 24 steps from each of 4,096 environments, 98,304 transitions, and makes 5 epochs over them in 4 minibatches.</p>
+    <p>Reusing data is risky, because the policy can drift far from the one that collected it. So PPO measures the drift per action with the ratio <var>ρ</var> = <var>π</var><sub>new</sub>(<var>a</var>|<var>o</var>) / <var>π</var><sub>old</sub>(<var>a</var>|<var>o</var>), and its clipped objective stops paying once <var>ρ</var> leaves 1 ± <var>ε</var> in the helpful direction, with <var>ε</var> = 0.2 for Microduck.</p>
     <p class="rule"><var>L</var> = E[ min( <var>ρÂ</var>, clip(<var>ρ</var>, 1 − <var>ε</var>, 1 + <var>ε</var>) <var>Â</var> ) ], with <var>ε</var> = 0.2</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -181,7 +181,7 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
       <label><input type="radio" name="predict-3" value="a"> More objective, at the same rate as before.</label>
       <label><input type="radio" name="predict-3" value="b"> Nothing: past 1.2 the objective is flat.</label>
       <label><input type="radio" name="predict-3" value="c"> A penalty that pulls the ratio back to 1.2.</label>
-      <details><summary>Check your prediction</summary><p><strong>Nothing.</strong> For <var>Â</var> &gt; 0 the objective is <var>ρÂ</var> only up to 1 + <var>ε</var> = 1.2, then flat, with zero gradient. For <var>Â</var> &lt; 0 it flattens below 0.8.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Nothing.</strong> For <var>Â</var> &gt; 0 the objective is <var>ρÂ</var> only up to 1 + <var>ε</var> = 1.2 and flat after that, with zero gradient, and for <var>Â</var> &lt; 0 it flattens below 0.8.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -198,19 +198,19 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 3">
     <section>
       <h3>Try it for real</h3>
-      <p>On a run, plot the KL and the learning rate together: when the KL runs hot, the adaptive schedule backs the rate off. The settings, from the walking task's runner:</p>
+      <p>On a run, plot the KL and the learning rate together, and watch the adaptive schedule back the rate off whenever the KL runs hot. The settings, from the walking task's runner:</p>
       <pre><code>clip_param=0.2,
 entropy_coef=0.01,
 num_learning_epochs=5,
 num_mini_batches=4,
 learning_rate=1.0e-3,
 schedule="adaptive",</code></pre>
-      <p>Around the clip, the runner sets the rest. The learning rate starts at 0.001 and adapts: it is cut when the KL divergence runs well above its 0.01 target, and raised when it runs well below. The entropy bonus is 0.01. The policy is a Gaussian whose noise starts at a standard deviation of 1.0, and gradients are clipped at norm 1.0.</p>
+      <p>Around the clip, the runner sets the rest: the learning rate starts at 0.001 and adapts, cut when the KL divergence runs well above its 0.01 target and raised when it runs well below. The entropy bonus is 0.01, the policy is a Gaussian whose noise starts at a standard deviation of 1.0, and gradients are clipped at norm 1.0.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Draw min(<var>ρÂ</var>, clip(<var>ρ</var>, 0.8, 1.2)<var>Â</var>) for <var>Â</var> = 1 and <var>Â</var> = −1 on squared paper. Ask which side of each curve goes flat, and why that is the safe side.</p>
-      <p>The entropy bonus is a reward for staying uncertain. Without it a policy can stop exploring before it has found a gait.</p>
+      <p>Draw min(<var>ρÂ</var>, clip(<var>ρ</var>, 0.8, 1.2)<var>Â</var>) for <var>Â</var> = 1 and <var>Â</var> = −1 on squared paper, then ask which side of each curve goes flat, and why that is the safe side.</p>
+      <p>The clip works like a bonus with a ceiling, set on how far one update moves the policy: once the probability ratio passes 1 ± ε in the helpful direction, moving it further earns nothing, but nothing is clawed back either. The entropy bonus is a reward for staying uncertain, and without it a policy can stop exploring before it has found a gait.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%203%3A%20PPO%3A%20better%2C%20but%20not%20too%20much">Tell us about it</a>.</p>
     </section>
     <section>
@@ -228,8 +228,8 @@ schedule="adaptive",</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 4 · The interface</p>
     <h2 id="lesson-4-title">61 numbers in, 14 out</h2>
-    <p>Every Microduck policy has one shape, <code>obs[1,61] → actions[1,14]</code>. The robot's daemon builds one observation for all of them, in this order: gyro (3), projected gravity (3), joint positions (14), joint velocities (14), last action (14) and command (13). The shape never changes, so the runtime can hot-swap walk, stand and trick policies. In training, an action is a joint target: the home pose plus 1.0 × the output. The daemon's defaults differ: it scales walking actions by 0.9 and smooths the head and leg targets, so Pollen's two repositories do not agree on this yet.</p>
-    <p>Training copies the robot's flaws on purpose: joint velocity arrives 1 tick late, the IMU (the motion sensor) lags 0 to 1 tick, joint readings carry a fixed bias of up to ±0.015 rad, and the IMU a mounting tilt of up to 6°.</p>
+    <p>Every Microduck policy has one shape, <code>obs[1,61] → actions[1,14]</code>, and the robot's daemon builds one observation for all of them in this order: gyro (3), projected gravity (3), joint positions (14), joint velocities (14), last action (14) and command (13). Because the shape never changes, the runtime can hot-swap walk, stand and trick policies. In training, an action is a joint target, the home pose plus 1.0 × the output, but the daemon's defaults scale walking actions by 0.9 and smooth the head and leg targets, so Pollen's two repositories do not agree on this yet.</p>
+    <p>Training also copies the robot's flaws on purpose: joint velocity arrives 1 tick late, the IMU (the motion sensor) lags 0 to 1 tick, joint readings carry a fixed bias of up to ±0.015 rad, and the IMU a mounting tilt of up to 6°.</p>
     <p class="rule">The same 61 inputs and 14 outputs, in the same order, for every policy.</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -237,7 +237,7 @@ schedule="adaptive",</code></pre>
       <label><input type="radio" name="predict-4" value="a"> Delete them, to make the network smaller.</label>
       <label><input type="radio" name="predict-4" value="b"> Keep them, and feed them plain zeros.</label>
       <label><input type="radio" name="predict-4" value="c"> Keep them, with small sampled values.</label>
-      <details><summary>Check your prediction</summary><p><strong>Keep them, with small sampled values.</strong> Deleting them breaks the contract, so unused command slots stay in. Pollen's notes say to sample small values in them from step 0, because a command input that is never non-zero keeps dead weights forever; the ball kick, for one, feeds plain zeros. Big random noise is not small, and no robot will ever send it.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Keep them, with small sampled values.</strong> Deleting them breaks the contract, so unused command slots stay in, and Pollen's notes say to sample small values in them from step 0, because a command input that is never non-zero keeps dead weights forever, though the ball kick, for one, feeds plain zeros. Big random noise is no answer either, since it is not small and no robot will ever send it.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -254,7 +254,7 @@ schedule="adaptive",</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 4">
     <section>
       <h3>Try it for real</h3>
-      <p>In Microduck Studio, <a href="/docs/#policies">Probe this network</a> lets you change one input of a policy and compare the actions; an input's z-score shows how far it sits from the training distribution.</p>
+      <p>In Microduck Studio, <a href="/docs/#policies">Probe this network</a> lets you change one input of a policy and compare the actions, and each input's z-score shows how far it sits from the training distribution.</p>
       <p>On a computer, rehearse the runtime's swaps with Pollen's tool:</p>
       <pre><code>uv run scripts/infer_policy.py --walking walk.onnx \
   --standing stand.onnx --sitstand sitstand.onnx \
@@ -262,8 +262,8 @@ schedule="adaptive",</code></pre>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Lay the 61 slots out on squared paper with their index ranges. The command is velocity 3, head 4 and body 6, at indices 48 to 60, as the daemon's own notes list it. Joint velocity is a tick old because the servo firmware computes it as a moving average.</p>
-      <p>The actor behind the plug is small: hidden layers of 512, 256 and 128 units, 197,774 weights and biases in all.</p>
+      <p>Lay the 61 slots out on squared paper with their index ranges. The command is velocity 3, head 4 and body 6, at indices 48 to 60 as the daemon's own notes list it, and joint velocity is a tick old because the servo firmware computes it as a moving average.</p>
+      <p>The contract works like a wall socket: any policy with the right plug can be swapped in, and one that changes the plug fits nothing. The actor behind the plug is small, with hidden layers of 512, 256 and 128 units and 197,774 weights and biases in all.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%204%3A%2061%20numbers%20in%2C%2014%20out">Tell us about it</a>.</p>
     </section>
     <section>
@@ -281,10 +281,10 @@ schedule="adaptive",</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 5 · Rewards</p>
     <h2 id="lesson-5-title">The reward is the specification</h2>
-    <p>RL optimizes the letter of the reward. Pollen's training notes keep hard-won rules:</p>
+    <p>RL optimizes the letter of the reward, not its spirit: PPO reads a reward the way a lawyer reads a contract, looking for the cheapest way to comply. Pollen's training notes keep hard-won rules for writing one:</p>
     <ul>
-      <li><strong>Get the signs right.</strong> A cost that returns 0 or more takes a negative weight. A penalty that is already negative, returning 0 or less, takes a positive one. Mix them up and the policy is paid to misbehave.</li>
-      <li><strong>No jackpots, and no pay for a bad state.</strong> Limit how often a "reach X" reward can pay. Never pay for just being in a bad state; pay the change in a potential instead, a score like cos(tilt). Rising pays, holding still pays zero.</li>
+      <li><strong>Get the signs right.</strong> A cost that returns 0 or more takes a negative weight, and a penalty that is already negative, returning 0 or less, takes a positive one. Mix them up and the policy is paid to misbehave.</li>
+      <li><strong>No jackpots, and no pay for a bad state.</strong> Limit how often a "reach X" reward can pay, and never pay for just being in a bad state: pay the change in a potential instead, a score like cos(tilt), so rising pays and holding still pays zero.</li>
       <li><strong>Judge a term by its share of the total.</strong> The same weight counts a quarter as much when the task reward is 4 times bigger.</li>
     </ul>
     <p class="rule">Pay progress, <var>γ</var><var>Φ</var>(<var>s</var><sub><var>t</var>+1</sub>) − <var>Φ</var>(<var>s<sub>t</sub></var>), not presence.</p>
@@ -294,7 +294,7 @@ schedule="adaptive",</code></pre>
       <label><input type="radio" name="predict-5" value="a"> Getting up as fast as it can.</label>
       <label><input type="radio" name="predict-5" value="b"> Staying low forever, collecting.</label>
       <label><input type="radio" name="predict-5" value="c"> Getting up, then falling to do it again.</label>
-      <details><summary>Check your prediction</summary><p><strong>Staying low:</strong> the cheapest qualifying state gets parked in and farmed.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Staying low.</strong> The cheapest state that qualifies gets parked in and farmed, which is exactly what the reward asked for.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -313,12 +313,13 @@ schedule="adaptive",</code></pre>
       <h3>Try it for real</h3>
       <p>Turn the sign rule into a test before training. microduck_rl's workflow asks for config tests that check "reward weights have the intended sign" and run on a CPU:</p>
       <pre><code>uv run --with pytest pytest tests/</code></pre>
-      <p>Then, on every run, look at each <code>Episode_Reward/&lt;penalty&gt;</code> curve: all of them must stay at or below zero.</p>
+      <p>Then look at each <code>Episode_Reward/&lt;penalty&gt;</code> curve on every run, because all of them must stay at or below zero.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
       <p>Run a reward-hacking round: each group writes a reward for a trick in plain words, and another group finds the laziest way to score it. The training notes' own catches include "ballistic whip instead of a roll" and "head-tripod instead of standing".</p>
-      <p>Potential-based shaping pays <var>γ</var><var>Φ</var>(<var>s</var>′) − <var>Φ</var>(<var>s</var>). With <var>γ</var> in it, every path between two states earns the same discounted total, so the best behaviour stays the best (Ng, Harada and Russell, 1999). Pollen's upright reward pays the plain change, which is close when <var>γ</var> is near 1. One more rule from the same notes: add smoothness penalties only after the skill exists, or doing nothing wins.</p>
+      <p>Potential-based shaping pays <var>γ</var><var>Φ</var>(<var>s</var>′) − <var>Φ</var>(<var>s</var>), and with <var>γ</var> in it every path between two states earns the same discounted total, so the best behaviour stays the best (Ng, Harada and Russell, 1999). Pollen's upright reward pays the plain change, which is close when <var>γ</var> is near 1.</p>
+      <p>One more rule from the same notes is about timing: add smoothness penalties only after the skill exists, or doing nothing wins.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%205%3A%20The%20reward%20is%20the%20specification">Tell us about it</a>.</p>
     </section>
     <section>
@@ -335,8 +336,8 @@ schedule="adaptive",</code></pre>
   <div class="lesson-page">
     <p class="kicker">Lesson 6 · Hardware</p>
     <h2 id="lesson-6-title">The actuator is most of the gap</h2>
-    <p>A Microduck is about 800 g of robot. Its policies drive 14 small Dynamixel XL330 servos, and a 15th opens the beak. Pollen's training repository says it plainly: at this scale, "actuator fidelity is most of the sim2real gap."</p>
-    <p>So instead of an ideal PD controller, a spring and damper toward the target that always gets the torque it asks for, training models each servo with BAM's M6 model: the voltage control law, back-EMF, and Coulomb, Stribeck and load-dependent friction. Back-EMF makes torque fall as the motor speeds up; friction makes a slow joint stick, then break away. Each environment draws its own battery voltage, sag, command delay and friction.</p>
+    <p>Pollen's training repository says it plainly: at this scale, "actuator fidelity is most of the sim2real gap." That scale is a robot of about 800 g, whose policies drive 14 small Dynamixel XL330 servos, with a 15th for the beak.</p>
+    <p>So instead of an ideal PD controller, a spring and damper toward the target that always gets the torque it asks for, training models each servo with BAM's M6 model: the voltage control law, back-EMF, and Coulomb, Stribeck and load-dependent friction. Back-EMF makes torque fall as the motor speeds up, and friction makes a slow joint stick, then break away. Each environment draws its own battery voltage, sag, command delay and friction.</p>
     <p>Backlash variants add ±1° of gear play, 2° in all, at every servo joint, read through the play as the real encoder on the output side reads it.</p>
     <p class="rule">A servo is not an ideal PD controller: its torque falls with speed, and it sticks when slow.</p>
     <fieldset class="predict" data-answer="c">
@@ -345,7 +346,7 @@ schedule="adaptive",</code></pre>
       <label><input type="radio" name="predict-6" value="a"> Nothing: the controller makes up for it.</label>
       <label><input type="radio" name="predict-6" value="b"> Only the top speed falls; stall torque stays.</label>
       <label><input type="radio" name="predict-6" value="c"> The whole line drops, at every speed.</label>
-      <details><summary>Check your prediction</summary><p><strong>The whole line drops.</strong> A lower battery voltage leaves less torque at every speed, so a tired battery makes a weaker servo. An ideal controller's flat line would not move. The actuator is most of the gap, so the simulator models the XL330 down to its voltage control law, and each environment draws its own battery voltage.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>The whole line drops.</strong> A lower battery voltage leaves less torque at every speed, so a tired battery makes a weaker servo, where an ideal controller's flat line would not move at all. The actuator is most of the gap, which is why the simulator models the XL330 down to its voltage control law and each environment draws its own battery voltage.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -362,14 +363,14 @@ schedule="adaptive",</code></pre>
   <aside class="lesson-notes" aria-label="Notes for lesson 6">
     <section>
       <h3>Try it for real</h3>
-      <p>Rehearse one policy on a computer with and without the servo model. Pollen's rehearsal tool uses the BAM actuators by default; <code>--no-bam</code> falls back to plain PD actuators, and <code>--vin</code> pins the battery voltage:</p>
+      <p>Rehearse one policy on a computer with and without the servo model. Pollen's rehearsal tool uses the BAM actuators by default, <code>--no-bam</code> falls back to plain PD actuators, and <code>--vin</code> pins the battery voltage:</p>
       <pre><code>uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs
 uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code></pre>
-      <p>Keep <code>--new-cmd-obs</code>: without it the tool builds the older 51-number observation, and a 61-input policy is refused.</p>
+      <p>Keep <code>--new-cmd-obs</code> on both lines, because without it the tool builds the older 51-number observation and refuses a 61-input policy.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Compare a spring with a heavy box. A spring pushes back the moment you move it, like an ideal controller. A box does not move at all until you push hard enough, then lurches: that is friction, and slow joints live in it.</p>
+      <p>Compare a spring with a heavy box. A spring pushes back the moment you move it, like an ideal controller, but a box does not move at all until you push hard enough, and then it lurches. That is friction, and slow joints live in it.</p>
       <p>BAM is Rhoban's open project, "better actuator models".</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%206%3A%20The%20actuator%20is%20most%20of%20the%20gap">Tell us about it</a>.</p>
     </section>
@@ -388,8 +389,8 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
   <div class="lesson-page">
     <p class="kicker">Lesson 7 · Robustness</p>
     <h2 id="lesson-7-title">Randomize, then measure</h2>
-    <p>A simulator is wrong in ways nobody can list, so the walking task trains across many wrong worlds. Each duck keeps its own foot friction (×0.7 to 1.3) and trunk mass and inertia (±5%); each reset redraws the trunk's center of mass (up to ±15 mm) and joint friction (×0.9 to 1.1); and pushes of ±0.3 m/s come every 3 to 6 s.</p>
-    <p>Randomizing is a hypothesis; measuring is its own step. Studio tested cards meant to walk one square, played in rows (a row, a program of Duck Cards), with Pollen's v8 policy in duck-sim, under test ranges of its own fixed first: 95 to 98% of short rows landed within 10 cm and 15°, rows of 10 cards or more only 33 to 42%. duck-sim drives plain position servos, not lesson 6's servo model.</p>
+    <p>A simulator is wrong in ways nobody can list, so the walking task trains across many wrong worlds. Each duck keeps its own foot friction (×0.7 to 1.3) and trunk mass and inertia (±5%), each reset redraws the trunk's center of mass (up to ±15 mm) and joint friction (×0.9 to 1.1), and pushes of ±0.3 m/s come every 3 to 6 s.</p>
+    <p>Randomizing is a hypothesis, though, and testing it is a separate step. We tested cards meant to walk one square, played in rows (a row is a program of Duck Cards), with Pollen's v8 policy in duck-sim, under test ranges of our own fixed first. Of the short rows, 95 to 98% landed within 10 cm and 15°, but of rows of 10 cards or more, only 33 to 42%. duck-sim drives plain position servos, not lesson 6's servo model.</p>
     <p class="rule">Randomize what you cannot know; measure against criteria fixed before looking.</p>
     <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
@@ -397,7 +398,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
       <label><input type="radio" name="predict-7" value="a"> Where it thinks it is drifts with time.</label>
       <label><input type="radio" name="predict-7" value="b"> Long rows have more turns to get wrong.</label>
       <label><input type="radio" name="predict-7" value="c"> The battery runs down as the row goes on.</label>
-      <details><summary>Check your prediction</summary><p><strong>Drift.</strong> The duck's belief about where it is drifts with time and with distance walked, so a longer row ends further off. Studio split long rows into chapters, parts of up to 7 cards, with the duck re-seated between them on a nest, the square where the child sets it back down. That lifted long rows from 42% to 63%. A mat under each nest, printed for the duck's head camera to read as a compass, took them to 97.5% in simulation.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Drift.</strong> The duck's belief about where it is drifts with time and with distance walked, so a longer row ends further off. We split long rows into chapters of up to 7 cards, with the duck re-seated between them on a nest, the square where the child sets it back down, and that lifted long rows from 42% to 63%. A mat under each nest, printed for the duck's head camera to read as a compass, took them to 97.5% in simulation.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -414,13 +415,14 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
   <aside class="lesson-notes" aria-label="Notes for lesson 7">
     <section>
       <h3>Try it for real</h3>
-      <p>Read <a href="/science/">the evidence page</a> from its criteria to its limits, then follow its <a href="/science/#reproduce">reproduce</a> section. Every raw row is published.</p>
-      <p>In the training code, most randomizations are <code>ENABLE_*</code> switches at the top of the task's settings, with their ranges beside them; the battery, sag and delay ranges live in <code>microduck_constants.py</code>.</p>
+      <p>Read <a href="/science/">the evidence page</a> from its criteria to its limits, then follow its <a href="/science/#reproduce">reproduce</a> section, since every raw row is published.</p>
+      <p>In the training code, most randomizations are <code>ENABLE_*</code> switches at the top of the task's settings with their ranges beside them, and the battery, sag and delay ranges live in <code>microduck_constants.py</code>.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Before any test, have the group write down what "walks one square reliably" means, in numbers. Then compare with the evidence page's: 95% of rows within 10 cm, 95% within 15°, a fall bound of 1%, and time limits.</p>
-      <p>Note what is still open: the mat result is simulation only, and closed-loop cards stay off on real ducks. And note the randomizer rule: a draw that accumulated across resets once degraded every long training run for months.</p>
+      <p>Before any test, have the group write down what "walks one square reliably" means, in numbers, then compare with the evidence page's: 95% of rows within 10 cm, 95% within 15°, a fall bound of 1%, and time limits.</p>
+      <p>Randomization is a flight simulator's trick: a pilot trains in many kinds of weather, because nobody knows which one the real flight will bring. Be clear about what is still open, too: the mat result is simulation only, and closed-loop cards stay off on real ducks.</p>
+      <p>And note the randomizer rule: a draw that accumulated across resets once degraded every long training run for months.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%207%3A%20Randomize%2C%20then%20measure">Tell us about it</a>.</p>
     </section>
     <section>
@@ -437,9 +439,9 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · Evidence</p>
     <h2 id="lesson-8-title">Honest numbers</h2>
-    <p>No falls in 100 rows (a row, a program of Duck Cards) does not mean a fall rate of zero. The Wilson 95% interval is a range that should hold the true rate 95 times in 100. For 0 falls in <var>n</var> rows it runs from 0 to <var>z</var><sup>2</sup>/(<var>n</var> + <var>z</var><sup>2</sup>), with <var>z</var> = 1.96. Bounding it at 1% takes 381 rows.</p>
-    <p>Rows are rarely independent, either. On the evidence page each condition's physics is drawn once per session of 12 rows, "so 400 rows are about 34 ducks", and intervals that count rows come out too narrow; later candidates were judged by a permutation test over sessions.</p>
-    <p>And decide what counts first: those criteria were written down on 2026-10-15, "before any result was in, and not changed since."</p>
+    <p>No falls in 100 rows (a row is a program of Duck Cards) does not mean a fall rate of zero, so how many clean rows does it take to bound the rate at 1%? The Wilson 95% interval is a range that should hold the true rate 95 times in 100, and with 0 falls, that takes 381 rows.</p>
+    <p>Rows are rarely independent, either. On the evidence page each condition's physics is drawn once per session of 12 rows, "so 400 rows are about 34 ducks", and intervals that count rows come out too narrow, so later candidates were judged by a permutation test over sessions.</p>
+    <p>And decide what counts before you look: those criteria were written down on 2026-10-15, "before any result was in, and not changed since."</p>
     <p class="rule">For 0 events in <var>n</var> trials, the Wilson 95% upper bound is <var>z</var><sup>2</sup>/(<var>n</var> + <var>z</var><sup>2</sup>), with <var>z</var> = 1.96.</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -447,7 +449,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
       <label><input type="radio" name="predict-8" value="a"> About 1.0%.</label>
       <label><input type="radio" name="predict-8" value="b"> About 1.9%.</label>
       <label><input type="radio" name="predict-8" value="c"> About 3.7%.</label>
-      <details><summary>Check your prediction</summary><p><strong>About 3.7%:</strong> 1.96<sup>2</sup> / (100 + 1.96<sup>2</sup>) = 0.037, so the interval runs up to 3.7% at <var>n</var> = 100. The rule of three, 3/<var>n</var>, a one-sided bound, says 3%.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>About 3.7%.</strong> 1.96<sup>2</sup> / (100 + 1.96<sup>2</sup>) = 0.037, so the interval runs up to 3.7% at <var>n</var> = 100, while the rule of three, 3/<var>n</var>, a one-sided bound, says 3%.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -472,8 +474,8 @@ for n in (100, 381, 1000):
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Before an experiment, have the group write the criteria and the analysis on paper, seal it, and open it afterward. Pre-registration is that envelope.</p>
-      <p>The rule of three is a quick check for zero events; Wilson is what the evidence page uses.</p>
+      <p>Before an experiment, have the group write the criteria and the analysis on paper, seal it, and open it afterward: pre-registration is that envelope.</p>
+      <p>The rule of three is a quick check for zero events, and Wilson is what the evidence page uses.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%208%3A%20Honest%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
@@ -491,8 +493,8 @@ for n in (100, 381, 1000):
     <p class="kicker">Lesson 9 · People</p>
     <h2 id="lesson-9-title">Learning from people</h2>
     <p>Some of what makes a duck good company will not fit in a formula, so people supply it.</p>
-    <p><strong>Episodes.</strong> Kith, a web game by this site's author, records an agent's own view five rows a second: what it sensed, what it did next, and its reward under a published schedule. It can release the walks people give as an open LeRobot dataset; so far its release holds only scripted walks.</p>
-    <p><strong>Picks.</strong> Studio's Compare plays two runs side by side and you pick the better. The docs call it "the human-feedback half of RLHF", reinforcement learning from human feedback. Picks can train a <strong>scorer learned from picks</strong>, which can then shape a policy's reward.</p>
+    <p><strong>Episodes.</strong> Kith, a web game by this site's author, records an agent's own view five rows a second: what it sensed, what it did next, and its reward under a published schedule. It can release the walks people give as an open LeRobot dataset, though so far its release holds only scripted walks.</p>
+    <p><strong>Picks.</strong> Studio's Compare plays two runs side by side and you pick the better, which the docs call "the human-feedback half of RLHF", reinforcement learning from human feedback. Picks can train a <strong>scorer learned from picks</strong>, which can then shape a policy's reward.</p>
     <p><strong>Poses.</strong> Mimic puts the duck in the pose of whoever stands in front of the camera.</p>
     <p class="rule">P(A picked over B) = σ(<var>S</var><sub>A</sub> − <var>S</var><sub>B</sub>), where <var>S</var> is a run's score and σ is the logistic curve, which turns a gap in score into a chance.</p>
     <fieldset class="predict" data-answer="b">
@@ -501,7 +503,7 @@ for n in (100, 381, 1000):
       <label><input type="radio" name="predict-9" value="a"> Nothing; the picks are only labels.</label>
       <label><input type="radio" name="predict-9" value="b"> A taste that re-weights Pollen's reward.</label>
       <label><input type="radio" name="predict-9" value="c"> A walking policy tuned to your taste.</label>
-      <details><summary>Check your prediction</summary><p><strong>A taste that re-weights Pollen's reward.</strong> With enough picks, Studio's Train from your picks fits your taste on the phone: a simple scorer learned from picks. It then scales Pollen's reward terms up or down, within bounds, for a training run off the phone, so it re-weights the reward Pollen wrote rather than replacing it. Settings decides whether the picks may be shared.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>A taste that re-weights Pollen's reward.</strong> With enough picks, Studio's Train from your picks fits your taste on the phone as a simple scorer learned from picks, then scales Pollen's reward terms up or down, within bounds, for a training run off the phone. So it re-weights the reward Pollen wrote rather than replacing it, and Settings decides whether the picks may be shared.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -518,12 +520,12 @@ for n in (100, 381, 1000):
   <aside class="lesson-notes" aria-label="Notes for lesson 9">
     <section>
       <h3>Try it for real</h3>
-      <p>Walk with a duck in <a href="https://kithgame.com/">Kith</a>; its <a href="https://kithgame.com/api/rewards">published rewards</a> name the skill each one is meant for, and several say no policy exists yet. Then judge two moves in <a href="/docs/#get-started">Studio's Compare</a>, and make one with <a href="/cards/#yours">Mimic</a>.</p>
+      <p>Walk with a duck in <a href="https://kithgame.com/">Kith</a>, whose <a href="https://kithgame.com/api/rewards">published rewards</a> name the skill each one is meant for, and several say no policy exists yet. Then judge two moves in <a href="/docs/#get-started">Studio's Compare</a>, and make one with <a href="/cards/#yours">Mimic</a>.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
       <p>Run a pick tournament: two moves on a screen, a show of hands, a tally. Then ask what the tally would teach a scorer, and what it would miss.</p>
-      <p>A scorer learned from picks inherits the pickers' blind spots. A policy trained against it can exploit them, exactly like a hand-written reward.</p>
+      <p>A scorer learned from picks inherits the pickers' blind spots, and a policy trained against it can exploit them, exactly as it would a hand-written reward.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%209%3A%20Learning%20from%20people">Tell us about it</a>.</p>
     </section>
     <section>
@@ -540,7 +542,7 @@ for n in (100, 381, 1000):
   <div class="lesson-page">
     <p class="kicker">Lesson 10 · Shipping</p>
     <h2 id="lesson-10-title">Ship it, and say what it does</h2>
-    <p>Every gate is cheap next to a wasted run or a fallen robot:</p>
+    <p>What has to happen between a config file and a robot? These gates, each one cheap next to a wasted run or a fallen robot:</p>
     <ol>
       <li><strong>Smoke test:</strong> 64 environments, 5 iterations; it "catches ~95% of config errors for cents".</li>
       <li><strong>Config tests</strong> on a CPU: indices, signs, gates.</li>
@@ -548,7 +550,7 @@ for n in (100, 381, 1000):
       <li><strong>Export</strong> with <code>scripts/export.py</code>, normalizer baked into the ONNX.</li>
       <li><strong>Rehearse</strong> in <code>scripts/infer_policy.py</code>, swaps and all.</li>
       <li><strong>Publish:</strong> checked, then uploaded, private until you say so.</li>
-      <li><strong>Measure</strong> where runs can be reset and scored; share the EvalLog, one file that keeps the results beside the whole specification.</li>
+      <li><strong>Measure</strong> where runs can be reset and scored, and share the EvalLog, one file that keeps the results beside the whole specification.</li>
     </ol>
     <p class="rule">Rollouts are the policy's real runs: "Report what rollouts actually show." Whoever asked decides when it is good enough.</p>
     <fieldset class="predict" data-answer="b">
@@ -557,7 +559,7 @@ for n in (100, 381, 1000):
       <label><input type="radio" name="predict-10" value="a"> It walks slower than Pollen's walk.</label>
       <label><input type="radio" name="predict-10" value="b"> Some of its outputs are NaN.</label>
       <label><input type="radio" name="predict-10" value="c"> Nobody has run it on a real robot.</label>
-      <details><summary>Check your prediction</summary><p><strong>NaN outputs.</strong> Publishing checks the shape, [1,61] → [1,14], and refuses a file with NaN or constant output. Whether the policy is good is a measurement, an EvalLog, not a publishing check.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>NaN outputs.</strong> Publishing checks the shape, [1,61] → [1,14], and refuses a file with NaN or constant output, but whether the policy is any good is a measurement, an EvalLog, not a publishing check.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -583,11 +585,11 @@ uv run scripts/export.py &lt;TASK_ID&gt; --wandb-run-path &lt;...&gt;
 uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs
 uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
   --kind perpetual --slot walk --dry-run</code></pre>
-      <p>That publishes a walk. A trick publishes with <code>--kind episodic --duration-s 4.0</code> instead. With a duck, <code>sudo robotctl policy load walk</code> puts a gait in the walk slot and <code>sudo robotctl policy add</code> installs a trick. Without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
+      <p>With <code>--dry-run</code>, the last line shows what would be uploaded without touching the Hugging Face Hub, and without it the same line publishes a walk. A trick publishes with <code>--kind episodic --duration-s 4.0</code> instead. With a duck, <code>sudo robotctl policy load walk</code> puts a gait in the walk slot and <code>sudo robotctl policy add</code> installs a trick; without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
-      <p>Put the gates on the wall as a checklist, and make "what did the rollout actually show?" the first question at every review, before anyone says "it works".</p>
+      <p>Put the gates on the wall as a checklist, the way pilots keep one for take-off, and make "what did the rollout actually show?" the first question at every review, before anyone says "it works".</p>
       <p>An EvalLog carries its whole specification beside its results, so a number can be traced to the run that made it.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%203%2C%20lesson%2010%3A%20Ship%20it%2C%20and%20say%20what%20it%20does">Tell us about it</a>.</p>
     </section>

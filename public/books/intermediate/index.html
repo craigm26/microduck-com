@@ -43,8 +43,8 @@
   <div class="book-intro-page">
     <p class="book-eyebrow"><a href="/books/">Microduck Studio books</a> · Book 2 of 4 · Intermediate</p>
     <h1 id="book-title">How a Microduck Learns</h1>
-    <p class="lede">What the duck's brain sees, what it does, and how thousands of pretend ducks teach it to walk. Ten lessons, with the real numbers.</p>
-    <p class="book-for"><strong>Who it is for:</strong> teens and adults, and anyone who finished Book 1. You never need to write code. A few notes show commands, for you or a friend who codes. Every number has a source, most of them Pollen's training code, and the notes say where.</p>
+    <p class="lede">How does a duck learn to walk when nobody writes the walk? Ten lessons, with the real numbers.</p>
+    <p class="book-for"><strong>Who it is for:</strong> teens and adults, and anyone who finished Book 1. You never need to write code, though a few notes show commands for you or a friend who codes. Every number has a source, most of them Pollen's training code, and the notes say where.</p>
     <ol class="book-toc">
       <li><a href="#lesson-1"><span>Observe, act, score, repeat</span></a></li>
       <li><a href="#lesson-2"><span>61 numbers</span></a></li>
@@ -57,7 +57,7 @@
       <li><a href="#lesson-9"><span>From training to a robot</span></a></li>
       <li><a href="#lesson-10"><span>Your first project: bounce a ball</span></a></li>
     </ol>
-    <p class="book-how">How a lesson works: read the left page and commit to a prediction. Then run the steps on the right page, one at a time. The notes under each lesson go further: what to try in Microduck Studio, Kith or Pollen Robotics' training code, and where every number comes from.</p>
+    <p class="book-how">How a lesson works: read the left page and commit to a prediction, then run the steps on the right one at a time. The notes under each lesson go further, into what to try in Microduck Studio, Kith or Pollen Robotics' training code and where every number comes from.</p>
   </div>
 </section>
 
@@ -65,9 +65,9 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 1 · The loop</p>
     <h2 id="lesson-1-title">Observe, act, score, repeat</h2>
-    <p>Every reinforcement learning problem has the same shape. An <strong>agent</strong>, here the duck's brain, gets an <strong>observation</strong> of the world and picks an <strong>action</strong>. The world moves on, and hands back the next observation and a <strong>reward</strong>: one number saying how good that moment was.</p>
-    <p>The duck's loop runs 50 times a second. One turn of it is a <strong>step</strong>. The steps from a reset until the duck falls, or time runs out, make an <strong>episode</strong>.</p>
-    <p>The agent is not trying to win one step. It is trying to collect as much reward as it can from the steps ahead, counting near ones more than far ones. With Pollen's settings, about the next 2 seconds count most. That is why a duck learns to take a small loss now, like a careful step, for more later.</p>
+    <p>Every reinforcement learning problem has the same shape. An <strong>agent</strong>, here the duck's brain, gets an <strong>observation</strong> of the world and picks an <strong>action</strong>. The world moves on, and hands back the next observation and a <strong>reward</strong>: one number for how good that moment was.</p>
+    <p>The duck's loop runs 50 times a second. One turn of it is a <strong>step</strong>, and the steps from a reset until the duck falls, or time runs out, make an <strong>episode</strong>.</p>
+    <p>The agent is not trying to win one step but to collect as much reward as it can from the steps ahead, counting near ones more than far ones. With Pollen's settings about the next 2 seconds count most, which is why a duck learns to take a small loss now, like a careful step, for more later.</p>
     <p class="rule">observation → action → next observation and reward → again</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -75,7 +75,7 @@
       <label><input type="radio" name="predict-1" value="a"> 20: one each second</label>
       <label><input type="radio" name="predict-1" value="b"> One, for the whole walk</label>
       <label><input type="radio" name="predict-1" value="c"> 1,000: one each step</label>
-      <details><summary>Check your prediction</summary><p><strong>1,000:</strong> 50 decisions a second for 20 seconds. Each one is an observation in and an action out, and each earns a reward.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>1,000:</strong> 50 decisions a second for 20 seconds, each one an observation in and an action out, and each earning a reward.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -92,13 +92,14 @@
   <aside class="lesson-notes" aria-label="Notes for lesson 1">
     <section>
       <h3>Try it for real</h3>
-      <p>In Microduck Studio, open <a href="/docs/#policies">Behaviours</a>, choose a policy Released by Pollen Robotics, and use Probe this network. It runs one turn of this loop's middle: an observation in, actions out.</p>
-      <p>In <a href="https://kithgame.com/">Kith</a>, a web game by this site's author, walk as a Microduck. Kith can record a walk as an episode: five rows a second of what a duck sensed, the action it took next, and its reward.</p>
+      <p>In Microduck Studio, open <a href="/docs/#policies">Behaviours</a>, choose a policy Released by Pollen Robotics, and use Probe this network, which runs the middle of one turn of this loop: an observation in, actions out.</p>
+      <p>In <a href="https://kithgame.com/">Kith</a>, a web game by this site's author, you can walk as a Microduck. Kith can record the walk as an episode: five rows a second of what the duck sensed, the action it took next, and its reward.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>The words in bold are the whole vocabulary of reinforcement learning. A good check: ask a student to name the agent, the observation, the action and the reward in a game they play.</p>
-      <p>A reset is the simulator putting the duck back on its feet. A real robot cannot reset in a blink: someone, or its stand-up skill, gets it up, and every fall wears it. That is one reason the learning happens in simulation (lesson 6).</p>
+      <p>The words in bold are the whole vocabulary of reinforcement learning. A good check is to ask a student to name the agent, the observation, the action and the reward in a game they play.</p>
+      <p>A picture for the 2 seconds: a cyclist cares most about the next few metres of road and hardly at all about a bend far ahead, and those seconds are the duck's few metres.</p>
+      <p>A reset is the simulator putting the duck back on its feet. A real robot cannot reset in a blink: someone, or its stand-up skill, has to get it up, and every fall wears it. That is one reason the learning happens in simulation (lesson 6).</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%201%3A%20Observe%2C%20act%2C%20score%2C%20repeat">Tell us about it</a>.</p>
     </section>
     <section>
@@ -115,7 +116,7 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 2 · The observation</p>
     <h2 id="lesson-2-title">61 numbers</h2>
-    <p>The duck's brain never sees the room. It sees a list of 61 numbers, 50 times a second.</p>
+    <p>The duck's brain never sees the room, only a list of 61 numbers, 50 times a second.</p>
     <p>3 say how fast its body is turning (a gyroscope) and 3 which way is down. 14 say where each joint is, 14 how fast each is moving, and 14 repeat the actions the brain chose last step. The last 13 are its orders: how fast to walk and turn (3), where to point its head (4), and how to hold its body (6).</p>
     <p>Every walking, standing and trick brain Pollen Robotics trains reads this same list in the same order, so the robot can hand over from one brain to another, say from walking to a kick.</p>
     <p>Some things are missing on purpose: the robot has no direct way to measure its own speed, and the ball-kicking brain never sees the ball.</p>
@@ -126,7 +127,7 @@
       <label><input type="radio" name="predict-2" value="a"> So it can learn from mistakes as it walks.</label>
       <label><input type="radio" name="predict-2" value="b"> So it can repeat a move that worked well.</label>
       <label><input type="radio" name="predict-2" value="c"> Its joints lag behind what it asked for.</label>
-      <details><summary>Check your prediction</summary><p><strong>Its joints lag behind.</strong> A joint takes time to reach its target, so the joint readings alone are always a little behind. Its last orders say where its joints are heading. They fill in the rest, and also let the brain keep its moves smooth.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>Its joints lag behind.</strong> A joint takes time to reach its target, so the joint readings alone are always a little behind, but its last orders say where the joints are heading. They fill in the rest, and they also let the brain keep its moves smooth.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -139,7 +140,7 @@
       <li><strong>Orders.</strong> The last 13: walk and turn speeds, head pose, and the body pose, mostly zeros.</li>
     </ol>
     <figcaption>The real layout of the 61 numbers, as a bar code beside the duck. The bar heights are drawn for the lesson.</figcaption>
-    <p class="big-idea"><strong>Big idea:</strong> a robot knows only what its observation tells it. Choosing those numbers is half of designing the robot's brain.</p>
+    <p class="big-idea"><strong>Big idea:</strong> a robot knows only what its observation tells it, so choosing those numbers is half of designing the robot's brain.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 2">
     <section>
@@ -148,8 +149,8 @@
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>A useful exercise: list what you would want to know to keep your balance, then cross out everything a small robot cannot measure. What is left is close to this list.</p>
-      <p>In the body pose, x, y and yaw are always zero on the robot today, and the rest are zero unless body pose is in use. Keeping the slots means one layout fits every brain.</p>
+      <p>A useful exercise is to list what you would want to know to keep your balance, then cross out everything a small robot cannot measure. What is left is close to this list.</p>
+      <p>In the body pose, x, y and yaw are always zero on the robot today, and the rest are zero unless body pose is in use. The slots stay anyway, so that one layout fits every brain.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%202%3A%2061%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
@@ -167,7 +168,7 @@
     <p class="kicker">Lesson 3 · The action</p>
     <h2 id="lesson-3-title">14 motors, 14 numbers</h2>
     <p>Each step, the brain answers with 14 numbers, one per motor, always in the same order: the left leg's 5 joints, then 4 in the neck and head, then the right leg's 5.</p>
-    <p>A number is not a speed or a push. It is where the joint should go, measured from a home pose. The motor's own small controller then drives the joint toward that target.</p>
+    <p>A number is not a speed or a push. It is a target, where the joint should go, measured from a home pose. The motor's own small controller then drives the joint toward it, the way a thermostat heats a room toward the temperature you set.</p>
     <p class="rule">target = home pose + action</p>
     <fieldset class="predict" data-answer="a">
       <legend>Predict</legend>
@@ -175,7 +176,7 @@
       <label><input type="radio" name="predict-3" value="a"> A little later, and not quite exactly.</label>
       <label><input type="radio" name="predict-3" value="b"> At once, and exactly where it was told.</label>
       <label><input type="radio" name="predict-3" value="c"> A little later, but exactly on target.</label>
-      <details><summary>Check your prediction</summary><p><strong>A little later, and not quite exactly.</strong> Real motors are not instant. They lag behind their orders, their gears have a little slack, and they get weaker as the battery runs down and as they spin faster. The simulator models the lag and the weakening, and every main task has a twin that adds the gear slack, because at this size, the motor is most of the difference between pretend and real. A brain trained on an instant, perfect motor would fall on the real one.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>A little later, and not quite exactly.</strong> Real motors are not instant: they lag behind their orders, their gears have a little slack, and they get weaker as the battery runs down and as they spin faster. The simulator models the lag and the weakening, and every main task has a twin that adds the gear slack, because at this size the motor is most of the difference between pretend and real. A brain trained on an instant, perfect motor would fall on the real one.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -187,17 +188,17 @@
       <li><strong>Arrive.</strong> Even when it arrives, the joint can rock a little in its gears.</li>
     </ol>
     <figcaption>The real joint order. The leg's moves are exaggerated so you can see them.</figcaption>
-    <p class="big-idea"><strong>Big idea:</strong> a robot's actions are wishes to its motors. Training has to happen with motors as slow and sloppy as the real ones.</p>
+    <p class="big-idea"><strong>Big idea:</strong> a robot's actions are wishes to its motors, so training has to happen with motors as slow and sloppy as the real ones.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 3">
     <section>
       <h3>Try it for real</h3>
-      <p>In Studio, <a href="/docs/#motions">write a motion</a> by posing the robot and editing keyframes. Every angle is checked against the robot's joint travel. The preview interpolates your poses; it does not run the motors' physics, which is what the bench is for.</p>
+      <p>In Studio, <a href="/docs/#motions">write a motion</a> by posing the robot and editing keyframes, and every angle is checked against the robot's joint travel. The preview interpolates your poses but does not run the motors' physics, which is what the bench is for.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>The robot has 15 motors. The fifteenth opens the beak, and the walking brains never move it.</p>
-      <p>The motor model in training is called BAM, from Rhoban. It models a Dynamixel XL330's voltage, the back-EMF that weakens a spinning motor, and its friction. Book 3, lesson 6 goes inside it.</p>
+      <p>The robot has 15 motors, and the fifteenth, which opens the beak, is one the walking brains never move.</p>
+      <p>The motor model in training is BAM, from Rhoban, which models a Dynamixel XL330's voltage, the back-EMF that weakens a spinning motor, and its friction. Book 3, lesson 6 goes inside it.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%203%3A%2014%20motors%2C%2014%20numbers">Tell us about it</a>.</p>
     </section>
     <section>
@@ -225,7 +226,7 @@
       <label><input type="radio" name="predict-4" value="a"> The weights and the biases.</label>
       <label><input type="radio" name="predict-4" value="b"> The number of layers and units.</label>
       <label><input type="radio" name="predict-4" value="c"> The curve each unit bends with.</label>
-      <details><summary>Check your prediction</summary><p><strong>The weights and biases.</strong> About 198,000 weights and biases, set by training, are the difference between a duck that falls and one that walks. The shape is chosen before training and never changes. Training turns the dials, and keeps the rescaling's averages up to date.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>The weights and biases.</strong> About 198,000 of them, set by training, are the difference between a duck that falls and one that walks, while the shape is chosen before training and never changes. Training turns the dials, and keeps the rescaling's averages up to date.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -238,17 +239,17 @@
       <li><strong>Turn the dials.</strong> Drag the slider to scale every weight, and watch the outputs and the pose change.</li>
     </ol>
     <figcaption>The shape is Pollen's network; the weights in this picture are random.</figcaption>
-    <p class="big-idea"><strong>Big idea:</strong> a policy is just arithmetic. Training is the search for the right numbers.</p>
+    <p class="big-idea"><strong>Big idea:</strong> a policy is just arithmetic, and training is the search for the right numbers.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 4">
     <section>
       <h3>Try it for real</h3>
-      <p>Open a policy in Studio's <a href="/docs/#policies">Behaviours</a>. With every tool on, its detail shows the network's operations, layer widths, parameter count and tensor names. A file you bring yourself shows the same, or the exact reason it was refused.</p>
+      <p>Open a policy in Studio's <a href="/docs/#policies">Behaviours</a>: with every tool on, its detail shows the network's operations, layer widths, parameter count and tensor names. A file you bring yourself shows the same, or the exact reason it was refused.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>The curve each unit uses is called ELU. Without a curve, the three layers would collapse into one big multiplication and the network could only draw straight lines.</p>
-      <p>The network actually outputs 14 averages. While practising, the duck tries numbers around them, by a spread it also learns, one per motor. On the robot, the average is used.</p>
+      <p>The curve each unit uses is called ELU, and without a curve the three layers would collapse into one big multiplication, so the network could only draw straight lines.</p>
+      <p>The network actually outputs 14 averages: while practising, the duck tries numbers around them, by a spread it also learns for each motor, but on the robot the average is used.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%204%3A%20A%20brain%20made%20of%20sums">Tell us about it</a>.</p>
     </section>
     <section>
@@ -266,8 +267,8 @@
     <p class="kicker">Lesson 5 · The reward</p>
     <h2 id="lesson-5-title">Points for what you want</h2>
     <p>Nobody writes the walk. They write the score, and reinforcement learning (RL) finds a walk that earns it.</p>
-    <p>The walking duck's score is a sum of terms, worked out every step. It earns points for matching the speed it was asked for, keeping its body upright, lifting its feet, and pointing its head where asked. It loses points for jerky actions, sliding its feet, and its legs knocking into its body.</p>
-    <p>Get the score wrong and the duck finds the loophole.</p>
+    <p>The walking duck's score is a sum of terms, worked out every step. It earns points for matching the speed it was asked for, keeping its body upright, lifting its feet and pointing its head where asked. It loses points for jerky actions, sliding its feet, and its legs knocking into its body.</p>
+    <p>Get the score wrong and the duck finds the loophole, the way a student can learn the test instead of the subject.</p>
     <p class="rule">"RL optimizes the letter of the reward."</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -275,7 +276,7 @@
       <label><input type="radio" name="predict-5" value="a"> A walk that keeps its head still.</label>
       <label><input type="radio" name="predict-5" value="b"> It stops walking and stands still.</label>
       <label><input type="radio" name="predict-5" value="c"> It walks anyway and pays the charge.</label>
-      <details><summary>Check your prediction</summary><p><strong>It stands still.</strong> When its trainers charged for every wobble of its heavy head, the best score came from not walking at all. So it stood still. The wobble could not be escaped while walking, and stopping was the cheapest way to avoid the charge. The fix charges only for the steady droop the duck can correct, so a good walk pays nothing for it.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>It stands still.</strong> When its trainers charged for every wobble of its heavy head, the best score came from not walking at all. The wobble could not be escaped while walking, so stopping was the cheapest way to avoid the charge. The fix charges only for the steady droop the duck can correct, so a good walk pays nothing for it.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="real">
@@ -288,7 +289,7 @@
       <li><strong>The fix.</strong> Charge only the steady droop, which a good walk does not pay. The duck can walk again.</li>
     </ol>
     <figcaption>The walking task's main terms, with how much each term counts; the full score has a few more, such as charges for feet that skim the floor. The bar heights move for the lesson.</figcaption>
-    <p class="big-idea"><strong>Big idea:</strong> a reward is a wish written in arithmetic. The robot will grant exactly what it says.</p>
+    <p class="big-idea"><strong>Big idea:</strong> a reward is a wish written in arithmetic, and the robot will grant exactly what it says.</p>
   </figure>
   <aside class="lesson-notes" aria-label="Notes for lesson 5">
     <section>
@@ -298,7 +299,7 @@
     <section>
       <h3>For parents and teachers</h3>
       <p>How much each term counts in the picture: speed 2.0, turning 2.0, upright 2.0, feet in the air 3.0, pose 1.0 and head 2.0 pay; jerky actions cost from 0.1 rising to 1.0 as training goes on, sliding feet 0.1, and legs knocking the body 1.0.</p>
-      <p>The head story in the code: a stricter head term made the duck stop walking "by iter 300". The fix was "L1 on a 1 s EMA of the error": charge the average droop, not each wobble.</p>
+      <p>The head story is in the code: a stricter head term made the duck stop walking "by iter 300". The fix was "L1 on a 1 s EMA of the error", which charges the average droop rather than each wobble.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%205%3A%20Points%20for%20what%20you%20want">Tell us about it</a>.</p>
     </section>
     <section>
@@ -315,8 +316,8 @@
   <div class="lesson-page">
     <p class="kicker">Lesson 6 · Training</p>
     <h2 id="lesson-6-title">Practice, at scale</h2>
-    <p>Training runs 4,096 pretend ducks at once on a graphics card. Each duck takes 24 steps. Then the brain learns from all of them together. That is one <strong>iteration</strong>: 98,304 steps of experience.</p>
-    <p>A usable walk takes about 1 to 2 hours. Pollen's guide says simple tricks need about 1,000 iterations, and walking and getting up need 4,000 to 6,000. A copy of the brain is saved every 250 iterations.</p>
+    <p>Training runs 4,096 pretend ducks at once on a graphics card. Each duck takes 24 steps, then the brain learns from all of them together, and that is one <strong>iteration</strong>: 98,304 steps of experience.</p>
+    <p>A usable walk takes about 1 to 2 hours. Pollen's guide says simple tricks need about 1,000 iterations, while walking and getting up need 4,000 to 6,000. A copy of the brain is saved every 250 iterations.</p>
     <p>Trainers watch the score climb, and they watch the duck too, because the score can climb while the trick never happens.</p>
     <p class="rule">4,096 ducks × 24 steps = 98,304 steps per iteration</p>
     <fieldset class="predict" data-answer="a">
@@ -325,7 +326,7 @@
       <label><input type="radio" name="predict-6" value="a"> About half a second.</label>
       <label><input type="radio" name="predict-6" value="b"> About 24 seconds.</label>
       <label><input type="radio" name="predict-6" value="c"> About one whole episode.</label>
-      <details><summary>Check your prediction</summary><p><strong>About half a second:</strong> 24 steps at 50 a second is 0.48 seconds of each duck's life. Short bursts from thousands of ducks give the brain a wide view of what it is doing.</p></details>
+      <details><summary>Check your prediction</summary><p><strong>About half a second:</strong> 24 steps at 50 a second is 0.48 seconds of each duck's life, but short bursts from thousands of ducks give the brain a wide view of what it is doing.</p></details>
     </fieldset>
   </div>
   <figure class="lesson-figure" data-badge="toy">
@@ -347,11 +348,11 @@
 <pre><code>git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl
 uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre>
-      <p>No graphics card: add <code>--hf-jobs</code> to run it on Hugging Face Jobs, billed to your Hugging Face account. Always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
+      <p>No graphics card? Add <code>--hf-jobs</code> to run it on Hugging Face Jobs, billed to your Hugging Face account. Always do a smoke test first: <code>--env.scene.num-envs 64 --agent.max_iterations 5</code>.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>The walking settings allow up to 50,000 iterations, a ceiling rather than a target. In September 2026, the walking brain Pollen had deployed was traced to a checkpoint at iteration 3,750.</p>
+      <p>The walking settings allow up to 50,000 iterations, a ceiling rather than a target: in September 2026, the walking brain Pollen had deployed was traced to a checkpoint at iteration 3,750.</p>
       <p>Watching the duck is a rule in Pollen's guide: "Report what rollouts actually show", not "it works!".</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%206%3A%20Practice%2C%20at%20scale">Tell us about it</a>.</p>
     </section>
@@ -369,8 +370,8 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
   <div class="lesson-page">
     <p class="kicker">Lesson 7 · The update</p>
     <h2 id="lesson-7-title">Small steps uphill</h2>
-    <p>While it practises, the brain tries numbers around its average, so every action has a chance. After each round of practice, the brain is nudged so that actions that went better than expected become more likely, and actions that went worse become less likely.</p>
-    <p>The method is <strong>PPO</strong>, proximal policy optimization. Proximal means near: it will not move the policy far in one go. Once a change would make an action more than 20% more or less likely than before, the update stops pushing it.</p>
+    <p>While it practises, the brain tries numbers around its average, so every action has a chance. After each round of practice it is nudged so that actions that went better than expected become more likely, and actions that went worse become less likely.</p>
+    <p>The method is <strong>PPO</strong>, proximal policy optimization, and proximal means near: it will not move the policy far in one go. Once a change would make an action more than 20% more or less likely than before, the update stops pushing it.</p>
     <p class="rule">Past a 20% change in an action's likelihood, an update gains nothing more.</p>
     <fieldset class="predict" data-answer="c">
       <legend>Predict</legend>
@@ -395,12 +396,12 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
   <aside class="lesson-notes" aria-label="Notes for lesson 7">
     <section>
       <h3>Try it for real</h3>
-      <p>In a training run's logs, watch the KL divergence: a measure of how far each update moved the policy. The walking task's learning rate adapts itself to keep it near its target.</p>
+      <p>In a training run's logs, watch the KL divergence, a measure of how far each update moved the policy: the walking task's learning rate adapts itself to keep it near its target.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
       <p>Each batch of practice is reused 5 times, in 4 slices, before new practice is collected. A small bonus for staying unpredictable, called entropy, keeps the duck exploring instead of settling early.</p>
-      <p>"Better than expected" needs an expectation. A second network, the critic, learns how much reward to expect from each moment. Book 3, lesson 2 opens it.</p>
+      <p>"Better than expected" needs an expectation, so a second network, the critic, learns how much reward to expect from each moment. Book 3, lesson 2 opens it.</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%207%3A%20Small%20steps%20uphill">Tell us about it</a>.</p>
     </section>
     <section>
@@ -416,8 +417,8 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
   <div class="lesson-page">
     <p class="kicker">Lesson 8 · Sim to real</p>
     <h2 id="lesson-8-title">Train on many worlds</h2>
-    <p>A brain trained on one perfect world learns that world, flaws and all. So every pretend duck gets a slightly different world. Some differences are drawn once for each duck, and some again each time it starts over. This is <strong>domain randomization</strong>.</p>
-    <p>The floor's grip ranges from 0.7 to 1.3 times normal. The main body's weight changes by 5% either way, and the body's balance point shifts by up to 15 mm. Every 3 to 6 seconds the duck is shoved, by up to 0.3 m/s. Its tilt sensor is mounted wrong by up to 6°, and each joint reading is off by a small, fixed amount.</p>
+    <p>A brain trained on one perfect world learns that world, flaws and all, so every pretend duck gets a slightly different one. Some differences are drawn once for each duck and some again each time it starts over, and the idea is called <strong>domain randomization</strong>.</p>
+    <p>The floor's grip ranges from 0.7 to 1.3 times normal. The main body's weight changes by 5% either way, and its balance point shifts by up to 15 mm. Every 3 to 6 seconds the duck is shoved, by up to 0.3 m/s. Its tilt sensor is mounted wrong by up to 6°, and each joint reading is off by a small, fixed amount.</p>
     <p>A brain that walks in all of these treats the real robot as one more variation.</p>
     <p class="rule">Train on a spread of worlds, so the real one falls inside it.</p>
     <fieldset class="predict" data-answer="c">
@@ -444,11 +445,11 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
   <aside class="lesson-notes" aria-label="Notes for lesson 8">
     <section>
       <h3>Try it for real</h3>
-      <p>Studio's <a href="/docs/#evaluations">Evaluations</a> walk a network from drop heights it was never tuned on, and say exactly what varied between tries. Changing the world and measuring is the same idea from the other side.</p>
+      <p>Studio's <a href="/docs/#evaluations">Evaluations</a> walk a network from drop heights it was never tuned on and say exactly what varied between tries. That is the same idea from the other side: change the world, then measure.</p>
     </section>
     <section>
       <h3>For parents and teachers</h3>
-      <p>Randomization is not free. Pollen once let the balance point shift by up to 30 mm, more than the 20 mm from ankle to heel, and walking got worse; the cap is now 15 mm. Too wide a spread teaches a nervous walk.</p>
+      <p>Randomization is not free. Pollen once let the balance point shift by up to 30 mm, more than the 20 mm from ankle to heel, and walking got worse, so the cap is now 15 mm. Too wide a spread teaches a nervous walk.</p>
       <p>The pushes used to reach 0.5 m/s, faster than the duck's top commanded walk of 0.4 m/s, which "trains a permanently nervous fall-recovery gait".</p>
       <p>Something in this lesson unclear, or wrong? <a href="mailto:feedback@microduckstudio.com?subject=Book%202%2C%20lesson%208%3A%20Train%20on%20many%20worlds">Tell us about it</a>.</p>
     </section>
@@ -468,7 +469,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
     <h2 id="lesson-9-title">From training to a robot</h2>
     <p>A trained brain leaves the simulator as a file, and every step from there is a check.</p>
     <p><strong>Export</strong> writes an ONNX file, a format many programs can run. <strong>Rehearse</strong> drives that file in a separate simulator on an ordinary computer, with the same motor model. <strong>Publish</strong> checks the file takes 61 numbers and gives 14, refuses one that outputs nonsense or a constant, and uploads it with a manifest that says how to run it.</p>
-    <p>On a robot, one command installs it and another runs it. On a phone, Microduck Studio opens the same file and shows you what is inside.</p>
+    <p>On a robot, one command installs it and another runs it, and on a phone, Microduck Studio opens the same file and shows you what is inside.</p>
     <p class="rule">train → export → rehearse → publish → install</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -519,10 +520,10 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
   <div class="lesson-page">
     <p class="kicker">Lesson 10 · Your project</p>
     <h2 id="lesson-10-title">Your first project: bounce a ball</h2>
-    <p>Here is a first project to try: teach the duck to bounce a small ball off its beak. A good first project changes as little as possible.</p>
+    <p>A good first project changes as little as possible. Here is one to try: teach the duck to bounce a small ball off its beak.</p>
     <p><strong>Start from what exists.</strong> Pollen's kicking task already puts a 70 mm, 15 g ball in front of the duck, and the ground-pick task already bends it to touch the floor with its beak.</p>
-    <p><strong>Change one thing at a time.</strong> The kicker cannot see the ball; bouncing needs to know where it is, so the brain needs new inputs.</p>
-    <p>Then expect loopholes. Pollen's guide expects 2 to 5 rounds of fixing them.</p>
+    <p><strong>Change one thing at a time.</strong> The kicker cannot see the ball, but bouncing needs to know where it is, so the brain needs new inputs.</p>
+    <p>Then expect loopholes: Pollen's guide expects 2 to 5 rounds of fixing them.</p>
     <p class="rule">Copy the closest task. Change one thing. Watch what it does.</p>
     <fieldset class="predict" data-answer="b">
       <legend>Predict</legend>
@@ -568,7 +569,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
 </article>
 
 <section class="book-next wrap" aria-label="Other books">
-  <p><strong>Before this:</strong> <a href="/books/beginner/">Book 1, Meet the Microduck</a>. <strong>Next:</strong> <a href="/books/advanced/">Book 3, Training Microducks</a>, for the equations, the reward rules, the motor model and honest statistics. All three are on <a href="/books/">the shelf</a>.</p>
+  <p><strong>Before this:</strong> <a href="/books/beginner/">Book 1, Meet the Microduck</a>. <strong>Next:</strong> <a href="/books/advanced/">Book 3, Training Microducks</a>, for the equations, the reward rules, the motor model and honest statistics. All four books are on <a href="/books/">the shelf</a>.</p>
 </section>
 
 </main>

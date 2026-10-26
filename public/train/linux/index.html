@@ -35,8 +35,9 @@
 
 <header class="privacy-header">
   <h1>Train your first duck on a Linux PC</h1>
-  <p class="lede">From a Linux PC with an NVIDIA graphics card to a walking policy you trained yourself, watched, and
-  entered in Pollen Robotics' Microduck Arena. You do not need a robot, and you do not need to code.
+  <p class="lede">Pollen's tools run on Linux as they come, so on a Linux PC the one thing to get right first is the
+  NVIDIA driver. This guide goes from that PC to a walking policy you trained yourself, watched,
+  and entered in Pollen Robotics' Microduck Arena. You do not need a robot, and you do not need to code.
   <a href="/train/">On another machine?</a></p>
 </header>
 
@@ -45,8 +46,8 @@
 <div class="note">
   <p><strong>The training tools here are Pollen Robotics'</strong>: their code, their challenges and their Arena,
   built on mjlab and MuJoCo. This page is an independent owner's route to them on a home PC running Linux, through
-  a few free tools and, if you like, Claude. Where it goes wrong for you,
-  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20Linux">tell us which step</a>.</p>
+  a few free tools and, if you like, Claude, so if a step goes wrong for you,
+  <a href="mailto:feedback@microduckstudio.com?subject=Train%20your%20first%20duck%20on%20Linux">tell us which one</a>.</p>
 </div>
 
 <nav aria-label="On this page">
@@ -66,15 +67,16 @@
 
 <ul>
   <li><strong>A Linux PC with an NVIDIA graphics card</strong> from NVIDIA's Volta generation or newer, which for a
-  home PC means Turing or newer: every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch the
-  training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>,
+  home PC means Turing or newer, so every RTX card qualifies. Training runs on CUDA through PyTorch, and the PyTorch
+  the training installs <a href="https://dev-discuss.pytorch.org/t/cuda-toolkit-version-and-architecture-support-update-maxwell-and-pascal-architecture-support-removed-in-cuda-12-8-and-12-9-builds/3128" rel="noopener">dropped older cards</a>
   such as Pascal's GTX ones. No NVIDIA card, or an older one? The workshop can rent a Hugging Face one instead: see
   <a href="#no-gpu">No NVIDIA card, or an older one</a>.</li>
-  <li><strong>Ubuntu, or a distribution like it.</strong> The commands here are Ubuntu's. On another distribution,
-  install the same things with its own package manager.</li>
+  <li><strong>Ubuntu, or a distribution like it.</strong> The commands here are Ubuntu's, so on another
+  distribution, install the same things with its own package manager.</li>
   <li><strong>A free Hugging Face account</strong>, which holds the policies you publish, and <strong>a free GitHub
   account</strong> for your fork of Pollen's challenges, where a published policy's link to its code points.</li>
-  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code. The free Claude plan does not include it.</li>
+  <li><strong>Optional: Claude Pro or higher</strong>, for Claude Code, which the free Claude plan does not
+  include.</li>
 </ul>
 
 <p><strong>You do not need Isaac Sim or Isaac Lab.</strong> Pollen trains the Microduck with mjlab, which borrows
@@ -93,53 +95,60 @@ Isaac Lab's way of describing a task but simulates with MuJoCo Warp, and the wor
   <li>Restart the PC.</li>
   <li>Open a terminal and check:
 <pre tabindex="0" role="region" aria-label="Checking the graphics card, in a terminal"><code>nvidia-smi</code></pre>
-  A table with your card's name in it means Linux can use the card. Training also needs it to be Turing or newer:
-  an older card shows up here and still cannot train.</li>
+  A table with your card's name in it means Linux can use the card. An older card shows up here as well and still
+  cannot train, because training needs Turing or newer.</li>
 </ol>
 
-<p>You do not need NVIDIA's CUDA toolkit. The training brings its own copy of CUDA; all it asks of your PC is the
-driver.</p>
+<p>Do you need NVIDIA's CUDA toolkit as well? No: the training brings its own copy of CUDA, and all it asks of your
+PC is the driver.</p>
 
 <h2 id="tools">Install git, curl and uv</h2>
 
-<p><code>git</code> fetches Pollen's code and records each change you train with. <code>curl</code> downloads the
-installers below; a fresh Ubuntu may not have it. <code>uv</code> installs the right Python and everything training
-needs.</p>
+<p><code>git</code> fetches Pollen's code and records each change you train with, and <code>uv</code> installs the
+right Python and everything training needs. <code>curl</code> downloads the installers below, and a fresh Ubuntu may
+not have it.</p>
 
 <pre tabindex="0" role="region" aria-label="Installing git, curl and uv, in a terminal"><code>sudo apt update &amp;&amp; sudo apt install -y git curl
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 
-<p>Linux asks for your password for the first line. Nothing appears on screen while you type it; that is normal. Put
-your own name and email in the <code>git config</code> lines: git puts them on every change it records, and the workshop
-commits each change before it trains. Close the terminal and open a new one, so that it finds <code>uv</code>. Then
+<p>Linux asks for your password for the first line, and nothing appears on screen while you type it, which is
+normal. Put your own name and email in the <code>git config</code> lines, since git puts them on every change it
+records and the workshop commits each change before it trains.</p>
+
+<p>Then close the terminal and open a new one so that it finds <code>uv</code>, and check that
 <code>uv --version</code> prints a version number.</p>
 
 <h2 id="workshop">Open Pollen's workshop</h2>
 
 <p>Pollen's <a href="https://pollen-robotics-microduck-arena.hf.space/" rel="noopener">Microduck Arena</a> races
 policies against a clock, and every challenge on it has a <strong>Train my own robot</strong> line. Start with the
-2 m Sprint: walk the duck down a lane as fast as it can go without falling. In a terminal:</p>
+2 m Sprint, which asks the duck to walk down a lane as fast as it can without falling. In a terminal:</p>
 
 <pre tabindex="0" role="region" aria-label="Opening the workshop on the sprint challenge, in a terminal"><code>cd ~
 uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py sprint-2m</code></pre>
 
-<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything: a
-big download, once. Then it prints a line that starts <code>Microduck workshop: http://127.0.0.1</code> and opens it
-in your browser; if no browser opens, open that address yourself. <strong>Leave this terminal open</strong>: the
-workshop runs in it until you press Ctrl-C there. Open a second terminal for anything else.</p>
+<p>The first time, it copies Pollen's challenges into <code>~/microduck-challenges</code> and installs everything,
+which is a big download but only once. Then it prints a line that starts
+<code>Microduck workshop: http://127.0.0.1</code> and opens it in your browser; if no browser opens, open that address
+yourself.</p>
+
+<p><strong>Leave this terminal open</strong>: the workshop runs in it until you press Ctrl-C there, so open a second
+terminal for anything else.</p>
 
 <p>The workshop's home has a list, <strong>Ready to train?</strong>, that ticks what is set up: Hugging Face Jobs
-billing, your fork of the challenges on GitHub, and an NVIDIA card. The fork and billing lines say how to set them
-up. Training needs the card or the billing, not both. Log in to Hugging Face with the button at the top right. Run the
-same line on another day and it reopens the same work; if it says its port is busy, the workshop is already open in
-another terminal.</p>
+billing, your fork of the challenges on GitHub, and an NVIDIA card. Training needs the card or the billing, not both,
+and the fork and billing lines say how to set them up.</p>
+
+<p>Log in to Hugging Face with the button at the top right. Run the same line on another day and it reopens the same
+work; if it says its port is busy, the workshop is already open in another terminal.</p>
 
 <p>The fork line's <strong>Push</strong> sends your commits to your fork, so a policy you publish links to the code
-that trained it. Without it, publishing still works and the link is missing. To push, git has to be signed in to
-GitHub. GitHub's own tool does that: install it, then log in, choosing HTTPS and yes when it asks to authenticate
-Git with your GitHub credentials.</p>
+that trained it. Without it, publishing still works and the link is missing.</p>
+
+<p>To push, git has to be signed in to GitHub, and GitHub's own tool does that: install it, then log in, choosing
+HTTPS, and yes when it asks to authenticate Git with your GitHub credentials.</p>
 
 <pre tabindex="0" role="region" aria-label="Signing git in to GitHub, in a terminal"><code>sudo apt install -y gh
 gh auth login</code></pre>
@@ -150,8 +159,8 @@ gh auth login</code></pre>
   <li>On the challenge's page, choose <strong>New training</strong>, and train on this machine. Leave the knobs
   (Follow the speed order, Stay upright, Lift your feet) where Pollen set them for your first run.</li>
   <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit. Then
-  it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250. How
-  long that takes depends on your card.</li>
+  it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250,
+  and how long that takes depends on your card.</li>
   <li>Every checkpoint is scored with the Arena's own rules as it arrives, and the training's page replays any of
   them. Pick 5/5 finishes first, then the lowest time. The best checkpoint is often not the last.</li>
   <li>When one is good enough, <strong>Publish and compete</strong> puts it on your Hugging Face account, in public,
@@ -167,20 +176,22 @@ gh auth login</code></pre>
 
 <h3 id="no-gpu">No NVIDIA card, or an older one</h3>
 
-<p>On the challenge's page, choose Hugging Face Jobs instead of this machine. It trains on Hugging Face's GPUs and
-bills your Hugging Face account, which needs credit on it. Pollen's notes give the default GPU, one NVIDIA L4, as
-$0.80 per hour, and the recipe as about 1 to 2.5 hours on it. You choose it for each training.</p>
+<p>On the challenge's page, choose Hugging Face Jobs instead of this machine; you make that choice for each
+training. It trains on Hugging Face's GPUs and bills your Hugging Face account, which needs credit on it.</p>
+
+<p>Pollen's notes give the default GPU, one NVIDIA L4, as $0.80 per hour, and the recipe as about 1 to 2.5 hours on
+it.</p>
 
 <p><strong>Closing the workshop does not stop a training on Hugging Face.</strong> It runs, and bills, until it ends
 or reaches its 12-hour limit, $9.60 at that price. To end one sooner, open the workshop again and press
 <strong>Stop</strong> on its ticket, or cancel it on your <a href="https://huggingface.co/settings/jobs"
-rel="noopener">Jobs page</a> at Hugging Face. A stopped job cannot be resumed.</p>
+rel="noopener">Jobs page</a> at Hugging Face, but a stopped job cannot be resumed.</p>
 
 <h2 id="claude">Claude beside you</h2>
 
 <p>Claude Code is Claude working in your terminal: it reads the files, runs commands and explains errors, and in
-its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher.
-In a second terminal, install it:</p>
+its normal mode it asks before it changes a file or runs anything that could. It comes with Claude Pro and higher,
+and you install it in a second terminal:</p>
 
 <pre tabindex="0" role="region" aria-label="Installing Claude Code, in a terminal"><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
 
@@ -191,9 +202,9 @@ claude</code></pre>
 
 <p>The first time, it asks you to log in to your Claude account in your browser.</p>
 
-<p>Pollen wrote the challenges with this in mind. Every challenge folder has an <code>AGENTS.md</code> that tells a
-coding agent which files to change, how to run and judge a training, and the challenge's rules, and the 2 m
-Sprint's tells it never to start a paid job, publish or enter the Arena without your yes. Things to say:</p>
+<p>Pollen wrote the challenges with this in mind: every challenge folder has an <code>AGENTS.md</code> that tells a
+coding agent which files to change, how to run and judge a training, and the challenge's rules. The 2 m Sprint's
+tells it never to start a paid job, publish or enter the Arena without your yes. Things to say:</p>
 
 <ul>
   <li>"I'm new to this. Read the AGENTS.md for the 2 m Sprint and take me through my first training. Explain each
@@ -203,47 +214,48 @@ Sprint's tells it never to start a paid job, publish or enter the Arena without 
   <li>"Suggest one knob to change for the next training, and say what you expect to see."</li>
 </ul>
 
-<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published; it does the
-mechanics. That split is Pollen's rule, in the same file.</p>
+<p>Read what it proposes before you say yes. You decide the goal, the budget and what gets published, and it does
+the mechanics: that split is Pollen's rule, in the same file.</p>
 
 <h2 id="fixes">When something goes wrong</h2>
 
 <dl class="spec">
   <dt><code>nvidia-smi</code> is not found, or shows no card</dt>
-  <dd>The driver is not installed or not running yet. Install it from <strong>Additional Drivers</strong>, or with
-  <code>sudo ubuntu-drivers install</code>, and restart the PC.</dd>
+  <dd>The driver is not installed or not running yet, so install it from <strong>Additional Drivers</strong>, or
+  with <code>sudo ubuntu-drivers install</code>, and restart the PC.</dd>
   <dt>Training stops and says the NVIDIA driver is too old</dt>
   <dd>Install a newer driver the same way, from <strong>Additional Drivers</strong>, and restart.</dd>
   <dt><code>uv: command not found</code></dt>
-  <dd>Close the terminal and open a new one. The installer adds uv for new terminals.</dd>
+  <dd>The installer adds uv for new terminals, so close the terminal and open a new one.</dd>
   <dt>The first install stops with a timeout</dt>
-  <dd>It downloads a lot at once. Give it longer with <code>export UV_HTTP_TIMEOUT=600</code>, then run the line
+  <dd>It downloads a lot at once, so give it longer with <code>export UV_HTTP_TIMEOUT=600</code> and run the line
   again. Pollen's README suggests the same setting for its own first install.</dd>
   <dt>Git says "Author identity unknown"</dt>
   <dd>Run the <code>git config</code> lines from <a href="#tools">Install git, curl and uv</a>, with your own name
   and email.</dd>
   <dt>CUDA out of memory</dt>
-  <dd>Train fewer simulated ducks at once.
+  <dd>Train fewer simulated ducks at once:
   <code>~/microduck-challenges/src/microduck_challenges/sprint_2m/challenge.toml</code> sets <code>num_envs</code> to
-  4096 under <code>[recipe]</code>; change it to 2048, or ask Claude Code to.</dd>
+  4096 under <code>[recipe]</code>, so change it to 2048, or ask Claude Code to.</dd>
 </dl>
 
 <h2 id="further">Going further</h2>
 
-<p>The challenges train for the Arena's courses. To train the skills a real Microduck runs, its walk, its stand and
-its tricks, work in Pollen's <a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>.
-In a new terminal, fetch it into your home folder:</p>
+<p>The challenges train for the Arena's courses. So what about the skills a real Microduck runs, its walk, its
+stand and its tricks? Those you train in Pollen's
+<a href="https://github.com/pollen-robotics/microduck_rl" rel="noopener">microduck_rl</a>, which you fetch into your
+home folder in a new terminal:</p>
 
 <pre tabindex="0" role="region" aria-label="Fetching microduck_rl, in a terminal"><code>cd ~
 git clone https://github.com/pollen-robotics/microduck_rl
 cd microduck_rl</code></pre>
 
-<p><strong>No usable NVIDIA card?</strong> The quick test and the real run below both need one. Log in to
+<p><strong>No usable NVIDIA card?</strong> The quick test and the real run below both need one, so log in to
 Hugging Face first, as at the end of this section, then skip the quick test and add <code>--hf-jobs --no-wandb</code>
-to the end of the real run: it trains on Hugging Face's L4 instead, and the
+to the end of the real run. It trains on Hugging Face's L4 instead, and the
 <a href="/train/mac/#further">Mac guide</a> shows how to bring its checkpoints back to your PC.</p>
 
-<p>A quick test first. It catches most mistakes before the long run, and the first time it also installs this
+<p>Run a quick test first, which catches most mistakes before the long run and, the first time, also installs this
 repository's own copy of everything:</p>
 
 <pre tabindex="0" role="region" aria-label="A quick test of the walking task"><code>uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 64 --agent.max-iterations 5 --agent.logger tensorboard</code></pre>
@@ -254,32 +266,34 @@ repository's own copy of everything:</p>
 
 <p><code>--agent.logger tensorboard</code> keeps the logs on your PC; without it, training uses Weights &amp; Biases,
 which asks you to log in. Pollen's README puts a usable gait at about one to two hours with 4096 simulated ducks,
-and its notes say a gait needs 4000 iterations or more. A checkpoint lands every 250 iterations, in a folder under
-<code>logs/rsl_rl/velocity/</code> named for the date and time and ending in <code>_velocity</code>. The quick test made one too; the later one is
-the real run. To see them:</p>
+and its notes say a gait needs 4000 iterations or more.</p>
+
+<p>A checkpoint lands every 250 iterations, in a folder under <code>logs/rsl_rl/velocity/</code> named for the date
+and time and ending in <code>_velocity</code>. The quick test made one too, so the later folder is the real run. To
+see them:</p>
 
 <pre tabindex="0" role="region" aria-label="Listing the checkpoints"><code>ls logs/rsl_rl/velocity/*/</code></pre>
 
 <p>In the commands below, put that folder's name in place of <code>&lt;run&gt;</code> and a checkpoint's number in
-place of <code>&lt;N&gt;</code>, without the angle brackets. Watch a checkpoint in your browser: <code>play</code>
-prints an address to open, and runs until you press Ctrl-C.</p>
+place of <code>&lt;N&gt;</code>, without the angle brackets. To watch a checkpoint in your browser, run
+<code>play</code>, which prints an address to open and runs until you press Ctrl-C:</p>
 
 <pre tabindex="0" role="region" aria-label="Watching a checkpoint"><code>uv run play Mjlab-Velocity-Flat-MicroDuck --viewer viser --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a robot,
-because it bakes in the normalizer the policy expects:</p>
+<p>Then export it. <code>export.py</code> writes <code>output.onnx</code>, the one safe way from a checkpoint to a
+robot, because it bakes in the normalizer the policy expects:</p>
 
 <pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Then drive it from the keyboard. This opens a MuJoCo window and takes your keys in the terminal.
+<p>Next, drive it from the keyboard. This opens a MuJoCo window and takes your keys in the terminal.
 <code>--new-cmd-obs</code> matters: this policy reads the newer layout of commands, and without the flag the script
 feeds it the old one and stops.</p>
 
 <pre tabindex="0" role="region" aria-label="Driving the exported policy"><code>uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs</code></pre>
 
-<p>To share a gait, log in to Hugging Face with <code>uv run hf auth login</code>. If you logged in with the
-workshop's button, it says you are logged in already. If not, it asks for an access token: make a Write one at
-<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then,
+<p>To share a gait, log in to Hugging Face with <code>uv run hf auth login</code>, which says you are logged in
+already if you used the workshop's button. If not, it asks for an access token: make a Write one at
+<a href="https://huggingface.co/settings/tokens" rel="noopener">huggingface.co/settings/tokens</a>. Then publish,
 with your Hugging Face username in place of <code>&lt;you&gt;</code>:</p>
 
 <pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>

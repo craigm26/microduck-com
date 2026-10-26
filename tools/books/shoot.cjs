@@ -4,7 +4,7 @@
 //
 //   node tools/books/shoot.cjs <book> [lessons] [outdir] [--w 1440 --h 900] [--flat] [--dark]
 //
-// Needs tools/books/serve.py running on :8123.
+// Needs tools/books/serve.py running on :8123, or on the port in BOOKS_PORT.
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
@@ -22,6 +22,7 @@ const book = pos[0] || 'beginner';
 const which = pos[1] && pos[1] !== 'all' ? pos[1].split(',').map(Number) : null;
 const out = pos[2] || path.join(process.env.SHOTS || '/tmp', 'shots-' + book);
 const W = Number(opt('w', 1280)), H = Number(opt('h', 800));
+const PORT = Number(process.env.BOOKS_PORT || 8123);
 fs.mkdirSync(out, { recursive: true });
 
 (async () => {
@@ -32,7 +33,7 @@ fs.mkdirSync(out, { recursive: true });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') problems.push(`console ${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push('pageerror: ' + e.message));
   page.on('requestfailed', (r) => problems.push('requestfailed: ' + r.url()));
-  await page.goto(`http://127.0.0.1:8123/books/${book}/?test`, { waitUntil: 'load' });
+  await page.goto(`http://127.0.0.1:${PORT}/books/${book}/?test`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__book, null, { timeout: 20000 });
   // set the view explicitly: Book 1 opens flat on screens where its 3D pages would read small
   await page.evaluate((flat) => window.__book.setMode(flat ? 'flat' : '3d'), flag('flat'));
