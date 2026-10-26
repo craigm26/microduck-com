@@ -44,7 +44,8 @@
 
 <div class="note">
   <p><strong>Whose tools these are.</strong> The robot, its software and its board are Pollen Robotics'. The runs
-  read here are duckbatch's, an open project by this site's author that fine-tunes Pollen's networks in simulation.
+  read here are duckbatch's, an open project by this site's author that fine-tunes, in simulation, Pollen's kick and
+  smaller networks distilled from Pollen's walk.
   <a href="/books/casebook/">Book 4, How a Policy Became</a>, tells the story behind each run. Where a step goes wrong
   for you, <a href="mailto:feedback@microduckstudio.com?subject=Go%20further%20with%20training">tell us which
   one</a>.</p>
@@ -64,14 +65,14 @@
 
 <h2 id="read">Read a real run</h2>
 
-<p>Every run in Book 4 left its records in a public Hugging Face dataset, <code>craigm26/duckbatch-records</code>,
-one folder per job. b003's, the run in the book's first lesson, is a good first read. With uv, from the
+<p>Every fine-tuning run in Book 4 left its records in a public Hugging Face dataset,
+<code>craigm26/duckbatch-records</code>, one folder per job. b003's, the run in the book's first lesson, is a good first read. With uv, from the
 <a href="/train/">first-duck guides</a>:</p>
 
 <pre tabindex="0" role="region" aria-label="Downloading b003's records and opening its log"><code>uvx --from huggingface_hub hf download craigm26/duckbatch-records \
   --repo-type dataset --include "jobs/6ab6d30b6b030d633f69210a/*" \
   --local-dir records
-uvx tensorboard --logdir records</code></pre>
+uvx tensorboard --logdir records/jobs</code></pre>
 
 <p>Open the address TensorBoard prints, and read the log in this order:</p>
 
@@ -80,7 +81,8 @@ uvx tensorboard --logdir records</code></pre>
   <code>Curriculum/standing_envs</code> reads 0.25 at every iteration, though the run's <code>menu.yaml</code> asked
   for 0.05. The menu is a request; the log is what ran.</li>
   <li><strong>Each term's pay.</strong> The <code>Episode_Reward/</code> charts, one per reward term, show which term
-  moved. Here the pay for tracking the command rises all run while the duck learns to stand.</li>
+  moved. Here the pay for tracking the command rises over the run while the duck learns to stand. The steep
+  start is episodes growing to their full length, not learning.</li>
   <li><strong>The total, last.</strong> <code>Train/mean_reward</code> adds every term together, which hides which one
   moved.</li>
 </ol>
@@ -112,7 +114,9 @@ and starts nothing.</p>
 <pre tabindex="0" role="region" aria-label="Checking, then running, the menu on Hugging Face Jobs"><code>uv run duckbatch hf-job menus/mine.yaml --run finetune --inline \
   --dataset &lt;you&gt;/duckbatch-records --dry-run</code></pre>
 
-<p>Then run the same line without <code>--dry-run</code>.</p>
+<p>Then run the same line without <code>--dry-run</code>. That run is billed to your Hugging Face account, which
+needs credit on it, and a fine-grained token also needs permission to start Jobs; the dry run checks neither. The job
+stops at duckbatch's default limit, <code>--timeout 4h</code>.</p>
 
 <ul>
   <li><strong>Pilot first.</strong> Set <code>iterations</code> to 100 and keep just one of the <code>final_seeds</code>,
@@ -133,7 +137,8 @@ kind of request. b003b itself was launched from the request Studio builds.</p>
 
 <h2 id="cards">Other cards and services</h2>
 
-<p>Every run in Book 4 trained on one NVIDIA L4 on Hugging Face Jobs, <code>l4x1</code>, duckbatch's default. The
+<p>Every fine-tuning run in Book 4 trained on one NVIDIA L4 on Hugging Face Jobs, <code>l4x1</code>, duckbatch's
+default; b002, the distillation that made their starting network, ran on a laptop's graphics card. The
 <a href="/train/windows/">Windows</a> and <a href="/train/linux/">Linux</a> guides train on an NVIDIA card in your own
 PC instead.</p>
 
@@ -145,7 +150,8 @@ this page will say so. Training in another simulator altogether is lesson 10 of 
 
 <h2 id="ports">Ports between your devices</h2>
 
-<p>The duck and your computers talk over a few ports, and none of them asks for a password.</p>
+<p>The duck and your computers talk over a few ports. Only ssh asks for anything: the duck account's password, or
+your key.</p>
 
 <ul>
   <li><strong>A shell on the duck.</strong> <code>ssh microduck@&lt;address&gt;</code>. Pollen's
@@ -158,19 +164,27 @@ this page will say so. Training in another simulator altogether is lesson 10 of 
   <li><strong>A pad over the network.</strong> Pollen's UDP pad, on port 4210, drives the duck the way a Bluetooth pad
   does. It is off until you switch it on: <code>netpad.enabled</code> in <code>sudo robotctl configure</code>, then
   <code>sudo systemctl restart padd netpadd</code>. While it is on, the Bluetooth pad does not work. It stays on, across restarts, until you switch it off.</li>
-  <li><strong>Pages on your own computers.</strong> TensorBoard and Pollen's workshop each open a page on the machine
-  they run on. To see one from another device, forward its port over ssh, <code>ssh -L</code> with the port the
-  page's address shows, and open the same address on the device.</li>
+  <li><strong>Pages on your own computers.</strong> TensorBoard and Pollen's workshop each open a page for the machine
+  they run on alone. To see one from another computer, run
+  <code>ssh -L &lt;port&gt;:localhost:&lt;port&gt; you@&lt;that computer&gt;</code> on it, with the port from the
+  page's address, then open <code>http://localhost:&lt;port&gt;</code> there. The computer with the page needs an ssh
+  server: Remote Login on a Mac, OpenSSH Server on Windows.</li>
 </ul>
 
 <div class="note">
-  <p><strong>Who can drive.</strong> Pollen's own notes say it plainly: anyone on the duck's network can drive it
-  from the console and see through its camera, and anyone who can reach the pad's port can drive it, sit it down and
-  switch it off. <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/remote-webrtc.md">Pollen
-  calls that</a> fine on a bench and in an office, and not fine in a home. So keep the duck on a network you would
-  let into the room with it, and never forward these ports to the internet. Pollen's way to reach a duck from outside
-  its network goes through a rendezvous service that checks your account at both ends and keeps the video encrypted;
-  it stays off until the duck is signed in.</p>
+  <p><strong>Who can drive.</strong> Pollen's own notes say it plainly. Anyone on the duck's network can drive it
+  from the console and see through its camera, which
+  <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/remote-webrtc.md">Pollen's
+  design note</a> calls fine on a bench and in an office, not in a home, and a thing to revisit before ducks ship to
+  homes. Anyone who can reach the pad's port, once it is on, can drive it, sit it down and switch it off. Bluetooth
+  is another way in: anyone in range with duckctl and the pairing PIN, the factory 000000 until you change it with
+  <code>sudo robotctl system set-pin</code>, can stand the duck up, run a skill or load another walk, though not steer
+  it.</p>
+  <p>So keep the duck on a network you would let into the room with it, and never forward these ports to the
+  internet. Pollen's way to reach a duck from outside its network goes through a rendezvous service that checks your
+  account at both ends and keeps the video encrypted. It stays off until the duck is signed in, and signing in stores
+  a Hugging Face token on the duck that, Pollen's notes say, can push to your repositories, start Jobs and read your
+  billing.</p>
 </div>
 
 <h2 id="channels">The duck's other channels</h2>
@@ -201,15 +215,19 @@ and the other three on buses that depend on the computer underneath. Pollen says
 version of that board, so look at yours before trusting the open schematic.</p>
 
 <ol>
-  <li><strong>See what answers now.</strong> On the duck, list that bus. On Pollen's board the audio codec sits at
-  0x18, the board's IMU at 0x19 and 0x68, and the depth sensor, on a duck that has one, at 0x29:
+  <li><strong>See what answers now.</strong> On the duck, list the bus and write down every address that answers.
+  On the Zero 3W ducks, <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/tof/src/link.rs">Pollen's
+  code</a> expects the audio codec at 0x18, the board's BMI088 IMU at 0x19 and 0x68, connected though unused by
+  default, and the depth sensor, where fitted, at 0x29, or 0x52 on some early ducks. The open board's latest revision
+  has an LSM6DSV16X IMU at 0x6A instead, and Pollen's beta board puts the depth sensor on SPI, where i2cdetect cannot
+  see it:
 <pre tabindex="0" role="region" aria-label="Listing the devices on the board's I2C bus, on the duck"><code>sudo i2cdetect -y -r 3</code></pre></li>
   <li><strong>Pick a sensor with an address of its own,</strong> one that nothing on the bus already answers to.</li>
   <li><strong>Leave the depth sensor's service off while you experiment,</strong> which Pollen's cheatsheet calls
   safe: <code>sudo systemctl stop tofd</code>.</li>
-  <li><strong>With the duck switched off, plug the sensor in,</strong> then run <code>i2cdetect</code> again and look
-  for the new address. If it is not there, <code>i2cdetect -l</code> lists every bus, and the socket may be on
-  another.</li>
+  <li><strong>With the duck switched off, plug the sensor in.</strong> Switch it on and stop <code>tofd</code> again,
+  since it starts at boot. Then run <code>i2cdetect</code> again and look for the new address. If it is not there,
+  <code>i2cdetect -l</code> lists every bus, and the socket may be on another.</li>
   <li><strong>Read it from a program, and steer with it,</strong> through the UDP pad above. That changes no policy.</li>
   <li><strong>Measure the walk again with the sensor on.</strong> Anything mounted on the duck changes the body the
   walk was trained for. If the walk got worse, that is a case for retraining, with the sensor's weight added to the
@@ -219,7 +237,7 @@ version of that board, so look at yours before trusting the open schematic.</p>
 <h2 id="next">Then</h2>
 
 <p><a href="/books/casebook/">Book 4</a> traces the runs this page reads: why a walk learned to stand, why more
-practice made it worse, and how a kick learned to go straight. Lesson 9 is the Qwiic port's, and lesson 10 is about
+practice made it worse, and how a kick learned to go straighter. Lesson 9 is the Qwiic port's, and lesson 10 is about
 training in another simulator. Found a better way, or a step that failed?
 <a href="mailto:feedback@microduckstudio.com?subject=Go%20further%20with%20training">Tell us</a>.</p>
 

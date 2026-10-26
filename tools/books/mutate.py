@@ -342,7 +342,7 @@ FCB = "public/books/engine/figures-casebook.js"
 
 @case("a number in a casebook lesson with no entry", [CB], "casebook lesson-3: prints '0.37'")
 def _():
-    sub(CB, "so only about 15% land under 0.15 m/s.", "so only about 15% land under 0.15 m/s, and 0.37 of those turn.")
+    sub(CB, "so only about 12% land under 0.15 m/s.", "so only about 12% land under 0.15 m/s, and 0.37 of those turn.")
 
 
 @case("a casebook quote duckbatch's close note does not say", [CBJ], "db-b003-close does not say")
@@ -370,7 +370,7 @@ TA = "public/train/advanced/index.html"
 
 @case("a number in the advanced guide with no entry", [TA], "the advanced guide prints '6006'")
 def _():
-    sub(TA, "forward its port over ssh, <code>ssh -L</code> with the port", "forward its port over ssh, <code>ssh -L 6006</code> with the port")
+    sub(TA, "with the port from the\n  page's address", "with the port from the\n  page's address, 6006 for TensorBoard")
 
 
 @case("an advanced-guide quote Pollen's pad page does not say", [TJ], "md-udp-pad does not say")

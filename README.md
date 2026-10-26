@@ -234,7 +234,8 @@ track's guide, beside Book 4: download a real run's records from Hugging Face an
 TensorBoard log, run one change of your own with duckbatch on Hugging Face Jobs (`--inline`, so
 the menu travels with the job and the code stays duckbatch's), and reach the duck's ports and
 channels: ssh, Pollen's console on 8080, the UDP pad, `robotctl monitor`, and the spare Qwiic socket.
-It says plainly what Pollen's own notes say: nothing on those ports asks for a password.
+It says plainly what Pollen's own notes say: the console and the UDP pad ask for no password, and Bluetooth's
+factory PIN is 000000.
 
 The PC and Mac guides hand over to Pollen's own workshop (the **Train my own robot** line on an
 Arena challenge, which clones `microduck-challenges`), Claude Code beside it (each challenge folder

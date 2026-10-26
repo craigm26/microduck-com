@@ -205,7 +205,8 @@ export const figures = {
     const { group } = ctx;
     const CMD = 0.3;
     // b003's TensorBoard log, Episode_Reward/track_linear_velocity, in 25-iteration
-    // means: iterations 24, 49, ... 1,499.
+    // means: iterations 24, 49, ... 1,499. The plot starts at the third: before it,
+    // episodes were still growing to full length, and a short episode logs less.
     const LOG = [0.091, 0.257, 0.333, 0.356, 0.382, 0.395, 0.421, 0.425, 0.426, 0.401, 0.425, 0.426, 0.409, 0.406, 0.408,
       0.427, 0.418, 0.428, 0.452, 0.447, 0.431, 0.437, 0.45, 0.46, 0.457, 0.445, 0.458, 0.475, 0.484, 0.487, 0.469, 0.474,
       0.463, 0.465, 0.497, 0.482, 0.479, 0.491, 0.496, 0.482, 0.484, 0.478, 0.473, 0.494, 0.486, 0.49, 0.504, 0.501, 0.487,
@@ -288,8 +289,9 @@ export const figures = {
       kc.group.rotation.x = lerp(TILT, -Math.PI / 2 + 0.02, fold);
       lc.group.visible = st.log > 0.001;
       lc.group.rotation.x = lerp(-Math.PI / 2 + 0.02, TILT, ease.back(seg(st.log, 0.25, 1)));
-      const lu = Math.round(LOG.length * seg(st.log, 0.45, 1));
-      plotIf(lc, `log|${lu}`, lu > 1 ? [{ points: LOG.map((y, i) => [24 + 25 * i, y]), color: C_GREEN, width: 3, upto: lu }] : []);
+      const SHOWN = LOG.slice(2);
+      const lu = Math.round(SHOWN.length * seg(st.log, 0.45, 1));
+      plotIf(lc, `log|${lu}`, lu > 1 ? [{ points: SHOWN.map((y, i) => [74 + 25 * i, y]), color: C_GREEN, width: 3, upto: lu }] : []);
       // the three ducks: one stands, one shuffles, one walks; the marks under them slide at their speed
       pop(row, st.row * (1 - ease.inOut(st.speeds)));
       WAYS.forEach((w, i) => {
@@ -388,7 +390,7 @@ export const figures = {
     const pairs = pairBars(ctx, spG, [
       { name: '0.40 m/s', vals: [0.157, 0.183], text: ['0.157', '0.183'] },
       { name: '1.0 rad/s', vals: [0.209, 0.456], text: ['0.209', '0.456'] },
-      { name: '0.10 m/s', vals: [0.008, 0.008], text: ['0.008', '0.008'] },
+      { name: '0.10 m/s', vals: [0.007, 0.008], text: ['0.007', '0.008'] },
       { name: '0.30 m/s', vals: [0.108, 0.1199], text: ['0.108', '0.1199'] },
     ], { z: FZ, x0: -150, dx: 82, gap: 34, H: 96 / 0.456 });
     const legS = ctx.label('student', V(-150, 2, FZ + 62), { cls: 'is-small is-blue', parent: spG });
@@ -464,15 +466,19 @@ export const figures = {
     const { group } = ctx;
     const R = K.rng(11);
     const N = 60, COLS = 10, CELL = 30;
-    // Commands for the envs asked to walk. Pollen's draw is even over the box, about 15% of it
-    // under 0.15 m/s: 9 of these 60. b003c gives 21 of them, 35%, a slow command instead.
+    // Commands for the envs asked to walk. mjlab sends a fifth straight ahead at 0.3 m/s or
+    // more (12 of these 60); the rest are drawn evenly over Pollen's box, about 15% of it
+    // under 0.15 m/s (7 of 48), so about 12% in all. b003c gives 21 of the 60, 35%, a slow
+    // command instead, whatever they had.
     const inBox = () => [lerp(-0.4, 0.4, R()), lerp(-0.3, 0.3, R())];
     const cmds = [];
-    while (cmds.length < 9) { const c = inBox(); if (Math.hypot(c[0], c[1]) < 0.15) cmds.push(c); }
+    while (cmds.length < 12) cmds.push([Math.max(0.3, Math.abs(lerp(-0.4, 0.4, R()))), 0]);
+    while (cmds.length < 19) { const c = inBox(); if (Math.hypot(c[0], c[1]) < 0.15) cmds.push(c); }
     while (cmds.length < N) { const c = inBox(); if (Math.hypot(c[0], c[1]) >= 0.15) cmds.push(c); }
     for (let i = N - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [cmds[i], cmds[j]] = [cmds[j], cmds[i]]; }
-    const fast = cmds.map((c, i) => i).filter((i) => Math.hypot(cmds[i][0], cmds[i][1]) >= 0.15);
-    const moved = new Set(fast.filter((_, k) => k % 4 === 1).slice(0, 12));
+    const order = cmds.map((c, i) => i);
+    for (let i = N - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    const moved = new Set(order.slice(0, 21));
     const slowCmd = cmds.map(() => { const a = R() * Math.PI * 2, s = lerp(0.05, 0.25, R()); return [Math.cos(a) * s, Math.sin(a) * s]; });
     const isSlow = (c) => Math.hypot(c[0], c[1]) < 0.15;
     const ndl = needles(N);
@@ -508,22 +514,22 @@ export const figures = {
 
     const st = { grid: 0, band: 0, sums: 0, res: 0 };
     const draw = () => {
-      let slowN = 0;
+      let slowN = 0, givenN = 0;
       for (let i = 0; i < N; i++) {
         const into = moved.has(i) && st.band > (i % 7) / 7 * 0.6 + 0.2;
         const c = into ? slowCmd[i] : cmds[i];
-        const slow = isSlow(c) || into;
-        if (slow) slowN++;
+        if (into) givenN++;
+        else if (isSlow(c)) slowN++;
         const len = (Math.hypot(c[0], c[1]) / 0.5) * 26 * ease.out(clamp(st.grid * 1.5 - (i / N) * 0.5));
-        ndl.set(i, cellX(i), cellZ(i), Math.atan2(c[1], c[0]), len, slow ? 0x8a4b00 : 0x6d6658);
+        ndl.set(i, cellX(i), cellZ(i), Math.atan2(c[1], c[0]), len, into || isSlow(c) ? 0x8a4b00 : 0x6d6658);
         const shown = clamp(st.grid * 1.5 - (i / N) * 0.5);
         if (shown < 0.01) tiles.hide(i); else tiles.set(i, cellX(i) + 10, 0, cellZ(i), 1.2 * ease.out(shown));
-        tiles.color(i, slow ? ORANGE : 0xe9e1cf);
+        tiles.color(i, into ? ORANGE : isSlow(c) ? 0xffcf8a : 0xe9e1cf);
       }
       ndl.commit();
       tiles.commit();
       gridG.visible = st.grid > 0.001;
-      setText(gridLab, `${slowN} of ${N} asked to walk slower than 0.15 m/s`);
+      setText(gridLab, st.band < 0.05 ? `${slowN} of ${N} asked to walk slower than 0.15 m/s` : `${givenN} of ${N} given a slow command, 0.05 to 0.25 m/s`);
       show(gridLab, st.grid > 0.8 && st.sums < 0.1);
       // coins: 0.2 a coin
       pop(sumG, st.sums);
@@ -539,7 +545,7 @@ export const figures = {
     const api = {
       group,
       chips() {
-        return [['walking envs', String(N)], ['slow commands', `${Math.round(100 * (9 + 12 * clamp(st.band * 1.3)) / N)}%`]];
+        return st.band < 0.05 ? [['walking envs', String(N)], ['under 0.15 m/s', '12%']] : [['walking envs', String(N)], ['given a slow command', '35%']];
       },
       reset() { Object.assign(st, { grid: 0, band: 0, sums: 0, res: 0 }); draw(); },
       steps: [
@@ -984,11 +990,11 @@ export const figures = {
     group.add(ball);
     const end = (deg) => { const a = (deg * Math.PI) / 180; return [BX + L * Math.cos(a), BZ + L * Math.sin(a)]; };
     const mk = (deg, color) => pathLine([[BX, BZ], end(deg)], color, 2.6);
-    const pPollen = mk(8.0, ORANGE), pK = mk(3.4, BLUE), pPollenB = mk(8.6, 0xffc070), pKB = mk(3.8, 0x8fb2ef);
+    const pPollen = mk(8.0, ORANGE), pK = mk(3.4, BLUE), pPollenB = mk(8.6, 0xffc070), pKB = mk(3.7, 0x8fb2ef);
     group.add(pPollen, pK, pPollenB, pKB);
     const labP = ctx.label('Pollen: 8.0°, 5.064 m', V(end(8.0)[0] - 40, 4, end(8.0)[1] + 22), { cls: 'is-small is-accent' });
     const labK = ctx.label('k001: 3.4°, 0.999 of the distance', V(96, 4, BZ - 4), { cls: 'is-small is-blue' });
-    const labB = ctx.label('backlash twin: 8.6° and 3.8°', V(BX + 150, 4, BZ + 92), { cls: 'is-small' });
+    const labB = ctx.label('backlash twin: 8.6° and 3.7°', V(BX + 150, 4, BZ + 92), { cls: 'is-small' });
     const labLine = ctx.label('kick line', V(BX + 40, 4, BZ - 14), { cls: 'is-small' });
     // the split: the ball's speed along the line pays, across it costs
     const SPX = -128;
@@ -997,8 +1003,8 @@ export const figures = {
     across.add(K.arrow([[0, 0, 0], [0, 0, 26]], { color: RED, width: 5, head: 12 }));
     along.position.set(SPX, 6, BZ + 66); across.position.set(SPX + 60, 6, BZ + 66);
     group.add(along, across);
-    const labAlong = ctx.label('along: pays 12.0', V(SPX + 26, 4, BZ + 46), { cls: 'is-small is-green' });
-    const labAcross = ctx.label('across: costs 12.0', V(SPX + 120, 4, BZ + 84), { cls: 'is-small is-red' });
+    const labAlong = ctx.label('along: pays 12.0 per m/s, to 1.0', V(SPX + 26, 4, BZ + 46), { cls: 'is-small is-green' });
+    const labAcross = ctx.label('across: costs 12.0 per m/s', V(SPX + 120, 4, BZ + 84), { cls: 'is-small is-red' });
 
     const st = { t: 0, theta: 8.0, pollen: 0, split: 0, k: 0, back: 0 };
     const draw = () => {
@@ -1040,7 +1046,7 @@ export const figures = {
       },
       chips() {
         const th = (st.theta * Math.PI) / 180;
-        return [['θ', `${st.theta.toFixed(1)}°`], ['along', `+${(12 * Math.cos(th)).toFixed(2)}`], ['across', `−${(12 * Math.sin(th)).toFixed(2)}`]];
+        return [['θ', `${st.theta.toFixed(1)}°`], ['along, at 1.0 m/s', `+${(12 * Math.cos(th)).toFixed(2)}`], ['across', `−${(12 * Math.sin(th)).toFixed(2)}`]];
       },
       reset() { Object.assign(st, { theta: api.slider.value, pollen: 0, split: 0, k: 0, back: 0 }); draw(); },
       idle(t, dt) { st.t += dt; draw(); },
@@ -1091,12 +1097,12 @@ export const figures = {
     ];
     const pk = Array.from({ length: 6 }, () => { const d = K.packet(ORANGE, 4); d.visible = false; group.add(d); return d; });
     const pkCurves = routes.map((r) => new THREE.CatmullRomCurve3(r.map((q) => V(q[0], 8, q[1]))));
-    // a new sensor in a spare socket
-    const j7 = sock(2);
+    // a new sensor on J5's bus; the other sockets are on buses the duck may never switch on
+    const jNew = sock(0);
     const newG = new THREE.Group();
     const nb = K.box(36, 4, 26, 0x2a64c9); nb.position.set(108, 2, -20); newG.add(nb);
     const nchip = K.box(10, 4, 10, 0x1d1d1f); nchip.position.set(108, 6, -20); newG.add(nchip);
-    newG.add(pathLine([[j7.x, j7.z], [60, -56], [92, -28]], 0x2a64c9, 3));
+    newG.add(pathLine([[jNew.x, jNew.z], [-60, -66], [40, -58], [92, -28]], 0x2a64c9, 3));
     group.add(newG);
     const newLab = ctx.label('new sensor, its own address', V(108, 4, 12), { cls: 'is-small is-blue' });
     // the two ways into behaviour
@@ -1175,7 +1181,7 @@ export const figures = {
     group.add(shops);
     const shopLabs = names.map((n, i) => ctx.label(n, V(SX[i], 52, SZ), { cls: 'is-small' }));
     const plugs = SX.map(() => { const p = K.box(18, 8, 12, 0x3c3c44); group.add(p); return p; });
-    // the check: the same recorded inputs through a reference and the port
+    // the check: the same recorded states turned into 61 numbers by Pollen's trainer and by yours
     const BZ = 44;
     const bench = new THREE.Group();
     const ref = K.box(64, 18, 28, 0x8d97a6); ref.position.set(-70, 9, BZ); bench.add(ref);
@@ -1183,8 +1189,8 @@ export const figures = {
     const lamp = K.ball(10, GREEN); lamp.position.set(0, 12, BZ); bench.add(lamp);
     group.add(bench);
     const benchLabs = [
-      ctx.label('reference', V(-70, 30, BZ), { cls: 'is-small' }),
-      ctx.label('port', V(70, 30, BZ), { cls: 'is-small' }),
+      ctx.label('Pollen', V(-70, 30, BZ), { cls: 'is-small' }),
+      ctx.label('your trainer', V(70, 30, BZ), { cls: 'is-small' }),
     ];
     const verdict = ctx.label('', V(0, 4, BZ + 30), { cls: 'is-small' });
     const benchDots = Array.from({ length: 6 }, () => { const d = K.packet(K.COL.blue, 3.5); d.visible = false; group.add(d); return d; });
@@ -1225,9 +1231,9 @@ export const figures = {
       // the check: inputs into both; a match while nothing is swapped, a difference once it is
       pop(bench, st.check);
       benchLabs.forEach((l) => show(l, st.check > 0.6));
-      const bad = st.swap > 0.5 && st.check > 0.55;
+      const bad = st.swap > 0.5;
       lamp.material = K.paper(bad ? RED : GREEN);
-      setText(verdict, bad ? 'the swapped port: outputs differ' : 'a faithful port: difference 0');
+      setText(verdict, bad ? 'two of the 61 in the wrong place: the swap shows' : 'the same 61 numbers');
       show(verdict, st.check > 0.3);
       benchDots.forEach((d, i) => {
         const u = (st.t * 0.8 + i / benchDots.length) % 1;

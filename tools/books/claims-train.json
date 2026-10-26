@@ -24,6 +24,10 @@
     "source": "ch-sprint",
     "quote": "$0.80 per hour"
    },
+   "000000": {
+    "source": "md-duckctl",
+    "quote": "defaults to `DUCK_PIN`, then to `000000`."
+   },
    "1,500": {
     "source": "db-b003-close",
     "quote": "1,500 PPO iterations × 2,048 envs, 54.6 min"
