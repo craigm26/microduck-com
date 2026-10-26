@@ -95,7 +95,7 @@ else.</p>
   <li>Restart the PC.</li>
   <li>Open <strong>Ubuntu</strong> from the Start menu. The first time, it unpacks itself and asks for a username
   and a password, which are for Linux only. Nothing appears on screen while you type the password, which is normal.
-  Keep it, because Linux asks for it whenever you install something.</li>
+  Keep it, because Linux asks for it when you install something.</li>
 </ol>
 
 <p>Commands from here on go into that Ubuntu window, unless a step says PowerShell. Ubuntu opens in your Linux home
@@ -171,8 +171,8 @@ gh auth login</code></pre>
 <ol>
   <li>On the challenge's page, choose <strong>New training</strong>, and train on this machine. Leave the knobs
   (Follow the speed order, Stay upright, Lift your feet) where Pollen set them for your first run.</li>
-  <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit, and
-  then it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250,
+  <li>If you changed a knob, the workshop commits that change first, so every training starts from a commit. Then
+  it trains and gives the training a ticket. The recipe runs 3000 iterations and saves a checkpoint every 250,
   and how long that takes depends on your card.</li>
   <li>Every checkpoint is scored with the Arena's own rules as it arrives, and the training's page replays any of
   them. Pick 5/5 finishes first, then the lowest time. The best checkpoint is often not the last.</li>
@@ -308,7 +308,7 @@ robot, because it bakes in the normalizer the policy expects:</p>
 
 <pre tabindex="0" role="region" aria-label="Exporting a checkpoint"><code>uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --checkpoint-file logs/rsl_rl/velocity/&lt;run&gt;/model_&lt;N&gt;.pt</code></pre>
 
-<p>Next, drive it from the keyboard, in a MuJoCo window that takes your keys in the terminal.
+<p>Next, drive it from the keyboard. This opens a MuJoCo window and takes your keys in the terminal.
 <code>--new-cmd-obs</code> matters: this policy reads the newer layout of commands, and without the flag the script
 feeds it the old one and stops.</p>
 
