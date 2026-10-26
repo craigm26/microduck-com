@@ -614,7 +614,14 @@ def check_headers() -> None:
 
     for page in sorted(PUBLIC.rglob("*.html")):
         rel = "/" + page.relative_to(PUBLIC).as_posix()
-        url = rel[: -len("index.html")] if rel.endswith("/index.html") or rel == "/index.html" else rel
+        # Pages serves /x/index.html at /x/ and /x.html at /x, answers the .html address with a
+        # 308, and matches _headers against the address it serves, so that is the one to check
+        if rel.endswith("/index.html"):
+            url = rel[: -len("index.html")]
+        elif rel.endswith(".html"):
+            url = rel[: -len(".html")]
+        else:
+            url = rel
         csps = [r for r in rules if "content-security-policy" in r["headers"] and matches(r["pattern"], url)]
         if len(csps) != 1:
             fail.append(f"{url} is under {len(csps)} security policies in _headers, not exactly one")

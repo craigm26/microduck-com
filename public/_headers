@@ -15,9 +15,12 @@
 /index.html
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
-# The not-found page, when asked for by name. Cloudflare Pages also serves it, with a 404,
-# for any path that is not a file, and there no section here matches: /* above still applies.
-/404.html
+# The not-found page, when asked for by name. Pages answers /404.html with a 308 to /404 and
+# matches these sections against the address it serves, so the section names /404 (found live,
+# 2026-10-26: a /404.html section never applied). For a path that is not a file, Pages serves the
+# page with a 404 under /* alone, which sets no policy, so the page also carries this policy in a
+# meta tag of its own, without frame-ancestors, which a meta tag cannot set.
+/404
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 /docs/*
