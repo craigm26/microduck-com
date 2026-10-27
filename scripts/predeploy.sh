@@ -299,6 +299,17 @@
 #     does not say ...".
 #   * an Arena time our runs log does not carry: "arena: '6.416':
 #     site-arena-runs does not say ...".
+# The same day a review found that page's 60 degrees vouched for by the hill's
+# "60 seconds", and its 0.3 s by the tug's "0.3 m pit": one key, one quote, two
+# meanings, and the gate passed. A key may now list one entry per meaning, and
+# three more cases failed for the planted reason, with the whole harness at 60
+# of 60:
+#   * a meaning the page no longer prints: "arena: '0.3': the Arena companion
+#     no longer prints '0.3 m pit'".
+#   * a printing no meaning covers: "the Arena companion prints '60' in ...,
+#     a meaning none of its entries covers".
+#   * a meaning that names no words: "arena: '60' has 2 entries, so each needs
+#     "as", ...".
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
