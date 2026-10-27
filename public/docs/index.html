@@ -157,7 +157,9 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
       <li><strong>Connect.</strong> In the app, open <strong>My Microduck → Connect to your duck's
       computer</strong>, type the computer's address (for example <code>duck.local</code>) and
       the token, and tap <strong>Connect</strong>. The sticks on <strong>Play</strong> now
-      drive the real duck.</li>
+      drive the real duck. Switch its Bluetooth pad off first: the robot obeys whichever
+      sends last, and an idle pad keeps sending zeros
+      (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md" rel="noopener">Pollen's robotd design</a>).</li>
       <li><strong>Show the camera.</strong> On the camera card, type the duck's camera
       address (for example <code>duck.local:8080</code>) and tap <strong>Show the
       camera</strong>. Turn on <strong>Read Duck Cards</strong> and the app reads a row of
@@ -614,7 +616,8 @@ fixing it is why we document them here.</p>
     <td><code>.onnx</code></td>
     <td>A trained policy. The app checks its input and output widths against the
     robot the app knows about, and tells you exactly why it refuses one that
-    does not match.</td>
+    does not match. Recurrent policies, which carry their memory in extra inputs and
+    outputs (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/recurrent-policies.md" rel="noopener">Pollen's page on them</a>), are not supported yet.</td>
   </tr>
 <!-- EVALSTATE:FORMATROW:BEGIN -->
   <tr id="format-evallog">

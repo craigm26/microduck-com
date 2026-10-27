@@ -178,7 +178,7 @@ is the whole book, readable and printable.
 
 **Their numbers have their own rule.** The books teach how Pollen Robotics trains the robot, so
 their numbers come from Pollen's `microduck_rl` and `microduck` repositories (pinned to commits
-`b02fdea` and `942e58e`), this site's own pages, and Kith. Every number a lesson prints, including
+`b02fdea` and `5def2f3`), this site's own pages, and Kith. Every number a lesson prints, including
 the ones its pop-up prints (labels, chips, a chart's ticks) and the ones in the page's title and
 descriptions, has an entry in `tools/books/claims-<book>.json`: a quote from a pinned source, the
 arithmetic that derives it, or the reason it is a toy, a count of something on the page, or an
@@ -263,7 +263,7 @@ numbers are held like a book's: `tools/books/claims-train.json` keeps one key pe
 `microduck-challenges` at `6ff4070` (its sprint `AGENTS.md` and its `uv.lock`), `microduck_rl` at
 `b02fdea`, Pollen's Arena at `d757117` (v0.5.0), `duck-studio` at `8e9e9bf` (build 85, the beta),
 the Microsoft and NVIDIA pages the Windows steps rest on, and, for the advanced guide, `duckbatch`
-at `1f476e4`, Pollen's `microduck` at `942e58e` and the Robot HAT at `6de8628`; `check_books.py` checks every page
+at `1f476e4`, Pollen's `microduck` at `5def2f3` and the Robot HAT at `6de8628`; `check_books.py` checks every page
 with the shelf as a plain page. When Pollen changes the workshop or the recipe, or Studio changes a screen the guides
 name, read the source again, re-pin the commit in `SOURCES`, and fix what the gate reports.
 

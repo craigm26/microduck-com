@@ -107,7 +107,7 @@ desired_kl=0.01,</code></pre>
       <h3>Where these numbers come from</h3>
       <ul>
         <li><var>γ</var> = 0.99: "gamma=0.99" in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>.</li>
-        <li>50 Hz: policies "are trained here at 50 Hz" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>). 61 and 14: "obs[1,61] → actions[1,14]" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
+        <li>50 Hz: policies "are trained here at 50 Hz" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>). 61 and 14: "obs[1,61] → actions[1,14]" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>).</li>
         <li>20 ms, 0.37, 100 ticks and 2 s are arithmetic on those two numbers, as are 10 ticks and 0.2 s for <var>γ</var> = 0.9, and 0.13 at 200 ticks.</li>
       </ul>
     </section>
@@ -162,7 +162,7 @@ cfg.observations["critic"].terms["base_lin_vel"] = ...</code></pre>
       <ul>
         <li><var>λ</var> = 0.95: "lam=0.95" in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>, which also say "Add base_lin_vel to critic only (privileged information)".</li>
         <li>The ball: "The CRITIC does see ball pos/vel (asymmetric actor-critic)" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_ball_kick_env_cfg.py">ball kick settings</a>).</li>
-        <li>61 and 14: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>. <var>λ</var> = 0 and 1 are the two ends of the range.</li>
+        <li>61 and 14: <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>. <var>λ</var> = 0 and 1 are the two ends of the range.</li>
       </ul>
     </section>
   </aside>
@@ -269,8 +269,8 @@ schedule="adaptive",</code></pre>
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>The order, the sizes and indices 48 to 60: "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]" and "command = vel(3) + head(4) + body(6)" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
-        <li>Scale 1.0, the lags, the bias and the tilt: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>. The daemon's 0.9: "Unset resolves per mode: 0.9 walking" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/deploy/robotd.toml">robotd.toml</a>). Dead weights: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
+        <li>The order, the sizes and indices 48 to 60: "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]" and "command = vel(3) + head(4) + body(6)" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>).</li>
+        <li>Scale 1.0, the lags, the bias and the tilt: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">walking task's settings</a>. The daemon's 0.9: "Unset resolves per mode: 0.9 walking" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/deploy/robotd.toml">robotd.toml</a>). Dead weights: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>.</li>
         <li>197,774 is 61 × 512 + 512 + 512 × 256 + 256 + 256 × 128 + 128 + 128 × 14 + 14.</li>
       </ul>
     </section>
@@ -379,7 +379,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
       <h3>Where these numbers come from</h3>
       <ul>
         <li>About 800 g, the sim2real sentence, the BAM model, the randomized quantities and the backlash: the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</li>
-        <li>14 Dynamixel XL330 servos: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>. Fifteen servos in all: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>. The 51-number observation: <code>scripts/infer_policy.py</code>.</li>
+        <li>14 Dynamixel XL330 servos: <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/AGENTS.md">AGENTS.md</a>. Fifteen servos in all: <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>. The 51-number observation: <code>scripts/infer_policy.py</code>.</li>
         <li>The figure's curves are drawn to show their shapes only.</li>
       </ul>
     </section>
@@ -587,7 +587,7 @@ uv run scripts/export.py &lt;TASK_ID&gt; --wandb-run-path &lt;...&gt;
 uv run scripts/infer_policy.py --walking output.onnx --new-cmd-obs
 uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; \
   --kind perpetual --slot walk --dry-run</code></pre>
-      <p>With <code>--dry-run</code>, the last line shows what would be uploaded without touching the Hugging Face Hub, and without it the same line publishes a walk. A trick publishes with <code>--kind episodic --duration-s 4.0</code> instead. With a duck, <code>sudo robotctl policy load walk</code> puts a gait in the walk slot and <code>sudo robotctl policy add</code> installs a trick; without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
+      <p>With <code>--dry-run</code>, the last line shows what would be uploaded without touching the Hugging Face Hub, and without it the same line publishes a walk. A trick publishes with <code>--kind episodic --duration-s 4.0</code> instead. With a duck, <code>sudo robotctl policy load walk</code> puts a gait in the walk slot and <code>sudo robotctl policy add &lt;name&gt; &lt;repo&gt;</code> installs a trick, which <code>robotctl robot do &lt;name&gt;</code> runs once the robot is driving; without one, <a href="/docs/#evaluations">Studio's evaluations</a> score a network on a bench and write an EvalLog.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>

@@ -494,7 +494,8 @@ python3 cardreader/sim/mc/mc_summary.py cardreader/sim/results/raw \
     <h2 id="limits">Limits</h2>
     <ul>
       <li>No real duck has run a closed-loop card yet.</li>
-      <li>duck-sim drives position servos, which are not the actuator v8 was trained with.</li>
+      <li>duck-sim's body drives MuJoCo position servos with gains fitted to the real servos, not the BAM
+      servo model v8 was trained with, which Pollen's <code>infer_policy.py</code> uses.</li>
       <li>Real floors, real IMU drift and real foot slip appear only through the randomized ranges.
       The simulated drift is one constant rate for a whole session; a real one wanders.</li>
       <li>Rows within a 12-row session share their physics, so they are not independent samples
