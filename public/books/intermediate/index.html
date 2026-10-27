@@ -157,7 +157,7 @@
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>The layout: "61-dim actor obs: 48 proprioception + commands [twist(3), head_pose(4), body_pose(6)]" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>), and the robot's own "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
+        <li>The layout: "61-dim actor obs: 48 proprioception + commands [twist(3), head_pose(4), body_pose(6)]" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>), and the robot's own "[ gyro(3) | projected_gravity(3) | joint_pos(14) | joint_vel(14) | last_action(14) | command(13) ]" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>).</li>
         <li>Swapping brains: the runtime "hot-swaps these policies (walk / recover / trick) behind a shared 61-dimensional observation contract". The kicker is "BLIND to the ball" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_ball_kick_env_cfg.py">the ball kick task</a>).</li>
       </ul>
     </section>
@@ -206,8 +206,8 @@
       <h3>Where these numbers come from</h3>
       <ul>
         <li>The order: the README's joint layout puts joints 0 to 4 in the left leg (hip_yaw, hip_roll, hip_pitch, knee, ankle), 5 to 8 in the neck and head (neck_pitch, head_pitch, head_yaw, head_roll) and 9 to 13 in the right leg (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>).</li>
-        <li>The target: "home pose + scale × action" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>). The gear play in the backlash tasks is "±1° of gear play (2° total)", and "actuator fidelity is most of the sim2real gap" (README).</li>
-        <li>15 motors: "a 50 Hz control loop driving fifteen servos" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/README.md">microduck README</a>).</li>
+        <li>The target: "home pose + scale × action" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>). The gear play in the backlash tasks is "±1° of gear play (2° total)", and "actuator fidelity is most of the sim2real gap" (README).</li>
+        <li>15 motors: "a 50 Hz control loop driving fifteen servos" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/README.md">microduck README</a>).</li>
       </ul>
     </section>
   </aside>
@@ -489,7 +489,7 @@ uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096</code></pre
       <li><strong>Export.</strong> It becomes an ONNX file, with its rescaling built in.</li>
       <li><strong>Rehearse.</strong> A laptop drives it in physics, with the motor model.</li>
       <li><strong>Publish.</strong> 61 in, 14 out, no nonsense: checked, then uploaded with a manifest.</li>
-      <li><strong>Install.</strong> One command puts it on a robot, another runs it.</li>
+      <li><strong>Install.</strong> One command puts a walk on a robot and drives it; a trick takes a second command to run.</li>
     </ol>
     <figcaption>The real path, station by station. Each stamp is a check the tools really make.</figcaption>
     <p class="big-idea"><strong>Big idea:</strong> a brain is only as good as the path that carries it to the robot.</p>
@@ -512,7 +512,7 @@ uv run publish --onnx output.onnx --repo &lt;user&gt;/microduck-&lt;name&gt; --k
       <h3>Where these numbers come from</h3>
       <ul>
         <li>The commands, the "[1,61] -> [1,14]" check, the refusal of "NaNs or a constant output", and "Repos are created private" are in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</li>
-        <li>The simulated duck: <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/README.md">microduck README</a>. Studio's checks: <a href="/docs/#formats">file formats</a>.</li>
+        <li>The simulated duck: <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/README.md">microduck README</a>. Studio's checks: <a href="/docs/#formats">file formats</a>.</li>
       </ul>
     </section>
   </aside>

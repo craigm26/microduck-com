@@ -304,7 +304,11 @@ robot, because it bakes in the normalizer the policy expects:</p>
 <pre tabindex="0" role="region" aria-label="Publishing a gait to Hugging Face"><code>uv run publish --onnx output.onnx --repo &lt;you&gt;/microduck-my-walk --kind perpetual --slot walk --no-private</code></pre>
 
 <p>An owner installs it on their robot with <code>sudo robotctl policy load walk</code> and the repository's
-name, and Studio opens the same <code>output.onnx</code> and shows what is inside it.</p>
+name, with the robot on its stand the first time, and <code>sudo robotctl policy reset walk</code> puts Pollen's
+walk back (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/robot/cheatsheet.md" rel="noopener">Pollen's cheat sheet</a>). A clip of it walking at
+<code>media/preview.mp4</code> in the repository is what <code>robotctl policy search</code> links beside it
+(<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/policy-manifest.md" rel="noopener">the policy manifest</a>). Studio opens the same <code>output.onnx</code> and
+shows what is inside it.</p>
 
 <h2 id="next">Then</h2>
 

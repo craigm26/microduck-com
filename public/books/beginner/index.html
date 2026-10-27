@@ -106,8 +106,8 @@
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>50 a second: the robot's code runs "a 50 Hz control loop driving fifteen servos" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/README.md">Pollen Robotics' microduck README</a>), and its walking brains "are trained here at 50 Hz" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>).</li>
-        <li>14 and 15 motors: "Joints exclude the mouth throughout" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>), and the training code's "Joint layout (14 servos)".</li>
+        <li>50 a second: the robot's code runs "a 50 Hz control loop driving fifteen servos" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/README.md">Pollen Robotics' microduck README</a>), and its walking brains "are trained here at 50 Hz" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>).</li>
+        <li>14 and 15 motors: "Joints exclude the mouth throughout" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>), and the training code's "Joint layout (14 servos)".</li>
         <li>500 is 50 times 10.</li>
       </ul>
     </section>
@@ -259,7 +259,7 @@
     </section>
     <section>
       <h3>Where these numbers come from</h3>
-      <p>No numbers in this lesson. "Knock it over and it stands itself up" is from <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/README.md">Pollen Robotics' microduck README</a>; the trained skills are the VelStand and StandUp tasks in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</p>
+      <p>No numbers in this lesson. "Knock it over and it stands itself up" is from <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/README.md">Pollen Robotics' microduck README</a>; the trained skills are the VelStand and StandUp tasks in the <a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/README.md">microduck_rl README</a>.</p>
     </section>
   </aside>
 </article>
@@ -559,7 +559,7 @@
     <section>
       <h3>Where these numbers come from</h3>
       <ul>
-        <li>About 20 degrees: "head_roll : ±0.31 rad (limit ±20°)", and the commands' "~10% safety margin" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">the walking task's settings</a>). The robot's control loop will "clamp to actuator range" (<a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/robotd-design.md">robotd design</a>).</li>
+        <li>About 20 degrees: "head_roll : ±0.31 rad (limit ±20°)", and the commands' "~10% safety margin" (<a href="https://github.com/pollen-robotics/microduck_rl/blob/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/tasks/microduck_velocity_env_cfg.py">the walking task's settings</a>). The robot's control loop will "clamp to actuator range" (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md">robotd design</a>).</li>
         <li>Studio checks angles: "Every angle it writes is checked against the robot's own joint travel before you see it" (<a href="/">Microduck Studio</a>). The preview sentence is from <a href="/docs/#motions">the docs</a>.</li>
       </ul>
     </section>

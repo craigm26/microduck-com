@@ -57,6 +57,7 @@
     <li><a href="#read">Read a real run</a></li>
     <li><a href="#change">Change one thing</a></li>
     <li><a href="#cards">Other cards and services</a></li>
+    <li><a href="#button">Put a trick on a button</a></li>
     <li><a href="#ports">Ports between your devices</a></li>
     <li><a href="#channels">The duck's other channels</a></li>
     <li><a href="#qwiic">The spare Qwiic port</a></li>
@@ -153,6 +154,23 @@ rented from another cloud, which should follow the Linux guide.</p>
 <a href="mailto:feedback@microduckstudio.com?subject=Go%20further%3A%20another%20card">tell us how it went</a>, and
 this page will say so. Training in another simulator altogether is lesson 10 of Book 4.</p>
 
+<h2 id="button">Put a trick on a button</h2>
+
+<p>The robot runs two kinds of policy, and Pollen's tools treat them differently. A slot is what it runs by default,
+the walk or the stand, and <code>robotctl policy load walk</code> replaces it. A skill is what it runs when asked, a bow
+or a kick, and it sits beside the walk instead of replacing it
+(<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/robot/cheatsheet.md" rel="noopener">Pollen's cheat sheet</a>).</p>
+
+<pre tabindex="0" role="region" aria-label="Installing a skill and binding it to a button"><code>sudo robotctl policy add polite-bow fffiloni/microduck-polite-bow-b1d864
+robotctl robot do polite-bow
+sudo robotctl pad bind x polite-bow</code></pre>
+
+<p>The first line installs a bow someone published as a skill. The second runs it, once the robot is driving: press
+Start on the pad first, or the request is refused. The last puts it on the pad's X button, which ships empty, and
+<code>sudo robotctl pad reset</code> puts the buttons back; nothing restarts either way. A skill that holds until told
+otherwise, like a one-footed stand, has no length of its own, so <code>policy add</code> takes one with
+<code>--hold</code>, and the command it reads with <code>--command</code>.</p>
+
 <h2 id="ports">Ports between your devices</h2>
 
 <p>The duck and your computers talk over a few ports, and only ssh asks for anything: the duck account's password,
@@ -160,7 +178,7 @@ or your key.</p>
 
 <ul>
   <li><strong>A shell on the duck.</strong> <code>ssh microduck@&lt;address&gt;</code>. Pollen's
-  <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/duckctl.md">duckctl</a>
+  <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/robot/duckctl.md">duckctl</a>
   finds the address over Bluetooth, from a laptop with uv: <code>uvx duckctl --name &lt;robot-name&gt; ip</code>.</li>
   <li><strong>The console.</strong> Pollen's camera service serves a page on port 8080 that streams the head camera
   and drives the duck, and the page connects back on port 8443 to start the stream.
@@ -180,7 +198,7 @@ or your key.</p>
 <div class="note">
   <p><strong>Who can drive.</strong> Pollen's own notes say it plainly: anyone on the duck's network can drive it
   from the console and see through its camera.
-  <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/design/remote-webrtc.md">Pollen's
+  <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/remote-webrtc.md">Pollen's
   design note</a> calls that fine on a bench and in an office, not in a home, and a thing to revisit before ducks ship
   to homes. Anyone who can reach the pad's port, once it is on, can drive it, sit it down and switch it off.
   Bluetooth is another way in: anyone in range with duckctl and the pairing PIN, the factory 000000 until you change
@@ -209,7 +227,7 @@ its mapping post describes the duck with one in its head.</p>
 
 <pre tabindex="0" role="region" aria-label="Recording the duck's state to a file, on the duck"><code>robotctl monitor --json --hz 50 &gt; run.jsonl</code></pre>
 
-<p>A program can also drive. Pollen's <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/docs/robot/udp-pad.md">UDP
+<p>A program can also drive. Pollen's <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/robot/udp-pad.md">UDP
 pad page</a> describes the 28-byte datagram and has a complete sender in Python, which stands the duck up, turns the
 walk on and walks it forward for three seconds.</p>
 
@@ -239,7 +257,7 @@ schematic.</p>
 
 <ol>
   <li><strong>See what answers now.</strong> On the duck, list the bus and write down every address that answers.
-  On the Zero 3W ducks, <a href="https://github.com/pollen-robotics/microduck/blob/942e58e3aa6dbb28e7037203fff11866122c7567/tof/src/link.rs">Pollen's
+  On the Zero 3W ducks, <a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/tof/src/link.rs">Pollen's
   code</a> expects the audio codec at 0x18, the board's BMI088 IMU at 0x19 and 0x68, connected though unused by
   default, and the depth sensor, where fitted, at 0x29, or 0x52 on some early ducks. The open board's latest revision
   has an LSM6DSV16X IMU at 0x6A instead, and Pollen's beta board puts the depth sensor on SPI, where i2cdetect cannot
