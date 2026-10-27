@@ -250,8 +250,8 @@ scorer (`arena score`, microduck-arena 0.6.0) and logged in full at
 [`public/train/arena/runs.txt`](public/train/arena/runs.txt), which the ledger cites for every time the
 page prints. The log ends with what the board itself said about the runs the page compares with ours,
 read from the Arena's API. Its Arena facts are quoted from the Space at one pinned revision, and Pollen's
-sprint notes at one pinned commit. It records our one entry, b003b on the hill climb, published with
-Pollen's own `publish`.
+sprint notes at one pinned commit. It records our entries, each published with Pollen's own `publish`:
+b003b on the hill climb, then b003f on the sprint and the hill.
 
 The PC and Mac guides hand over to Pollen's own workshop (the **Train my own robot** line on an
 Arena challenge, which clones `microduck-challenges`), Claude Code beside it (each challenge folder
