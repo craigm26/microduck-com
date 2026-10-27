@@ -6,7 +6,8 @@ microduck-challenges installs at commit 4b675ebf4d7c7b961cd78da94bfc37ca1686d321
 on an x86_64 Linux machine, the same architecture as the Arena's Space, one run at a time per policy:
   arena score <policy.onnx> --event <event>
 A time from a machine other than the Arena's is indicative, as the Arena's README says; the board's
-time is the Arena's own run. The one entry we made is at the end, with the Arena's own answer.
+time is the Arena's own run. The one entry we made is at the end, with the Arena's own answer, and
+after it what the board said about the runs the page compares with ours.
 
 The policies (name, what it is, where the file is, its sha256):
   sprint-reference: Pollen's sprint reference, trained with the 2 m Sprint's own recipe
@@ -916,3 +917,28 @@ own publish tool (microduck_rl at commit 1efd853be9fcdf050da24b5723cb74ada9a731d
 [publish] on a robot: sudo robotctl policy load walk craigm26/microduck-duckbatch-b003b
 [publish] entered on hill-climb-1m5: 6.416 s (5/5 seeds) at 0.85 m/s → https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5Z66V0M99E7BA87B42H
 
+====================================================================================================
+What the board said, read from the Arena's API on 2026-10-27 (GET /api/runs/<run id>, and its
+/settle and /trace, which the API serves as 21 little-endian float32 values a frame, 50 frames a
+second; as we read them, the duck's position, then the trunk's orientation as a quaternion, then
+its 14 joints. Tilt below is the trunk's angle from upright, worked out from that quaternion):
+====================================================================================================
+Pollen's sprint reference on sprint-2m, entered as "Pollen Sprint Reference", run 01M3PVB3EC1HG6N3SYZZZS,
+the same policy.onnx as ours by sha256 (adbc1594..., at revision 3e59e802dea470f62c16a018ee2a3b603374ae92):
+  board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start
+  trace: the settle moves it from x = 0.00 m to 0.05 m; the trunk stays within 3 degrees of upright
+
+Our entry, b003b on hill-climb-1m5, run 01M5Z66V0M99E7BA87B42H:
+  board: 6.416 s (5/5 seeds) at 0.85 m/s, per seed 6.395 6.390 6.540 6.675 6.080, the same as ours above, start for start
+  trace: the settle moves it from x = -0.02 m to 0.04 m; the trunk stays within 10 degrees of upright
+
+The sprint's best run when we looked, greecree's sprint-2m-sprint-leader-v2, run 01M5YY1WYCDYN4FRB7BF4N:
+  board: 0.839 s (5/5 seeds) at 1.15 m/s, rank 1
+  trace: the untimed settle moves it from x = 0.00 m to 0.30 m, and it is moving at 1.75 m/s when the
+  clock starts; timed, it covers x = 0.33 m to 2.30 m in 42 frames, its trunk 7 to 52 degrees from
+  upright before its last 6 frames, past 60 degrees only in the last 4, and 106 degrees at the end
+
+The hill's best run when we looked, jrubiosainz's game-hillclimber-remix8, run 01M5V33SPVY6R6NBBB4NZW:
+  board: 0.744 s (5/5 seeds) at 0.30 m/s, rank 1
+  trace: the untimed settle moves it from x = -0.02 m to 0.21 m, and it is moving at 1.48 m/s when the
+  clock starts; timed, 37 frames, its trunk past 60 degrees only in the last 2, and 93 degrees at the end

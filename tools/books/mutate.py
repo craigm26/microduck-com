@@ -413,6 +413,21 @@ def _():
 def _():
     ledger("train", lambda L: L["arena"]["6.416"].update(quote="entered on hill-climb-1m5: 6.417 s (5/5 seeds) at 0.85 m/s"))
 
+
+@case("a meaning of a shared number the page no longer prints", [TR], "the Arena companion no longer prints '0.3 m pit'")
+def _():
+    sub(TR, "over a 0.3 m pit", "over a pit")
+
+
+@case("a shared number printed in a meaning no entry covers", [TR], "a meaning none of its entries covers")
+def _():
+    sub(TR, "Walk 1.5 m up an 8&deg; slope", "Walk 1.5 m up an 8&deg; slope, in under 60 s if you can")
+
+
+@case("a meaning with no words to vouch for", ["tools/books/claims-train.json"], "so each needs \"as\"")
+def _():
+    ledger("train", lambda L: L["arena"]["60"][1].pop("as"))
+
 def main():
     if COPY == SRC or SRC in COPY.parents or COPY in SRC.parents:
         raise SystemExit("mutate: that copy would land on the repository itself; name another WORKDIR")

@@ -190,9 +190,9 @@
    "9.60": {
     "derived": "12 * 0.80"
    },
-   "4.883": {
-    "source": "ch-sprint",
-    "quote": "It scores 4.883 s, 5/5, at 0.55 m/s"
+   "4.886": {
+    "source": "site-arena-runs",
+    "quote": "board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start"
    }
   },
   "linux": {
@@ -258,9 +258,9 @@
    "9.60": {
     "derived": "12 * 0.80"
    },
-   "4.883": {
-    "source": "ch-sprint",
-    "quote": "It scores 4.883 s, 5/5, at 0.55 m/s"
+   "4.886": {
+    "source": "site-arena-runs",
+    "quote": "board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start"
    }
   },
   "mac": {
@@ -320,9 +320,9 @@
     "source": "rl-hfjobs-py",
     "quote": "Hugging Face Jobs permission error (403)"
    },
-   "4.883": {
-    "source": "ch-sprint",
-    "quote": "It scores 4.883 s, 5/5, at 0.55 m/s"
+   "4.886": {
+    "source": "site-arena-runs",
+    "quote": "board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start"
    }
   },
   "iphone": {
@@ -405,18 +405,52 @@
     "source": "arena-hill",
     "quote": "The Arena scans forward commands from **0.15 to 1.00 m/s** in 0.05 steps."
    },
-   "0.20": {
-    "source": "arena-sprint",
-    "quote": "The Arena scans forward commands from **0.20 to 1.20 m/s** in 0.05 steps."
-   },
-   "0.3": {
-    "source": "arena-tug",
-    "quote": "Two ducks are tied neck to neck by a 1 m string, over a 0.3 m pit, in a 3 m wrestling ring."
-   },
-   "0.30": {
-    "source": "arena-roller",
-    "quote": "The Arena scans forward commands from **0.30 to 2.00 m/s** in 0.10 steps."
-   },
+   "0.20": [
+    {
+     "as": "from 0.20 to 1.20 m/s",
+     "source": "arena-sprint",
+     "quote": "The Arena scans forward commands from **0.20 to 1.20 m/s** in 0.05 steps."
+    },
+    {
+     "as": "asked for 0.20 m/s",
+     "source": "site-arena-runs",
+     "quote": "0.20 m/s timeout at 0.00m 0.25 m/s fall at 1.46m"
+    }
+   ],
+   "0.3": [
+    {
+     "as": "for 0.3 s",
+     "source": "ch-sprint",
+     "quote": "trunk tilted more than 60° (gravity z above −0.5) for 0.3 s"
+    },
+    {
+     "as": "0.3 m pit",
+     "source": "arena-tug",
+     "quote": "Two ducks are tied neck to neck by a 1 m string, over a 0.3 m pit, in a 3 m wrestling ring."
+    }
+   ],
+   "0.30": [
+    {
+     "as": "student up to 0.30",
+     "source": "site-arena-runs",
+     "quote": "0.20 m/s timeout at -0.00m 0.25 m/s timeout at -0.00m 0.30 m/s timeout at -0.00m"
+    },
+    {
+     "as": "crept forward when asked for 0.30",
+     "source": "db-b003-close",
+     "quote": "| vx 0.30 | 0.119 | 0.108 | 0.060 |"
+    },
+    {
+     "as": "from 0.30 to 2.00 m/s",
+     "source": "arena-roller",
+     "quote": "The Arena scans forward commands from **0.30 to 2.00 m/s** in 0.10 steps."
+    },
+    {
+     "as": "walk backwards at 0.30 m/s",
+     "source": "arena-tug",
+     "quote": "the Arena sends every duck the same fixed command, `[-0.30, 0, 0]`."
+    }
+   ],
    "0.45": {
     "source": "site-arena-runs",
     "quote": "scored at 0.45 m/s"
@@ -465,10 +499,23 @@
     "source": "arena-hill",
     "quote": "Walk 1.5 metres up an **8° slope**."
    },
-   "100": {
-    "source": "arena-tug",
-    "quote": "plus **100 cm** when the reference ends in the pit, or minus 100 cm when your duck does."
-   },
+   "100": [
+    {
+     "as": "plus 100 when the reference ends in the pit and minus 100 when yours does",
+     "source": "arena-tug",
+     "quote": "plus **100 cm** when the reference ends in the pit, or minus 100 cm when your duck does."
+    },
+    {
+     "as": "earns 100",
+     "source": "arena-points",
+     "quote": "| First publication in a challenge | +100 | Once per challenge |"
+    },
+    {
+     "as": "250, 150 or 100",
+     "source": "arena-points",
+     "quote": "| Hold a podium place | +250 / +150 / +100 | First / second / third, per challenge |"
+    }
+   ],
    "122.9": {
     "source": "site-arena-runs",
     "quote": "rating: -122.9 cm"
@@ -505,18 +552,45 @@
     "source": "arena-tug",
     "quote": "Entries close on **Friday at 16:00, Paris time**, and the cup airs on the live channel from **18:00**."
    },
-   "2": {
-    "source": "arena-sprint",
-    "quote": "Walk 2 metres on flat ground."
-   },
+   "2": [
+    {
+     "as": [
+      "2 m Sprint",
+      "walk 2 m down"
+     ],
+     "source": "arena-sprint",
+     "quote": "Walk 2 metres on flat ground."
+    },
+    {
+     "as": [
+      "2 m Roller Sprint",
+      "Skate 2 m"
+     ],
+     "source": "arena-roller",
+     "quote": "Skate 2 metres on flat ground."
+    },
+    {
+     "as": "2 of 5 finished",
+     "source": "site-arena-runs",
+     "quote": "score 32.202s · 2/5 finished"
+    }
+   ],
    "2.00": {
     "source": "arena-roller",
     "quote": "The Arena scans forward commands from **0.30 to 2.00 m/s** in 0.10 steps."
    },
-   "20": {
-    "source": "arena-talent",
-    "quote": "Put on a 20-second performance on an open stage."
-   },
+   "20": [
+    {
+     "as": "20-second performance",
+     "source": "arena-talent",
+     "quote": "Put on a 20-second performance on an open stage."
+    },
+    {
+     "as": "20 votes a day",
+     "source": "arena-talent",
+     "quote": "You can cast **20 votes per UTC day**."
+    }
+   ],
    "200": {
     "source": "arena-tug",
     "quote": "A fault scores **−200 cm**, below any bout played out"
@@ -530,10 +604,18 @@
     "source": "arena-points",
     "quote": "| Hold a podium place | +250 / +150 / +100 | First / second / third, per challenge |"
    },
-   "3": {
-    "source": "arena-talent",
-    "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
-   },
+   "3": [
+    {
+     "as": "twist (3)",
+     "source": "arena-talent",
+     "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
+    },
+    {
+     "as": "3 m ring",
+     "source": "arena-tug",
+     "quote": "Two ducks are tied neck to neck by a 1 m string, over a 0.3 m pit, in a 3 m wrestling ring."
+    }
+   ],
    "32.202": {
     "source": "site-arena-runs",
     "quote": "score 32.202s · 2/5 finished"
@@ -542,21 +624,25 @@
     "source": "site-arena-runs",
     "quote": "score 38.053s · 2/5 finished"
    },
-   "4": {
-    "source": "arena-talent",
-    "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
-   },
+   "4": [
+    {
+     "as": "4 of 5 finished",
+     "source": "site-arena-runs",
+     "quote": "score 14.523s · 4/5 finished"
+    },
+    {
+     "as": "head (4)",
+     "source": "arena-talent",
+     "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
+    }
+   ],
    "4.859": {
     "source": "site-arena-runs",
     "quote": "score 4.859s · 5/5 finished"
    },
-   "4.883": {
-    "source": "ch-sprint",
-    "quote": "It scores 4.883 s, 5/5, at 0.55 m/s"
-   },
    "4.886": {
     "source": "site-arena-runs",
-    "quote": "score 4.886s · 5/5 finished · replay from seed 3"
+    "quote": "board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start"
    },
    "40": {
     "source": "arena-roller",
@@ -582,18 +668,35 @@
     "source": "arena-sprint",
     "quote": "Each fall or timeout counts as **50 seconds**."
    },
-   "6": {
-    "source": "arena-talent",
-    "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
-   },
+   "6": [
+    {
+     "as": "body (6)",
+     "source": "arena-talent",
+     "quote": "the policy reads its 13 command numbers: `twist` (3), `head` (4), `body` (6)."
+    },
+    {
+     "as": "6 November 2026",
+     "source": "arena-tug-event",
+     "quote": "first = \"2026-11-06\"",
+     "means": "the first cup's day, 2026-11-06, is 6 November 2026"
+    }
+   ],
    "6.416": {
     "source": "site-arena-runs",
-    "quote": "entered on hill-climb-1m5: 6.416 s (5/5 seeds) at 0.85 m/s"
+    "quote": "board: 6.416 s (5/5 seeds) at 0.85 m/s, per seed 6.395 6.390 6.540 6.675 6.080, the same as ours above, start for start"
    },
-   "60": {
-    "source": "arena-hill",
-    "quote": "Each fall or timeout counts as **60 seconds**."
-   },
+   "60": [
+    {
+     "as": "60°",
+     "source": "ch-sprint",
+     "quote": "trunk tilted more than 60° (gravity z above −0.5) for 0.3 s"
+    },
+    {
+     "as": "counts as 60 s",
+     "source": "arena-hill",
+     "quote": "Each fall or timeout counts as **60 seconds**."
+    }
+   ],
    "61": {
     "source": "arena-readme",
     "quote": "One ONNX file with a **61-D observation input** and a **14-D action output**"
@@ -618,14 +721,39 @@
     "source": "arena-talent",
     "quote": "A performance can put up to **8 ducks** on the stage."
    },
-   "five": {
-    "source": "arena-readme",
-    "quote": "An entry is scored as the **mean finish time over five perturbed starts**"
-   },
-   "four": {
-    "source": "arena-readme",
-    "quote": "so a policy that is quick four times and falls once ranks below a steady one"
-   },
+   "five": [
+    {
+     "as": [
+      "five starts",
+      "two of five",
+      "five of five"
+     ],
+     "source": "arena-readme",
+     "quote": "An entry is scored as the **mean finish time over five perturbed starts**"
+    },
+    {
+     "as": "five bouts",
+     "source": "arena-tug",
+     "quote": "The board ranks a rating from five bouts against the Arena's **reference duck**"
+    }
+   ],
+   "four": [
+    {
+     "as": "quick four times",
+     "source": "arena-readme",
+     "quote": "so a policy that is quick four times and falls once ranks below a steady one"
+    },
+    {
+     "as": "two to four anonymous",
+     "source": "arena-talent",
+     "quote": "Ballots offer two to four anonymous performances, excluding your own"
+    },
+    {
+     "as": "at least four entrants",
+     "source": "arena-tug",
+     "quote": "A cup needs at least **4 entrants**, or it is skipped."
+    }
+   ],
    "seven": {
     "source": "arena-talent",
     "quote": "The most votes over the **last seven days** wins"
@@ -634,10 +762,27 @@
     "source": "arena-sprint",
     "quote": "It tests three shortlisted speeds over five starts and keeps the best average."
    },
-   "two": {
-    "source": "arena-talent",
-    "quote": "Ballots offer two to four anonymous performances, excluding your own"
-   }
+   "two": [
+    {
+     "as": "finished two of five",
+     "source": "site-arena-runs",
+     "quote": "score 38.053s · 2/5 finished"
+    },
+    {
+     "as": "those two climb",
+     "editorial": "b003b and b003f, the two policies the sentence before it names"
+    },
+    {
+     "as": "two to four anonymous performances",
+     "source": "arena-talent",
+     "quote": "Ballots offer two to four anonymous performances, excluding your own"
+    },
+    {
+     "as": "Two ducks are tied",
+     "source": "arena-tug",
+     "quote": "Two ducks are tied neck to neck by a 1 m string, over a 0.3 m pit, in a 3 m wrestling ring."
+    }
+   ]
   }
  }
 }

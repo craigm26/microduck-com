@@ -53,6 +53,15 @@ come out right could license a number.
 
 THE HEAD COUNTS. A number in a page's title or descriptions, which is what a
 search result or a shared link shows, must be ledgered in that book.
+
+ONE NUMBER, TWO MEANINGS. On a plain page the same digits can say two different
+things: 60 is a tilt in degrees in one sentence and a time limit in seconds in
+the next, and one quote cannot vouch for both. A ledger key may then hold a list
+of entries, one per meaning, each naming under "as" the words on the page it
+vouches for (one phrase or a list of them). Every place the page prints that
+number must sit inside one of those phrases, so a new meaning cannot slip in
+under an old meaning's quote. Whether a quote fits its words is still a reader's
+call; the gate makes each pairing explicit.
 """
 
 from __future__ import annotations
@@ -649,6 +658,37 @@ def check_headers() -> None:
             fail.append(f"{url}: its policy must start from default-src 'none'")
 
 
+def occurrences(text: str, key: str) -> list[int]:
+    """Where text prints a ledger key the way numbers_in reads it: the digits for a digit key,
+    the word for a word key."""
+    text = XREF.sub(lambda m: " " * len(m.group(0)), text)
+    spots = [m.start(1) for m in NUM.finditer(text) if m.group(1) == key]
+    return spots + [m.start(1) for m in WORD.finditer(text) if m.group(1).lower() == key]
+
+
+def check_meanings(where: str, label: str, key: str, entries: list, text: str, ledgered: set[str]) -> None:
+    """One number with more than one meaning: an entry for each, and every printing inside one."""
+    spans: list[tuple[int, int]] = []
+    for entry in entries:
+        check_entry(where, key, entry, ledgered)
+        said = entry.get("as") or []
+        said = [norm(str(w)) for w in ([said] if isinstance(said, str) else said)]
+        if not said:
+            fail.append(f"{where}: {key!r} has {len(entries)} entries, so each needs \"as\", "
+                        "the words on the page it vouches for")
+        for words in said:
+            if not carries(words, key):
+                fail.append(f"{where}: {key!r}: \"as\" {words!r} does not print {key}")
+            found = [(m.start(), m.end()) for m in re.finditer(re.escape(words), text)]
+            if not found:
+                fail.append(f"{where}: {key!r}: {label} no longer prints {words!r}")
+            spans += found
+    for at in occurrences(text, key):
+        if not any(a <= at < b for a, b in spans):
+            fail.append(f"{where}: {label} prints {key!r} in \"...{text[max(0, at - 40):at + 20]}...\", "
+                        "a meaning none of its entries covers")
+
+
 def check_plain(rel: str, ledger: str, key_name: str, label: str, list_only: bool) -> int:
     """A plain page: every number in its main and its head ledgered, and no script."""
     path = PUBLIC / rel
@@ -657,7 +697,8 @@ def check_plain(rel: str, ledger: str, key_name: str, label: str, list_only: boo
         return 0
     page = path.read_text(encoding="utf-8")
     m = re.search(r"<main\b.*?</main>", page, flags=re.S)
-    found = numbers_in(flatten(m.group(0) if m else ""))
+    text = flatten(m.group(0) if m else "")
+    found = numbers_in(text)
     claims = json.loads((TOOLS / ledger).read_text(encoding="utf-8"))["lessons"][key_name]
     if list_only:
         print(f"{key_name}: {sorted(found)}")
@@ -668,7 +709,10 @@ def check_plain(rel: str, ledger: str, key_name: str, label: str, list_only: boo
         fail.append(f"tools/books/{ledger} lists {key!r} and {label} no longer prints it")
     ledgered = set().union(*(forms(k) for k in claims)) if claims else set()
     for key, value in claims.items():
-        check_entry(key_name, key, value, ledgered)
+        if isinstance(value, list):
+            check_meanings(key_name, label, key, value, text, ledgered)
+        else:
+            check_entry(key_name, key, value, ledgered)
     for key in sorted(head_numbers(page)):
         if not forms(key) & ledgered:
             fail.append(f"{label}'s head prints {key!r} and tools/books/{ledger} does not say where it comes from")

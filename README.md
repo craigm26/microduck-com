@@ -244,11 +244,14 @@ factory PIN is 000000.
 
 [`/train/arena/`](public/train/arena/index.html) is the companion to Pollen's Microduck Arena on Hugging
 Face, which races and ranks policies on its own machine. The Arena's help is short on purpose, so the
-page adds what each of its five events really tests, the lessons behind each, and what duckbatch's
-policies did under its rules: every one raced with the Arena's own scorer (`arena score`, microduck-arena
-0.6.0) and logged in full at [`public/train/arena/runs.txt`](public/train/arena/runs.txt), which the
-ledger cites for every time the page prints. Its Arena facts are quoted from the Space at one pinned
-revision. It records our one entry, b003b on the hill climb, published with Pollen's own `publish`.
+page adds what each of its five events really tests, the lessons behind each, and what the policies we
+raced did under its rules: Pollen's two references and duckbatch's, every one raced with the Arena's own
+scorer (`arena score`, microduck-arena 0.6.0) and logged in full at
+[`public/train/arena/runs.txt`](public/train/arena/runs.txt), which the ledger cites for every time the
+page prints. The log ends with what the board itself said about the runs the page compares with ours,
+read from the Arena's API. Its Arena facts are quoted from the Space at one pinned revision, and Pollen's
+sprint notes at one pinned commit. It records our one entry, b003b on the hill climb, published with
+Pollen's own `publish`.
 
 The PC and Mac guides hand over to Pollen's own workshop (the **Train my own robot** line on an
 Arena challenge, which clones `microduck-challenges`), Claude Code beside it (each challenge folder
