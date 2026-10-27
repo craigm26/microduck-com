@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Race in Pollen's Arena, Microduck Studio</title>
+<meta name="description" content="A companion to Pollen Robotics' Microduck Arena on Hugging Face: what each of its events really tests, the lessons that explain it, and what the policies we raced did under its rules.">
+<link rel="canonical" href="https://microduckstudio.com/train/arena/">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/assets/studio-icon.png">
+<link rel="stylesheet" href="/assets/site.css?v=2061e35c66">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner wrap">
+    <a class="brand" href="/">
+      <img src="/assets/studio-icon.png" width="36" height="36" alt="">
+      <span>Microduck Studio<small>Independent project</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#what">Studio</a>
+      <a href="/docs/">Docs</a>
+      <a href="/cards/">Cards</a>
+      <a href="/books/">Books</a>
+      <a href="/train/" aria-current="page">Train</a>
+      <a href="/#links">Downloads</a>
+      <a class="nav-source" href="https://github.com/craigm26/duck-studio" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="privacy-wrap">
+
+<header class="privacy-header">
+  <h1>Race your duck in Pollen's Arena</h1>
+  <p class="lede">Pollen Robotics' <a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena" rel="noopener">Microduck
+  Arena</a>, a Space on Hugging Face, races your policy on its own machine and ranks it against everyone else's. Its
+  help is short on purpose: the objective, how to start, and how the result is judged. This page adds the rest, which
+  is what each event really tests, the lessons that explain it, and what the policies we raced did under the Arena's
+  rules. <a href="/train/">New to training? Start with your first duck.</a></p>
+</header>
+
+<main id="main" tabindex="-1">
+
+<div class="note">
+  <p><strong>Whose Arena this is.</strong> The Arena, its events, its scorer and its workshop are Pollen Robotics',
+  and each section below links to their own pages for its rules. We raced Pollen's sprint reference and the reference
+  walker the Arena ships with, and the policies of duckbatch, an open project by this site's author. Those are smaller
+  students of Pollen's own walker, the teacher in <a href="/books/casebook/">Book 4</a>, and the fine-tunes that book
+  traces. Our times come from the Arena's own scorer, run on our machine, and
+  <a href="/train/arena/runs.txt">the log of every run</a> has them in full; only the Arena's own run puts a time on
+  its board.</p>
+</div>
+
+<nav aria-label="On this page">
+  <ul>
+    <li><a href="#clock">How the Arena times you</a></li>
+    <li><a href="#sprint">The sprint</a></li>
+    <li><a href="#hill">The hill climb</a></li>
+    <li><a href="#roller">The roller sprint</a></li>
+    <li><a href="#talent">Got a Talent</a></li>
+    <li><a href="#tug">Tug of War</a></li>
+    <li><a href="#entry">What we entered</a></li>
+    <li><a href="#points">Points</a></li>
+    <li><a href="#start">Get to the start line</a></li>
+  </ul>
+</nav>
+
+<h2 id="clock">How the Arena times you</h2>
+
+<p>Why might the time on your machine not match the board's? The Arena's servo model is chaotic enough that a run
+drifts apart after a few seconds of simulated time, so the same policy gives other times on a Mac or another
+architecture. Only a machine like the Arena's own, x86_64 Linux, reproduces the board's
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/README.md" rel="noopener">the
+Arena's README</a>).</p>
+
+<p>The rules are built so that one lucky run cannot win. For a race, the Arena tries every commanded speed in the
+event's sweep once, then runs the three fastest again from five starts, each with the joints and the heading nudged a
+little, and keeps the best average. A fall, or no finish inside the time limit, counts as the time limit, so a policy
+that is quick four times and falls once ranks below a steady one. The replay you watch is the median finishing run,
+not the best. Pollen's workshop and its <code>arena score</code> apply the same rules on your machine.</p>
+
+<p>We saw what that costs. Book 4's starting point, duckbatch's student, finishes the sprint in 5.59 to 5.76 s when it
+finishes, but one of its five starts never reached the line, and its score is 14.523 s.</p>
+
+<p>Our machine is the same kind as the Arena's, and the times agree to the millisecond. Pollen's sprint reference
+scores 4.886 s here and 4.886 s on the board, start for start, and the entry we made scored 6.416 s on both.</p>
+
+<p class="meta">Read next: <a href="/books/advanced/#lesson-8">Book 3, Honest numbers</a>, for why a result has to
+survive more than one start, and <a href="/books/advanced/#lesson-6">Book 3, The actuator is most of the gap</a>, for
+why the servos decide so much.</p>
+
+<h2 id="sprint">The 2 m Sprint</h2>
+
+<p>This race asks the duck to walk 2 m down a flat lane, 0.8 m wide between low walls, as fast as it can without
+falling. The sweep runs from 0.20 to 1.20 m/s in steps of 0.05, and a fall or a timeout counts as 50 s
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/sprint-2m.md" rel="noopener">the
+Arena's rules</a>). The policy's command is one constant forward speed, with the head and body commands at zero, and it
+is never told its heading or where it is in the lane. A fall is the trunk tilted past 60&deg; for 0.3 s, after an
+untimed settle at the start
+(<a href="https://github.com/pollen-robotics/microduck-challenges/blob/4b675ebf4d7c7b961cd78da94bfc37ca1686d321/src/microduck_challenges/sprint_2m/AGENTS.md" rel="noopener">Pollen's
+notes for this challenge</a>).</p>
+
+<p><strong>What it really tests.</strong> The leaders do not walk to the line. In
+<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5YY1WYCDYN4FRB7BF4N" rel="noopener">the
+best run</a> when we looked, the duck gets going in the settle and is already running when the clock starts. It runs
+bent forward in quick strides and dives across the line in under a second. The fall rule lets it: a dive that
+crosses the line before the trunk has been past 60&deg; for 0.3 s is a finish. That is Book 3's point that the reward
+is the specification, played out on a public board: the race times only the run to the line, and a running start and
+a dive are both inside its rules.</p>
+
+<p><strong>What we measured.</strong> A walk is slower, and a steady walk is harder than it looks.</p>
+
+<div class="scroller">
+<table>
+  <caption>The 2 m Sprint, raced with the Arena's own scorer on our machine</caption>
+  <thead><tr><th scope="col">Policy</th><th scope="col">Score</th><th scope="col">Timed at</th></tr></thead>
+  <tbody>
+    <tr><td><a href="https://huggingface.co/pollen-robotics/microduck-sprint-2m-reference" rel="noopener">Pollen's sprint reference</a><br><span class="meta">trained by Pollen with this race's own recipe</span></td><td>4.886 s<br><span class="meta">5 of 5 finished</span></td><td>0.55 m/s</td></tr>
+    <tr><td>b003f<br><span class="meta"><a href="/books/casebook/#lesson-6">Book 4, The teacher's pull</a></span></td><td>5.108 s<br><span class="meta">5 of 5 finished</span></td><td>1.15 m/s</td></tr>
+    <tr><td>The Arena's reference walker<br><span class="meta">shipped with the Arena, not Book 4's teacher</span></td><td>9.392 s<br><span class="meta">5 of 5 finished</span></td><td>0.45 m/s</td></tr>
+    <tr><td>b003d<br><span class="meta"><a href="/books/casebook/#lesson-5">Book 4, One change at a time</a></span></td><td>14.083 s<br><span class="meta">4 of 5 finished</span></td><td>0.90 m/s</td></tr>
+    <tr><td>duckbatch's student<br><span class="meta"><a href="/books/casebook/#lesson-1">Book 4's starting point</a></span></td><td>14.523 s<br><span class="meta">4 of 5 finished</span></td><td>0.90 m/s</td></tr>
+    <tr><td>b003b<br><span class="meta"><a href="/books/casebook/#lesson-2">Book 4, Pay for going</a></span></td><td>32.202 s<br><span class="meta">2 of 5 finished</span></td><td>1.05 m/s</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Slow commands leave a duck standing here, too. From the Arena's start, its reference walker stays put when asked
+for 0.20 m/s, and duckbatch's student up to 0.30. That is a wider band than
+<a href="/books/casebook/#lesson-1">Book 4</a> measured for the same student, which crept forward when asked for
+0.30. The sweep simply times them at a faster
+speed, so in this race the band costs nothing; what costs a walker is a single start that falls or never reaches the
+line.</p>
+
+<p class="meta">Read first: <a href="/books/casebook/#lesson-1">Book 4, The walk that learned to stand</a>, and
+<a href="/books/intermediate/#lesson-5">Book 2, Points for what you want</a>.</p>
+
+<h2 id="hill">The 1.5 m Hill Climb</h2>
+
+<p>Walk 1.5 m up an 8&deg; slope, measured along the slope. The sweep runs from 0.15 to 1.00 m/s, and a fall or a
+timeout counts as 60 s. The challenge's own training already walks on generated slopes up to 8&deg;
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/hill-climb-1m5.md" rel="noopener">the Arena's rules</a>).</p>
+
+<p>It tests forward progress without slipping or tipping backwards. Our runs split hard: b003b climbed it in
+6.416 s and b003f in 4.859 s, both finishing every start, while the Arena's reference walker finished two of five for
+38.053 s. We do not know why those two climb so much better than their siblings, and nothing in their notes was about
+slopes.</p>
+
+<p class="meta">Read first: <a href="/books/intermediate/#lesson-8">Book 2, Train on many worlds</a>, and
+<a href="/books/advanced/#lesson-7">Book 3, Randomize, then measure</a>. Neither lesson randomizes the ground, but
+generated slopes are the same idea applied to it.</p>
+
+<h2 id="roller">The 2 m Roller Sprint</h2>
+
+<p>Skate 2 m on flat ground with passive wheels, so the policy still drives only the 14 body joints. The sweep runs
+from 0.30 to 2.00 m/s in steps of 0.10, and a fall or a timeout counts as 40 s. The Arena's own advice is to test
+several checkpoints, because on this course some score well and their neighbours fall
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/roller-sprint-2m.md" rel="noopener">the Arena's rules</a>).</p>
+
+<p>A walk still gets there on wheels: the Arena's reference walker finished five of five in 7.490 s, and our student
+in 8.814 s, though both were made for walking.</p>
+
+<p class="meta">Read first: <a href="/books/intermediate/#lesson-3">Book 2, 14 motors, 14 numbers</a>, and
+<a href="/books/intermediate/#lesson-6">Book 2, Practice, at scale</a>, for the copies a run saves as it trains, which
+are the checkpoints to test.</p>
+
+<h2 id="talent">MicroDuck Got a Talent</h2>
+
+<p>Put on a 20-second performance on an open stage, and the public votes for its favourite. Nothing is timed, nothing
+has to be finished, and a fall is part of the show
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/got-a-talent.md" rel="noopener">the Arena's rules</a>).</p>
+
+<p>The challenge trains a duck to sit and stand on command and to turn its head where it is told, and your performance
+is a <code>timeline.json</code> published beside the policy: when to sit, when to stand, where to look. From each
+keyframe until the next, the policy reads its 13 command numbers, which are the twist (3), the head (4) and the body
+(6). Those are the last 13 of the 61 numbers in <a href="/books/intermediate/#lesson-2">Book 2</a>, the duck's
+orders, so a performance is a program written over time, which is
+<a href="/books/beginner/#lesson-2">Book 1's Do this, then that</a>.</p>
+
+<p>Plan the act with <a href="/cards/">Duck Cards</a> before you write it. The deck already has its moves: Sit or
+stand, the Look cards, and Wheee, which is the pad's LT trigger here as on a real duck. Studio's bench plays the tricks
+but leaves the Look and Sound cards to people; on this stage they all become keyframes. Lay a row, one beat at a time,
+with each Look card under the card it changes, then write each beat as a keyframe in the workshop's timeline editor.
+The other trigger, RT, quacks, which no card in the deck does, and a troupe of up to eight ducks can share the
+stage.</p>
+
+<p>Votes decide it. A ballot shows two to four anonymous performances, you can cast 20 votes a day, and the most votes
+over the last seven days wins. A vote is a person's preference, the same kind of signal Microduck Studio's Compare
+collects.</p>
+
+<p class="meta">Read first: <a href="/books/intermediate/#lesson-2">Book 2, 61 numbers</a>, and
+<a href="/books/advanced/#lesson-9">Book 3, Learning from people</a>.</p>
+
+<h2 id="tug">Tug of War</h2>
+
+<p>Two ducks are tied neck to neck by a 1 m string over a 0.3 m pit, in a 3 m ring, and each tries to drag the other
+in. Every duck gets the same command, walk backwards at 0.30 m/s, and only the pit decides
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/tug-of-war.md" rel="noopener">the Arena's rules</a>).</p>
+
+<p>The board rates five bouts against the Arena's reference duck: the centimetres the string's marker moved your way,
+plus 100 when the reference ends in the pit and minus 100 when yours does, with a fault scoring &minus;200. A walker
+cannot pull, and we measured it: our student rates &minus;122.9 cm and the Arena's reference walker &minus;135.0 cm.
+The Arena says it plainly, too: a walking policy from the races cannot pull, so train a new one.</p>
+
+<p>Each week a cup plays every player's latest entry in groups, then a knockout. Entries close on Friday at 16:00,
+Paris time, the cup airs on the Arena's live channel from 18:00, and it needs at least four entrants. The first cup is
+set for 6 November 2026
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/arena/events/tug-of-war.toml" rel="noopener">the
+event's file</a>).</p>
+
+<p class="meta">Read first: <a href="/books/advanced/#lesson-5">Book 3, The reward is the specification</a>, and
+<a href="/books/casebook/#lesson-8">Book 4, Aim, not distance</a>, for a reward changed to serve a goal.</p>
+
+<h2 id="entry">What we entered</h2>
+
+<p>We entered b003b on the hill climb, from this site author's Hugging Face account, as
+<a href="https://huggingface.co/craigm26/microduck-duckbatch-b003b" rel="noopener">craigm26/microduck-duckbatch-b003b</a>.
+On the Arena's own machine it scored 6.416 s at 0.85 m/s and finished all five starts, the same as on ours
+(<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5Z66V0M99E7BA87B42H" rel="noopener">its
+run on the Arena</a>). It is a walk, and it stays one, on a board led by dives:
+<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5V33SPVY6R6NBBB4NZW" rel="noopener">the
+hill's best run</a> when we looked also gets going in the settle and ends in a dive. Our entry's repo says what it is:
+a student of Pollen's walk, fine-tuned in simulation, never run on a real duck.</p>
+
+<p>We chose it before b003f's hill result was in, and b003f is faster on both courses, so it is the better candidate
+for a next entry.</p>
+
+<h2 id="points">Points and the season</h2>
+
+<p>The Arena keeps a season, and its points reward taking part as well as winning, so your result in a race and your
+player points are separate. A first publication in a challenge earns 100, and a podium place is worth 250, 150 or 100
+while you hold it. The whole table is on the Arena's
+<a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/points.md" rel="noopener">points page</a>.</p>
+
+<h2 id="start">Get to the start line</h2>
+
+<p>Every event starts from the same line, with its own name at the end. It opens Pollen's workshop on that challenge,
+where you train, judge every checkpoint under the Arena's rules and enter the one you choose:</p>
+
+<pre tabindex="0" role="region" aria-label="Opening the workshop on the hill climb"><code>uv run https://pollen-robotics-microduck-arena.hf.space/workshop.py hill-climb-1m5</code></pre>
+
+<p>What that line needs depends on your machine, and each guide walks through it:
+<a href="/train/windows/">a Windows PC</a>, <a href="/train/linux/">a Linux PC</a> or <a href="/train/mac/">a
+Mac</a>. Pollen's own <a href="https://huggingface.co/spaces/pollen-robotics/microduck-arena/blob/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/train-a-policy.md" rel="noopener">Train
+your first policy</a> covers the same ground from the Arena's side.</p>
+
+<p>Already have an <code>.onnx</code>? Race it under the Arena's rules on your own machine before you enter it, in a
+clone of Pollen's <a href="https://github.com/pollen-robotics/microduck-challenges" rel="noopener">microduck-challenges</a>:</p>
+
+<pre tabindex="0" role="region" aria-label="Racing a policy on your own machine"><code>uv run --group workshop arena score policy.onnx --event sprint-2m</code></pre>
+
+</main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner wrap">
+    <div>
+      <p class="footer-title">Microduck Studio</p>
+      <p class="meta">A little robot. Plenty to discover.</p>
+    </div>
+    <div class="footer-copy">
+      <p><strong>This is not the official Microduck app.</strong> Pollen Robotics make the robot: <a href="https://pollen-robotics.com/microduck/" rel="noopener">Microduck, by Pollen Robotics</a> · <a href="https://pollen-robotics.com/" rel="noopener">Pollen Robotics</a>.</p>
+      <p>Microduck Studio is an independent project. It is not made by, endorsed by, or affiliated with Pollen Robotics. Microduck is their robot; this is an independent owner's app for it.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/">Studio</a>
+        <a href="/docs/">Documentation</a>
+        <a href="/cards/">Duck Cards</a>
+        <a href="/books/">Books</a>
+        <a href="/train/">Train a duck</a>
+        <a href="/science/">Evidence</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="https://github.com/craigm26/microduck-com" rel="noopener">Website source</a>
+        <a href="/feedback/">Feedback</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

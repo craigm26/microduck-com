@@ -314,6 +314,7 @@ schedule="adaptive",</code></pre>
       <p>Turn the sign rule into a test before training. microduck_rl's workflow asks for config tests that check "reward weights have the intended sign" and run on a CPU:</p>
       <pre><code>uv run --with pytest pytest tests/</code></pre>
       <p>Then look at each <code>Episode_Reward/&lt;penalty&gt;</code> curve on every run, because all of them must stay at or below zero.</p>
+      <p>Then look at the sprint board in Pollen's Arena, where the leaders get a running start in the untimed settle and end in a dive across the line, inside the time the rules give a tilted trunk before they call a fall. <a href="/train/arena/#sprint">Race in Pollen's Arena</a> has the run we read and the rule it meets.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -471,6 +472,7 @@ uv run scripts/infer_policy.py --walking out.onnx --new-cmd-obs --no-bam</code><
 for n in (100, 381, 1000):
     print(n, z * z / (n + z * z))</code></pre>
       <p>Then read how <a href="/science/#merge">the evidence page</a> compares candidates session by session rather than row by row.</p>
+      <p>Pollen's Arena shares one part of this: a single run is not a result there either. It times every entry over several starts, counts a fall as the time limit, and replays the median run, not the best. <a href="/train/arena/#clock">Race in Pollen's Arena</a> shows what one bad start does to a score.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>

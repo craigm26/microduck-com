@@ -96,6 +96,7 @@
       <p>Chart the kernel yourself: for a 0.30 m/s command, compute exp(−(0.30 − <var>v</var>)<sup>2</sup>/<var>σ</var><sup>2</sup>) for speeds from standing still up to the command, once at <var>σ</var> = 0.316 and once at 0.1, and watch where the slope goes. Then read b003 the way we wrote it: <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">the plan</a>, committed before the run, and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-close.md">the verdict</a> after it. The menu that ran is in duckbatch's <code>menus/</code> folder, and any menu runs again on Hugging Face Jobs, billed to you, from a copy of duckbatch with your Hugging Face token in <code>HF_TOKEN</code>. <a href="/train/advanced/#change">Go further</a> has the steps:</p>
       <pre><code>uv run duckbatch hf-job menus/b003-dead-band.yaml \
   --run finetune --dataset &lt;you&gt;/duckbatch-records</code></pre>
+      <p>Race the student on the sprint in Pollen's Arena and it stands still at its slowest commands, over a wider band than this lesson measured, so the sweep times it at a faster speed instead. <a href="/train/arena/#sprint">Race in Pollen's Arena</a> has every run.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -146,6 +147,7 @@
     <section>
       <h3>Try it for real</h3>
       <p>The term is a few lines of duckbatch's <code>rewards.py</code>: the velocity along the command, clipped between zero and the command's size, divided by that size. Chart it beside the tracking kernel for a 0.30 m/s command, tracking at weight 2.0 and progress at 1.0, and compare what the first steps away from standing earn under each. Then read <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-design.md">the design</a>, <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-pilot.md">the pilot</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003b-close.md">the verdict</a>.</p>
+      <p>b003b is the policy we entered in Pollen's Arena, on the hill climb, where it finished every start; on the sprint it finished only some. <a href="/train/arena/#entry">Race in Pollen's Arena</a> has both.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -341,6 +343,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
       <p>The whole anchor is one loss in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/finetune.py"><code>finetune.py</code></a>, run after each PPO update:</p>
       <pre><code>loss = (weight[sel] * (pred - target[sel]).pow(2).mean(dim=1)).mean()</code></pre>
       <p>A frame counts as fallen when the duck is tilted past 35°. b003's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">design note</a> sets the weights, and b003f's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003f-close.md">close note</a> has what letting go cost and bought.</p>
+      <p>Under the Arena's rules, b003f is our fastest walker on both the sprint and the hill climb, and it finished every start of both. <a href="/train/arena/#hill">Race in Pollen's Arena</a> has the runs.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>

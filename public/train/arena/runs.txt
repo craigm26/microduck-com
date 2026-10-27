@@ -1,0 +1,944 @@
+Every Arena run behind https://microduckstudio.com/train/arena/
+
+Raced on 2026-10-27 with the Arena's own scorer, microduck-arena 0.6.0, the wheel Pollen's
+microduck-challenges installs at commit 4b675ebf4d7c7b961cd78da94bfc37ca1686d321:
+  https://github.com/pollen-robotics/microduck-arena/releases/download/v0.6.0/microduck_arena-0.6.0-py3-none-any.whl
+on an x86_64 Linux machine, the same architecture as the Arena's Space, one run at a time per policy:
+  arena score <policy.onnx> --event <event>
+A time from a machine other than the Arena's is indicative, as the Arena's README says; the board's
+time is the Arena's own run. The one entry we made is at the end, with the Arena's own answer, and
+after it what the board said about the runs the page compares with ours.
+
+The policies (name, what it is, where the file is, its sha256):
+  sprint-reference: Pollen's sprint reference, trained with the 2 m Sprint's own recipe
+    https://huggingface.co/pollen-robotics/microduck-sprint-2m-reference/resolve/62afcc461f1d4a5ac22bfbff55ce4900c1afba32/policy.onnx
+    sha256 adbc1594ccfcafa93ecb3872ab985498207b73e4445a36c5b4f58d9d8701b924
+  pollen-reference: Pollen's reference walker, the one the Arena ships with
+    arena/assets/policies/BEST_alpha_walking.onnx in the microduck-arena 0.6.0 wheel
+    sha256 e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c
+  student-a02: duckbatch's 26,254-parameter student of Pollen's walk (61-128-128-14), Book 4's starting point
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/records/b002-student-size-longer/policies/a02/policy.onnx
+    sha256 0b3e39b99e5b6a63a61934ab2c9ee5c6db7d7120e4bce3b9d9dc2b52753b0b9f
+  student-a01: duckbatch's larger student (61-256-128-64-14)
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/records/b002-student-size-longer/policies/a01/policy.onnx
+    sha256 a8af40d5279e08c9757e6c3e34115ac502f988e73dc0f9fe90ab2228eec6a964
+  b003: Book 4, lesson 1
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6ab6d30b6b030d633f69210a/b003-dead-band/policies/finetuned/policy.onnx
+    sha256 367ad04f475f8896ae56f83c73e3bec5844b140a398432ccdc0e1840316e52ac
+  b003b-pilot: Book 4, lesson 2, the 100-iteration pilot
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abde177fbc85ba68235ee45/b003b-pilot/policies/finetuned/policy.onnx
+    sha256 5e284d5d1bd98ebf8c6db3cc7243ff3fc22d2676f22a793a9878fbe09d515a27
+  b003b: Book 4, lesson 2
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abde53f404719ba37615dbb/app-b003b-progress-20261001-0444/policies/finetuned/policy.onnx
+    sha256 d5dbde4130f6ff4c9ecf62436d9ebe387473b08e8cf9e30cd8f9bb446271f304
+  b003c: Book 4, lesson 3
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abdf66efbc85ba68235f996/b003c-dead-band/policies/finetuned/policy.onnx
+    sha256 c197f18c9183300dcb397c992df6be0f99c5b9331909f304cd86498b7b2f5023
+  b003d: Book 4, lesson 5
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abf0d27404719ba3761bce2/b003d-relative-tracking/policies/finetuned/policy.onnx
+    sha256 9f75a03a3b38c7d3152307f68418b72e0621362e90f3f916fef1e72d5f80180d
+  b003e: Book 4, lesson 5
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abf4e0c404719ba3761d080/b003e-stride-average/policies/finetuned/policy.onnx
+    sha256 7c9bf694a6ee570e7de361cc0c612bf7347f3d6dec2f95806a437726bb603eb7
+  b003f: Book 4, lesson 6
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abfbbf5404719ba37623ad5/b003f-anchor-off/policies/finetuned/policy.onnx
+    sha256 ea67fb94d1c34cc00d77a23a1773a9fd9d6b2154fa69b650dc0ee582604d5c7a
+  b003g: Book 4, lesson 7
+    https://huggingface.co/datasets/craigm26/duckbatch-records/resolve/02265bb47590bb44b3e9fa1ee98c60f17076c493/jobs/6abfde14fbc85ba682372093/b003g-standing-5/policies/finetuned/policy.onnx
+    sha256 767773b4d3090b4dbba89ffb53833e85d23ef01f8007c3d9a27991a165ef4183
+
+====================================================================================================
+sprint-reference on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  14.71s
+   0.25 m/s  9.67s
+   0.30 m/s  fall at 1.77m
+   0.35 m/s  fall at 1.79m
+   0.40 m/s  5.55s
+   0.45 m/s  5.17s
+   0.50 m/s  4.88s
+   0.55 m/s  4.89s
+   0.60 m/s  5.14s
+   0.65 m/s  5.95s
+   0.70 m/s  fall at 0.91m
+   0.75 m/s  fall at 0.62m
+   0.80 m/s  timeout at 1.86m
+   0.85 m/s  timeout at 1.71m
+   0.90 m/s  timeout at 0.94m
+   0.95 m/s  timeout at 0.96m
+   1.00 m/s  timeout at 0.87m
+   1.05 m/s  timeout at 0.71m
+   1.10 m/s  timeout at 0.77m
+   1.15 m/s  timeout at 0.72m
+   1.20 m/s  timeout at 0.56m
+
+scored at 0.55 m/s
+seed 1: finish   4.89s
+seed 2: finish   4.88s
+seed 3: finish   4.88s
+seed 4: finish   4.93s
+seed 5: finish   4.86s
+
+score 4.886s · 5/5 finished · replay from seed 3
+
+====================================================================================================
+pollen-reference on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at 0.00m
+   0.25 m/s  fall at 1.46m
+   0.30 m/s  14.67s
+   0.35 m/s  11.91s
+   0.40 m/s  10.33s
+   0.45 m/s  9.39s
+   0.50 m/s  fall at 1.68m
+   0.55 m/s  fall at 1.32m
+   0.60 m/s  fall at 1.02m
+   0.65 m/s  fall at 0.90m
+   0.70 m/s  fall at 0.81m
+   0.75 m/s  fall at 0.76m
+   0.80 m/s  fall at 0.82m
+   0.85 m/s  fall at 0.65m
+   0.90 m/s  fall at 0.56m
+   0.95 m/s  fall at 0.70m
+   1.00 m/s  fall at 0.75m
+   1.05 m/s  fall at 0.81m
+   1.10 m/s  fall at 0.66m
+   1.15 m/s  fall at 0.91m
+   1.20 m/s  fall at 0.60m
+
+scored at 0.45 m/s
+seed 1: finish   9.39s
+seed 2: finish   9.38s
+seed 3: finish   9.45s
+seed 4: finish   9.37s
+seed 5: finish   9.37s
+
+score 9.392s · 5/5 finished · replay from seed 2
+
+====================================================================================================
+pollen-reference on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.31m
+   0.20 m/s  timeout at -0.31m
+   0.25 m/s  fall at 0.13m
+   0.30 m/s  fall at 0.16m
+   0.35 m/s  fall at 0.97m
+   0.40 m/s  fall at -0.47m
+   0.45 m/s  fall at 0.22m
+   0.50 m/s  fall at 0.25m
+   0.55 m/s  fall at 0.46m
+   0.60 m/s  fall at 0.43m
+   0.65 m/s  fall at 0.38m
+   0.70 m/s  fall at 0.25m
+   0.75 m/s  fall at 0.55m
+   0.80 m/s  fall at 0.18m
+   0.85 m/s  fall at 0.03m
+   0.90 m/s  fall at 1.18m
+   0.95 m/s  fall at 0.91m
+   1.00 m/s  fall at 0.48m
+
+scored at 0.95 m/s
+seed 1: fall     —
+seed 2: finish   5.29s
+seed 3: fall     —
+seed 4: fall     —
+seed 5: finish   4.97s
+
+score 38.053s · 2/5 finished · replay from seed 5
+
+====================================================================================================
+pollen-reference on roller-sprint-2m
+====================================================================================================
+sweep 18 commanded speeds 0.30–2.00 m/s
+   0.30 m/s  timeout at 0.59m
+   0.40 m/s  timeout at 0.55m
+   0.50 m/s  8.25s
+   0.60 m/s  7.48s
+   0.70 m/s  fall at 0.79m
+   0.80 m/s  7.19s
+   0.90 m/s  fall at 1.23m
+   1.00 m/s  fall at 0.62m
+   1.10 m/s  fall at 0.45m
+   1.20 m/s  fall at 0.35m
+   1.30 m/s  fall at 0.10m
+   1.40 m/s  fall at 0.08m
+   1.50 m/s  fall at 0.09m
+   1.60 m/s  fall at 0.25m
+   1.70 m/s  fall at 0.23m
+   1.80 m/s  fall at 0.03m
+   1.90 m/s  fall at 0.04m
+   2.00 m/s  fall at 0.06m
+
+scored at 0.60 m/s
+seed 1: finish   7.48s
+seed 2: finish   7.92s
+seed 3: finish   7.49s
+seed 4: finish   7.44s
+seed 5: finish   7.13s
+
+score 7.490s · 5/5 finished · replay from seed 1
+
+====================================================================================================
+pollen-reference on tug-of-war
+====================================================================================================
+seed 1: west pit_lost  -138.3 cm at 8.30 s
+seed 2: east pit_lost  -137.5 cm at 11.44 s
+seed 3: west pit_lost  -123.4 cm at 38.54 s
+seed 4: east pit_lost  -138.1 cm at 9.80 s
+seed 5: west pit_lost  -137.5 cm at 9.18 s
+rating: -135.0 cm · replay from seed 2
+
+====================================================================================================
+student-a02 on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at 1.75m
+   0.40 m/s  timeout at 1.28m
+   0.45 m/s  timeout at 0.95m
+   0.50 m/s  timeout at 1.22m
+   0.55 m/s  timeout at 1.30m
+   0.60 m/s  fall at 1.18m
+   0.65 m/s  7.01s
+   0.70 m/s  6.49s
+   0.75 m/s  6.24s
+   0.80 m/s  6.18s
+   0.85 m/s  5.78s
+   0.90 m/s  5.64s
+   0.95 m/s  5.53s
+   1.00 m/s  5.67s
+   1.05 m/s  fall at 0.98m
+   1.10 m/s  fall at 0.97m
+   1.15 m/s  timeout at 0.79m
+   1.20 m/s  timeout at 0.89m
+
+scored at 0.90 m/s
+seed 1: finish   5.64s
+seed 2: timeout  —
+seed 3: finish   5.62s
+seed 4: finish   5.59s
+seed 5: finish   5.76s
+
+score 14.523s · 4/5 finished · replay from seed 3
+
+====================================================================================================
+student-a02 on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -1.94m
+   0.20 m/s  timeout at -10.10m
+   0.25 m/s  timeout at -0.16m
+   0.30 m/s  timeout at 0.64m
+   0.35 m/s  timeout at 0.70m
+   0.40 m/s  50.80s
+   0.45 m/s  19.73s
+   0.50 m/s  15.21s
+   0.55 m/s  fall at 0.55m
+   0.60 m/s  timeout at -20.07m
+   0.65 m/s  fall at 0.22m
+   0.70 m/s  fall at 0.26m
+   0.75 m/s  fall at 0.23m
+   0.80 m/s  fall at 0.28m
+   0.85 m/s  fall at 0.30m
+   0.90 m/s  timeout at 0.15m
+   0.95 m/s  fall at 0.23m
+   1.00 m/s  fall at 0.19m
+
+scored at 0.45 m/s
+seed 1: finish   19.73s
+seed 2: finish   19.78s
+seed 3: finish   19.91s
+seed 4: finish   20.00s
+seed 5: fall     —
+
+score 27.885s · 4/5 finished · replay from seed 2
+
+====================================================================================================
+student-a02 on roller-sprint-2m
+====================================================================================================
+sweep 18 commanded speeds 0.30–2.00 m/s
+   0.30 m/s  timeout at 0.00m
+   0.40 m/s  8.91s
+   0.50 m/s  fall at 1.79m
+   0.60 m/s  6.59s
+   0.70 m/s  fall at 0.10m
+   0.80 m/s  fall at 0.14m
+   0.90 m/s  timeout at 1.41m
+   1.00 m/s  fall at 0.44m
+   1.10 m/s  fall at 0.45m
+   1.20 m/s  fall at 0.37m
+   1.30 m/s  fall at 0.23m
+   1.40 m/s  fall at 0.07m
+   1.50 m/s  fall at 0.07m
+   1.60 m/s  fall at 0.07m
+   1.70 m/s  fall at 0.10m
+   1.80 m/s  fall at 0.11m
+   1.90 m/s  fall at 0.09m
+   2.00 m/s  fall at 0.09m
+
+scored at 0.40 m/s
+seed 1: finish   8.91s
+seed 2: finish   8.84s
+seed 3: finish   8.97s
+seed 4: finish   8.80s
+seed 5: finish   8.54s
+
+score 8.814s · 5/5 finished · replay from seed 2
+
+====================================================================================================
+student-a02 on tug-of-war
+====================================================================================================
+seed 1: west pit_lost  -123.7 cm at 28.22 s
+seed 2: east pit_lost  -121.9 cm at 31.22 s
+seed 3: west pit_lost  -124.4 cm at 29.44 s
+seed 4: east pit_lost  -120.9 cm at 30.64 s
+seed 5: west pit_lost  -123.6 cm at 27.76 s
+rating: -122.9 cm · replay from seed 5
+
+====================================================================================================
+student-a01 on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at 0.00m
+   0.25 m/s  timeout at 0.00m
+   0.30 m/s  timeout at 0.95m
+   0.35 m/s  timeout at 1.41m
+   0.40 m/s  timeout at 1.56m
+   0.45 m/s  timeout at 1.48m
+   0.50 m/s  timeout at 1.45m
+   0.55 m/s  timeout at 0.89m
+   0.60 m/s  fall at 0.83m
+   0.65 m/s  timeout at 0.87m
+   0.70 m/s  timeout at 0.91m
+   0.75 m/s  timeout at 0.99m
+   0.80 m/s  fall at 0.68m
+   0.85 m/s  fall at 0.92m
+   0.90 m/s  timeout at 1.02m
+   0.95 m/s  timeout at 1.00m
+   1.00 m/s  fall at 0.54m
+   1.05 m/s  timeout at 0.83m
+   1.10 m/s  fall at 0.47m
+   1.15 m/s  timeout at 0.94m
+   1.20 m/s  timeout at 0.82m
+
+scored at 0.40 m/s
+seed 1: timeout  —
+seed 2: timeout  —
+seed 3: timeout  —
+seed 4: timeout  —
+seed 5: timeout  —
+
+score 50.000s · 0/5 finished · replay from seed 1
+
+====================================================================================================
+student-a01 on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.29m
+   0.20 m/s  timeout at -0.97m
+   0.25 m/s  timeout at 0.07m
+   0.30 m/s  timeout at -0.21m
+   0.35 m/s  fall at -0.36m
+   0.40 m/s  timeout at 0.27m
+   0.45 m/s  timeout at 0.30m
+   0.50 m/s  fall at 0.06m
+   0.55 m/s  timeout at -0.12m
+   0.60 m/s  fall at 0.28m
+   0.65 m/s  fall at 0.17m
+   0.70 m/s  fall at 0.08m
+   0.75 m/s  fall at 0.14m
+   0.80 m/s  fall at 0.28m
+   0.85 m/s  fall at 0.24m
+   0.90 m/s  fall at 0.31m
+   0.95 m/s  fall at 0.23m
+   1.00 m/s  fall at 0.46m
+
+scored at 0.45 m/s
+seed 1: timeout  —
+seed 2: finish   32.05s
+seed 3: finish   27.43s
+seed 4: fall     —
+seed 5: fall     —
+
+score 47.895s · 2/5 finished · replay from seed 3
+
+====================================================================================================
+b003 on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at -0.00m
+   0.40 m/s  timeout at 0.79m
+   0.45 m/s  timeout at 1.73m
+   0.50 m/s  timeout at 0.41m
+   0.55 m/s  timeout at -0.59m
+   0.60 m/s  fall at 0.52m
+   0.65 m/s  fall at 1.33m
+   0.70 m/s  timeout at 1.19m
+   0.75 m/s  timeout at 0.76m
+   0.80 m/s  timeout at 0.66m
+   0.85 m/s  timeout at 0.84m
+   0.90 m/s  fall at 0.94m
+   0.95 m/s  timeout at 0.69m
+   1.00 m/s  fall at 0.70m
+   1.05 m/s  timeout at 0.57m
+   1.10 m/s  fall at 1.36m
+   1.15 m/s  fall at 0.97m
+   1.20 m/s  fall at 0.81m
+
+scored at 0.45 m/s
+seed 1: timeout  —
+seed 2: finish   11.85s
+seed 3: fall     —
+seed 4: timeout  —
+seed 5: finish   44.34s
+
+score 41.237s · 2/5 finished · replay from seed 2
+
+====================================================================================================
+b003 on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.16m
+   0.20 m/s  timeout at -0.16m
+   0.25 m/s  timeout at -0.13m
+   0.30 m/s  timeout at -0.13m
+   0.35 m/s  timeout at -0.15m
+   0.40 m/s  timeout at -0.13m
+   0.45 m/s  timeout at -0.13m
+   0.50 m/s  fall at 0.01m
+   0.55 m/s  fall at 0.63m
+   0.60 m/s  timeout at -0.07m
+   0.65 m/s  fall at -0.22m
+   0.70 m/s  fall at -0.18m
+   0.75 m/s  fall at -0.25m
+   0.80 m/s  fall at -0.47m
+   0.85 m/s  fall at 0.10m
+   0.90 m/s  timeout at 0.23m
+   0.95 m/s  fall at 0.26m
+   1.00 m/s  fall at -0.17m
+
+scored at 0.55 m/s
+seed 1: fall     —
+seed 2: fall     —
+seed 3: fall     —
+seed 4: fall     —
+seed 5: fall     —
+
+score 60.000s · 0/5 finished · replay from seed 1
+
+====================================================================================================
+b003b-pilot on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at -0.00m
+   0.40 m/s  timeout at 0.00m
+   0.45 m/s  timeout at 0.64m
+   0.50 m/s  timeout at 0.53m
+   0.55 m/s  timeout at 0.36m
+   0.60 m/s  timeout at 0.43m
+   0.65 m/s  timeout at 0.41m
+   0.70 m/s  timeout at 0.47m
+   0.75 m/s  timeout at 0.15m
+   0.80 m/s  timeout at 0.37m
+   0.85 m/s  timeout at 0.28m
+   0.90 m/s  timeout at 0.38m
+   0.95 m/s  timeout at 0.48m
+   1.00 m/s  timeout at 0.45m
+   1.05 m/s  timeout at 1.06m
+   1.10 m/s  timeout at 0.44m
+   1.15 m/s  fall at 0.57m
+   1.20 m/s  timeout at 0.67m
+
+scored at 0.45 m/s
+seed 1: timeout  —
+seed 2: timeout  —
+seed 3: timeout  —
+seed 4: timeout  —
+seed 5: timeout  —
+
+score 50.000s · 0/5 finished · replay from seed 1
+
+====================================================================================================
+b003b-pilot on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.29m
+   0.20 m/s  timeout at -7.16m
+   0.25 m/s  timeout at -0.50m
+   0.30 m/s  timeout at -0.17m
+   0.35 m/s  timeout at -0.73m
+   0.40 m/s  timeout at 0.12m
+   0.45 m/s  timeout at -7.06m
+   0.50 m/s  fall at 0.32m
+   0.55 m/s  timeout at 0.08m
+   0.60 m/s  timeout at 0.05m
+   0.65 m/s  timeout at 0.10m
+   0.70 m/s  fall at 0.08m
+   0.75 m/s  timeout at -0.39m
+   0.80 m/s  timeout at -0.14m
+   0.85 m/s  fall at -0.02m
+   0.90 m/s  fall at -0.46m
+   0.95 m/s  fall at 0.14m
+   1.00 m/s  fall at 0.02m
+
+scored at 0.40 m/s
+seed 1: timeout  —
+seed 2: timeout  —
+seed 3: timeout  —
+seed 4: timeout  —
+seed 5: timeout  —
+
+score 60.000s · 0/5 finished · replay from seed 1
+
+====================================================================================================
+b003b on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.01m
+   0.30 m/s  timeout at 0.94m
+   0.35 m/s  timeout at -0.19m
+   0.40 m/s  timeout at 0.08m
+   0.45 m/s  timeout at 1.06m
+   0.50 m/s  timeout at -0.42m
+   0.55 m/s  timeout at 0.90m
+   0.60 m/s  timeout at 0.79m
+   0.65 m/s  timeout at 0.62m
+   0.70 m/s  fall at 0.60m
+   0.75 m/s  timeout at 0.40m
+   0.80 m/s  timeout at 0.53m
+   0.85 m/s  timeout at 0.50m
+   0.90 m/s  timeout at 0.68m
+   0.95 m/s  timeout at 0.46m
+   1.00 m/s  timeout at 0.55m
+   1.05 m/s  6.17s
+   1.10 m/s  fall at 0.95m
+   1.15 m/s  fall at 0.46m
+   1.20 m/s  timeout at 0.41m
+
+scored at 1.05 m/s
+seed 1: finish   6.17s
+seed 2: timeout  —
+seed 3: fall     —
+seed 4: fall     —
+seed 5: finish   4.84s
+
+score 32.202s · 2/5 finished · replay from seed 5
+
+====================================================================================================
+b003b on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.16m
+   0.20 m/s  timeout at -0.16m
+   0.25 m/s  timeout at -0.16m
+   0.30 m/s  timeout at -0.15m
+   0.35 m/s  timeout at 0.04m
+   0.40 m/s  fall at 0.03m
+   0.45 m/s  timeout at 0.28m
+   0.50 m/s  fall at 0.19m
+   0.55 m/s  timeout at -0.27m
+   0.60 m/s  9.55s
+   0.65 m/s  7.79s
+   0.70 m/s  7.52s
+   0.75 m/s  7.15s
+   0.80 m/s  6.95s
+   0.85 m/s  6.40s
+   0.90 m/s  fall at 0.81m
+   0.95 m/s  fall at 0.23m
+   1.00 m/s  fall at 0.30m
+
+scored at 0.85 m/s
+seed 1: finish   6.40s
+seed 2: finish   6.39s
+seed 3: finish   6.54s
+seed 4: finish   6.67s
+seed 5: finish   6.08s
+
+score 6.416s · 5/5 finished · replay from seed 1
+
+====================================================================================================
+b003c on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at -0.00m
+   0.40 m/s  12.81s
+   0.45 m/s  timeout at 1.62m
+   0.50 m/s  timeout at 1.26m
+   0.55 m/s  timeout at 1.15m
+   0.60 m/s  timeout at 1.19m
+   0.65 m/s  fall at 1.00m
+   0.70 m/s  fall at 1.00m
+   0.75 m/s  timeout at 1.31m
+   0.80 m/s  timeout at 1.31m
+   0.85 m/s  fall at 0.91m
+   0.90 m/s  6.86s
+   0.95 m/s  timeout at 0.81m
+   1.00 m/s  timeout at 1.04m
+   1.05 m/s  timeout at -4.61m
+   1.10 m/s  5.87s
+   1.15 m/s  5.74s
+   1.20 m/s  timeout at 0.73m
+
+scored at 1.15 m/s
+seed 1: finish   5.74s
+seed 2: finish   5.26s
+seed 3: finish   5.34s
+seed 4: fall     —
+seed 5: finish   5.58s
+
+score 14.386s · 4/5 finished · replay from seed 3
+
+====================================================================================================
+b003c on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.30m
+   0.20 m/s  timeout at -0.13m
+   0.25 m/s  timeout at -0.12m
+   0.30 m/s  timeout at -0.13m
+   0.35 m/s  timeout at -0.14m
+   0.40 m/s  timeout at -0.13m
+   0.45 m/s  fall at 0.13m
+   0.50 m/s  fall at 0.04m
+   0.55 m/s  fall at 0.01m
+   0.60 m/s  fall at -0.11m
+   0.65 m/s  fall at -0.43m
+   0.70 m/s  fall at 0.42m
+   0.75 m/s  fall at 0.94m
+   0.80 m/s  fall at -0.06m
+   0.85 m/s  fall at 0.52m
+   0.90 m/s  fall at 0.29m
+   0.95 m/s  timeout at 0.31m
+   1.00 m/s  fall at 0.05m
+
+scored at 0.70 m/s
+seed 1: fall     —
+seed 2: fall     —
+seed 3: timeout  —
+seed 4: fall     —
+seed 5: fall     —
+
+score 60.000s · 0/5 finished · replay from seed 1
+
+====================================================================================================
+b003d on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at -0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at 1.71m
+   0.40 m/s  19.17s
+   0.45 m/s  timeout at 0.91m
+   0.50 m/s  timeout at 0.52m
+   0.55 m/s  7.62s
+   0.60 m/s  7.08s
+   0.65 m/s  6.29s
+   0.70 m/s  6.12s
+   0.75 m/s  timeout at 1.71m
+   0.80 m/s  timeout at 1.50m
+   0.85 m/s  timeout at 1.16m
+   0.90 m/s  4.80s
+   0.95 m/s  timeout at 1.27m
+   1.00 m/s  timeout at 0.22m
+   1.05 m/s  fall at 1.60m
+   1.10 m/s  timeout at 0.92m
+   1.15 m/s  fall at 1.49m
+   1.20 m/s  fall at 0.73m
+
+scored at 0.90 m/s
+seed 1: finish   4.80s
+seed 2: finish   6.08s
+seed 3: finish   4.82s
+seed 4: finish   4.71s
+seed 5: timeout  —
+
+score 14.083s · 4/5 finished · replay from seed 1
+
+====================================================================================================
+b003d on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.16m
+   0.20 m/s  timeout at -0.13m
+   0.25 m/s  timeout at -0.13m
+   0.30 m/s  timeout at -0.14m
+   0.35 m/s  timeout at -0.14m
+   0.40 m/s  timeout at -0.14m
+   0.45 m/s  timeout at -0.15m
+   0.50 m/s  fall at -0.39m
+   0.55 m/s  fall at 0.70m
+   0.60 m/s  fall at 0.59m
+   0.65 m/s  fall at 0.61m
+   0.70 m/s  fall at 0.55m
+   0.75 m/s  fall at 0.61m
+   0.80 m/s  fall at 1.41m
+   0.85 m/s  fall at 0.19m
+   0.90 m/s  fall at -0.01m
+   0.95 m/s  fall at 0.12m
+   1.00 m/s  timeout at -3.89m
+
+scored at 0.80 m/s
+seed 1: fall     —
+seed 2: finish   7.57s
+seed 3: fall     —
+seed 4: fall     —
+seed 5: timeout  —
+
+score 49.514s · 1/5 finished · replay from seed 2
+
+====================================================================================================
+b003e on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at 0.00m
+   0.25 m/s  timeout at 0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at -0.01m
+   0.40 m/s  timeout at 0.98m
+   0.45 m/s  10.23s
+   0.50 m/s  8.96s
+   0.55 m/s  8.10s
+   0.60 m/s  7.38s
+   0.65 m/s  6.90s
+   0.70 m/s  6.49s
+   0.75 m/s  6.05s
+   0.80 m/s  5.83s
+   0.85 m/s  5.67s
+   0.90 m/s  5.58s
+   0.95 m/s  fall at 1.93m
+   1.00 m/s  timeout at 1.58m
+   1.05 m/s  5.17s
+   1.10 m/s  4.73s
+   1.15 m/s  timeout at 1.66m
+   1.20 m/s  5.46s
+
+scored at 1.05 m/s
+seed 1: finish   5.17s
+seed 2: finish   5.19s
+seed 3: timeout  —
+seed 4: timeout  —
+seed 5: finish   5.23s
+
+score 23.118s · 3/5 finished · replay from seed 2
+
+====================================================================================================
+b003e on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -0.94m
+   0.20 m/s  timeout at -0.17m
+   0.25 m/s  timeout at -0.17m
+   0.30 m/s  timeout at -0.16m
+   0.35 m/s  timeout at -0.16m
+   0.40 m/s  timeout at -0.15m
+   0.45 m/s  timeout at 0.03m
+   0.50 m/s  18.22s
+   0.55 m/s  fall at 0.02m
+   0.60 m/s  fall at 0.90m
+   0.65 m/s  fall at 0.41m
+   0.70 m/s  fall at 0.09m
+   0.75 m/s  fall at 0.05m
+   0.80 m/s  fall at 0.71m
+   0.85 m/s  fall at 0.53m
+   0.90 m/s  fall at 0.38m
+   0.95 m/s  fall at 0.35m
+   1.00 m/s  fall at 0.30m
+
+scored at 0.50 m/s
+seed 1: finish   18.22s
+seed 2: fall     —
+seed 3: fall     —
+seed 4: fall     —
+seed 5: fall     —
+
+score 51.644s · 1/5 finished · replay from seed 1
+
+====================================================================================================
+b003f on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at 0.00m
+   0.25 m/s  timeout at -0.00m
+   0.30 m/s  timeout at -0.00m
+   0.35 m/s  timeout at 0.92m
+   0.40 m/s  timeout at 0.54m
+   0.45 m/s  timeout at 0.62m
+   0.50 m/s  timeout at 0.41m
+   0.55 m/s  timeout at 0.91m
+   0.60 m/s  timeout at 0.70m
+   0.65 m/s  timeout at 0.39m
+   0.70 m/s  timeout at 0.47m
+   0.75 m/s  timeout at 0.47m
+   0.80 m/s  timeout at 0.58m
+   0.85 m/s  fall at 0.75m
+   0.90 m/s  timeout at 0.60m
+   0.95 m/s  timeout at 1.58m
+   1.00 m/s  fall at 1.39m
+   1.05 m/s  fall at 1.63m
+   1.10 m/s  fall at 1.15m
+   1.15 m/s  4.91s
+   1.20 m/s  timeout at 1.57m
+
+scored at 1.15 m/s
+seed 1: finish   4.91s
+seed 2: finish   5.07s
+seed 3: finish   6.71s
+seed 4: finish   4.04s
+seed 5: finish   4.83s
+
+score 5.108s · 5/5 finished · replay from seed 1
+
+====================================================================================================
+b003f on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -7.43m
+   0.20 m/s  timeout at -5.49m
+   0.25 m/s  timeout at -2.16m
+   0.30 m/s  timeout at -2.73m
+   0.35 m/s  timeout at -0.54m
+   0.40 m/s  timeout at -0.53m
+   0.45 m/s  timeout at -0.15m
+   0.50 m/s  timeout at -0.42m
+   0.55 m/s  timeout at 0.08m
+   0.60 m/s  timeout at 0.19m
+   0.65 m/s  timeout at 0.14m
+   0.70 m/s  timeout at 0.32m
+   0.75 m/s  timeout at 0.47m
+   0.80 m/s  6.78s
+   0.85 m/s  5.99s
+   0.90 m/s  5.55s
+   0.95 m/s  5.27s
+   1.00 m/s  4.88s
+
+scored at 1.00 m/s
+seed 1: finish   4.88s
+seed 2: finish   4.80s
+seed 3: finish   4.85s
+seed 4: finish   4.93s
+seed 5: finish   4.83s
+
+score 4.859s · 5/5 finished · replay from seed 3
+
+====================================================================================================
+b003g on sprint-2m
+====================================================================================================
+sweep 21 commanded speeds 0.20–1.20 m/s
+   0.20 m/s  timeout at 0.51m
+   0.25 m/s  timeout at 0.64m
+   0.30 m/s  timeout at 0.70m
+   0.35 m/s  timeout at 0.96m
+   0.40 m/s  timeout at 0.99m
+   0.45 m/s  timeout at 1.33m
+   0.50 m/s  timeout at 1.61m
+   0.55 m/s  timeout at 1.51m
+   0.60 m/s  timeout at 1.89m
+   0.65 m/s  fall at 0.67m
+   0.70 m/s  fall at 0.77m
+   0.75 m/s  timeout at 0.45m
+   0.80 m/s  timeout at 0.45m
+   0.85 m/s  6.13s
+   0.90 m/s  5.93s
+   0.95 m/s  timeout at 0.64m
+   1.00 m/s  fall at 0.90m
+   1.05 m/s  fall at 0.70m
+   1.10 m/s  fall at 1.14m
+   1.15 m/s  4.53s
+   1.20 m/s  timeout at 1.07m
+
+scored at 1.15 m/s
+seed 1: finish   4.53s
+seed 2: fall     —
+seed 3: fall     —
+seed 4: finish   4.97s
+seed 5: finish   5.86s
+
+score 23.070s · 3/5 finished · replay from seed 4
+
+====================================================================================================
+b003g on hill-climb-1m5
+====================================================================================================
+sweep 18 commanded speeds 0.15–1.00 m/s
+   0.15 m/s  timeout at -4.37m
+   0.20 m/s  timeout at -0.19m
+   0.25 m/s  timeout at -0.18m
+   0.30 m/s  timeout at -2.39m
+   0.35 m/s  timeout at -1.17m
+   0.40 m/s  timeout at 0.13m
+   0.45 m/s  timeout at 0.35m
+   0.50 m/s  timeout at 0.51m
+   0.55 m/s  13.42s
+   0.60 m/s  10.87s
+   0.65 m/s  10.06s
+   0.70 m/s  timeout at 0.84m
+   0.75 m/s  8.54s
+   0.80 m/s  timeout at 0.35m
+   0.85 m/s  7.37s
+   0.90 m/s  fall at 0.25m
+   0.95 m/s  6.85s
+   1.00 m/s  7.07s
+
+scored at 0.85 m/s
+seed 1: finish   7.37s
+seed 2: timeout  —
+seed 3: finish   7.10s
+seed 4: finish   7.44s
+seed 5: finish   7.58s
+
+score 17.897s · 4/5 finished · replay from seed 1
+
+====================================================================================================
+Our entry: b003b on hill-climb-1m5, published from craigm26's Hugging Face account with Pollen's
+own publish tool (microduck_rl at commit 1efd853be9fcdf050da24b5723cb74ada9a731d7), 2026-10-27:
+====================================================================================================
+  uv run publish --onnx b003b.onnx --repo craigm26/microduck-duckbatch-b003b --kind perpetual --slot walk \
+    --event hill-climb-1m5 --base-model craigm26/microduck-duckbatch-b002-128x128 \
+    --code-url https://github.com/craigm26/duckbatch --twist-help "vx (m/s), vy (m/s), wz (rad/s)" \
+    --description "..." --no-private --enter
+[publish] b003b.onnx: 61 -> 14, ok
+[publish] smoke run: finite, non-constant output
+[publish] uploaded: https://huggingface.co/craigm26/microduck-duckbatch-b003b/commit/b23987590f08c9c5ac0af10b7291053f6c1a8142
+[publish] on a robot: sudo robotctl policy load walk craigm26/microduck-duckbatch-b003b
+[publish] entered on hill-climb-1m5: 6.416 s (5/5 seeds) at 0.85 m/s → https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5Z66V0M99E7BA87B42H
+
+====================================================================================================
+What the board said, read from the Arena's API on 2026-10-27 (GET /api/runs/<run id>, and its
+/settle and /trace, which the API serves as 21 little-endian float32 values a frame, 50 frames a
+second; as we read them, the duck's position, then the trunk's orientation as a quaternion, then
+its 14 joints. Tilt below is the trunk's angle from upright, worked out from that quaternion):
+====================================================================================================
+Pollen's sprint reference on sprint-2m, entered as "Pollen Sprint Reference", run 01M3PVB3EC1HG6N3SYZZZS,
+the same policy.onnx as ours by sha256 (adbc1594..., at revision 3e59e802dea470f62c16a018ee2a3b603374ae92):
+  board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start
+  trace: the settle moves it from x = 0.00 m to 0.05 m; the trunk stays within 3 degrees of upright
+
+Our entry, b003b on hill-climb-1m5, run 01M5Z66V0M99E7BA87B42H:
+  board: 6.416 s (5/5 seeds) at 0.85 m/s, per seed 6.395 6.390 6.540 6.675 6.080, the same as ours above, start for start
+  trace: the settle moves it from x = -0.02 m to 0.04 m; the trunk stays within 10 degrees of upright
+
+The sprint's best run when we looked, greecree's sprint-2m-sprint-leader-v2, run 01M5YY1WYCDYN4FRB7BF4N:
+  board: 0.839 s (5/5 seeds) at 1.15 m/s, rank 1
+  trace: the untimed settle moves it from x = 0.00 m to 0.30 m, and it is moving at 1.75 m/s when the
+  clock starts; timed, it covers x = 0.33 m to 2.30 m in 42 frames, its trunk 7 to 52 degrees from
+  upright before its last 6 frames, past 60 degrees only in the last 4, and 106 degrees at the end
+
+The hill's best run when we looked, jrubiosainz's game-hillclimber-remix8, run 01M5V33SPVY6R6NBBB4NZW:
+  board: 0.744 s (5/5 seeds) at 0.30 m/s, rank 1
+  trace: the untimed settle moves it from x = -0.02 m to 0.21 m, and it is moving at 1.48 m/s when the
+  clock starts; timed, 37 frames, its trunk past 60 degrees only in the last 2, and 93 degrees at the end
