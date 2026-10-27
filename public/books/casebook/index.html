@@ -147,7 +147,7 @@
     <section>
       <h3>Try it for real</h3>
       <p>The term is a few lines of duckbatch's <code>rewards.py</code>: the velocity along the command, clipped between zero and the command's size, divided by that size. Chart it beside the tracking kernel for a 0.30 m/s command, tracking at weight 2.0 and progress at 1.0, and compare what the first steps away from standing earn under each. Then read <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-design.md">the design</a>, <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-30-b003b-pilot.md">the pilot</a> and <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-01-b003b-close.md">the verdict</a>.</p>
-      <p>b003b is the policy we entered in Pollen's Arena, on the hill climb, where it finished every start; on the sprint it finished only some. <a href="/train/arena/#entry">Race in Pollen's Arena</a> has both.</p>
+      <p>b003b was the first policy we entered in Pollen's Arena, on the hill climb, where it finished every start; on the sprint it finished only some. <a href="/train/arena/#entry">Race in Pollen's Arena</a> has both.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>
@@ -343,7 +343,7 @@ uvx tensorboard --logdir records/jobs</code></pre>
       <p>The whole anchor is one loss in duckbatch's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/finetune.py"><code>finetune.py</code></a>, run after each PPO update:</p>
       <pre><code>loss = (weight[sel] * (pred - target[sel]).pow(2).mean(dim=1)).mean()</code></pre>
       <p>A frame counts as fallen when the duck is tilted past 35°. b003's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-09-25-b003-design.md">design note</a> sets the weights, and b003f's <a href="https://github.com/craigm26/duckbatch/blob/1f476e486e496bdd3e3cb1806e33352daaba065b/notes/2026-10-02-b003f-close.md">close note</a> has what letting go cost and bought.</p>
-      <p>Under the Arena's rules, b003f is our fastest walker on both the sprint and the hill climb, and it finished every start of both. <a href="/train/arena/#hill">Race in Pollen's Arena</a> has the runs.</p>
+      <p>Under the Arena's rules, b003f is our fastest walker on both the sprint and the hill climb, and it finished every start of both, so we entered it on both. <a href="/train/arena/#hill">Race in Pollen's Arena</a> has the runs.</p>
     </section>
     <section>
       <h3>For teachers and mentors</h3>

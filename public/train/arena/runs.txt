@@ -6,8 +6,8 @@ microduck-challenges installs at commit 4b675ebf4d7c7b961cd78da94bfc37ca1686d321
 on an x86_64 Linux machine, the same architecture as the Arena's Space, one run at a time per policy:
   arena score <policy.onnx> --event <event>
 A time from a machine other than the Arena's is indicative, as the Arena's README says; the board's
-time is the Arena's own run. The one entry we made is at the end, with the Arena's own answer, and
-after it what the board said about the runs the page compares with ours.
+time is the Arena's own run. The entries we made are at the end, with the Arena's own answers, and
+after them what the board said about the runs the page compares with ours.
 
 The policies (name, what it is, where the file is, its sha256):
   sprint-reference: Pollen's sprint reference, trained with the 2 m Sprint's own recipe
@@ -904,7 +904,7 @@ seed 5: finish   7.58s
 score 17.897s · 4/5 finished · replay from seed 1
 
 ====================================================================================================
-Our entry: b003b on hill-climb-1m5, published from craigm26's Hugging Face account with Pollen's
+Our first entry: b003b on hill-climb-1m5, published from craigm26's Hugging Face account with Pollen's
 own publish tool (microduck_rl at commit 1efd853be9fcdf050da24b5723cb74ada9a731d7), 2026-10-27:
 ====================================================================================================
   uv run publish --onnx b003b.onnx --repo craigm26/microduck-duckbatch-b003b --kind perpetual --slot walk \
@@ -918,6 +918,27 @@ own publish tool (microduck_rl at commit 1efd853be9fcdf050da24b5723cb74ada9a731d
 [publish] entered on hill-climb-1m5: 6.416 s (5/5 seeds) at 0.85 m/s → https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5Z66V0M99E7BA87B42H
 
 ====================================================================================================
+Our second entry: b003f, on sprint-2m and then on hill-climb-1m5, published from craigm26's Hugging
+Face account with the same publish tool, 2026-10-27. One repo, published twice: the second publish
+changed only the manifest's event, so each entry's revision names the event it raced:
+====================================================================================================
+  uv run publish --onnx b003f.onnx --repo craigm26/microduck-duckbatch-b003f --kind perpetual --slot walk \
+    --base-model craigm26/microduck-duckbatch-b002-128x128 \
+    --code-url https://github.com/craigm26/duckbatch --twist-help "vx (m/s), vy (m/s), wz (rad/s)" \
+    --description "..." --event sprint-2m --no-private --enter
+[publish] b003f.onnx: 61 -> 14, ok
+[publish] smoke run: finite, non-constant output
+[publish] uploaded: https://huggingface.co/craigm26/microduck-duckbatch-b003f/commit/5e1a4ac330f05d4f27faa5cd0bc62f75d804db63
+[publish] on a robot: sudo robotctl policy load walk craigm26/microduck-duckbatch-b003f
+[publish] entered on sprint-2m: 5.108 s (5/5 seeds) at 1.15 m/s → https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5ZCR92S48BMSVV3MW8P
+  uv run publish <the same arguments, with --event hill-climb-1m5> --no-private --enter --force
+[publish] b003f.onnx: 61 -> 14, ok
+[publish] smoke run: finite, non-constant output
+[publish] uploaded: https://huggingface.co/craigm26/microduck-duckbatch-b003f/commit/278395656a5612ed09fbec6623aec09bfc9d2b45
+[publish] on a robot: sudo robotctl policy load walk craigm26/microduck-duckbatch-b003f
+[publish] entered on hill-climb-1m5: 4.859 s (5/5 seeds) at 1.00 m/s → https://huggingface.co/spaces/pollen-robotics/microduck-arena#/r/01M5ZCVX3D0S7ESXG6Y0PQ
+
+====================================================================================================
 What the board said, read from the Arena's API on 2026-10-27 (GET /api/runs/<run id>, and its
 /settle and /trace, which the API serves as 21 little-endian float32 values a frame, 50 frames a
 second; as we read them, the duck's position, then the trunk's orientation as a quaternion, then
@@ -928,9 +949,15 @@ the same policy.onnx as ours by sha256 (adbc1594..., at revision 3e59e802dea470f
   board: 4.886 s (5/5 seeds) at 0.55 m/s, per seed 4.890 4.875 4.875 4.930 4.860, the same as ours above, start for start
   trace: the settle moves it from x = 0.00 m to 0.05 m; the trunk stays within 3 degrees of upright
 
-Our entry, b003b on hill-climb-1m5, run 01M5Z66V0M99E7BA87B42H:
+Our first entry, b003b on hill-climb-1m5, run 01M5Z66V0M99E7BA87B42H:
   board: 6.416 s (5/5 seeds) at 0.85 m/s, per seed 6.395 6.390 6.540 6.675 6.080, the same as ours above, start for start
   trace: the settle moves it from x = -0.02 m to 0.04 m; the trunk stays within 10 degrees of upright
+
+Our second entry, b003f on sprint-2m, run 01M5ZCR92S48BMSVV3MW8P:
+  board: 5.108 s (5/5 seeds) at 1.15 m/s, per seed 4.905 5.070 6.705 4.035 4.825, the same as ours above, start for start
+
+b003f on hill-climb-1m5, run 01M5ZCVX3D0S7ESXG6Y0PQ:
+  board: 4.859 s (5/5 seeds) at 1.00 m/s, per seed 4.885 4.800 4.850 4.930 4.830, the same as ours above, start for start
 
 The sprint's best run when we looked, greecree's sprint-2m-sprint-leader-v2, run 01M5YY1WYCDYN4FRB7BF4N:
   board: 0.839 s (5/5 seeds) at 1.15 m/s, rank 1
