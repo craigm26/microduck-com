@@ -94,13 +94,13 @@ SOURCES = {
     "site-loop": "public/cards/packs/loop-the-course/index.html",
     "site-home": "public/index.html",
     # the training guide, /train/: Pollen's challenges, pinned, and the platform pages it leans on
-    "ch-sprint": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/src/microduck_challenges/sprint_2m/AGENTS.md",
+    "ch-sprint": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/4b675ebf4d7c7b961cd78da94bfc37ca1686d321/src/microduck_challenges/sprint_2m/AGENTS.md",
     "ms-wsl-gpu": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gpu-compute",
     "ms-wslg": "https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps",
     "nvidia-wsl": "https://docs.nvidia.com/cuda/archive/13.2.2/wsl-user-guide/index.html",
     # the Mac and iPhone guides: what Pollen's tools install on a Mac and how they rent a card,
     # and Microduck Studio's own words at 8e9e9bf, the commit of build 85, the beta
-    "ch-lock": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/6ff40704a1b086618b52173c4ea3851bb21ee4f6/uv.lock",
+    "ch-lock": "https://raw.githubusercontent.com/pollen-robotics/microduck-challenges/4b675ebf4d7c7b961cd78da94bfc37ca1686d321/uv.lock",
     "rl-hfjobs": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/scripts/hf/README.md",
     "arena-training": "https://raw.githubusercontent.com/pollen-robotics/microduck-arena/d7571179242140cefd788639a23195bd56575490/arena/workshop/training.py",
     "rl-hfjobs-py": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/b02fdea4902c2b93b7d34a83a6f05da4ececb7d3/src/mjlab_microduck/hf_jobs.py",
@@ -145,6 +145,18 @@ SOURCES = {
     "db-cli": "https://raw.githubusercontent.com/craigm26/duckbatch/1f476e486e496bdd3e3cb1806e33352daaba065b/src/duckbatch/cli.py",
     "hat-readme": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/README.md",
     "hat-bom": "https://raw.githubusercontent.com/pollen-robotics/elec_RPI_Robot_HAT/6de86283297e4c49a9da8312cd3395ab83c437e3/production/ASE01187-D1_elec_RPI_Robot_HAT_BOM.csv",
+    # Pollen's Microduck Arena on Hugging Face: its README, player guides and event files, all
+    # at one pinned revision of the Space, and this site's own log of every run it races
+    "arena-readme": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/README.md",
+    "arena-train": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/train-a-policy.md",
+    "arena-points": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/points.md",
+    "arena-sprint": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/sprint-2m.md",
+    "arena-hill": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/hill-climb-1m5.md",
+    "arena-roller": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/roller-sprint-2m.md",
+    "arena-talent": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/got-a-talent.md",
+    "arena-tug": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/docs/guides/challenges/tug-of-war.md",
+    "arena-tug-event": "https://huggingface.co/spaces/pollen-robotics/microduck-arena/raw/e50f1b8c5d78b8c81d8f43dbd9e522436dda9f07/arena/events/tug-of-war.toml",
+    "site-arena-runs": "public/train/arena/runs.txt",
     # the other open simulators a policy can be trained in
     "stack-mjlab": "https://raw.githubusercontent.com/mujocolab/mjlab/8bb2bc9e187797689ec82c78c35019afd2fd0376/README.md",
     "stack-playground": "https://raw.githubusercontent.com/google-deepmind/mujoco_playground/12ad7f3842791ced39f27e5ac96d066bbe361653/README.md",
@@ -163,6 +175,7 @@ PLAIN = (
     ("train/mac/index.html", "claims-train.json", "mac", "the Mac guide"),
     ("train/iphone/index.html", "claims-train.json", "iphone", "the iPhone guide"),
     ("train/advanced/index.html", "claims-train.json", "advanced", "the advanced guide"),
+    ("train/arena/index.html", "claims-train.json", "arena", "the Arena companion"),
 )
 
 WORDS = ("two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen "
