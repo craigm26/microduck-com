@@ -11,9 +11,10 @@ wraps them in markup and changes no word, so scripts/check_story.py can read
 every source paragraph back off the built page.
 
 PICTURES ARE SLOTS. book.json says where each slot goes (`after` is the start of
-the paragraph before it), the size the art must be, and its alt text. A slot
-draws a labelled empty frame of that shape. Add art by changing this script's
-slot() and the slot's alt, never by editing a built page.
+the paragraph before it), the size of the art, its alt text and its `image`, a
+file under public/stories/<slug>/. A slot with no `image` draws a labelled empty
+frame of that shape. A slot naming a file that is not there stops the build. Add
+art by giving the slot an `image` and a true alt, never by editing a built page.
 
 THE STYLESHEET STAYS THE SITE'S. check_site_claims.sh holds every page to one
 stamped site.css, so the story look is the `.story-` section of that file.
@@ -95,15 +96,22 @@ def stylesheet() -> str:
     return f"/assets/site.css?v={digest}"
 
 
-def slot(data: dict) -> str:
+def slot(data: dict, slug: str, *, first: bool = False) -> str:
     if not str(data.get("alt", "")).strip():
         raise SystemExit(f"build_story: picture slot {data.get('id')} has no alt text; "
                          'give it an "alt" field in book.json')
     tall = " story-slot-tall" if data["height"] > data["width"] else ""
-    return (f'<figure class="story-slot{tall}" id="picture-{attr(data["id"])}" '
-            f'data-art-width="{data["width"]}" data-art-height="{data["height"]}">\n'
-            f'  <div class="story-slot-frame" role="img" aria-label="{attr(data["alt"])}">'
-            f'<span>Picture to come</span></div>\n</figure>')
+    head = (f'<figure class="story-slot{tall}" id="picture-{attr(data["id"])}" '
+            f'data-art-width="{data["width"]}" data-art-height="{data["height"]}">')
+    if not data.get("image"):
+        return (f'{head}\n  <div class="story-slot-frame" role="img" aria-label="{attr(data["alt"])}">'
+                f'<span>Picture to come</span></div>\n</figure>')
+    src = f'/stories/{slug}/{data["image"]}'
+    if not (PUBLIC / src.lstrip("/")).is_file():
+        raise SystemExit(f"build_story: picture slot {data['id']} names public{src}, which does not exist")
+    lazy = "" if first else ' loading="lazy"'
+    return (f'{head}\n  <img class="story-slot-art" src="{attr(src)}" alt="{attr(data["alt"])}" '
+            f'width="{data["width"]}" height="{data["height"]}" decoding="async"{lazy}>\n</figure>')
 
 
 def page(book: dict, path: str, title: str, description: str, body: str) -> str:
@@ -153,7 +161,7 @@ def chapter_page(book: dict, chapter: dict, chapters: list[dict]) -> str:
         sound = ' class="story-sound"' if text in SOUNDS else ""
         story.append(f"<p{sound}>{esc(text)}</p>")
         if text in slots:
-            story.append(slot(slots[text]))
+            story.append(slot(slots[text], book["slug"]))
     log = "\n".join(f"    <li>{esc(line)}</li>" for line in chapter["log"])
     ends = []
     for lead, text in chapter["ends"]:
@@ -225,7 +233,7 @@ def home_page(book: dict, chapters: list[dict]) -> str:
   <p class="story-draft">{esc(book["draft_line"])}</p>
 </header>
 
-{slot(book["cover"])}
+{slot(book["cover"], book["slug"], first=True)}
 
 <p class="story-blurb">{esc(book["blurb"])}</p>
 

@@ -7,7 +7,9 @@ Every story page must have no script tag, no third-party address and no link to
 kithgame.com; no em or en dash, in the pages or in the source; every chapter in
 the source built, and every built chapter in the source; every word of a chapter
 on its page in order; no picture idea on a page; an alt text on every picture
-slot; a draft's noindex and licence line; chapters and a book's home that link
+slot; every image a page names present in the book's folder and under the size
+limit; the picture credit in the licence line and on the page for grown-ups; a
+draft's noindex and licence line; chapters and a book's home that link
 only within the book; and a page for grown-ups that links out only to the short
 list in build_story.py. The pages must also be exactly what build_story.py draws,
 so a hand edit fails here.
@@ -17,9 +19,9 @@ assets, but a plain link to another site is fine anywhere else on the site and i
 not fine in a book a child reads. These pages promise a child's reader that
 nothing leaves the book.
 
-A SLOT'S ALT TEXT IS A FIELD, NOT A PICTURE. There is no art yet, so the field
-says what is missing. The check is that it exists, in source and page, so the
-slot cannot gain art with no text beside it.
+A SLOT'S ALT TEXT IS A FIELD. An empty slot's field says what is missing and a
+slot with art must say what the art shows. The check is that it exists, in source
+and page, and that art never sits beside a "to come" alt.
 
 Failures name the file and the fix. See the header of predeploy.sh for the
 planted mistakes this was seen to fail on.
@@ -48,6 +50,7 @@ fail: list[str] = []
 URL = re.compile(r"""(?:https?:)?//[^\s"'<>)]+""", flags=re.IGNORECASE)
 IDEAS = ("Picture ideas", "Picture-only joke", "THIS WAY UP", "WANTED poster", "bird's-eye")
 DASHES = (("—", "an em dash"), ("–", "an en dash"))
+MAX_ART = 400 * 1024
 
 
 def rel(path: pathlib.Path) -> str:
@@ -85,6 +88,19 @@ def check_links(path: pathlib.Path, book: dict) -> None:
                     "build_story.py" if grown_ups else "a child's page links only within the book"))
 
 
+def check_image(name: str, src: str, book: dict) -> None:
+    """An image a page names is in the book's folder, is there, and is small enough."""
+    home = f"/stories/{book['slug']}/"
+    if not posixpath.normpath(src).startswith(home):
+        fail.append(f"{name} names the image {src!r}; a book's pictures live under public{home}")
+        return
+    art = ROOT / "public" / src.lstrip("/")
+    if not art.is_file():
+        fail.append(f"{name} names {src}, which does not exist; add the file or fix book.json")
+    elif art.stat().st_size > MAX_ART:
+        fail.append(f"{rel(art)} is {art.stat().st_size} bytes, over the {MAX_ART} limit; re-export it")
+
+
 def check_page(path: pathlib.Path, book: dict) -> None:
     text = path.read_text(encoding="utf-8")
     name = rel(path)
@@ -101,6 +117,8 @@ def check_page(path: pathlib.Path, book: dict) -> None:
             fail.append(f"{name} carries an event handler on <{tag}>")
         if tag == "img" and not attrs.get("alt", "").strip():
             fail.append(f"{name} has an <img> with no alt text")
+        if tag == "img":
+            check_image(name, attrs.get("src", ""), book)
     for mark, label in DASHES:
         if mark in text:
             fail.append(f"{name} contains {label}; fix it in tools/books/{book['slug']}/")
@@ -115,14 +133,17 @@ def check_page(path: pathlib.Path, book: dict) -> None:
 
 def check_slots(path: pathlib.Path, slots: list[dict]) -> None:
     name = rel(path)
-    frames = [attrs for tag, attrs in Markup(path.read_text(encoding="utf-8")).elements
-              if "story-slot-frame" in attrs.get("class", "").split()]
-    if len(frames) != len(slots):
-        fail.append(f"{name} draws {len(frames)} picture slots and book.json has {len(slots)}; "
+    elements = Markup(path.read_text(encoding="utf-8")).elements
+    frames = [attrs for tag, attrs in elements if "story-slot-frame" in attrs.get("class", "").split()]
+    art = [attrs for tag, attrs in elements if "story-slot-art" in attrs.get("class", "").split()]
+    if len(frames) + len(art) != len(slots):
+        fail.append(f"{name} draws {len(frames) + len(art)} picture slots and book.json has {len(slots)}; "
                     "run python3 tools/books/build_story.py")
     for data in slots:
         if not str(data.get("alt", "")).strip():
             fail.append(f"tools/books slot {data.get('id')} has no alt text; give it an \"alt\" field")
+        if data.get("image") and "to come" in str(data.get("alt", "")).lower():
+            fail.append(f"tools/books slot {data.get('id')} has art and its alt says it is to come")
         if not (data.get("width") and data.get("height")):
             fail.append(f"tools/books slot {data.get('id')} has no width and height for the art")
     for frame in frames:
@@ -177,6 +198,12 @@ def main() -> int:
             check_slots(base / "index.html", [book["cover"]])
             if book["draft_line"] not in flatten((base / "index.html").read_text(encoding="utf-8")):
                 fail.append(f"{rel(base)}/index.html must say plainly: {book['draft_line']}")
+        credit = book.get("picture_credit", "")
+        if not credit or credit not in book["licence"]:
+            fail.append(f"tools/books/{slug}/book.json: the licence line must carry picture_credit")
+        # The source, not the built page: every built page's footer carries the credit too.
+        if credit and credit not in flatten((folder / "grown-ups.html").read_text(encoding="utf-8")):
+            fail.append(f"tools/books/{slug}/grown-ups.html must carry picture_credit word for word")
         for path in sorted(base.rglob("*.html")):
             check_page(path, book)
             check_links(path, book)
@@ -195,7 +222,7 @@ def main() -> int:
             print("check_story: " + problem, file=sys.stderr)
         return 1
     print(f"check_story: {len(build.BOOKS)} story book, plain pages, every chapter built and "
-          "word for word, picture slots with alt text")
+          "word for word, picture slots with alt text, every image present")
     return 0
 
 

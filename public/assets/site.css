@@ -911,6 +911,7 @@ body.story-page { color-scheme: light; background: var(--story-paper); color: va
 .story-text .story-sound { font: 400 2.2rem/1.2 var(--story-fell); text-align: center; margin: 1.2em 0; }
 .story-slot { margin: 2rem 0; }
 .story-slot-frame { aspect-ratio: 3 / 2; display: grid; place-items: center; background: var(--story-ground); border: 1px solid var(--story-rule); border-radius: 2px; }
+.story-slot-art { display: block; width: 100%; height: auto; border: 1px solid var(--story-rule); border-radius: 2px; }
 .story-slot-tall { max-width: 22rem; margin-inline: auto; }
 .story-slot-tall .story-slot-frame { aspect-ratio: 4 / 5; }
 .story-slot-frame span { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; color: var(--story-ink); }
@@ -957,5 +958,5 @@ body.story-page { color-scheme: light; background: var(--story-paper); color: va
   .storybook-cover span { font-size: 1rem; }
 }
 @media print {
-  .story-slot, .story-bar, .story-moves { display: none; }
+  .story-slot-frame, .story-bar, .story-moves { display: none; }
 }

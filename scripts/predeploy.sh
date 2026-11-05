@@ -322,6 +322,13 @@
 # /feedback/ through "..", the page for grown-ups linking /feedback/ and a GitHub
 # address, and a picture idea in a chapter's source. Before the review the first
 # three passed, because only chapters were held to their links.
+# PROVED ABLE TO FAIL, 2026-11-05, check_story three more times once the pictures
+# went in, in this tree, each restored byte for byte: ch5-map.webp moved away (exit 1,
+# "names ... which does not exist", and build_story.py stopped too), ch1-log.webp
+# padded to 500 KB ("over the 409600 limit"), and the credit cut from grown-ups.html
+# ("must carry picture_credit word for word"). That last one passed at first, because
+# the check read the built page and every footer carries the credit; it reads the
+# source now.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

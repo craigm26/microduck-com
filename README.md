@@ -237,12 +237,14 @@ python3 scripts/check_story.py
 ```
 
 The text is wrapped, never retyped, and picture ideas stay out of the source and the pages. A
-picture slot is a labelled empty frame with the size the art must be and an alt text field; no art
-exists yet. While `status` is `draft` every page says noindex. Pages run no script and load nothing
+picture slot in `book.json` has its size, alt text and an `image` under
+`public/stories/<slug>/art/`; a slot with no `image` draws a labelled empty frame. While `status` is `draft` every page says noindex. Pages run no script and load nothing
 from another host. A chapter and the book's home link only within the book, the page for grown-ups
 links out only to the short list in `build_story.py`, and nothing links to kithgame.com. The words
-are CC BY 4.0; pictures made from the real robot models will carry those models' own terms.
-`check_story.py` holds all of this, and that every chapter in the source is built, word for word.
+are CC BY 4.0. The pictures adapt Pollen Robotics' Microduck meshes and carry CC BY-NC-SA 4.0, with
+the credit in `book.json`'s licence line and on the page for grown-ups. `check_story.py` holds all of
+this, that every image a page names exists and is under 400 KB, and that every chapter in the source
+is built, word for word.
 
 ## Train your first duck
 
