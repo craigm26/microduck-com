@@ -268,7 +268,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "a322b4e02e58a6d2f3490bd4fafe06b8084fd3ff",
+  "duck_studio_commit": "4bb1ee9a4dfae4eb47cf0a94bff644ee8128eaa5",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -340,6 +340,7 @@
     "stairs_one_sentence_raw": "Get the duck from the floor onto a step in simulation and leave it standing there \u2014 upright on the tread with both feet resting on it, fifty ticks after your move ends."
   },
   "routes": [
+    "/ball",
     "/chase",
     "/chase/grid",
     "/climb",
