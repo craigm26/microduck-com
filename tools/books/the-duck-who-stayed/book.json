@@ -23,7 +23,7 @@
       "slots": [
         {"id": "1-1", "after": "Aunt Mo set the box on the kitchen table", "width": 1800, "height": 1200, "image": "art/ch1-box.webp", "alt": "Aunt Mo, in a blue coat and green boots, carries a cardboard box into the farmhouse kitchen. A red arrow on the box points down. In a panel beside her the same box stands open and full of white foam, and the head of a small robot duck, with a flat beak and a round orange eye, pokes through the foam."},
         {"id": "1-2", "after": "Pip walked. It walked like someone", "width": 1800, "height": 1200, "image": "art/ch1-clonk.webp", "alt": "Wren, in a straw hat and a red shirt, kneels on the kitchen floor with her arms held out. Pip, a small white and grey robot duck with orange feet, walks towards her. A dashed line on the floor runs past her and on to the leg of a chair."},
-        {"id": "1-3", "after": "She went to find a pencil.", "width": 1800, "height": 1200, "image": "art/ch1-log.webp", "alt": "Wren sits at the kitchen table, writing in an open thin green book with a yellow pencil. Aunt Mo sits across from her, holding a yellow book. One leg of Wren's chair is wrapped in a tied bandage. Pip stands on a shelf by the back door, plugged in to charge."}
+        {"id": "1-3", "after": "She went to find a pencil.", "width": 1800, "height": 1200, "image": "art/ch1-log.webp", "alt": "Wren sits at the kitchen table, writing in an open thin green book with a yellow pencil. Aunt Mo sits across from her with a mug. One leg of Wren's chair is wrapped in a tied bandage. Pip stands on a shelf by the back door, plugged in to charge."}
       ]
     },
     {
