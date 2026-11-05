@@ -727,8 +727,8 @@ def main() -> int:
         digest = quoted["plant_digest"]
         if not re.fullmatch(r"[0-9a-f]{64}", digest):
             raise Missing(f"plant_digest is not 64 lowercase hex characters: {digest!r}")
-        if len(routes) != 18:
-            raise Missing(f"DuckBench.routes has {len(routes)} entries, the page says eighteen")
+        if len(routes) != 19:
+            raise Missing(f"DuckBench.routes has {len(routes)} entries, the page says nineteen")
         if BALL_CONTROLS_CLAUSE not in restated["ball_leaderboard_raw"]:
             raise Missing("ball_controls_clause is no longer a substring of "
                           "BallChallenge.leaderboardSaid")
