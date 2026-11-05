@@ -36,6 +36,13 @@ BOOKS = ("the-duck-who-stayed",)
 INDEPENDENCE = ("Microduck Studio is an independent project. It is not made by, endorsed by, "
                 "or affiliated with Pollen Robotics. Microduck is their robot; this is an "
                 "independent owner's app for it.")
+# On every page a child reads, because a shared link lands on a chapter, not the shelf.
+KIND = "Story book · Fiction"
+# A child's page links only within the book. The page for grown-ups is the one way
+# out, and only to these. Each of them carries the site's header, so what lies one
+# step further is the grown-up's choice, which is why that page is the only door.
+GROWN_UP_LINKS = ("/books/", "/books/#learning-books", "/cards/", "/cards/print/",
+                  "mailto:feedback@microduckstudio.com")
 SOUNDS = {"Clonk.", "Bump!"}
 ENDINGS = ("Real robots.", "Big Question (back page).", "Try It:")
 
@@ -170,6 +177,7 @@ def chapter_page(book: dict, chapter: dict, chapters: list[dict]) -> str:
     body = f"""<main id="main" tabindex="-1" class="story-main">
 <article>
 <header class="story-head">
+  <p class="story-kind">{KIND}</p>
   <h1><span class="story-number">Chapter {chapter["number"]}</span> {esc(chapter["title"])}</h1>
   <p class="story-draft">{esc(book["draft_line"])}</p>
 </header>
@@ -211,7 +219,7 @@ def home_page(book: dict, chapters: list[dict]) -> str:
     chapter_list = "\n".join(rows)
     body = f"""<main id="main" tabindex="-1" class="story-main">
 <header class="story-head story-title">
-  <p class="story-kind">Story book</p>
+  <p class="story-kind">{KIND}</p>
   <h1>{esc(book["title"])}</h1>
   <p class="story-tagline">{esc(book["tagline"])}</p>
   <p class="story-draft">{esc(book["draft_line"])}</p>
@@ -228,7 +236,7 @@ def home_page(book: dict, chapters: list[dict]) -> str:
   </ol>
 </section>
 
-<p class="story-out"><a href="{home}grown-ups/">For grown-ups</a> · <a href="/books/">All Microduck books</a></p>
+<p class="story-out"><a href="{home}grown-ups/">For grown-ups</a></p>
 </main>"""
     return page(book, home, f'{book["title"]} | Microduck Studio story books',
                 f'{book["title"]}, a first draft of a story to read aloud. {book["blurb"]}', body)

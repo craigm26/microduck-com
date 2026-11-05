@@ -7,9 +7,10 @@ Every story page must have no script tag, no third-party address and no link to
 kithgame.com; no em or en dash, in the pages or in the source; every chapter in
 the source built, and every built chapter in the source; every word of a chapter
 on its page in order; no picture idea on a page; an alt text on every picture
-slot; a draft's noindex and licence line; and chapters that link only within the
-book. The pages must also be exactly what build_story.py draws, so a hand edit
-fails here.
+slot; a draft's noindex and licence line; chapters and a book's home that link
+only within the book; and a page for grown-ups that links out only to the short
+list in build_story.py. The pages must also be exactly what build_story.py draws,
+so a hand edit fails here.
 
 WHY A GATE OF ITS OWN. check_site_claims.sh already bans scripts and remote
 assets, but a plain link to another site is fine anywhere else on the site and is
@@ -29,6 +30,7 @@ from __future__ import annotations
 import importlib.util
 import os
 import pathlib
+import posixpath
 import re
 import sys
 from urllib.parse import urlsplit
@@ -61,6 +63,26 @@ def check_source(slug: str) -> None:
                 fail.append(f"{rel(path)} contains {name}; rewrite the sentence")
         if "kithgame.com" in text.lower():
             fail.append(f"{rel(path)} names kithgame.com; story books do not link to it")
+        for idea in IDEAS:
+            if idea.lower() in text.lower():
+                fail.append(f"{rel(path)} holds a picture idea ({idea!r}); those stay in the draft")
+
+
+def check_links(path: pathlib.Path, book: dict) -> None:
+    """A child's page stays in the book. Only the page for grown-ups has a way out."""
+    name = rel(path)
+    home = f"/stories/{book['slug']}/"
+    grown_ups = path.parent.name == "grown-ups"
+    for tag, attrs in Markup(path.read_text(encoding="utf-8")).elements:
+        href = attrs.get("href")
+        if tag == "link" or not href or href.startswith("#"):
+            continue
+        target = href.split("?")[0]
+        kept = posixpath.normpath(target) + "/" if target.startswith("/") else target
+        if kept.startswith(home) or (grown_ups and target in build.GROWN_UP_LINKS):
+            continue
+        fail.append(f"{name} links {href}; " + ("this page links out only to GROWN_UP_LINKS in "
+                    "build_story.py" if grown_ups else "a child's page links only within the book"))
 
 
 def check_page(path: pathlib.Path, book: dict) -> None:
@@ -109,7 +131,7 @@ def check_slots(path: pathlib.Path, slots: list[dict]) -> None:
 
 
 def check_chapter(path: pathlib.Path, book: dict, chapter: dict) -> None:
-    """Every source sentence on its page, in order, and every link inside the book."""
+    """Every source sentence on its page, in order."""
     name = rel(path)
     page = flatten(path.read_text(encoding="utf-8"))
     place = 0
@@ -123,12 +145,6 @@ def check_chapter(path: pathlib.Path, book: dict, chapter: dict) -> None:
             fail.append(f"{name} does not carry, in order: {words[:70]!r}")
             continue
         place = found + len(words)
-    home = f"/stories/{book['slug']}/"
-    markup = Markup(path.read_text(encoding="utf-8"))
-    for tag, attrs in markup.elements:
-        href = attrs.get("href")
-        if tag == "a" and href and not href.startswith(("#", home)):
-            fail.append(f"{name} links {href}; a chapter links only within the book")
 
 
 def main() -> int:
@@ -163,6 +179,7 @@ def main() -> int:
                 fail.append(f"{rel(base)}/index.html must say plainly: {book['draft_line']}")
         for path in sorted(base.rglob("*.html")):
             check_page(path, book)
+            check_links(path, book)
         try:
             drawn = build.pages_for(slug)
         except SystemExit as why:

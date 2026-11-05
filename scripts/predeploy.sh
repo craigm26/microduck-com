@@ -317,6 +317,11 @@
 # from book.json, a slot's alt field removed, the same field left blank, a picture
 # idea on a page, noindex removed from a draft, and one word changed on a page. Each
 # failed for the planted reason.
+# PROVED ABLE TO FAIL, 2026-11-05, check_story five more times after a review, in a
+# throwaway copy, each restored: the book's home linking /books/, a chapter reaching
+# /feedback/ through "..", the page for grown-ups linking /feedback/ and a GitHub
+# address, and a picture idea in a chapter's source. Before the review the first
+# three passed, because only chapters were held to their links.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
