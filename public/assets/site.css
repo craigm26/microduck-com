@@ -685,7 +685,7 @@ td code { white-space: normal; }
 .shelf-intermediate { --c: #2c64c0; --c-ink: #0d244a; }
 .shelf-advanced { --c: #3b3e47; --c-ink: #15161a; }
 .shelf-casebook { --c: #2f6b4f; --c-ink: #0f2a1e; }
-.shelf-text h2 { font-size: 1.3rem; margin: 0 0 .35rem; }
+.shelf-text h3 { font-size: 1.3rem; margin: 0 0 .35rem; }
 .shelf-text p { color: var(--dim); font-size: .95rem; margin: 0 0 .5rem; }
 .shelf-text .shelf-for { color: var(--ink); font-weight: 600; font-size: .88rem; }
 
@@ -851,4 +851,109 @@ html.bk-flat .bk-where-num { white-space: nowrap; }
   html.bk-3d .book-page main > .lesson, html.bk-3d .book-page main > .book-intro,
   html.bk-flat .book-page main > .lesson, html.bk-flat .book-page main > .book-intro { display: grid !important; }
   .lesson { break-inside: avoid; }
+}
+
+/* The story books. A reader should know at a glance that they have left the
+   reference shelf, so these pages leave the app's system type and light and dark
+   themes for warm paper, and stay on paper at night. IM Fell English carries the
+   titles, and Alegreya Sans the long text, because a chapter in Fell at reading
+   size is untested with children. Both are served from this site under the SIL
+   Open Font License 1.1 (see /assets/fonts/OFL-IMFellEnglish.txt and
+   OFL-AlegreyaSans.txt), and load only where these rules ask for them. */
+@font-face {
+  font-family: "IM Fell English";
+  src: url("/assets/fonts/IMFellEnglish-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IM Fell English";
+  src: url("/assets/fonts/IMFellEnglish-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alegreya Sans";
+  src: url("/assets/fonts/AlegreyaSans-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --story-ink: #2f2721;
+  --story-paper: #f5eddd;
+  --story-ground: #eadcc4;
+  --story-madder: #b5523b;
+  --story-moss: #3f6b47;
+  --story-rule: rgba(47,39,33,.3);
+  --story-fell: "IM Fell English", Georgia, "Times New Roman", serif;
+  --story-sans: "Alegreya Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+}
+body.story-page { color-scheme: light; background: var(--story-paper); color: var(--story-ink); font: 500 1.28rem/1.6 var(--story-sans); }
+.story-page a { color: var(--story-moss); }
+.story-page a:focus-visible { outline: 3px solid var(--story-madder); outline-offset: 2px; }
+.story-page h1, .story-page h2 { font-family: var(--story-fell); font-weight: 400; color: var(--story-ink); letter-spacing: .005em; }
+.story-bar { display: flex; justify-content: space-between; gap: 1rem; max-width: 40rem; margin: 0 auto; padding: 1.1rem 1.25rem; font-size: 1rem; }
+.story-bar a { text-decoration: none; }
+.story-bar a:first-child { font-family: var(--story-fell); font-size: 1.15rem; }
+.story-main { max-width: 40rem; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
+.story-main:focus { outline: none; }
+.story-head { margin-bottom: 2rem; text-align: center; }
+.story-head h1 { font-size: clamp(2.3rem, 7vw, 3.4rem); line-height: 1.05; margin: 0 0 .75rem; }
+.story-number, .story-kind { display: block; font: 500 .9rem/1.4 var(--story-sans); letter-spacing: .3em; text-transform: uppercase; color: var(--story-moss); margin-bottom: .6rem; }
+.story-tagline { font: italic 400 1.4rem/1.3 var(--story-fell); margin: 0 0 .6rem; color: var(--story-ink); }
+.story-draft { display: inline-block; margin: 0; padding: .15rem .8rem; border: 1px solid var(--story-rule); border-radius: 2px; font-size: 1rem; }
+.story-blurb { font: italic 400 1.5rem/1.35 var(--story-fell); text-align: center; margin: 2rem 0; }
+.story-text p { margin: 0 0 1em; }
+.story-text .story-sound { font: 400 2.2rem/1.2 var(--story-fell); text-align: center; margin: 1.2em 0; }
+.story-slot { margin: 2rem 0; }
+.story-slot-frame { aspect-ratio: 3 / 2; display: grid; place-items: center; background: var(--story-ground); border: 1px solid var(--story-rule); border-radius: 2px; }
+.story-slot-tall { max-width: 22rem; margin-inline: auto; }
+.story-slot-tall .story-slot-frame { aspect-ratio: 4 / 5; }
+.story-slot-frame span { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; color: var(--story-ink); }
+.story-log { margin: 2.5rem 0; padding: 1.25rem 1.5rem; background: var(--story-ground); border: 1px solid var(--story-rule); border-radius: 2px; font: 400 1.35rem/1.45 var(--story-fell); }
+.story-log-title { margin: 0 0 .6rem; font: 500 .9rem/1.4 var(--story-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--story-moss); }
+.story-log ul { list-style: none; margin: 0; padding: 0; }
+.story-log li { margin: 0 0 .2rem; }
+.story-end { margin: 1.5rem 0; padding-top: 1rem; border-top: 1px solid var(--story-rule); font-size: 1.15rem; }
+.story-end p { margin: 0; }
+.story-end strong { font-family: var(--story-fell); font-size: 1.3rem; font-weight: 400; color: var(--story-moss); }
+.story-web-note { font-size: 1rem; color: var(--story-ink); }
+.story-moves { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; max-width: 40rem; margin: 0 auto; padding: 1rem 1.25rem 2rem; font-size: 1.05rem; }
+.story-chapters { list-style: none; margin: 0; padding: 0; }
+.story-chapters li { padding: .45rem 0; border-top: 1px solid var(--story-rule); font-size: 1.25rem; }
+.story-chapters a { display: block; font-family: var(--story-fell); font-size: 1.5rem; line-height: 1.25; text-decoration: none; }
+.story-chapters span { display: block; font: 500 .8rem/1.4 var(--story-sans); letter-spacing: .2em; text-transform: uppercase; color: var(--story-moss); }
+.story-unwritten { padding-block: .2rem; font-size: 1rem; }
+.story-unwritten span { display: inline; margin-right: .6rem; color: var(--story-ink); }
+.story-notes h2 { font-size: 1.8rem; margin: 2rem 0 .5rem; }
+.story-notes p, .story-notes ul { margin: 0 0 .9em; }
+.story-page section > h2#chapters-title { font-size: 1.8rem; margin: 2rem 0 .75rem; }
+.story-out { margin-top: 2rem; font-size: 1.05rem; }
+.story-foot { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1.25rem 2.5rem; border-top: 1px solid var(--story-rule); font-size: .95rem; line-height: 1.45; color: var(--story-ink); }
+.story-foot p { margin: 0 0 .6rem; }
+
+/* The two shelves on /books/. The story shelf is a sheet of the story books' paper
+   in either theme, so the two kinds of book differ at a glance. */
+.books-jump { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: 1rem; font-weight: 600; }
+.bookshelf { margin-top: 2.5rem; scroll-margin-top: 1rem; }
+.bookshelf > h2 { margin: 0; font-size: clamp(1.7rem, 3.4vw, 2.3rem); }
+.bookshelf-line { margin: .3rem 0 0; max-width: 60ch; }
+.bookshelf-story { padding: clamp(1.25rem, 4vw, 2.25rem); background: var(--story-paper); color: var(--story-ink); border-radius: 2px; box-shadow: 0 3px 10px rgba(52,34,20,.32); font-family: var(--story-sans); font-weight: 500; }
+.bookshelf-story > h2 { font-family: var(--story-fell); font-weight: 400; color: var(--story-ink); }
+.bookshelf-story .bookshelf-line { font-size: 1.15rem; }
+.storybook { display: grid; grid-template-columns: 11rem 1fr; gap: 1.5rem; align-items: center; margin-top: 1.25rem; color: var(--story-ink); text-decoration: none; }
+.storybook-cover { aspect-ratio: 4 / 5; display: grid; place-items: center; padding: 1rem; background: var(--story-moss); border-radius: 2px; box-shadow: 0 5px 12px rgba(52,34,20,.32); }
+.storybook-cover span { padding: .7rem .6rem; background: var(--story-paper); color: var(--story-ink); font: 400 1.35rem/1.1 var(--story-fell); text-align: center; }
+.storybook h3 { margin: 0; font: 400 1.7rem/1.2 var(--story-fell); color: var(--story-ink); }
+.storybook p { margin: .3rem 0 0; font-size: 1.1rem; line-height: 1.4; }
+.storybook .storybook-draft { border-left: 3px solid var(--story-madder); padding-left: .6rem; }
+@media (max-width: 34rem) {
+  .storybook { grid-template-columns: 7.5rem 1fr; gap: 1rem; }
+  .storybook-cover span { font-size: 1rem; }
+}
+@media print {
+  .story-slot, .story-bar, .story-moves { display: none; }
 }

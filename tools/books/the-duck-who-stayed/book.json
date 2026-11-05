@@ -1,0 +1,38 @@
+{
+  "title": "The Duck Who Stayed",
+  "slug": "the-duck-who-stayed",
+  "status": "draft",
+  "draft_line": "First draft. More chapters are coming.",
+  "tagline": "A story to read aloud.",
+  "blurb": "A small walking robot comes to a farm in a box. Wren gets a thin green book to write down what it does.",
+  "licence": "The words of this book are CC BY 4.0, matching this site. Pictures made from the real robot models will carry those models' own terms.",
+  "planned_chapters": 10,
+  "cover": {
+    "id": "cover",
+    "width": 1600,
+    "height": 2000,
+    "alt": "Cover picture to come."
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "source": "chapter-1.md",
+      "description": "Chapter 1 of The Duck Who Stayed, a first draft of a story to read aloud.",
+      "slots": [
+        {"id": "1-1", "after": "Aunt Mo set the box on the kitchen table", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 1, first picture."},
+        {"id": "1-2", "after": "Pip walked. It walked like someone", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 1, second picture."},
+        {"id": "1-3", "after": "She went to find a pencil.", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 1, third picture."}
+      ]
+    },
+    {
+      "number": 5,
+      "source": "chapter-5.md",
+      "description": "Chapter 5 of The Duck Who Stayed, a first draft of a story to read aloud.",
+      "slots": [
+        {"id": "5-1", "after": "Pip stood on a flat stone", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 5, first picture."},
+        {"id": "5-2", "after": "Pip tipped over and stuck there", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 5, second picture."},
+        {"id": "5-3", "after": "Wren got out the green book.", "width": 1800, "height": 1200, "alt": "Picture to come, chapter 5, third picture."}
+      ]
+    }
+  ]
+}

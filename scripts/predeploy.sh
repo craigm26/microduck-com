@@ -310,6 +310,13 @@
 #     a meaning none of its entries covers".
 #   * a meaning that names no words: "arena: '60' has 2 entries, so each needs
 #     "as", ...".
+# PROVED ABLE TO FAIL, 2026-11-05, check_story twelve times: a script tag planted in
+# a chapter, in this tree and restored byte for byte; then in a throwaway copy, an em
+# dash in a chapter's source, a kithgame.com link, a third-party link, a chapter
+# linking out of the book, a chapter deleted from the build, a chapter file missing
+# from book.json, a slot's alt field removed, the same field left blank, a picture
+# idea on a page, noindex removed from a draft, and one word changed on a page. Each
+# failed for the planted reason.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -321,28 +328,28 @@ DUCK_STUDIO="${1:-${DUCK_STUDIO:-$HOME/projects/duck-studio}}"
 
 step() { printf '\n== %s\n' "$1"; }
 
-step "1/9 extract the pinned StudioKit values"
+step "1/10 extract the pinned StudioKit values"
 python3 scripts/extract_kit_sentences.py "$DUCK_STUDIO"
 
-step "2/9 every pinned sentence is on the site"
+step "2/10 every pinned sentence is on the site"
 bash scripts/check_site_sentences.sh
 
-step "3/9 dashes, third parties, the bundle, the shared stylesheet"
+step "3/10 dashes, third parties, the bundle, the shared stylesheet"
 bash scripts/check_site_claims.sh
 
-step "4/9 the Evaluations copy matches what a tester can open"
+step "4/10 the Evaluations copy matches what a tester can open"
 bash scripts/check_evallog_claims.sh
 
-step "5/9 every Duck Card matches the deck, StudioKit, its code and the beta"
+step "5/10 every Duck Card matches the deck, StudioKit, its code and the beta"
 python3 scripts/check_cards.py "$DUCK_STUDIO"
 
-step "6/9 every Duck Card pack is Studio's, and its pages say what it says"
+step "6/10 every Duck Card pack is Studio's, and its pages say what it says"
 python3 scripts/check_packs.py "$DUCK_STUDIO"
 
-step "7/9 every link resolves"
+step "7/10 every link resolves"
 bash scripts/check_links.sh
 
-step "8/9 every page is well formed"
+step "8/10 every page is well formed"
 if command -v xmllint >/dev/null 2>&1; then
   mapfile -d '' html_pages < <(find public -type f -name '*.html' -print0)
   xmllint --html --noout "${html_pages[@]}"
@@ -350,8 +357,11 @@ if command -v xmllint >/dev/null 2>&1; then
 fi
 python3 scripts/check_wellformed.py
 
-step "9/9 the books: their structure, their one script, and every number's source"
+step "9/10 the books: their structure, their one script, and every number's source"
 python3 scripts/check_books.py
 
-printf '\npredeploy: all nine gates passed. Deploy with\n'
+step "10/10 the story books: plain pages, every chapter built, word for word"
+python3 scripts/check_story.py
+
+printf '\npredeploy: all ten gates passed. Deploy with\n'
 printf '  npx --yes wrangler@4 pages deploy public --project-name microduck --branch=main\n'

@@ -1,5 +1,5 @@
 # Every rule whose pattern matches a request applies, so the security policy is
-# set per section rather than on /*: the books are the one place scripts run,
+# set per section rather than on /*: the learning books are the one place scripts run,
 # and a /* policy would be joined to theirs and still block them.
 # scripts/check_books.py fails unless every page is under exactly one policy.
 
@@ -44,7 +44,11 @@
 /assets/*
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
-# The books run their own scripts and nothing else's: no other host, no eval,
+# The story books run no scripts at all, so they stay under the same policy as the plain pages.
+/stories/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+# The learning books run their own scripts and nothing else's: no other host, no eval,
 # no inline script, no network.
 /books/*
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
