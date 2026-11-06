@@ -105,18 +105,25 @@ HOSTS = ("fonts.googleapis", "fonts.gstatic", "googletagmanager",
 assets = {str(path): path.read_text(encoding="utf-8")
           for path in pathlib.Path("public").rglob("*")
           if path.suffix.lower() in (".css", ".svg")}
-# THE BOOKS ARE THE ONE EXCEPTION. Each of the four book pages may carry this
-# exact module tag and nothing else; scripts/check_books.py holds the rest of the
+# THE BOOKS ARE THE EXCEPTION. Each of the four book pages, and the 3-D edition of
+# the picture book, may carry this exact module tag and nothing else, and the flat
+# edition may carry the page turner's; scripts/check_books.py holds the rest of the
 # exception to its edges (the policy in _headers, the books' own code, the
 # vendored library byte for byte).
-BOOK_PAGE = re.compile(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$")
+BOOK_PAGE = re.compile(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$|"
+                       r"public/stories/[a-z-]+/3d/index\.html$")
 BOOK_TAG = '<script type="module" src="/books/engine/book.js"></script>'
+PICTURE_PAGE = re.compile(r"public/stories/[a-z-]+/picture/index\.html$")
+PICTURE_TAG = '<script type="module" src="/books/engine/picture.js"></script>'
 for name, text in (pages | assets).items():
     parsed = Markup(text) if not name.endswith(".css") else None
     scripts = re.findall(r"<script\b[^>]*>(?:.*?</script>)?", text, flags=re.IGNORECASE | re.DOTALL)
     if BOOK_PAGE.search(name):
         if scripts != [BOOK_TAG]:
             fail.append(f"{name} must carry exactly {BOOK_TAG} and no other script")
+    elif PICTURE_PAGE.search(name):
+        if scripts != [PICTURE_TAG]:
+            fail.append(f"{name} must carry exactly {PICTURE_TAG} and no other script")
     elif scripts:
         fail.append(f"{name} carries a script tag")
     if parsed:

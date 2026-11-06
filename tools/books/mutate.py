@@ -260,7 +260,7 @@ def _():
 
 @case("a number on the shelf with no entry", ["public/books/index.html"], "the shelf prints '12'")
 def _():
-    sub("public/books/index.html", "Four books, one little robot", "Four books, 12 drawings, one little robot")
+    sub("public/books/index.html", "Story books and learning books</h1>", "Story books, 12 drawings and learning books</h1>")
 
 
 @case("a script on the shelf", ["public/books/index.html"], "carries a script")

@@ -3,8 +3,8 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Twenty-eight HTML pages, a not-found page and a shared stylesheet, with no build step at deploy time, bundler or npm
-dependency. There is no JavaScript anywhere except the four books under `/books/`, which run
+Thirty-three HTML pages, a not-found page and a shared stylesheet, with no build step at deploy time, bundler or npm
+dependency. There is no JavaScript anywhere except the four learning books under `/books/`, which run
 the site's own scripts and nothing else's (see "The books" below). The visual theme follows
 Pollen Robotics' warm orange accents, spacious typography and rounded panels while clearly
 identifying Studio as an independent project.
@@ -26,27 +26,32 @@ identifying Studio as an independent project.
   (`index.html`), each pack's page of challenge cards and lessons (`<id>/index.html`), its cut
   sheet of only the cards in play (`<id>/print/index.html`), and the pack files themselves
   (`<id>.duckpack`), byte identical to the ones StudioKit bundles.
-- `public/books/` - four reference books, ten lessons each: the shelf (`index.html`), Book 1
+- `public/books/` - the landing page with two shelves, story books and learning books
+  (`index.html`), and four learning books, ten lessons each: Book 1
   for readers 7 and up with a grown-up (`beginner/`), Book 2 for teens and adults
   (`intermediate/`), Book 3 for people who train robots (`advanced/`) and Book 4, real runs
   traced from their notes and logs (`casebook/`). Each page is the whole
   book as a document; `engine/book.js` lays it onto a 3D pop-up book, `engine/kit.js` is the
   shared paper kit, `engine/figures-<book>.js` holds each lesson's pop-up, and `vendor/` is
   three.js r170 with its licence.
+- `public/stories/` - story books, which are fiction: one folder a book, drawn by
+  `tools/books/build_story.py` and never edited by hand (see "The story books" below).
 - `public/assets/site.css` - shared theme, responsive navigation, documentation layout,
-  light and dark colors, keyboard focus styles, and the books.
+  light and dark colors, keyboard focus styles, the learning books and the story books.
 - `public/assets/studio-icon.png` - the existing app icon, copied from the app repository.
-- `public/assets/fonts/` - Fredoka, the one face that is not the system's, used only on the
-  Duck Cards themselves; served from this site under the SIL Open Font License 1.1, whose
-  text sits beside it.
+- `public/assets/fonts/` - Fredoka, used only on the Duck Cards themselves, and IM Fell English
+  and Alegreya Sans, used only on the story books and their shelf; all served from this site under
+  the SIL Open Font License 1.1, whose text sits beside each.
 - `public/duckbench-bundle.zip` (+ `.sha256`) - the downloadable duckbench bundle, built in
   the `duckbench` repo; regenerate there, do not edit here.
 - `public/_headers` - response headers. Every section gets a CSP with `default-src 'none'`
-  and local stylesheets; only `/books/*` adds `script-src 'self'`, so scripts can run there
+  and local stylesheets, `/stories/*` included; only `/books/*` adds `script-src 'self'`, so scripts can run there
   and nowhere else, and never from another host. The policy is set per section rather than on
   `/*`, because Cloudflare joins every matching rule's headers and a `/*` policy would still
   block the books.
-- `public/robots.txt`, `public/sitemap.xml` - every page and a crawl pointer.
+- `public/robots.txt`, `public/sitemap.xml` - every page and a crawl pointer. The draft story
+  pages are listed too: they say noindex, and `check_wellformed.py` holds the sitemap to every
+  page but the not-found one.
 - `scripts/` - the gates. `tools/` is never served.
 - `tools/duckcards/` - draws the cards into the pages: `build_cards.py`, the pictures
   (`art.py`) and the AprilTag table (`tag36h11.txt`); `build_packs.py` draws the pack pages.
@@ -70,7 +75,7 @@ a policy that would block the books blocks them here too.
 ## Run the gates before every deploy
 
 ```sh
-bash scripts/predeploy.sh                # all nine, stopping at the first failure
+bash scripts/predeploy.sh                # all ten, stopping at the first failure
 ```
 
 In order: the extractor reads the **values** of the pinned StudioKit constants out of
@@ -90,13 +95,13 @@ elements, use unique IDs and appear in the sitemap. Same-site canonical URLs are
 locally so a new page can pass before its first deployment. Last, the books: every lesson's
 structure, the one module script on each book page and nowhere else, the policy in
 `_headers`, the vendored three.js byte for byte, and every number each lesson prints against
-its ledger and the pinned source the ledger quotes.
+its ledger and the pinned source the ledger quotes. Then the story books: `check_story.py`.
 
 Three rules the gates exist to hold:
 
 1. **Every number on the site is read out of a StudioKit constant, or it is not on the
-   site.** The books under `/books/` are the one exception, and they have a rule of their own
-   (see "The books"). A number that lives only in a Swift doc comment cannot be pinned by anything,
+   site.** The learning books under `/books/` are one exception, with a rule of their own
+   (see "The books"), and the story pages are the other, because a story's numbers are fiction. A number that lives only in a Swift doc comment cannot be pinned by anything,
    so it is not printed here. A pack page's numbers come from the pack file, which is a
    StudioKit resource pinned by its sha256; its one number about a real duck, how far the
    first simulator measurement carried it on one Walk card, is read by the extractor out of
@@ -169,7 +174,7 @@ TestFlight build, so the pack pages go live with that build and not before.
 
 ## The books
 
-Four books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
+Four learning books, ten lessons each, at `/books/`. A lesson is a spread: the left page is the lesson
 (`.lesson-page`, with a prediction to commit to), the right page is a pop-up figure played one
 step at a time (`figure.lesson-figure`, whose `ol.figure-steps` the engine turns into the step
 buttons, so every word the figure shows is in the HTML), and `aside.lesson-notes` holds Try it
@@ -217,6 +222,33 @@ the ledger it complains about. To look at it, run `python3 tools/books/serve.py 
 console error, a step-count mismatch, a left page that overflows, or a mesh that jumps between
 frames; `python3 tools/books/montage.py <stills dir>` tiles them per lesson. After changing
 `check_books.py` itself, run `python3 tools/books/mutate.py` and add a case for the new rule.
+
+## The story books
+
+`/books/` has two shelves. Learning books are reference: the rest of this README's rules about
+numbers apply. Story books are fiction, with their own look and their own pages under `/stories/`.
+*The Duck Who Stayed* is the first. Its source is `tools/books/the-duck-who-stayed/`: `book.json`
+says the picture slots and whether it is a draft, `picture-1.json` is chapter 1's words and art in
+both editions, and `grown-ups.html` is the page for grown-ups. Only chapter 1 is published, at
+`picture/` and `3d/`, beside the book's home and `grown-ups/`; `check_story.py` fails on any other
+page or any unused picture. The older prose chapters and their art wait in `unpublished/`, which
+the build does not read. To change a page:
+
+```sh
+python3 tools/books/build_story.py           # --check only reports stale pages
+python3 scripts/check_story.py
+```
+
+The text is wrapped, never retyped, and picture ideas stay out of the source and the pages. A
+picture slot in `book.json` has its size, alt text and an `image` under
+`public/stories/<slug>/art/`; a slot with no `image` draws a labelled empty frame. While `status` is `draft` every page says noindex. Pages run no script and load nothing
+from another host, except that the two editions run this site's own scripts. A child's page links
+only within the book, to a published page, the page for grown-ups
+links out only to the short list in `build_story.py`, and nothing links to kithgame.com. The words
+are CC BY 4.0. The pictures adapt Pollen Robotics' Microduck meshes and carry CC BY-NC-SA 4.0, with
+the credit in `book.json`'s licence line and on the page for grown-ups. `check_story.py` holds all of
+this, that every image a page names exists and is under 400 KB, and that both editions carry every
+word in order.
 
 ## Train your first duck
 
@@ -299,7 +331,7 @@ gate fails until every page carries the current stamp.
 The live wrangler OAuth token is in `~/.wrangler/config/`, not `~/.config/.wrangler/`. No
 GitHub Actions, ever. After deploying, check the live host: `/`, `/docs/`, `/privacy/`,
 `/cards/`, `/cards/print/`, `/cards/spec/`, `/cards/duck-cards.json`, `/cards/packs/`, each
-pack's page, cut sheet and `.duckpack`, `/books/` and the four books all return 200, a book's
+pack's page, cut sheet and `.duckpack`, `/books/`, the four learning books and the story pages all return 200, a book's
 response carries the books' `script-src 'self'` policy and every other page carries none, the
 stylesheet and icon load, the zip is 11666886 bytes, the CSP header is present, and the docs
 carry exactly one `id="evallog-..."` marker matching the receipt.

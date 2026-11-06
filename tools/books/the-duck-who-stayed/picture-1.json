@@ -1,0 +1,840 @@
+{
+ "number": 1,
+ "title": "Chapter 1: A Box From the Post Office",
+ "description": "Chapter 1 of The Duck Who Stayed as a picture book to read aloud, a first draft, with the words on the pictures.",
+ "description_3d": "Chapter 1 of The Duck Who Stayed as a paper book that opens and turns, a first draft.",
+ "audience": "For children 5 to 8. A grown-up reads it to a child of 5 or 6. A child of about 7 reads it alone.",
+ "title_page": {
+  "art": "art/spreads/s00",
+  "alt": "The title page. On the right, Wren in a straw hat kneels on a kitchen floor and holds out her hands to Pip, a small white and grey robot duck.",
+  "zones": [
+   {
+    "x": 8,
+    "y": 20,
+    "w": 36,
+    "kind": "title"
+   }
+  ]
+ },
+ "spreads": [
+  {
+   "title": "The box",
+   "art": "art/spreads/s01",
+   "alt": "A farmhouse kitchen. Aunt Mo walks in at the back door, carrying a cardboard box with a large red arrow on it pointing at the floor. Wren in her straw hat trots alongside with her nose level with the label. On the table at the left, beside a bowl of apples, sits Nod, a pale robot with one head, two thin antennas, no hands and no wheels, its head tipped toward the box.",
+   "sheets": [
+    {
+     "name": "table",
+     "foot": 0.939,
+     "rise": 11
+    },
+    {
+     "name": "people",
+     "foot": 1.0,
+     "rise": 16
+    }
+   ],
+   "zones": [
+    {
+     "x": 4,
+     "y": 4,
+     "w": 42,
+     "p": [
+      "On the last hot day of summer, the truck came home with a box.",
+      "A box! With a name on it!",
+      "The name was not Wren. It was Aunt Mo. Wren felt this was a mistake."
+     ],
+     "tight": true
+    },
+    {
+     "x": 4,
+     "y": 32,
+     "w": 24,
+     "p": [
+      "Nod was the robot on the table: one head, two antennas, no hands. It nodded at everything."
+     ]
+    },
+    {
+     "x": 38.5,
+     "y": 31,
+     "w": 10.5,
+     "p": [
+      "“That box,” said Nod, “is a ham.”"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Not yet",
+   "art": "art/spreads/s02",
+   "alt": "The kitchen table, close, seen twice. On the left the box is still taped shut, with Wren's chin on the lid and Aunt Mo's hand flat on top, and Nod at the end of the table. On the right the box is open with foam spilling out and a small flat beak poking up at an odd angle. Nod has a blob of foam on one antenna. Wren stands on a chair at the end of the table and looks down, Grandpa Sol leans in at the door with his hammer, and Aunt Mo's hand holds the scissors.",
+   "sheets": [
+    {
+     "name": "people",
+     "foot": 1.0,
+     "rise": 12
+    },
+    {
+     "name": "table",
+     "foot": 1.0,
+     "rise": 6
+    }
+   ],
+   "zones": [
+    {
+     "x": 7,
+     "y": 4,
+     "w": 30,
+     "p": [
+      "“Can we open it now?”"
+     ]
+    },
+    {
+     "x": 13,
+     "y": 11,
+     "w": 24,
+     "p": [
+      "“Not yet.”"
+     ],
+     "kind": "chant"
+    },
+    {
+     "x": 19,
+     "y": 18,
+     "w": 24,
+     "p": [
+      "“Now?”"
+     ]
+    },
+    {
+     "x": 25,
+     "y": 25,
+     "w": 24,
+     "p": [
+      "“Not yet.”"
+     ],
+     "kind": "chant"
+    },
+    {
+     "x": 31,
+     "y": 32,
+     "w": 18,
+     "p": [
+      "“How about now?”"
+     ]
+    },
+    {
+     "x": 52.5,
+     "y": 3,
+     "w": 46,
+     "p": [
+      "Aunt Mo cut the tape. Foam. More foam. Foam, foam, foam. Then up poked one small flat beak."
+     ]
+    },
+    {
+     "x": 52.5,
+     "y": 32,
+     "w": 12.5,
+     "p": [
+      "“Ham with a beak,” said Nod."
+     ]
+    },
+    {
+     "x": 52.5,
+     "y": 11.9,
+     "w": 46,
+     "p": [
+      "“Pipped,” said Grandpa Sol. “Like a chick through its shell.”"
+     ]
+    },
+    {
+     "x": 52.5,
+     "y": 21.6,
+     "w": 38,
+     "p": [
+      "<span class=\"pb-big\">“Pip!”</span> said Wren, quickly, before anyone had a different idea."
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The goat",
+   "art": "art/spreads/s03",
+   "alt": "Pip, a small white and grey robot duck, stands on the floor beside Grandpa Sol's boot, exactly as tall as the boot, with foam on one foot. Grandpa Sol bends down and nods. Up on the table at the left, Nod is caught mid-nod with its chin down. Wren's hand comes in from the side, close to the green button. On the wall a small framed drawing of a goat looks at nobody, and Aunt Mo stands close by with the manual under one arm.",
+   "sheets": [
+    {
+     "name": "table",
+     "foot": 0.967,
+     "rise": 11
+    },
+    {
+     "name": "sol",
+     "foot": 1.0,
+     "rise": 13
+    },
+    {
+     "name": "pip",
+     "foot": 1.0,
+     "rise": 16
+    }
+   ],
+   "zones": [
+    {
+     "x": 12,
+     "y": 4,
+     "w": 18,
+     "p": [
+      "Aunt Mo lifted Pip to the floor. It stood one boot high.",
+      "“Does it lay?” asked Grandpa Sol."
+     ],
+     "tight": true
+    },
+    {
+     "x": 31,
+     "y": 4,
+     "w": 17.5,
+     "p": [
+      "“No,” said Aunt Mo.",
+      "“Then what’s it for?”",
+      "“I don’t know yet.”",
+      "Grandpa Sol nodded. He once had a goat like that."
+     ],
+     "tight": true
+    },
+    {
+     "x": 12,
+     "y": 37,
+     "w": 18,
+     "p": [
+      "Nod nodded too."
+     ]
+    },
+    {
+     "x": 33,
+     "y": 56,
+     "w": 15.5,
+     "p": [
+      "Wren’s finger crept toward the green button."
+     ]
+    },
+    {
+     "x": 80,
+     "y": 50,
+     "w": 11,
+     "p": [
+      "“Not yet,” said Aunt Mo."
+     ],
+     "kind": "chant"
+    }
+   ]
+  },
+  {
+   "title": "The manual",
+   "art": "art/spreads/s04",
+   "alt": "Aunt Mo sits behind a very large open manual, with only her eyes above it. Its left page shows a printed list of five sounds: Wak-wak?, Prrip!, Cooo-ak., ACK! ACK! ACK! and Wheeeeak! Nod stands beside it on the table with its head tipped at the page. Wren slumps on her elbows, and a row of apple cores runs along the table's edge, stopping just short of Nod. Pip stands switched off in a heap of foam. Through the window a hen goes about her day.",
+   "sheets": [
+    {
+     "name": "people",
+     "foot": 0.988,
+     "rise": 11
+    },
+    {
+     "name": "table",
+     "foot": 1.0,
+     "rise": 8
+    }
+   ],
+   "zones": [
+    {
+     "x": 2.5,
+     "y": 4,
+     "w": 17.5,
+     "p": [
+      "Aunt Mo read the manual. Page one. Wren ate an apple.",
+      "Page two. Wren ate an apple.",
+      "Page three. Wren ran out of apples."
+     ],
+     "tight": true
+    },
+    {
+     "x": 52,
+     "y": 4,
+     "w": 44,
+     "p": [
+      "“Keep Pip away from water,” read Aunt Mo.",
+      "“A duck,” said Grandpa Sol, “that keeps away from water.”"
+     ],
+     "tight": true
+    },
+    {
+     "x": 51,
+     "y": 26,
+     "w": 9.5,
+     "p": [
+      "“What’s that page say?”"
+     ]
+    },
+    {
+     "x": 78,
+     "y": 29,
+     "w": 12,
+     "p": [
+      "“It says, This page is blank.”"
+     ]
+    },
+    {
+     "x": 85,
+     "y": 78,
+     "w": 14.5,
+     "p": [
+      "Wren thought about that. Nod nodded."
+     ],
+     "kind": "floor"
+    }
+   ]
+  },
+  {
+   "title": "Hot soup",
+   "art": "art/spreads/s05",
+   "alt": "From floor height, Pip walks on the left page with a dotted line ahead of it that already bends away from Wren, who kneels with her arms out. A chair leg rises at the far right like a tree. Aunt Mo's boot stands at the left edge. High up on the table only Nod's two antennas show over the edge. The sound Wak-wak? is lettered near Pip and ACK! ACK! ACK! is lettered big near the chair leg.",
+   "sheets": [
+    {
+     "name": "wren",
+     "foot": 0.889,
+     "rise": 12
+    },
+    {
+     "name": "near",
+     "foot": 0.953,
+     "rise": 7
+    },
+    {
+     "name": "letters",
+     "foot": 0.694,
+     "rise": 6
+    }
+   ],
+   "zones": [
+    {
+     "x": 28,
+     "y": 25,
+     "w": 17,
+     "p": [
+      "“All right,” said Aunt Mo. “Now.”",
+      "Wren pressed once. Whirr. Up stood Pip."
+     ],
+     "tight": true
+    },
+    {
+     "art": "Wak-wak?"
+    },
+    {
+     "x": 28,
+     "y": 49,
+     "w": 17,
+     "p": [
+      "“That means ham,” said Nod."
+     ]
+    },
+    {
+     "x": 52.5,
+     "y": 3,
+     "w": 31,
+     "p": [
+      "Wren pressed twice. Tick, tick, tick.",
+      "Pip walked like someone carrying hot soup.",
+      "“This walk is the one!” said Nod."
+     ],
+     "tight": true
+    },
+    {
+     "x": 52.5,
+     "y": 91,
+     "w": 34,
+     "p": [
+      "A little to one side. Past Wren’s hand..."
+     ],
+     "kind": "floor"
+    },
+    {
+     "art": "ACK! ACK! ACK!"
+    },
+    {
+     "x": 84,
+     "y": 25,
+     "w": 14.5,
+     "p": [
+      "“That means all is well,” said Nod."
+     ]
+    },
+    {
+     "x": 88.5,
+     "y": 60,
+     "w": 10.5,
+     "p": [
+      "<span class=\"pb-chant\">Was it?</span>"
+     ],
+     "kind": "floor"
+    }
+   ]
+  },
+  {
+   "title": "CLONK",
+   "art": "art/spreads/s06",
+   "alt": "Close and enormous. The word CLONK is cut from red paper letters, the biggest thing in the book, filling the left page. A chair leg stands in the middle of the right page and Pip lies at its foot, legs in the air, with bits of paper flying up. Wren's hands are at her mouth at the left edge, and Aunt Mo's raised finger comes in from the top. Nod's two antennas show over the table's edge at the top left.",
+   "sheets": [
+    {
+     "name": "table",
+     "foot": 0.963,
+     "rise": 11
+    },
+    {
+     "name": "letters",
+     "foot": 0.576,
+     "rise": 6
+    },
+    {
+     "name": "chair",
+     "foot": 0.986,
+     "rise": 16
+    },
+    {
+     "name": "near",
+     "foot": 1.0,
+     "rise": 8
+    }
+   ],
+   "zones": [
+    {
+     "art": "CLONK!"
+    },
+    {
+     "x": 21.5,
+     "y": 56,
+     "w": 27,
+     "p": [
+      "Over went Pip, flat on its side, with both legs still going.",
+      "Up on the table, Nod could not see the floor. It nodded anyway."
+     ],
+     "tight": true
+    },
+    {
+     "x": 3,
+     "y": 17,
+     "w": 20,
+     "p": [
+      "“That’s one.”"
+     ],
+     "kind": "chant"
+    },
+    {
+     "x": 21.5,
+     "y": 83,
+     "w": 27,
+     "p": [
+      "“It’s broken!” said Wren.",
+      "Aunt Mo held up one finger."
+     ],
+     "tight": true
+    },
+    {
+     "x": 84.5,
+     "y": 41,
+     "w": 12,
+     "p": [
+      "“Wait.”"
+     ],
+     "kind": "chant"
+    }
+   ]
+  },
+  {
+   "title": "Tuck, push, roll, up",
+   "art": "art/spreads/s07",
+   "alt": "A comic strip of one floor in two rows. Each row of small Pips tucks, pushes, rolls and stands, then walks into a chair leg. In the second row Wren drags the chair far over to the right, wide-eyed, and Pip bends after it anyway. Aunt Mo stands behind her with her arms folded. At the end of each row a small round window shows the table's edge and Nod's antennas. Prrip! is lettered by Pip, and ACK! ACK! ACK! and CLONK! are lettered at the end of each row, the second CLONK bigger.",
+   "sheets": [
+    {
+     "name": "strip",
+     "foot": 0.39,
+     "rise": 7
+    },
+    {
+     "name": "wren",
+     "foot": 0.824,
+     "rise": 13
+    },
+    {
+     "name": "strip2",
+     "foot": 1.0,
+     "rise": 10
+    },
+    {
+     "name": "letters",
+     "foot": 0.986,
+     "rise": 6
+    }
+   ],
+   "zones": [
+    {
+     "x": 2,
+     "y": 39,
+     "w": 9.4,
+     "p": [
+      "Tuck."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 12,
+     "y": 39,
+     "w": 8.8,
+     "p": [
+      "Push."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 21.3,
+     "y": 39,
+     "w": 9,
+     "p": [
+      "Roll."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 31,
+     "y": 39,
+     "w": 8.8,
+     "p": [
+      "Up!"
+     ],
+     "kind": "cell"
+    },
+    {
+     "art": "Prrip!"
+    },
+    {
+     "x": 40,
+     "y": 38,
+     "w": 9.8,
+     "p": [
+      "“That means this is the one!” said Nod."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 52,
+     "y": 38,
+     "w": 11.5,
+     "p": [
+      "Tick, tick, tick."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 64,
+     "y": 38,
+     "w": 13,
+     "p": [
+      "And Pip walked into the same leg."
+     ],
+     "kind": "cell"
+    },
+    {
+     "art": "ACK! ACK! ACK!"
+    },
+    {
+     "art": "CLONK!"
+    },
+    {
+     "x": 86.5,
+     "y": 13.5,
+     "w": 12,
+     "p": [
+      "“That’s two.”"
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 2,
+     "y": 48,
+     "w": 37,
+     "p": [
+      "Wren dragged the chair way over there."
+     ]
+    },
+    {
+     "x": 2,
+     "y": 76.5,
+     "w": 9.4,
+     "p": [
+      "Tuck."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 12,
+     "y": 76.5,
+     "w": 8.8,
+     "p": [
+      "Push."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 21.3,
+     "y": 76.5,
+     "w": 9,
+     "p": [
+      "Roll."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 31,
+     "y": 76.5,
+     "w": 8.8,
+     "p": [
+      "Up!"
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 40,
+     "y": 76,
+     "w": 9.8,
+     "p": [
+      "“This is the one!”"
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 51.5,
+     "y": 76,
+     "w": 11,
+     "p": [
+      "Tick, tick, tick."
+     ],
+     "kind": "cell"
+    },
+    {
+     "x": 63,
+     "y": 77.5,
+     "w": 13,
+     "p": [
+      "And Pip walked into a different leg."
+     ],
+     "kind": "cell"
+    },
+    {
+     "art": "ACK! ACK! ACK!"
+    },
+    {
+     "art": "CLONK!"
+    },
+    {
+     "x": 85.8,
+     "y": 90.5,
+     "w": 13.4,
+     "p": [
+      "“That’s three.”"
+     ],
+     "kind": "cell"
+    }
+   ]
+  },
+  {
+   "title": "We can know that",
+   "art": "art/spreads/s08",
+   "alt": "Wren and Aunt Mo face each other. Pip is tucked under Aunt Mo's arm with its legs out, and she holds the manual open with a thumb. Wren points toward the chair, which stands alone on the right, in nobody's way. Nod on the table between them has its chin down. Wheeeeak! climbs in a curve from the floor up to Pip.",
+   "sheets": [
+    {
+     "name": "table",
+     "foot": 0.91,
+     "rise": 11
+    },
+    {
+     "name": "people",
+     "foot": 0.979,
+     "rise": 16
+    },
+    {
+     "name": "letters",
+     "foot": 0.95,
+     "rise": 6
+    }
+   ],
+   "zones": [
+    {
+     "x": 3,
+     "y": 3,
+     "w": 24,
+     "p": [
+      "Aunt Mo scooped up Pip."
+     ]
+    },
+    {
+     "art": "Wheeeeak!"
+    },
+    {
+     "x": 3,
+     "y": 9.5,
+     "w": 38,
+     "p": [
+      "“That means Pip loves that chair,” said Nod."
+     ]
+    },
+    {
+     "x": 3,
+     "y": 19,
+     "w": 26,
+     "p": [
+      "“Pip doesn’t like that chair,” said Wren."
+     ]
+    },
+    {
+     "x": 52,
+     "y": 3,
+     "w": 26,
+     "p": [
+      "“We can’t know that,” said Aunt Mo."
+     ]
+    },
+    {
+     "x": 68,
+     "y": 13.5,
+     "w": 30,
+     "p": [
+      "Page twelve of the manual said: Pip does not look. Pip just goes."
+     ]
+    },
+    {
+     "x": 52,
+     "y": 26,
+     "w": 14.5,
+     "p": [
+      "“It went CLONK three times!”"
+     ]
+    },
+    {
+     "x": 69,
+     "y": 29,
+     "w": 28,
+     "p": [
+      "“Yes. We can know that.”"
+     ]
+    },
+    {
+     "x": 70.5,
+     "y": 42,
+     "w": 20,
+     "p": [
+      "“Three,” said Nod."
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The green book",
+   "art": "art/spreads/s09",
+   "alt": "Evening light comes low through the window. On the right Pip stands on the shelf by the back door, plugged in, one small light on. On the left Wren holds a green book open at an empty page and looks across the kitchen at Pip. Nod sits on the table between them, facing the wrong way, toward the window. Aunt Mo leans at the table, and through the window the hens are still not told. Cooo-ak. is lettered small beside the shelf.",
+   "sheets": [
+    {
+     "name": "pip",
+     "foot": 0.522,
+     "rise": 6
+    },
+    {
+     "name": "people",
+     "foot": 0.993,
+     "rise": 14
+    },
+    {
+     "name": "letters",
+     "foot": 0.64,
+     "rise": 6
+    }
+   ],
+   "zones": [
+    {
+     "x": 2.5,
+     "y": 3.5,
+     "w": 19.5,
+     "p": [
+      "Pip went on the shelf to charge."
+     ],
+     "tight": true
+    },
+    {
+     "art": "Cooo-ak."
+    },
+    {
+     "x": 2.5,
+     "y": 12.8,
+     "w": 19.5,
+     "p": [
+      "“That means mad,” said Nod.",
+      "“Can I show the hens?”",
+      "<span class=\"pb-chant\">“Not yet.”</span>",
+      "Out came a green book.",
+      "“This is blank,” said Wren.",
+      "“It’s a log. For what Pip did.”",
+      "“Can I put that Pip was mad?”",
+      "“Did you see mad?”",
+      "Wren looked. One small light."
+     ],
+     "tight": true
+    },
+    {
+     "x": 77,
+     "y": 71,
+     "w": 21,
+     "p": [
+      "She went to find a pencil."
+     ],
+     "kind": "floor"
+    }
+   ]
+  },
+  {
+   "title": "Wren's log",
+   "art": "art/spreads/s10",
+   "alt": "Wren writes at the kitchen table, Aunt Mo close beside her with a pen in her hand. Nod leans over the book at her shoulder with its head tipped. Under the table one chair leg wears a bandage. Pip stands charging on the shelf, showing above the corner of a large sheet from the green book, which lies over the right page.",
+   "sheets": [
+    {
+     "name": "table",
+     "foot": 0.993,
+     "rise": 13
+    },
+    {
+     "name": "pip",
+     "foot": 0.223,
+     "rise": 6
+    },
+    {
+     "name": "sheet",
+     "foot": 1.0,
+     "rise": 5
+    }
+   ],
+   "zones": [
+    {
+     "x": 57.5,
+     "y": 29.4,
+     "w": 38,
+     "p": [
+      "WREN’S LOG. Machine: Pip. Day 1.",
+      "Look: Pip walked into the chair leg. Two times.",
+      "Tried: Moved the chair. Pip walked into another leg. One time.",
+      "Heard: ACK! ACK! ACK! before every CLONK.",
+      "Nod says that means all is well. I did not write that down.",
+      "Chair leg: fine. I checked.",
+      "Tomorrow: hens. They have not been told.",
+      "<span class=\"pb-pen\">Not yet.</span>"
+     ],
+     "kind": "log"
+    }
+   ]
+  }
+ ]
+}
