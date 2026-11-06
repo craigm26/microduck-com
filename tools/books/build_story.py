@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Draw a story book's pages from its source. Plain static pages, no script tag.
+"""Draw a story book's pages from its source. Plain static pages, no script tag,
+except the two pages a picture book adds, each with one module tag.
 
     python3 tools/books/build_story.py            # write public/stories/<slug>/
     python3 tools/books/build_story.py --check    # exit 1 if any page is stale
@@ -15,6 +16,14 @@ the paragraph before it), the size of the art, its alt text and its `image`, a
 file under public/stories/<slug>/. A slot with no `image` draws a labelled empty
 frame of that shape. A slot naming a file that is not there stops the build. Add
 art by giving the slot an `image` and a true alt, never by editing a built page.
+
+A PICTURE BOOK IS ONE SOURCE, DRAWN TWICE. picture-<n>.json holds a chapter's
+read-aloud words, where each block sits on its spread (in percent of the spread)
+and the sheets of its art. picture/ draws them as a page-turning book and 3d/ as
+the same markup under the learning books' engine. Without a script both are the
+same plain scrolling page, which is why the words live in the markup and never
+in a script or a picture. The one thing printed in the art is a sound word, and
+the markup still carries it for a screen reader, and for the gate.
 
 THE STYLESHEET STAYS THE SITE'S. check_site_claims.sh holds every page to one
 stamped site.css, so the story look is the `.story-` section of that file.
@@ -114,7 +123,8 @@ def slot(data: dict, slug: str, *, first: bool = False) -> str:
             f'width="{data["width"]}" height="{data["height"]}" decoding="async"{lazy}>\n</figure>')
 
 
-def page(book: dict, path: str, title: str, description: str, body: str) -> str:
+def page(book: dict, path: str, title: str, description: str, body: str, *,
+         head: str = "", body_attrs: str = 'class="story-page"', bar: str = "") -> str:
     robots = '<meta name="robots" content="noindex">\n' if book["status"] == "draft" else ""
     home = f'/stories/{book["slug"]}/'
     return f"""<!doctype html>
@@ -128,12 +138,12 @@ def page(book: dict, path: str, title: str, description: str, body: str) -> str:
 <meta name="theme-color" content="#f5eddd">
 <link rel="icon" type="image/png" href="/assets/studio-icon.png">
 <link rel="stylesheet" href="{stylesheet()}">
-</head>
-<body class="story-page">
+{head}</head>
+<body {body_attrs}>
 <a class="skip" href="#main">Skip to content</a>
 <header class="story-bar">
   <a href="{home}">{esc(book["title"])}</a>
-  <a href="{home}grown-ups/">For grown-ups</a>
+{bar}  <a href="{home}grown-ups/">For grown-ups</a>
 </header>
 
 {body}
@@ -267,6 +277,98 @@ def grown_ups_page(book: dict) -> str:
                 f'A note for parents, Duck Cards and contact for {book["title"]}.', body)
 
 
+PICTURE_TAG = '<script type="module" src="/books/engine/picture.js"></script>'
+BOOK_TAG = '<script type="module" src="/books/engine/book.js"></script>'
+ART_WIDTH, ART_HEIGHT = 1800, 1200
+INLINE = re.compile(r'&lt;span class=&quot;(pb-big|pb-chant|pb-pen)&quot;&gt;(.*?)&lt;/span&gt;')
+
+
+def picture_source(slug: str, book: dict) -> dict:
+    return json.loads((TOOLS / slug / book["picture"]).read_text(encoding="utf-8"))
+
+
+def art_files(spec: dict) -> list[str]:
+    """Every file a spread needs: the flat picture, then, if it has sheets, the room and each sheet."""
+    names = [f'{spec["art"]}.webp']
+    if spec.get("sheets"):
+        names += [f'{spec["art"]}-back.webp'] + [f'{spec["art"]}-{sheet["name"]}.webp' for sheet in spec["sheets"]]
+    return names
+
+
+def line(text: str) -> str:
+    """One line of the words, with the three marks a line may carry and nothing else."""
+    return INLINE.sub(r'<span class="\1">\2</span>', html.escape(text, quote=True))
+
+
+def zone(data: dict) -> str:
+    if "art" in data:  # a sound word lettered into the picture: the art shows it, the markup says it
+        return f'<p class="pb-said">{esc(data["art"])}</p>'
+    kind = f' pb-{data["kind"]}' if data.get("kind") else ""
+    tight = " pb-tight" if data.get("tight") else ""
+    lines = "".join(f"<p>{line(text)}</p>" for text in data["p"])
+    return (f'<div class="pb-z{kind}{tight}" style="--x:{data["x"]};--y:{data["y"]};--w:{data["w"]}">{lines}</div>')
+
+
+def title_zone(book: dict, source: dict, data: dict) -> str:
+    return (f'<div class="pb-z pb-title-z" style="--x:{data["x"]};--y:{data["y"]};--w:{data["w"]}">'
+            f'<p class="story-kind">{KIND}</p><h1>{esc(book["title"])}</h1>'
+            f'<p class="pb-chapter">{esc(source["title"])}</p>'
+            f'<p class="pb-for">{esc(source["audience"])}</p>'
+            f'<p class="pb-draft">{esc(book["draft_line"])}</p></div>')
+
+
+def spread(slug: str, spec: dict, number: int, *, engine: bool, words: str, alt: str, title: str = "") -> str:
+    """One spread. The same markup for both editions: engine adds the classes book.js reads."""
+    src = f'/stories/{slug}/{spec["art"]}.webp'
+    if not (PUBLIC / src.lstrip("/")).is_file():
+        raise SystemExit(f"build_story: public{src} does not exist")
+    lazy = ' loading="lazy"' if number else ""
+    art = (f'<img class="pb-art" src="{attr(src)}" alt="{attr(alt)}" width="{ART_WIDTH}" height="{ART_HEIGHT}" '
+           f'decoding="async"{lazy}>')
+    heading = f'<h2 class="pb-title">{esc(title)}</h2>\n' if title else ""
+    if engine:
+        sheets = attr(json.dumps(spec.get("sheets", []), separators=(",", ":")))
+        data = f'data-art="/stories/{slug}/{spec["art"]}" data-sheets="{sheets}"'
+        kind, inner, sid = ("lesson", "lesson-page", f"lesson-{number}") if number else ("book-intro", "book-intro-page", "title-page")
+        return (f'<article class="pb-spread {kind}" id="{sid}" {data}>\n{heading}'
+                f'<div class="pb-canvas {inner}">\n{art}\n<div class="pb-words">\n{words}\n</div>\n</div>\n</article>')
+    return (f'<article class="pb-spread" id="spread-{number}">\n{heading}'
+            f'<div class="pb-canvas">\n{art}\n<div class="pb-words">\n{words}\n</div>\n</div>\n</article>')
+
+
+def picture_body(book: dict, source: dict, *, engine: bool) -> str:
+    slug = book["slug"]
+    first = source["title_page"]
+    parts = [spread(slug, first, 0, engine=engine, words=title_zone(book, source, first["zones"][0]), alt=first["alt"])]
+    for number, data in enumerate(source["spreads"], 1):
+        words = "\n".join(zone(item) for item in data["zones"])
+        parts.append(spread(slug, data, number, engine=engine, words=words, alt=data["alt"], title=data["title"]))
+    return "\n\n".join(parts)
+
+
+def picture_page(book: dict, source: dict) -> str:
+    home = f'/stories/{book["slug"]}/'
+    body = f"""<main id="main" tabindex="-1" class="pb-main">
+{picture_body(book, source, engine=False)}
+</main>"""
+    return page(book, f"{home}picture/", f'{source["title"]}, picture book | {book["title"]}', source["description"], body,
+                head=f"{PICTURE_TAG}\n", body_attrs='class="story-page pb-page"',
+                bar=f'  <a class="pb-switch" href="{home}3d/">Open the 3-D book</a>\n')
+
+
+def book3d_page(book: dict, source: dict) -> str:
+    home = f'/stories/{book["slug"]}/'
+    body = f"""<main id="main" tabindex="-1" class="pb-main">
+{picture_body(book, source, engine=True)}
+</main>"""
+    return page(book, f"{home}3d/", f'{source["title"]}, 3-D book | {book["title"]}', source["description_3d"], body,
+                head=f"{BOOK_TAG}\n",
+                body_attrs=(f'class="story-page book-page pb-page pb-3d" data-book="story" data-spreads="" '
+                            f'data-unit="Page" data-label="Story book" data-flat="{home}picture/" '
+                            f'data-cover="{home}art/cover.webp"'),
+                bar=f'  <a class="pb-switch" href="{home}picture/">Flat picture book</a>\n')
+
+
 def pages_for(slug: str) -> dict[pathlib.Path, str]:
     book, chapters = load(slug)
     base = PUBLIC / "stories" / slug
@@ -274,6 +376,10 @@ def pages_for(slug: str) -> dict[pathlib.Path, str]:
            base / "grown-ups/index.html": grown_ups_page(book)}
     for chapter in chapters:
         out[base / str(chapter["number"]) / "index.html"] = chapter_page(book, chapter, chapters)
+    if book.get("picture"):
+        source = picture_source(slug, book)
+        out[base / "picture/index.html"] = picture_page(book, source)
+        out[base / "3d/index.html"] = book3d_page(book, source)
     return out
 
 

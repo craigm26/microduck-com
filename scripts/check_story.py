@@ -3,8 +3,8 @@
 
     python3 scripts/check_story.py
 
-Every story page must have no script tag, no third-party address and no link to
-kithgame.com; no em or en dash, in the pages or in the source; every chapter in
+Every story page must have no script tag, except the one module tag each edition
+of a picture book carries, no third-party address and no link to kithgame.com; no em or en dash, in the pages or in the source; every chapter in
 the source built, and every built chapter in the source; every word of a chapter
 on its page in order; no picture idea on a page; an alt text on every picture
 slot; every image a page names present in the book's folder and under the size
@@ -13,6 +13,11 @@ draft's noindex and licence line; chapters and a book's home that link
 only within the book; and a page for grown-ups that links out only to the short
 list in build_story.py. The pages must also be exactly what build_story.py draws,
 so a hand edit fails here.
+
+A PICTURE BOOK'S SCRIPT IS THE ONE EXCEPTION, AND IT STAYS SMALL. Its two pages may
+each carry their one self-hosted module tag, the words stay in the markup in reading
+order, so both still read with scripts off, and the scripts they run may not open a
+window, send a beacon or point the page anywhere but this book.
 
 WHY A GATE OF ITS OWN. check_site_claims.sh already bans scripts and remote
 assets, but a plain link to another site is fine anywhere else on the site and is
@@ -104,8 +109,10 @@ def check_image(name: str, src: str, book: dict) -> None:
 def check_page(path: pathlib.Path, book: dict) -> None:
     text = path.read_text(encoding="utf-8")
     name = rel(path)
-    for tag in re.findall(r"<script\b", text, flags=re.IGNORECASE):
-        fail.append(f"{name} carries a {tag}> tag; story pages run no scripts")
+    allowed = {"picture": [build.PICTURE_TAG], "3d": [build.BOOK_TAG]}.get(path.parent.name, []) if book.get("picture") else []
+    tags = re.findall(r"<script\b[^>]*>(?:.*?</script>)?", text, flags=re.IGNORECASE | re.DOTALL)
+    if tags != allowed:
+        fail.append(f"{name} carries {tags}; a story page runs no scripts, and a picture book's page only {allowed}")
     markup = Markup(text)
     if "kithgame.com" in text.lower():
         fail.append(f"{name} names kithgame.com; story books do not link to it")
@@ -129,6 +136,46 @@ def check_page(path: pathlib.Path, book: dict) -> None:
         fail.append(f"{name} is a draft and must carry <meta name=\"robots\" content=\"noindex\">")
     if book["licence"] not in flatten(text):
         fail.append(f"{name} has lost its licence line")
+
+
+STORY_SCRIPTS = ("picture.js", "figures-story.js")
+OUTWARD = re.compile(r"window\.open|sendBeacon|\.href\s*=|location\s*=|target\s*=|createElement\(\s*['\"]a['\"]")
+
+
+def check_picture(slug: str, book: dict) -> None:
+    """Both editions carry every word in reading order, and every sheet of art is there."""
+    source = build.picture_source(slug, book)
+    base = ROOT / "public/stories" / slug
+    words = []
+    for data in source["spreads"]:
+        if not str(data.get("alt", "")).strip():
+            fail.append(f"{book['picture']}: spread {data.get('title')!r} has no alt text")
+        words.append(data["title"])
+        for item in data["zones"]:
+            words += [item["art"]] if "art" in item else [re.sub(r"<[^>]+>", "", line) for line in item["p"]]
+    for edition in ("picture", "3d"):
+        path = base / edition / "index.html"
+        if not path.is_file():
+            fail.append(f"{rel(path)} is missing; run python3 tools/books/build_story.py")
+            continue
+        page, place = flatten(path.read_text(encoding="utf-8")), 0
+        for line in words:
+            found = page.find(line, place)
+            if found < 0:
+                fail.append(f"{rel(path)} does not carry, in order: {line[:70]!r}")
+                continue
+            place = found + len(line)
+    for spec in [source["title_page"]] + source["spreads"]:
+        for name in build.art_files(spec):
+            check_image(f"tools/books/{slug}/{book['picture']}", f"/stories/{slug}/{name}", book)
+    for script in STORY_SCRIPTS:
+        code = (ROOT / "public/books/engine" / script).read_text(encoding="utf-8")
+        for hit in OUTWARD.findall(code):
+            fail.append(f"public/books/engine/{script} has {hit!r}; a child's page opens no way out")
+    engine = (ROOT / "public/books/engine/book.js").read_text(encoding="utf-8")
+    for hit in re.findall(r"location\.assign\(([^)]*)\)", engine):
+        if "dataset.flat" not in hit:
+            fail.append(f"public/books/engine/book.js leaves the page with location.assign({hit})")
 
 
 def check_slots(path: pathlib.Path, slots: list[dict]) -> None:
@@ -191,9 +238,11 @@ def main() -> int:
             check_chapter(path, book, chapter)
             check_slots(path, chapter["slots"])
         numbers = {str(chapter["number"]) for chapter in chapters}
-        extra = {path.parent.name for path in base.glob("[0-9]*/index.html")} - numbers
+        extra = {path.parent.name for path in base.glob("*/index.html") if path.parent.name.isdigit()} - numbers
         for number in sorted(extra):
             fail.append(f"{rel(base)}/{number}/ is built and has no chapter in the source")
+        if book.get("picture"):
+            check_picture(slug, book)
         if (base / "index.html").is_file():
             check_slots(base / "index.html", [book["cover"]])
             if book["draft_line"] not in flatten((base / "index.html").read_text(encoding="utf-8")):
@@ -222,7 +271,8 @@ def main() -> int:
             print("check_story: " + problem, file=sys.stderr)
         return 1
     print(f"check_story: {len(build.BOOKS)} story book, plain pages, every chapter built and "
-          "word for word, picture slots with alt text, every image present")
+          "word for word, picture slots with alt text, every image present, "
+          "and the picture book's two editions carry every word with one self-hosted script each")
     return 0
 
 

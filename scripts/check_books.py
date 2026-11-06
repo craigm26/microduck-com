@@ -32,8 +32,9 @@ THE ONE PLACE SCRIPTS RUN. The rest of the site has no JavaScript and a policy
 that forbids it. The books are the exception, so this gate also holds the
 exception to its edges: one module script tag on each book page and nowhere
 else, no inline script or handler, a policy in _headers that lets /books/* run
-the site's own scripts and nothing more, every other page under a policy with
-no script-src, the vendored three.js byte for byte, and no remote host, dash
+the site's own scripts and nothing more, the same for the picture book's two
+editions under /stories/ with connections closed, every other page under a
+policy with no script-src, the vendored three.js byte for byte, and no remote host, dash
 or banned phrase in the books' own code.
 
 A FIGURE'S NUMBERS COUNT TOO. A number a figure prints, in a label, a sound
@@ -570,16 +571,20 @@ def check_book(book: str, list_only: bool) -> None:
             fail.append(f"{path}: the head prints {key!r} and the book's ledger does not say where it comes from")
 
 
+# A picture book's two editions, and only those two, turn pages with a script.
+SCRIPTED_STORY = re.compile(r"public/stories/[a-z-]+/(picture|3d)/index\.html$")
+
+
 def check_scripts() -> None:
     # keyed from the repository root, so the gate reads the same pages from any directory
     pages = {p.relative_to(ROOT).as_posix(): p.read_text(encoding="utf-8") for p in sorted(PUBLIC.rglob("*.html"))}
     for name, text in pages.items():
-        is_book = re.match(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$", name)
+        is_book = re.match(r"public/books/(beginner|intermediate|advanced|casebook)/index\.html$", name) or SCRIPTED_STORY.match(name)
         tags = re.findall(r"<script\b[^>]*>", text, flags=re.I)
         if is_book:
             continue
         if tags:
-            fail.append(f"{name} carries a script tag; only the four book pages may")
+            fail.append(f"{name} carries a script tag; only the four book pages and a picture book's two may")
     engine = PUBLIC / "books/engine"
     for js in sorted(engine.glob("*.js")):
         src = js.read_text(encoding="utf-8")
@@ -649,9 +654,11 @@ def check_headers() -> None:
             fail.append(f"{url} is under {len(csps)} security policies in _headers, not exactly one")
             continue
         csp = csps[0]["headers"]["content-security-policy"]
-        if url.startswith("/books/"):
+        if url.startswith("/books/") or SCRIPTED_STORY.match("public" + url + "index.html"):
             if "script-src 'self'" not in csp or re.search(r"script-src[^;]*(unsafe|https?:|\*)", csp):
                 fail.append(f"{url}: the books' policy must allow the site's own scripts and nothing else")
+            if url.startswith("/stories/") and "connect-src 'none'" not in csp:
+                fail.append(f"{url}: a child's page with scripts must still open no connection")
         elif "script-src" in csp:
             fail.append(f"{url}: only the books may run scripts, and its policy names script-src")
         if "default-src 'none'" not in csp:

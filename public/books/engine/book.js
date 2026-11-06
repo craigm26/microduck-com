@@ -6,6 +6,13 @@
 // document: the steps, the captions, the big idea, the prediction. A figure
 // module only moves things. Narrow screens get the same lesson flat, one at a
 // time, with the same figure in a card.
+//
+// A PICTURE BOOK RUNS ON THE SAME BOOK. With data-spreads on the body, a spread
+// is one picture across both pages: the words go on the paper as one sheet of
+// DOM, the room is printed on the pages, and each cut sheet of the picture lies
+// flat on the room and hinges up at its foot. Lying flat, room and sheets are
+// the picture, so a turning leaf carries the flat picture and nothing jumps when
+// the sheets stand up. A screen too small for a book keeps the plain page.
 
 import * as K from './kit.js';
 import { CSS3DRenderer } from '../vendor/CSS3DRenderer.js';
@@ -19,8 +26,11 @@ const TILT = 0.032;            // pages slope down toward their outer edges
 const BLOCK = 24;              // pages in the whole book, as a thickness
 // Where a figure stands on its page: right of the steps, above the caption.
 const STAGE = { x: 82, z: -62, w: 420, d: 470 };
-const COVER = { beginner: 0xf08c12, intermediate: 0x2c64c0, advanced: 0x3b3e47, casebook: 0x2f6b4f };
-const COVER_INK = { beginner: '#5a2f00', intermediate: '#0d244a', advanced: '#15161a', casebook: '#0f2a1e' };
+// A spread's art is 3:2 and a spread of pages 1216 by 780, so a little of the top and foot stays off the paper.
+const ART_W = PW * 2 + GUT * 2, ART_H = ART_W / 1.5;
+const ART_V0 = (1 - PH / ART_H) / 2, ART_V1 = 1 - ART_V0;
+const COVER = { beginner: 0xf08c12, intermediate: 0x2c64c0, advanced: 0x3b3e47, casebook: 0x2f6b4f, story: 0x3f6b47 };
+const COVER_INK = { beginner: '#5a2f00', intermediate: '#0d244a', advanced: '#15161a', casebook: '#0f2a1e', story: '#22382a' };
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const darkQuery = matchMedia('(prefers-color-scheme: dark)');
@@ -209,15 +219,29 @@ function printedLines(dark) {
 
 // ---------------------------------------------------------------- the lessons
 
+function spreadOf(node) {
+  if (!node.dataset.art) return {};
+  const sheets = JSON.parse(node.dataset.sheets || '[]');
+  return { art: `${node.dataset.art}.webp`, room: sheets.length ? `${node.dataset.art}-back.webp` : `${node.dataset.art}.webp`, sheets };
+}
+
 function readLessons() {
   const out = [];
   const intro = document.querySelector('.book-intro');
   out.push({
     kind: 'intro', el: intro, page: intro.querySelector('.book-intro-page'),
-    figureName: intro.dataset.figure || 'cover', steps: [], title: 'Title page', num: '',
-    figureEl: null, notes: null, predict: null, badge: '',
+    figureName: intro.dataset.figure || (intro.dataset.art ? 'spread' : 'cover'), steps: [], title: 'Title page', num: '',
+    figureEl: null, notes: null, predict: null, badge: '', ...spreadOf(intro),
   });
   for (const a of document.querySelectorAll('article.lesson')) {
+    if (a.dataset.art) {
+      const title = a.querySelector('h2').textContent.trim();
+      out.push({
+        kind: 'lesson', el: a, page: a.querySelector('.lesson-page'), figureName: 'spread', steps: [], title, short: title,
+        num: a.id.replace('lesson-', ''), figureEl: null, caption: '', bigIdea: '', badge: '', notes: null, predict: null, ...spreadOf(a),
+      });
+      continue;
+    }
     const fig = a.querySelector('figure.lesson-figure');
     const steps = [...fig.querySelectorAll('ol.figure-steps > li')].map((li) => {
       const strong = li.querySelector('strong');
@@ -246,7 +270,9 @@ function readLessons() {
 
 async function main() {
   const book = document.body.dataset.book;
-  if (!book || !webgl()) { document.documentElement.classList.add('bk-static'); return; }
+  const paged = 'spreads' in document.body.dataset;
+  const tooSmall = paged && (innerWidth < 760 || innerHeight < 540);
+  if (!book || !webgl() || tooSmall) { document.documentElement.classList.add('bk-static'); return; }
   let mod;
   try { mod = await import(`./figures-${book}.js`); } catch (e) {
     console.error('books: figures failed to load', e);
@@ -260,6 +286,7 @@ async function main() {
   const main = document.querySelector('main');
   const bookTitle = document.querySelector('.book-intro h1').textContent.trim();
   const bookLabel = document.body.dataset.label || '';
+  const unit = document.body.dataset.unit || 'Lesson';
 
   // ---------------------------------------------------------- renderer
 
@@ -374,7 +401,25 @@ async function main() {
   sheetGeo.setAttribute('uv', new THREE.BufferAttribute(sheetUV, 2));
   sheetGeo.setIndex(sheetIdx);
   const sheetFront = new THREE.Mesh(sheetGeo, new THREE.MeshLambertMaterial({ map: paperTexture(dark), side: THREE.FrontSide }));
-  const sheetBack = new THREE.Mesh(sheetGeo, new THREE.MeshLambertMaterial({ map: printedLines(dark), side: THREE.BackSide }));
+  // A picture book's leaf carries a picture: the right half of one spread on its
+  // front and the left half of the next on its back, so each side reads its own uv.
+  const sheetGeoB = paged ? new THREE.BufferGeometry() : sheetGeo;
+  if (paged) {
+    const uvB = new Float32Array((SEG + 1) * 2 * 2);
+    for (let i = 0; i <= SEG; i++) {
+      const s = i / SEG;
+      sheetUV.set([0.5 + s / 2, ART_V1, 0.5 + s / 2, ART_V0], i * 4);
+      uvB.set([0.5 - s / 2, ART_V1, 0.5 - s / 2, ART_V0], i * 4);
+    }
+    sheetGeo.setAttribute('uv', new THREE.BufferAttribute(sheetUV, 2));
+    sheetGeo.setAttribute('normal', new THREE.BufferAttribute(new Float32Array((SEG + 1) * 2 * 3), 3));
+    sheetGeoB.setAttribute('position', sheetGeo.attributes.position);
+    sheetGeoB.setAttribute('normal', sheetGeo.attributes.normal);
+    sheetGeoB.setAttribute('uv', new THREE.BufferAttribute(uvB, 2));
+    sheetGeoB.setIndex(sheetIdx);
+  }
+  const sheetBack = new THREE.Mesh(sheetGeoB, new THREE.MeshLambertMaterial({ map: printedLines(dark), side: THREE.BackSide }));
+  sheetFront.frustumCulled = sheetBack.frustumCulled = !paged;
   for (const m of [sheetFront, sheetBack]) { m.castShadow = true; m.visible = false; bookGroup.add(m); }
   // theta 0: lying on the right page; PI: lying on the left
   function shapeSheet(theta, baseY) {
@@ -407,6 +452,55 @@ async function main() {
   rightEl.style.userSelect = 'text';
   rightObj.rotation.x = -Math.PI / 2;
   R.top.add(rightObj);
+  // the words of a spread, one sheet of DOM across both pages
+  const spreadEl = el('div', 'bk-spread');
+  const spreadObj = new CSS3DObject(spreadEl);
+  spreadEl.style.userSelect = 'text';
+  spreadObj.rotation.x = -Math.PI / 2;
+  spreadObj.position.y = BOARD + BLOCK / 2 + 1;
+  spreadObj.visible = false;
+  bookGroup.add(spreadObj);
+  // the picture on the paper, one plane to a page so each follows its page's slope
+  function artPlane(side) {
+    const g = new THREE.PlaneGeometry(PW + GUT, PH);
+    const uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) {
+      uv.setX(i, (side < 0 ? 0 : 0.5) + uv.getX(i) / 2);
+      uv.setY(i, ART_V0 + uv.getY(i) * (ART_V1 - ART_V0));
+    }
+    const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ color: 0xffffff }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.set(-side * GUT / 2, 0.2, 0);
+    m.receiveShadow = true;
+    m.visible = false;
+    (side < 0 ? L : R).top.add(m);
+    return m;
+  }
+  const artL = paged ? artPlane(-1) : null, artR = paged ? artPlane(1) : null;
+  // Decoded pictures are large, so only the pages near the reader stay in memory.
+  const artCache = new Map(), artLoader = new THREE.TextureLoader();
+  function artTex(src) {
+    let e = artCache.get(src);
+    if (e) { artCache.delete(src); artCache.set(src, e); return e; }
+    e = { ready: false, waiters: [], tex: null };
+    const entry = e;
+    e.tex = artLoader.load(src, () => { entry.ready = true; entry.waiters.splice(0).forEach((f) => f()); });
+    e.tex.colorSpace = THREE.SRGBColorSpace;
+    e.tex.anisotropy = 8;
+    artCache.set(src, e);
+    while (artCache.size > 16) {
+      const [old, gone] = artCache.entries().next().value;
+      gone.tex.dispose();
+      artCache.delete(old);
+    }
+    return e;
+  }
+  function setArt(mesh, src) {
+    mesh.userData.want = src;
+    const e = artTex(src);
+    const apply = () => { if (mesh.userData.want !== src) return; mesh.material.map = e.tex; mesh.material.needsUpdate = true; mesh.visible = true; };
+    if (e.ready) apply(); else e.waiters.push(apply);
+  }
   const figureMount = new THREE.Group();
   figureMount.position.set(STAGE.x, 0, STAGE.z);
   R.top.add(figureMount);
@@ -427,14 +521,15 @@ async function main() {
   };
   const bContents = btn('bk-b-contents', 'Contents');
   bContents.setAttribute('aria-expanded', 'false');
-  const bPrev = btn('bk-b-prev', '‹', 'Previous lesson');
+  const bPrev = btn('bk-b-prev', '‹', `Previous ${unit.toLowerCase()}`);
   const where = el('div', 'bk-where');
   const whereNum = el('span', 'bk-where-num');
   const whereTitle = el('span', 'bk-where-title');
   where.append(whereNum, whereTitle);
-  const bNext = btn('bk-b-next', '›', 'Next lesson');
+  const bNext = btn('bk-b-next', '›', `Next ${unit.toLowerCase()}`);
   const bNotes = btn('bk-b-notes', 'Notes');
   bNotes.setAttribute('aria-expanded', 'false');
+  bNotes.hidden = paged;
   const bSound = btn('bk-b-sound', '');
   const bView = btn('bk-b-view', '');
   bar.append(bContents, bPrev, where, bNext, bNotes, bSound, bView);
@@ -468,7 +563,7 @@ async function main() {
 
   const stageHint = el('p', 'bk-hint');
   stageHint.id = 'bk-hint';
-  stageHint.textContent = 'Use ← and → to turn pages, and Space for the next step.';
+  stageHint.textContent = paged ? 'Use ← and → or Space to turn pages.' : 'Use ← and → to turn pages, and Space for the next step.';
   menu.insertBefore(stageHint, menuFoot);
   stage.setAttribute('aria-describedby', 'bk-hint');
   // where the book ends: the next book, in the menu and after the last lesson's answer
@@ -487,9 +582,10 @@ async function main() {
   const anims = [];        // little timed things: sound words, fades
   let clock = 0, manual = false;
 
-  function makeCtx(group) {
+  function makeCtx(group, Ls) {
     return {
       THREE, K, group, page: { w: PW, h: PH }, stage: STAGE, reduced, dark,
+      spread: Ls.art ? { sheets: Ls.sheets, base: Ls.art.replace(/\.webp$/, ''), left: L.top, right: R.top, tex: artTex, art: { w: ART_W, h: ART_H }, gut: GUT } : null,
       label(text, pos, opts = {}) {
         const e = el('div', 'bk-label' + (opts.cls ? ' ' + opts.cls : ''), text);
         e.setAttribute('aria-hidden', 'true');
@@ -544,7 +640,7 @@ async function main() {
       console.error(`books: no figure called ${Ls.figureName}`);
       obj = { group, steps: [], reset() {} };
     } else {
-      obj = make(makeCtx(group));
+      obj = make(makeCtx(group, Ls));
       if (obj.group !== group) group.add(obj.group);
       obj.group = group;
     }
@@ -567,6 +663,7 @@ async function main() {
   }
   function applyPop() {
     if (!fig) return;
+    if (fig.obj.pop) { fig.obj.pop(fig.pop, !!(fig.popping && fig.popping.to > fig.popping.from)); return; }
     const kids = fig.obj.group.children;
     const n = kids.length;
     kids.forEach((k, j) => {
@@ -772,7 +869,9 @@ async function main() {
     for (const n of [...homes.keys()]) if (n !== Ls.page) giveBack(n);
     document.querySelectorAll('.is-current').forEach((n) => n.classList.remove('is-current'));
     Ls.el.classList.add('is-current');
-    if (mode === '3d') {
+    if (paged) {
+      borrow(Ls.page, spreadEl);
+    } else if (mode === '3d') {
       borrow(Ls.page, leftEl);
       leftEl.scrollTop = 0;
       if (fig) rightEl.append(fig.ui.root);
@@ -803,17 +902,17 @@ async function main() {
 
   function updateBar() {
     const Ls = lessons[index];
-    whereNum.textContent = index ? `Lesson ${index} of ${total}` : bookLabel;
+    whereNum.textContent = index ? `${unit} ${index} of ${total}` : bookLabel;
     whereTitle.textContent = index ? Ls.title : bookTitle;
     bPrev.disabled = index === 0;
     bNext.disabled = index === total;
     bNotes.disabled = index === 0;
     bSound.textContent = sound.on ? 'Sound on' : 'Sound off';
     bSound.setAttribute('aria-pressed', String(sound.on));
-    bView.textContent = mode === '3d' ? 'Flat pages' : '3D book';
+    bView.textContent = paged ? 'Flat picture book' : mode === '3d' ? 'Flat pages' : '3D book';
     mSound.textContent = bSound.textContent;
     mSound.setAttribute('aria-pressed', String(sound.on));
-    mView.textContent = mode === '3d' ? 'Show flat pages' : 'Show the 3D book';
+    mView.textContent = paged ? 'Show the flat picture book' : mode === '3d' ? 'Show flat pages' : 'Show the 3D book';
     if (notesFor !== null && notesFor !== index) closeNotes();
   }
 
@@ -857,6 +956,7 @@ async function main() {
     updateBar();
   };
   const toggleView = () => {
+    if (paged) { location.assign(`${document.body.dataset.flat}${index ? `#spread-${index}` : ''}`); return; }
     const want = mode === '3d' ? 'flat' : '3d';
     store('bk-view', want);
     closeMenu();
@@ -889,6 +989,7 @@ async function main() {
       setBlocks(thick(index));
       mountFigure(index);
       placeDOM();
+      if (paged) { setArt(artL, lessons[index].room); setArt(artR, lessons[index].room); fig.obj.show?.(true); }
       fig.pop = 0;
       popTo(1, instant ? 0.001 : 0.45);
       if (mode === 'flat' && !instant) lessons[index].el.scrollIntoView({ block: 'start' });
@@ -896,6 +997,12 @@ async function main() {
       return;
     }
     turn = { dir: to > from ? 1 : -1, t: 0, dur: 1.15, from, to, swapped: false, mounted: false };
+    if (paged) {
+      const f = artTex(lessons[turn.dir > 0 ? from : to].art), b = artTex(lessons[turn.dir > 0 ? to : from].art);
+      artTex(lessons[from].art); artTex(lessons[to].room);
+      const leaf = (mesh, e) => { const put = () => { mesh.material.map = e.tex; mesh.material.needsUpdate = true; }; if (e.ready) put(); else e.waiters.push(put); };
+      leaf(sheetFront, f); leaf(sheetBack, b);
+    }
     popTo(0, 0.22);
     rightEl.classList.add('is-fading');
     sound.play('turn');
@@ -903,7 +1010,9 @@ async function main() {
   function afterGo() {
     const h = index ? '#lesson-' + index : location.pathname + location.search;
     history.replaceState(null, '', index ? location.pathname + location.search + h : h);
-    live.textContent = index ? `Lesson ${index}: ${lessons[index].title}` : bookTitle;
+    live.textContent = !index ? bookTitle : paged
+      ? `${unit} ${index}: ${lessons[index].title}. ${[...lessons[index].page.querySelectorAll('.pb-words p')].map((p) => p.textContent).join(' ')}`
+      : `${unit} ${index}: ${lessons[index].title}`;
     document.documentElement.classList.toggle('bk-at-end', index === total);
     if (focusAfter) { focusAfter = false; focusNext(); }
   }
@@ -918,6 +1027,12 @@ async function main() {
       unmountFigure();
       index = turn.to;
       mountFigure(index);
+      if (paged) {
+        // the old sheets are down, so the flat pictures take over: the side the leaf leaves
+        // shows the new spread at once, and the side it lands on keeps the old one
+        setArt(artL, lessons[turn.dir > 0 ? turn.from : turn.to].art);
+        setArt(artR, lessons[turn.dir > 0 ? turn.to : turn.from].art);
+      }
       fig.pop = 0;
       applyPop();
       if (mode === '3d') rightEl.append(fig.ui.root);
@@ -930,10 +1045,20 @@ async function main() {
     sheetFront.visible = sheetBack.visible = t > 0.15 && t < 0.9;
     setBlocks({ l: K.lerp(tb.l, ta.l, u), r: K.lerp(tb.r, ta.r, u) });
     leftEl.style.opacity = String(t < 0.42 ? 1 : t < 0.58 ? 1 - (t - 0.42) / 0.16 : t < 0.82 ? 0 : (t - 0.82) / 0.18);
+    spreadEl.style.opacity = String(t < 0.12 ? 1 - t / 0.12 : t < 0.9 ? 0 : (t - 0.9) / 0.1);
     if (t >= 0.58 && !turn.swapped) { turn.swapped = true; placeDOM(); }
-    if (t > 0.62 && fig.popping === null && fig.pop === 0) popTo(1, 0.6);
+    if (paged) {
+      if (t >= 0.9 && !turn.landed) {
+        // the leaf is down: the room goes under the sheets, which lie exactly on the picture, and they stand up
+        turn.landed = true;
+        setArt(artL, lessons[index].room); setArt(artR, lessons[index].room);
+        fig.obj.show?.(true);
+        popTo(1, 0.6);
+      }
+    } else if (t > 0.62 && fig.popping === null && fig.pop === 0) popTo(1, 0.6);
     if (t >= 1) {
       leftEl.style.opacity = '1';
+      spreadEl.style.opacity = '1';
       rightEl.classList.remove('is-fading');
       turn = null;
       afterGo();
@@ -947,6 +1072,7 @@ async function main() {
     opening = { t: 0, dur: 1.6 };
     hinge.rotation.z = TILT - Math.PI + 0.001;
     leftEl.style.opacity = '0';
+    spreadEl.style.opacity = '0';
     rightEl.classList.add('is-fading');
     camState.intro = 1;
   }
@@ -956,6 +1082,7 @@ async function main() {
     const u = K.ease.inOut(K.seg(t, 0.12, 0.85));
     hinge.rotation.z = TILT - Math.PI * (1 - u);
     leftEl.style.opacity = String(K.seg(t, 0.8, 1));
+    spreadEl.style.opacity = String(K.seg(t, 0.8, 1));
     camState.intro = 1 - K.ease.inOut(K.seg(t, 0, 0.95));
     if (t > 0.55 && fig && fig.pop === 0 && !fig.popping) popTo(1, 0.6);
     if (t > 0.3 && !opening.sounded) { opening.sounded = true; sound.play('turn'); }
@@ -1014,7 +1141,7 @@ async function main() {
     const margin = mode === '3d' ? 0.94 : 0.98;
     const area = { w: margin, h: (usableH / H) * margin };
     const box = mode === '3d' ? boxes.spread : boxes.flat;
-    const elev = mode === '3d' ? 0.86 : 0.7;
+    const elev = mode === '3d' ? (paged ? 1.12 : 0.86) : 0.7;
     camBase = { ...fit(box, elev, 0, W / H, area), elev, box };
     // shift the picture so the book sits in the space above the bar
     const r = camBase.ndc;
@@ -1063,6 +1190,7 @@ async function main() {
   // ---------------------------------------------------------- modes
 
   function preferred() {
+    if (paged) return '3d';
     const saved = store('bk-view');
     if (saved === 'flat' || saved === '3d') return saved;
     return innerWidth < 760 || innerHeight < 540 ? 'flat' : '3d';
@@ -1088,7 +1216,8 @@ async function main() {
     if (m === '3d') stage.prepend(renderer.domElement, css.domElement);
     stage.hidden = m !== '3d';
     if (m === 'flat') document.body.append(barWrap); else stage.append(barWrap);
-    leftObj.visible = rightObj.visible = m === '3d';
+    leftObj.visible = rightObj.visible = m === '3d' && !paged;
+    spreadObj.visible = m === '3d' && paged;
     placeDOM();
     layout();
     // one lesson at a time: start the reader at the top of the one showing
@@ -1111,6 +1240,7 @@ async function main() {
     else if (onChoice) return;
     else if ((e.key === ' ' || e.key === 'Enter') && (t === document.body || t === stage || t.closest?.('.bk-page'))) {
       if (t.closest?.('a, button, summary, label')) return;
+      if (paged) { e.preventDefault(); go(index + 1, { focus: true }); return; }
       if (fig && lessons[fig.i].kind === 'lesson') { e.preventDefault(); runStep(fig.done); }
     }
   });
@@ -1229,6 +1359,21 @@ async function main() {
   });
   setBlocks(thick(index));
   mountFigure(index);
+  if (paged) {
+    setArt(artL, lessons[index].room); setArt(artR, lessons[index].room);
+    fig.obj.show?.(true);
+    shapeSheet(0, 0);
+    // the story's own cover art, drawn over the paper duck when it arrives
+    const face = coverFace.map.image, cover = new Image();
+    cover.onload = () => {
+      const c = face.getContext('2d');
+      c.fillStyle = '#' + COVER[book].toString(16).padStart(6, '0');
+      c.fillRect(140, 840, 960, 740);
+      c.drawImage(cover, 340, 860, 560, 700);
+      coverFace.map.needsUpdate = true;
+    };
+    cover.src = document.body.dataset.cover;
+  }
   chooseMode();
   document.documentElement.classList.toggle('bk-at-end', index === total);
   fig.pop = 0;

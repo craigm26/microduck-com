@@ -960,3 +960,94 @@ body.story-page { color-scheme: light; background: var(--story-paper); color: va
 @media print {
   .story-slot-frame, .story-bar, .story-moves { display: none; }
 }
+
+/* ================================================================ Picture book
+   One chapter as read-aloud spreads, at /stories/<slug>/picture/ and /3d/. Without
+   a script a spread is a picture with its words on it, one under the next. Sizes
+   are in cqw, parts of the spread's own width, so a line lands in the same place
+   at any size. A word block sits in percent of the spread (--x, --y, --w). */
+.pb-page .story-bar { max-width: none; align-items: baseline; flex-wrap: wrap; padding: .6rem 1.25rem; }
+.pb-switch { font-weight: 500; padding: .1rem .7rem; border: 1px solid var(--story-moss); border-radius: 2px; margin-inline: auto 0; }
+.pb-main { margin: 0 auto; max-width: 1400px; padding: 0 .75rem 1rem; }
+.pb-main:focus { outline: none; }
+.pb-spread { position: relative; margin: 0 auto 1.25rem; padding: 0; border: 0; }
+.pb-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.pb-canvas { position: relative; aspect-ratio: 3 / 2; container-type: inline-size; overflow: hidden; color: #21160e; }
+.pb-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.pb-said { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.pb-z { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); width: calc(var(--w) * 1%); font: 500 1.95cqw/1.3 var(--story-sans); text-shadow: 0 0 .5em rgba(246,238,218,.65); }
+.pb-z p { margin: 0 0 .5em; }
+.pb-z p:last-child { margin-bottom: 0; }
+.pb-tight p { margin-bottom: .26em; }
+.pb-chant, .pb-chant p { font-family: var(--story-fell); font-style: italic; font-weight: 400; font-size: 1.14em; color: #7c2f1e; }
+.pb-big { font-family: var(--story-fell); font-size: 1.7em; line-height: 1; color: #7c2f1e; }
+.pb-cell { font-size: 1.75cqw; line-height: 1.18; text-align: center; }
+.pb-floor, .pb-cell { text-shadow: 0 0 .1em rgba(246,238,218,.85), 0 0 .4em rgba(246,238,218,.85); }
+.pb-floor { font-size: 1.9cqw; }
+.pb-log { font: 400 2cqw/3.333cqw "Fredoka", var(--story-sans); color: #2f3136; text-shadow: none; transform: rotate(-2.2deg); transform-origin: 0 0; }
+.pb-log p { margin: 0; }
+.pb-pen { font: italic 400 1.2em/1 var(--story-fell); color: #2f4a78; }
+.pb-title-z h1 { font-size: 4.4cqw; line-height: 1.04; margin: 0 0 .5em; }
+.pb-title-z .story-kind { font-size: 1.15cqw; margin-bottom: .8em; color: #2c4a39; }
+.pb-chapter { font: italic 400 2.2cqw/1.2 var(--story-fell); }
+.pb-for, .pb-draft { font-size: 1.45cqw; }
+.pb-draft { display: inline-block; padding: .1em .6em; border: 1px solid var(--story-rule); }
+
+/* A narrow screen with no script: the picture, then its words under it, at reading size. */
+@media (max-width: 699px) {
+  html:not(.pb-live) .pb-canvas { aspect-ratio: auto; container-type: normal; overflow: visible; }
+  html:not(.pb-live) .pb-art { position: static; height: auto; }
+  html:not(.pb-live) .pb-z { position: static; width: auto; margin: .6rem .25rem; font-size: 1.2rem; transform: none; text-shadow: none; }
+  html:not(.pb-live) .pb-cell { text-align: left; }
+  html:not(.pb-live) .pb-title-z h1 { font-size: 2.4rem; }
+  html:not(.pb-live) .pb-title-z .story-kind, html:not(.pb-live) .pb-for, html:not(.pb-live) .pb-draft { font-size: 1rem; }
+  html:not(.pb-live) .pb-chapter { font-size: 1.4rem; }
+}
+
+/* The page turner, once picture.js is running. Its sizes come from the script, because
+   a spread has to fit the window both ways. */
+html.pb-live .pb-main { position: relative; max-width: none; padding: 0; }
+html.pb-live .pb-stage { position: relative; height: var(--pb-h, 80svh); overflow: hidden; background: #3a2c20; touch-action: pan-y; perspective: 2400px; display: grid; place-items: center; }
+html.pb-live .pb-spread { grid-area: 1 / 1; width: var(--pb-w, 100%); margin: 0; overflow: hidden; box-shadow: 0 6px 22px rgba(0,0,0,.4); }
+html.pb-live .pb-spread[hidden] { display: none; }
+html.pb-live .pb-canvas { width: var(--pb-cw, 100%); transition: transform .32s ease; }
+html.pb-live .pb-spread.pb-on-right .pb-canvas { transform: translateX(-50%); }
+html.pb-live .pb-words { transition: opacity .18s ease; }
+html.pb-live .pb-words.pb-quiet { opacity: 0; }
+.pb-turn { position: absolute; z-index: 3; pointer-events: none; transform-style: preserve-3d; }
+.pb-half { position: absolute; top: 0; bottom: 0; width: 50%; background-size: 200% 100%; backface-visibility: hidden; }
+.pb-half-l { left: 0; background-position: 0 0; }
+.pb-half-r { left: 50%; background-position: 100% 0; }
+.pb-leaf { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; }
+.pb-leaf .pb-half { left: 0; width: 100%; }
+.pb-leaf .pb-back { transform: rotateY(180deg); }
+.pb-tap { position: absolute; z-index: 2; top: 0; bottom: 0; width: 14%; padding: 0; border: 0; background: none; color: transparent; cursor: pointer; }
+.pb-tap-prev { left: 0; } .pb-tap-next { right: 0; }
+.pb-nav { display: flex; justify-content: center; align-items: center; gap: .75rem; padding: .35rem .75rem; background: var(--story-paper); }
+.pb-nav button { min-width: 3rem; min-height: 2.75rem; font: 500 1.05rem/1 var(--story-sans); color: var(--story-paper); background: var(--story-moss); border: 0; border-radius: 2px; cursor: pointer; }
+.pb-nav button:disabled { background: var(--story-rule); cursor: default; }
+.pb-nav button:focus-visible, .pb-tap:focus-visible { outline: 3px solid var(--story-madder); outline-offset: 2px; }
+.pb-where { min-width: 11rem; text-align: center; font-size: 1.05rem; }
+.pb-announce { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (prefers-reduced-motion: reduce) { html.pb-live .pb-canvas, html.pb-live .pb-words { transition: none; } }
+
+/* The 3-D edition: the words go on the book, and the art is the book's paper. */
+.pb-3d .bk-stage { height: calc(100svh - 62px); min-height: 480px; }
+.pb-3d .pb-main { max-width: none; padding: 0; }
+html:not(.bk-3d) .pb-3d .pb-main { max-width: 1400px; padding: 0 .75rem 1rem; }
+.book-page .pb-spread.lesson, .book-page .pb-spread.book-intro { display: block; }
+.pb-spread .book-intro-page { max-width: none; }
+.bk-spread { width: 1216px; height: 811px; }
+.bk-spread .pb-canvas { width: 1216px; max-width: none; height: 811px; aspect-ratio: auto; overflow: visible; }
+.bk-spread .pb-art { display: none; }
+
+@page pb { size: landscape; margin: 8mm; }
+@media print {
+  .pb-page .story-bar, .pb-nav, .pb-tap, .pb-switch, .pb-turn { display: none !important; }
+  .pb-page { background: #fff; }
+  .pb-main, html.pb-live .pb-main { max-width: none; padding: 0; }
+  html.pb-live .pb-stage { display: block; height: auto; overflow: visible; background: none; perspective: none; }
+  .pb-spread, html.pb-live .pb-spread, html.pb-live .pb-spread[hidden], html.bk-3d .pb-page .pb-spread { display: block !important; width: 100% !important; box-shadow: none; page: pb; break-after: page; break-inside: avoid; margin: 0; }
+  .pb-canvas, html.pb-live .pb-canvas { width: 100% !important; transform: none !important; }
+  .pb-z { text-shadow: none; }
+}

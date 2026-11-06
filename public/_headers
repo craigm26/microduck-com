@@ -1,6 +1,6 @@
 # Every rule whose pattern matches a request applies, so the security policy is
-# set per section rather than on /*: the learning books are the one place scripts run,
-# and a /* policy would be joined to theirs and still block them.
+# set per section rather than on /*: the learning books and the picture book are the only
+# places scripts run, and a /* policy would be joined to theirs and still block them.
 # scripts/check_books.py fails unless every page is under exactly one policy.
 
 /*
@@ -44,9 +44,33 @@
 /assets/*
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
-# The story books run no scripts at all, so they stay under the same policy as the plain pages.
-/stories/*
+# A story book's words and chapters run no scripts at all, so each part is listed here under the
+# plain pages' policy. The list is by part, not /stories/*, because a policy is joined to every
+# other rule that matches, so a /stories/* rule would still block the two pages below. A new part
+# with no rule here fails scripts/check_books.py: it would be under no policy at all.
+/stories/the-duck-who-stayed/
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/stories/the-duck-who-stayed/1/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/stories/the-duck-who-stayed/5/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/stories/the-duck-who-stayed/grown-ups/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/stories/the-duck-who-stayed/art/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+# The picture book's two editions turn pages and need scripts: the site's own and nothing else's,
+# no other host, no eval, no inline script, no network, under the learning books' policy. Everything
+# in them still reads with scripts off.
+/stories/the-duck-who-stayed/picture/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/stories/the-duck-who-stayed/3d/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 # The learning books run their own scripts and nothing else's: no other host, no eval,
 # no inline script, no network.

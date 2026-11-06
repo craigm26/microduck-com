@@ -329,6 +329,14 @@
 # ("must carry picture_credit word for word"). That last one passed at first, because
 # the check read the built page and every footer carries the credit; it reads the
 # source now.
+# PROVED ABLE TO FAIL, 2026-11-05, seventeen times when the picture book's two scripted
+# pages went in, in this tree, each restored and the tree hash compared after: on those
+# two pages an outside link, a link to /books/, a third-party image, a second script (in
+# check_story and check_site_claims), an inline script and a dropped word; a script on a
+# chapter (check_story and check_books); in _headers the 3-D rule's connect-src removed,
+# unsafe-inline on the flat rule, script-src on a chapter's rule and a chapter's rule
+# gone; picture.js with window.open and with fetch; book.js with location.assign to
+# /books/; and a sheet of art removed. Each failed for the planted reason.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -372,7 +380,7 @@ python3 scripts/check_wellformed.py
 step "9/10 the books: their structure, their one script, and every number's source"
 python3 scripts/check_books.py
 
-step "10/10 the story books: plain pages, every chapter built, word for word"
+step "10/10 the story books: plain pages, every chapter built, word for word, picture book in both editions"
 python3 scripts/check_story.py
 
 printf '\npredeploy: all ten gates passed. Deploy with\n'
