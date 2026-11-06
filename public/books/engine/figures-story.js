@@ -20,7 +20,8 @@ function half(ctx, sheet, j, side) {
   const mat = new THREE.MeshLambertMaterial({ map: entry.tex, transparent: true, depthWrite: false, side: THREE.DoubleSide, alphaTest: 0.03 });
   const mesh = new THREE.Mesh(g, mat);
   mesh.receiveShadow = true;
-  mesh.castShadow = true;
+  // cut letters would print a second, grey copy of the word on the page behind
+  mesh.castShadow = sheet.name !== 'letters';
   mesh.renderOrder = 2 + j;
   mesh.position.set(-side * sp.gut / 2, 0.8 + j * 0.5, (foot - 0.5) * H);
   mesh.rotation.x = -Math.PI / 2;

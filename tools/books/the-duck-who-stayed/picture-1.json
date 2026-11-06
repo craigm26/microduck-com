@@ -54,13 +54,12 @@
      ]
     },
     {
-     "x": 89,
-     "y": 79,
+     "x": 38.5,
+     "y": 31,
      "w": 10.5,
      "p": [
       "“That box,” said Nod, “is a ham.”"
-     ],
-     "kind": "floor"
+     ]
     }
    ]
   },
@@ -149,7 +148,7 @@
     },
     {
      "x": 52.5,
-     "y": 20.6,
+     "y": 21.6,
      "w": 38,
      "p": [
       "<span class=\"pb-big\">“Pip!”</span> said Wren, quickly, before anyone had a different idea."
@@ -220,7 +219,7 @@
     {
      "x": 80,
      "y": 50,
-     "w": 10,
+     "w": 11,
      "p": [
       "“Not yet,” said Aunt Mo."
      ],
@@ -620,7 +619,7 @@
     },
     {
      "x": 63,
-     "y": 76,
+     "y": 77.5,
      "w": 13,
      "p": [
       "And Pip walked into a different leg."
@@ -742,13 +741,18 @@
    "sheets": [
     {
      "name": "pip",
-     "foot": 0.64,
+     "foot": 0.522,
      "rise": 6
     },
     {
      "name": "people",
      "foot": 0.993,
      "rise": 14
+    },
+    {
+     "name": "letters",
+     "foot": 0.64,
+     "rise": 6
     }
    ],
    "zones": [

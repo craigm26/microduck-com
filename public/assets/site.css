@@ -985,6 +985,7 @@ body.story-page { color-scheme: light; background: var(--story-paper); color: va
 .pb-chant, .pb-chant p { font-family: var(--story-fell); font-style: italic; font-weight: 400; font-size: 1.14em; color: #7c2f1e; }
 .pb-big { font-family: var(--story-fell); font-size: 1.7em; line-height: 1; color: #7c2f1e; }
 .pb-cell { line-height: 1.16; text-align: center; }
+.pb-floor .pb-chant { color: #4a1a0e; }
 .pb-floor, .pb-cell { text-shadow: 0 0 .1em rgba(246,238,218,.85), 0 0 .4em rgba(246,238,218,.85); }
 .pb-log { font: 400 var(--pb-type)/3.056cqw "Fredoka", var(--story-sans); color: #2f3136; text-shadow: none; transform: rotate(-2.2deg); transform-origin: 0 0; }
 .pb-log p { margin: 0; }
