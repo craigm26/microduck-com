@@ -336,7 +336,8 @@
 # chapter (check_story and check_books); in _headers the 3-D rule's connect-src removed,
 # unsafe-inline on the flat rule, script-src on a chapter's rule and a chapter's rule
 # gone; picture.js with window.open and with fetch; book.js with location.assign to
-# /books/; and a sheet of art removed. Each failed for the planted reason.
+# /books/; a sheet of art removed; and a word box widened across the fold. Each failed for
+# the planted reason.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]

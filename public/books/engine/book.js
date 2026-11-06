@@ -1371,6 +1371,23 @@ async function main() {
       c.fillRect(140, 840, 960, 740);
       c.drawImage(cover, 340, 860, 560, 700);
       coverFace.map.needsUpdate = true;
+      // the label in the book's own lettering, once that face has loaded
+      const lettered = () => {
+        c.fillStyle = '#fbf6ea';
+        K.roundRectPath(c, 160, 260, face.width - 320, 540, 30); c.fill();
+        c.fillStyle = COVER_INK[book];
+        c.textAlign = 'center';
+        c.font = '400 40px "Alegreya Sans", sans-serif';
+        c.fillText(bookLabel.toUpperCase(), face.width / 2, 345);
+        c.font = '400 124px "IM Fell English", serif';
+        const words = bookTitle.split(' '), half = Math.floor(words.length / 2);
+        c.fillText(words.slice(0, half).join(' '), face.width / 2, 490);
+        c.fillText(words.slice(half).join(' '), face.width / 2, 620);
+        c.font = '500 38px "Alegreya Sans", sans-serif';
+        c.fillText('Microduck Studio books', face.width / 2, 745);
+        coverFace.map.needsUpdate = true;
+      };
+      Promise.all([document.fonts.load('400 124px "IM Fell English"'), document.fonts.load('500 38px "Alegreya Sans"')]).then(lettered, () => {});
     };
     cover.src = document.body.dataset.cover;
   }

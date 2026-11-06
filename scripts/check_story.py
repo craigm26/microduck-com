@@ -153,6 +153,9 @@ def check_picture(slug: str, book: dict) -> None:
         words.append(data["title"])
         for item in data["zones"]:
             words += [item["art"]] if "art" in item else [re.sub(r"<[^>]+>", "", line) for line in item["p"]]
+            # A phone shows one half of a spread at a time, so a box across the fold is cut in two.
+            if "x" in item and item["x"] < 50 < item["x"] + item["w"]:
+                fail.append(f"{book['picture']}: spread {data.get('title')!r} has words across the fold at x {item['x']}")
     for edition in ("picture", "3d"):
         path = base / edition / "index.html"
         if not path.is_file():

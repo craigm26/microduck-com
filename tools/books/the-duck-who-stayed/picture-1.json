@@ -10,8 +10,8 @@
   "zones": [
    {
     "x": 8,
-    "y": 23,
-    "w": 34,
+    "y": 20,
+    "w": 36,
     "kind": "title"
    }
   ]
@@ -53,17 +53,17 @@
      ]
     },
     {
-     "x": 50.5,
+     "x": 52,
      "y": 20,
-     "w": 17,
+     "w": 16,
      "p": [
       "“You could share your name,” said Wren."
      ]
     },
     {
-     "x": 92,
+     "x": 90.5,
      "y": 80,
-     "w": 7.5,
+     "w": 8,
      "p": [
       "And what was inside?"
      ],
@@ -148,7 +148,7 @@
     },
     {
      "x": 77,
-     "y": 14,
+     "y": 15,
      "w": 22,
      "p": [
       "<span class=\"pb-big\">“Pip!”</span> said Wren, quickly, before anyone had a different idea."
@@ -188,17 +188,17 @@
      "tight": true
     },
     {
-     "x": 71.5,
+     "x": 73,
      "y": 6,
-     "w": 13,
+     "w": 12.6,
      "p": [
       "Wren’s finger crept toward the green button."
      ]
     },
     {
-     "x": 71.5,
+     "x": 73,
      "y": 56,
-     "w": 13,
+     "w": 12.6,
      "p": [
       "“Not yet,” said Aunt Mo, and out came the manual."
      ]
@@ -301,7 +301,7 @@
      "tight": true
     },
     {
-     "x": 23,
+     "x": 25.5,
      "y": 31,
      "w": 12.5,
      "p": [
@@ -318,8 +318,8 @@
      "kind": "floor"
     },
     {
-     "x": 40,
-     "y": 92,
+     "x": 33,
+     "y": 93,
      "w": 17,
      "p": [
       "A little to one side."
@@ -327,8 +327,8 @@
      "kind": "floor"
     },
     {
-     "x": 55,
-     "y": 93,
+     "x": 52,
+     "y": 92,
      "w": 21,
      "p": [
       "A little more to one side."
@@ -373,8 +373,8 @@
     },
     {
      "x": 21,
-     "y": 71,
-     "w": 39,
+     "y": 69,
+     "w": 27.5,
      "p": [
       "Over went Pip, flat on its side, with both legs still going.",
       "“It’s broken!” said Wren.",
@@ -527,7 +527,7 @@
      "kind": "cell"
     },
     {
-     "x": 52,
+     "x": 50.8,
      "y": 75,
      "w": 12,
      "p": [
@@ -536,7 +536,7 @@
      "kind": "cell"
     },
     {
-     "x": 64.5,
+     "x": 62.5,
      "y": 75,
      "w": 9.5,
      "p": [
@@ -576,7 +576,7 @@
     },
     {
      "x": 3,
-     "y": 17,
+     "y": 14.5,
      "w": 18,
      "p": [
       "“Pip doesn’t like that chair,” said Wren."
