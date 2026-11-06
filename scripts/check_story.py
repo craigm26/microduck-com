@@ -3,7 +3,9 @@
 
     python3 scripts/check_story.py
 
-Every story page must have no script tag, except the one module tag each edition
+Only the pages in PUBLISHED may exist, and only the pictures they use, with the same
+list in the sitemap and in _headers. The book's home shows the chapter and its two
+editions and lists nothing unwritten. Every story page must have no script tag, except the one module tag each edition
 of a picture book carries, no third-party address and no link to kithgame.com; no em or en dash, in the pages or in the source; every chapter in
 the source built, and every built chapter in the source; every word of a chapter
 on its page in order; no picture idea on a page; an alt text on every picture
@@ -23,6 +25,11 @@ WHY A GATE OF ITS OWN. check_site_claims.sh already bans scripts and remote
 assets, but a plain link to another site is fine anywhere else on the site and is
 not fine in a book a child reads. These pages promise a child's reader that
 nothing leaves the book.
+
+PUBLISHED IS THE OWNER'S CALL. On 2026-11-05 the owner said to publish chapter 1 only.
+The older prose chapters and their art wait in tools/books/<slug>/unpublished/. A page
+or picture that comes back to public/ fails here, even if book.json lists it, so
+publishing more means changing this list on purpose.
 
 A SLOT'S ALT TEXT IS A FIELD. An empty slot's field says what is missing and a
 slot with art must say what the art shows. The check is that it exists, in source
@@ -56,6 +63,11 @@ URL = re.compile(r"""(?:https?:)?//[^\s"'<>)]+""", flags=re.IGNORECASE)
 IDEAS = ("Picture ideas", "Picture-only joke", "THIS WAY UP", "WANTED poster", "bird's-eye")
 DASHES = (("—", "an em dash"), ("–", "an en dash"))
 MAX_ART = 400 * 1024
+PUBLISHED = ("", "picture/", "3d/", "grown-ups/")  # under /stories/<slug>/, the owner's call
+SOURCE_TEXT = (".md", ".json", ".html")
+# Words of the older drafts and promises it made. None of them is true of what is published.
+RETIRED = ("That we can know", "Two chapters", "Real robots", "Big Question", "Try It", "Bump",
+           "Not written yet", "run no scripts and load nothing")
 
 
 def rel(path: pathlib.Path) -> str:
@@ -64,7 +76,7 @@ def rel(path: pathlib.Path) -> str:
 
 def check_source(slug: str) -> None:
     folder = ROOT / "tools/books" / slug
-    for path in sorted(folder.iterdir()):
+    for path in sorted(item for item in folder.rglob("*") if item.suffix in SOURCE_TEXT):
         text = path.read_text(encoding="utf-8")
         for mark, name in DASHES:
             if mark in text:
@@ -86,7 +98,10 @@ def check_links(path: pathlib.Path, book: dict) -> None:
         if tag == "link" or not href or href.startswith("#"):
             continue
         target = href.split("?")[0]
-        kept = posixpath.normpath(target) + "/" if target.startswith("/") else target
+        kept = posixpath.normpath(target.split("#")[0]) + "/" if target.startswith("/") else target
+        if kept.startswith(home) and kept.removeprefix(home) not in PUBLISHED:
+            fail.append(f"{name} links {href}, which is not a published page of this book")
+            continue
         if kept.startswith(home) or (grown_ups and target in build.GROWN_UP_LINKS):
             continue
         fail.append(f"{name} links {href}; " + ("this page links out only to GROWN_UP_LINKS in "
@@ -136,6 +151,11 @@ def check_page(path: pathlib.Path, book: dict) -> None:
         fail.append(f"{name} is a draft and must carry <meta name=\"robots\" content=\"noindex\">")
     if book["licence"] not in flatten(text):
         fail.append(f"{name} has lost its licence line")
+    if build.INDEPENDENCE not in flatten(text):
+        fail.append(f"{name} has lost the statement that this is independent of Pollen Robotics")
+    for words in RETIRED:
+        if words.lower() in flatten(text).lower():
+            fail.append(f"{name} says {words!r}, from an older draft; fix it in tools/books/{book['slug']}/")
 
 
 STORY_SCRIPTS = ("picture.js", "figures-story.js")
@@ -179,6 +199,41 @@ def check_picture(slug: str, book: dict) -> None:
     for hit in re.findall(r"location\.assign\(([^)]*)\)", engine):
         if "dataset.flat" not in hit:
             fail.append(f"public/books/engine/book.js leaves the page with location.assign({hit})")
+
+
+def check_published(slug: str, book: dict) -> None:
+    """Exactly the published pages and the pictures they use, on disk and in every list of them."""
+    base = ROOT / "public/stories" / slug
+    wanted = {base / part / "index.html" for part in PUBLISHED}
+    source = build.picture_source(slug, book)
+    art = {base / book["cover"]["image"]}
+    for spec in [source["title_page"]] + source["spreads"]:
+        art |= {base / name for name in build.art_files(spec)}
+    for path in sorted(item for item in base.rglob("*") if item.is_file()):
+        if path not in wanted | art:
+            fail.append(f"{rel(path)} is not a published page or a picture one uses; only {PUBLISHED} "
+                        f"are published, so move it to tools/books/{slug}/unpublished/")
+    for path in sorted(wanted - {item for item in wanted if item.is_file()}):
+        fail.append(f"{rel(path)} is missing; run python3 tools/books/build_story.py")
+
+    urls = {f"/stories/{slug}/{part}" for part in PUBLISHED}
+    listed = {urlsplit(url).path for url in re.findall(r"<loc>([^<]+)</loc>", (ROOT / "public/sitemap.xml").read_text(encoding="utf-8"))}
+    for url in sorted({url for url in listed if url.startswith(f"/stories/{slug}/")} ^ urls):
+        fail.append(f"public/sitemap.xml and PUBLISHED disagree on {url}")
+    rules = re.findall(rf"^/stories/{slug}/([^\s*]*)\*?\s*$", (ROOT / "public/_headers").read_text(encoding="utf-8"), flags=re.MULTILINE)
+    for part in sorted(set(rules) ^ set(PUBLISHED) ^ {"art/"}):
+        fail.append(f"public/_headers and PUBLISHED disagree on /stories/{slug}/{part}")
+
+    path = base / "index.html"
+    if path.is_file():
+        text = path.read_text(encoding="utf-8")
+        home = f"/stories/{slug}/"
+        links = {attrs.get("href") for tag, attrs in Markup(text).elements if tag == "a"}
+        for link in (f"{home}picture/", f"{home}3d/"):
+            if link not in links:
+                fail.append(f"{rel(path)} must link the edition {link}")
+        if source["title"] not in flatten(text):
+            fail.append(f"{rel(path)} must show {source['title']!r}")
 
 
 def check_slots(path: pathlib.Path, slots: list[dict]) -> None:
@@ -246,6 +301,7 @@ def main() -> int:
             fail.append(f"{rel(base)}/{number}/ is built and has no chapter in the source")
         if book.get("picture"):
             check_picture(slug, book)
+            check_published(slug, book)
         if (base / "index.html").is_file():
             check_slots(base / "index.html", [book["cover"]])
             if book["draft_line"] not in flatten((base / "index.html").read_text(encoding="utf-8")):
@@ -265,6 +321,9 @@ def main() -> int:
             fail.append(str(why))
             continue
         for path, text in drawn.items():
+            if path.parent.relative_to(base).as_posix().removeprefix(".") not in {part.rstrip("/") for part in PUBLISHED}:
+                fail.append(f"build_story.py draws {rel(path)}, which is not in PUBLISHED; "
+                            "the owner publishes chapter 1 only")
             if path.is_file() and path.read_text(encoding="utf-8") != text:
                 fail.append(f"{rel(path)} is not what build_story.py draws; edit the source and rebuild")
             if not path.is_file() and path.parent.name not in numbers:
@@ -273,9 +332,9 @@ def main() -> int:
         for problem in fail:
             print("check_story: " + problem, file=sys.stderr)
         return 1
-    print(f"check_story: {len(build.BOOKS)} story book, plain pages, every chapter built and "
-          "word for word, picture slots with alt text, every image present, "
-          "and the picture book's two editions carry every word with one self-hosted script each")
+    print(f"check_story: {len(build.BOOKS)} story book, only the {len(PUBLISHED)} published pages and "
+          "the pictures they use, with the sitemap and _headers agreeing, plain pages, every image "
+          "present, and the picture book's two editions carry every word with one self-hosted script each")
     return 0
 
 

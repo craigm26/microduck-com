@@ -338,6 +338,14 @@
 # gone; picture.js with window.open and with fetch; book.js with location.assign to
 # /books/; a sheet of art removed; and a word box widened across the fold. Each failed for
 # the planted reason.
+# PROVED ABLE TO FAIL, 2026-11-05, twenty-two times when the owner said to publish chapter 1
+# only, in a throwaway copy, each restored and the tree compared after: /1/ and /5/ back; ch5
+# art, old ch1 art and a stray file under the book; the picture page gone; the sitemap gaining
+# /1/ and losing /3d/; _headers gaining /5/ and losing the art rule; book.json listing chapter 1
+# again; chapter-5.md back beside book.json; a link to /1/; the home listing an unwritten
+# chapter, losing the 3-D link and losing the draft line; "That we can know" in the spreads;
+# "Two chapters" on the page for grown-ups; the independence statement and the Pollen credit
+# cut; a kithgame.com link; and noindex dropped. Each failed for the planted reason.
 # A gate nobody has watched fail is not a gate.
 #
 # Usage: bash scripts/predeploy.sh [DUCK_STUDIO]
@@ -381,7 +389,7 @@ python3 scripts/check_wellformed.py
 step "9/10 the books: their structure, their one script, and every number's source"
 python3 scripts/check_books.py
 
-step "10/10 the story books: plain pages, every chapter built, word for word, picture book in both editions"
+step "10/10 the story books: only the published pages and pictures, plain pages, picture book in both editions, word for word"
 python3 scripts/check_story.py
 
 printf '\npredeploy: all ten gates passed. Deploy with\n'

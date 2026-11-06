@@ -228,8 +228,11 @@ frames; `python3 tools/books/montage.py <stills dir>` tiles them per lesson. Aft
 `/books/` has two shelves. Learning books are reference: the rest of this README's rules about
 numbers apply. Story books are fiction, with their own look and their own pages under `/stories/`.
 *The Duck Who Stayed* is the first. Its source is `tools/books/the-duck-who-stayed/`: `book.json`
-says the chapters, the picture slots and whether it is a draft, each `chapter-<n>.md` is a chapter's
-words, and `grown-ups.html` is the page for grown-ups. To change a page:
+says the picture slots and whether it is a draft, `picture-1.json` is chapter 1's words and art in
+both editions, and `grown-ups.html` is the page for grown-ups. Only chapter 1 is published, at
+`picture/` and `3d/`, beside the book's home and `grown-ups/`; `check_story.py` fails on any other
+page or any unused picture. The older prose chapters and their art wait in `unpublished/`, which
+the build does not read. To change a page:
 
 ```sh
 python3 tools/books/build_story.py           # --check only reports stale pages
@@ -239,12 +242,13 @@ python3 scripts/check_story.py
 The text is wrapped, never retyped, and picture ideas stay out of the source and the pages. A
 picture slot in `book.json` has its size, alt text and an `image` under
 `public/stories/<slug>/art/`; a slot with no `image` draws a labelled empty frame. While `status` is `draft` every page says noindex. Pages run no script and load nothing
-from another host. A chapter and the book's home link only within the book, the page for grown-ups
+from another host, except that the two editions run this site's own scripts. A child's page links
+only within the book, to a published page, the page for grown-ups
 links out only to the short list in `build_story.py`, and nothing links to kithgame.com. The words
 are CC BY 4.0. The pictures adapt Pollen Robotics' Microduck meshes and carry CC BY-NC-SA 4.0, with
 the credit in `book.json`'s licence line and on the page for grown-ups. `check_story.py` holds all of
-this, that every image a page names exists and is under 400 KB, and that every chapter in the source
-is built, word for word.
+this, that every image a page names exists and is under 400 KB, and that both editions carry every
+word in order.
 
 ## Train your first duck
 

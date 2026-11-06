@@ -5,7 +5,11 @@ except the two pages a picture book adds, each with one module tag.
     python3 tools/books/build_story.py            # write public/stories/<slug>/
     python3 tools/books/build_story.py --check    # exit 1 if any page is stale
 
-THE STORY TEXT IS NEVER RETYPED. A chapter's words live in
+ONLY WHAT BOOK.JSON LISTS IS BUILT. tools/books/<slug>/unpublished/ holds older
+sources this script never reads, and scripts/check_story.py fails if their pages
+or pictures come back to public/.
+
+THE STORY TEXT IS NEVER RETYPED. A prose chapter's words live in
 tools/books/<slug>/chapter-<n>.md, in the form the draft has them: one heading,
 paragraphs, a `> ` log, then Real robots, Big Question and Try It. This script
 wraps them in markup and changes no word, so scripts/check_story.py can read
@@ -224,17 +228,10 @@ def chapter_page(book: dict, chapter: dict, chapters: list[dict]) -> str:
                 chapter["description"], body)
 
 
-def home_page(book: dict, chapters: list[dict]) -> str:
+def home_page(book: dict) -> str:
+    """One chapter, its two editions and nothing about chapters that do not exist yet."""
     home = f'/stories/{book["slug"]}/'
-    built = {chapter["number"]: chapter for chapter in chapters}
-    rows = []
-    for number in range(1, book["planned_chapters"] + 1):
-        if number in built:
-            rows.append(f'    <li><a href="{home}{number}/"><span>Chapter {number}</span> '
-                        f'{esc(built[number]["title"])}</a></li>')
-        else:
-            rows.append(f'    <li class="story-unwritten"><span>Chapter {number}</span> Not written yet</li>')
-    chapter_list = "\n".join(rows)
+    chapter = picture_source(book["slug"], book)["title"]
     body = f"""<main id="main" tabindex="-1" class="story-main">
 <header class="story-head story-title">
   <p class="story-kind">{KIND}</p>
@@ -247,11 +244,12 @@ def home_page(book: dict, chapters: list[dict]) -> str:
 
 <p class="story-blurb">{esc(book["blurb"])}</p>
 
-<section aria-labelledby="chapters-title">
-  <h2 id="chapters-title">Chapters</h2>
-  <ol class="story-chapters">
-{chapter_list}
-  </ol>
+<section aria-labelledby="chapter-title">
+  <h2 id="chapter-title">{esc(chapter)}</h2>
+  <ul class="story-chapters">
+    <li><a href="{home}picture/">Read the picture book</a></li>
+    <li><a href="{home}3d/">Open the 3-D book</a></li>
+  </ul>
 </section>
 
 <p class="story-out"><a href="{home}grown-ups/">For grown-ups</a></p>
@@ -372,7 +370,7 @@ def book3d_page(book: dict, source: dict) -> str:
 def pages_for(slug: str) -> dict[pathlib.Path, str]:
     book, chapters = load(slug)
     base = PUBLIC / "stories" / slug
-    out = {base / "index.html": home_page(book, chapters),
+    out = {base / "index.html": home_page(book),
            base / "grown-ups/index.html": grown_ups_page(book)}
     for chapter in chapters:
         out[base / str(chapter["number"]) / "index.html"] = chapter_page(book, chapter, chapters)

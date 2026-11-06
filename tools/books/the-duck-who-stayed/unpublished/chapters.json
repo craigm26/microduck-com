@@ -1,0 +1,68 @@
+{
+  "status": "unpublished",
+  "note": "The prose chapters' old book.json entries, word for word. The build reads none of this.",
+  "chapters": [
+    {
+      "number": 1,
+      "source": "chapter-1.md",
+      "description": "Chapter 1 of The Duck Who Stayed, a first draft of a story to read aloud.",
+      "slots": [
+        {
+          "id": "1-1",
+          "after": "Aunt Mo set the box on the kitchen table",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch1-box.webp",
+          "alt": "Aunt Mo, in a blue coat and green boots, carries a cardboard box into the farmhouse kitchen. A red arrow on the box points down. In a panel beside her the same box stands open and full of white foam, and the head of a small robot duck, with a flat beak and a round orange eye, pokes through the foam."
+        },
+        {
+          "id": "1-2",
+          "after": "Pip walked. It walked like someone",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch1-clonk.webp",
+          "alt": "Wren, in a straw hat and a red shirt, kneels on the kitchen floor with her arms held out. Pip, a small white and grey robot duck with orange feet, walks towards her. A dashed line on the floor runs past her and on to the leg of a chair."
+        },
+        {
+          "id": "1-3",
+          "after": "She went to find a pencil.",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch1-log.webp",
+          "alt": "Wren sits at the kitchen table, writing in an open thin green book with a yellow pencil. Aunt Mo sits across from her with a mug. One leg of Wren's chair is wrapped in a tied bandage. Pip stands on a shelf by the back door, plugged in to charge."
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "source": "chapter-5.md",
+      "description": "Chapter 5 of The Duck Who Stayed, a first draft of a story to read aloud.",
+      "slots": [
+        {
+          "id": "5-1",
+          "after": "Pip stood on a flat stone",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch5-gate.webp",
+          "alt": "In the farmyard, Pip stands on a flat stone with two cards laid beside it. Wren, on her knees, stretches one hand back to Tam, who holds out a card with an arrow turning right. Aunt Mo sits on a crate by the pump, cleaning a wheel. A hen walks past the gate, and beyond it is a chalk square."
+        },
+        {
+          "id": "5-2",
+          "after": "Pip tipped over and stuck there",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch5-map.webp",
+          "alt": "A map of the yard seen from above, with paper labels. Dots show Pip's path: forward from Pip's stone, a right turn, then on to the woodpile, where Pip lies tipped over against the logs. A row of six cards lies beside the path. The gate and the chalk square are the other way, and a label shows where Wren knelt, facing the stone."
+        },
+        {
+          "id": "5-3",
+          "after": "Wren got out the green book.",
+          "width": 1800,
+          "height": 1200,
+          "image": "art/ch5-who.webp",
+          "alt": "An open green book, with a page headed Who Did It in pencil. Pip, The stone, Drift and Tam are crossed out, and Chair leg is not. Beside the list is a small drawing of a bandaged chair leg under the word Wanted. A pencil lies on the other page, and a hen walks past the book."
+        }
+      ]
+    }
+  ]
+}
