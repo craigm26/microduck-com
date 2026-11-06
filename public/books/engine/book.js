@@ -13,6 +13,13 @@
 // flat on the room and hinges up at its foot. Lying flat, room and sheets are
 // the picture, so a turning leaf carries the flat picture and nothing jumps when
 // the sheets stand up. A screen too small for a book keeps the plain page.
+//
+// THE PAPER IS HELD BY HAND. A reader can take a page by its outer edge or a
+// corner and pull it over: nothing about the lesson changes until they let go
+// past the middle, so a page that falls back has lost no step, slider or answer.
+// Anything the reader can already use on a page keeps the pointer: words, links,
+// radios, step buttons and sliders are never a grip. The table is, and it tilts
+// the whole book a little and lets it settle.
 
 import * as K from './kit.js';
 import { CSS3DRenderer } from '../vendor/CSS3DRenderer.js';
@@ -24,6 +31,14 @@ const GUT = 8;                 // spine to page edge
 const BOARD = 6;               // cover board thickness
 const TILT = 0.032;            // pages slope down toward their outer edges
 const BLOCK = 24;              // pages in the whole book, as a thickness
+// How a hand finds the paper, in book units. The inside of the grip is the page's
+// own margin, and a word or a control under the pointer always wins over it.
+const EDGE_IN = 56, EDGE_OUT = 44, CORNER = 120;
+const FLICK = 0.8;             // a share of the sheet's whole travel a second: faster is a flick
+const SLOP = { mouse: 4, touch: 9 };   // screen pixels before a press is a drag
+const LOOK = { az: 0.34, up: 0.24, down: 0.26 };   // how far the table tilts, in radians
+const CONTROLS = 'a, button, input, select, textarea, label, summary, details, output, [contenteditable], .predict, .bk-slider';
+const WORDS = 'p, li, h1, h2, h3, h4, blockquote, pre, table, dl, span, .pb-z';
 // Where a figure stands on its page: right of the steps, above the caption.
 const STAGE = { x: 82, z: -62, w: 420, d: 470 };
 // A spread's art is 3:2 and a spread of pages 1216 by 780, so a little of the top and foot stays off the paper.
@@ -421,23 +436,43 @@ async function main() {
   const sheetBack = new THREE.Mesh(sheetGeoB, new THREE.MeshLambertMaterial({ map: printedLines(dark), side: THREE.BackSide }));
   sheetFront.frustumCulled = sheetBack.frustumCulled = !paged;
   for (const m of [sheetFront, sheetBack]) { m.castShadow = true; m.visible = false; bookGroup.add(m); }
-  // theta 0: lying on the right page; PI: lying on the left
-  function shapeSheet(theta, baseY) {
-    const W = PW + GUT, curl = 0.95 * Math.sin(theta);
-    let x = 0, y = 0;
-    for (let i = 0; i <= SEG; i++) {
-      const s = i / SEG;
-      if (i > 0) {
-        const a = theta + curl * Math.pow(s, 1.6);
-        x += Math.cos(a) * (W / SEG); y += Math.sin(a) * (W / SEG);
+  // theta 0: lying on the right page; PI: lying on the left. A sheet held by its
+  // edge bends toward the hand, so lead is the way it is being pulled, and a sheet
+  // held by a corner twists, the near and far edges at different angles.
+  function shapeSheet(theta, baseY, lead = 1, twist = 0) {
+    const W = PW + GUT;
+    const row = (th, z, o0) => {
+      const curl = 0.95 * Math.sin(th) * lead;
+      let x = 0, y = 0;
+      for (let i = 0; i <= SEG; i++) {
+        if (i > 0) {
+          const a = th + curl * Math.pow(i / SEG, 1.6);
+          x += Math.cos(a) * (W / SEG); y += Math.sin(a) * (W / SEG);
+        }
+        const o = i * 6 + o0;
+        sheetPos[o] = x; sheetPos[o + 1] = baseY + y; sheetPos[o + 2] = z;
       }
-      const o = i * 6;
-      sheetPos[o] = x; sheetPos[o + 1] = baseY + y; sheetPos[o + 2] = -PH / 2;
-      sheetPos[o + 3] = x; sheetPos[o + 4] = baseY + y; sheetPos[o + 5] = PH / 2;
-    }
+    };
+    row(theta - twist, -PH / 2, 0);
+    row(theta + twist, PH / 2, 3);
     sheetGeo.attributes.position.needsUpdate = true;
     sheetGeo.computeVertexNormals();
     sheetGeo.computeBoundingSphere();
+  }
+  // Where a sheet's free edge is at each angle, as a share of the way from its own
+  // side (0) to the far side (1), so a hand can hold the edge and not the angle.
+  const reach = [];
+  for (let k = 0; k <= 64; k++) {
+    const th = (k / 64) * Math.PI, curl = 0.95 * Math.sin(th);
+    let x = 0;
+    for (let i = 1; i <= SEG; i++) x += Math.cos(th + curl * Math.pow(i / SEG, 1.6)) / SEG;
+    reach.push(Math.max((1 - x) / 2, k ? reach[k - 1] : 0));
+  }
+  function angleAt(p) {
+    let k = 0;
+    while (k < 63 && reach[k + 1] < p) k++;
+    const span = reach[k + 1] - reach[k];
+    return ((k + (span > 0 ? K.clamp((p - reach[k]) / span) : 0)) / 64) * Math.PI;
   }
 
   // ---------------------------------------------------------- the paper's DOM
@@ -532,7 +567,9 @@ async function main() {
   bNotes.hidden = paged;
   const bSound = btn('bk-b-sound', '');
   const bView = btn('bk-b-view', '');
-  bar.append(bContents, bPrev, where, bNext, bNotes, bSound, bView);
+  const bReset = btn('bk-b-reset', '↺', 'Reset the view');
+  bReset.title = 'Reset the view';
+  bar.append(bContents, bPrev, where, bNext, bNotes, bSound, bView, bReset);
 
   const menu = el('div', 'bk-menu');
   menu.hidden = true;
@@ -548,7 +585,8 @@ async function main() {
   const menuFoot = el('div', 'bk-menu-foot');
   const mSound = btn('bk-m-sound', '');
   const mView = btn('bk-m-view', '');
-  menuFoot.append(mSound, mView);
+  const mReset = btn('bk-m-reset', 'Reset the view');
+  menuFoot.append(mSound, mView, mReset);
   menu.append(menuList, menuFoot);
 
   const notes = el('aside', 'bk-notes');
@@ -563,7 +601,8 @@ async function main() {
 
   const stageHint = el('p', 'bk-hint');
   stageHint.id = 'bk-hint';
-  stageHint.textContent = paged ? 'Use ← and → or Space to turn pages.' : 'Use ← and → to turn pages, and Space for the next step.';
+  stageHint.textContent = (paged ? 'Use ← and → or Space to turn pages' : 'Use ← and → to turn pages, and Space for the next step')
+    + ', or drag a page by its outer edge. Drag the table to tilt the book.';
   menu.insertBefore(stageHint, menuFoot);
   stage.setAttribute('aria-describedby', 'bk-hint');
   // where the book ends: the next book, in the menu and after the last lesson's answer
@@ -572,7 +611,11 @@ async function main() {
 
   const barWrap = el('div', 'bk-barwrap');
   barWrap.append(menu, bar);
-  stage.append(renderer.domElement, css.domElement, barWrap, notes);
+  // said once, the first time a reader opens any of the books; the menu keeps it
+  const tip = el('p', 'bk-tip', `Drag a page by its edge to turn it, or ${matchMedia('(pointer: coarse)').matches ? 'tap' : 'click'} the edge. Drag the table to tilt the book.`);
+  tip.setAttribute('aria-hidden', 'true');
+  tip.hidden = true;
+  stage.append(renderer.domElement, css.domElement, tip, barWrap, notes);
   main.prepend(stage);
   document.body.append(live);
 
@@ -969,7 +1012,7 @@ async function main() {
 
   // ---------------------------------------------------------- turning
 
-  let turn = null;   // { dir, t, dur, to }
+  let turn = null;   // { dir, t, dur, to }, or with held set, a sheet in the reader's hand
   let focusAfter = false;
   function focusNext() {
     if (!fig) return;
@@ -997,15 +1040,24 @@ async function main() {
       return;
     }
     turn = { dir: to > from ? 1 : -1, t: 0, dur: 1.15, from, to, swapped: false, mounted: false };
-    if (paged) {
-      const f = artTex(lessons[turn.dir > 0 ? from : to].art), b = artTex(lessons[turn.dir > 0 ? to : from].art);
-      artTex(lessons[from].art); artTex(lessons[to].room);
-      const leaf = (mesh, e) => { const put = () => { mesh.material.map = e.tex; mesh.material.needsUpdate = true; }; if (e.ready) put(); else e.waiters.push(put); };
-      leaf(sheetFront, f); leaf(sheetBack, b);
-    }
+    dressLeaf();
     popTo(0, 0.22);
     rightEl.classList.add('is-fading');
     sound.play('turn');
+  }
+  function dressLeaf() {
+    if (!paged) return;
+    const { dir, from, to } = turn;
+    const f = artTex(lessons[dir > 0 ? from : to].art), b = artTex(lessons[dir > 0 ? to : from].art);
+    artTex(lessons[from].art); artTex(lessons[to].room);
+    const leaf = (mesh, e) => { const put = () => { mesh.material.map = e.tex; mesh.material.needsUpdate = true; }; if (e.ready) put(); else e.waiters.push(put); };
+    leaf(sheetFront, f); leaf(sheetBack, b);
+  }
+  // the flat pictures take over: the side the leaf leaves shows the new spread at
+  // once, and the side it lands on keeps the old one
+  function flatArt(T) {
+    setArt(artL, lessons[T.dir > 0 ? T.from : T.to].art);
+    setArt(artR, lessons[T.dir > 0 ? T.to : T.from].art);
   }
   function afterGo() {
     const h = index ? '#lesson-' + index : location.pathname + location.search;
@@ -1015,9 +1067,12 @@ async function main() {
       : `${unit} ${index}: ${lessons[index].title}`;
     document.documentElement.classList.toggle('bk-at-end', index === total);
     if (focusAfter) { focusAfter = false; focusNext(); }
+    // a hand can lift the next leaf at any moment, so its pictures wait close by
+    if (paged) for (const i of [index - 1, index + 1]) if (lessons[i]) { artTex(lessons[i].art); artTex(lessons[i].room); }
   }
 
   function stepTurn(dt) {
+    if (turn.held) { stepHeld(dt); return; }
     turn.t += dt / turn.dur;
     const t = Math.min(1, turn.t);
     const tb = thick(turn.from), ta = thick(turn.to);
@@ -1028,10 +1083,7 @@ async function main() {
       index = turn.to;
       mountFigure(index);
       if (paged) {
-        // the old sheets are down, so the flat pictures take over: the side the leaf leaves
-        // shows the new spread at once, and the side it lands on keeps the old one
-        setArt(artL, lessons[turn.dir > 0 ? turn.from : turn.to].art);
-        setArt(artR, lessons[turn.dir > 0 ? turn.to : turn.from].art);
+        flatArt(turn);   // the old sheets are down
       }
       fig.pop = 0;
       applyPop();
@@ -1065,6 +1117,97 @@ async function main() {
     }
   }
 
+  // A sheet in the hand. turn.p is how far its free edge has come, 0 at home and 1
+  // landed, and everything on the book follows from that one number, so the sheet
+  // can go either way. Nothing is mounted or moved until the reader lets go past the
+  // middle: until then this is the same lesson with a page lifted off it.
+  function holdSheet(dir) {
+    turn = { held: true, dir, from: index, to: index + dir, p: 0, twist: 0, settle: null, committed: false, swapped: false, under: false };
+    dressLeaf();
+    popTo(0, 0.16);
+    rightEl.classList.add('is-fading');
+    sound.play('turn');
+    dropTip();
+  }
+  function poseHeld() {
+    const T = turn, W = PW + GUT;
+    const away = angleAt(T.p), theta = T.dir > 0 ? away : Math.PI - away;
+    const tb = thick(T.from), ta = thick(T.to), u = away / Math.PI;
+    const base = BOARD + K.lerp(T.dir > 0 ? tb.r : tb.l, T.dir > 0 ? ta.l : ta.r, u) + 0.6;
+    // the pages slope away from the spine, so a sheet at rest lies at that slope
+    shapeSheet(theta - TILT * Math.cos(theta), base, T.dir, T.dir * T.twist * Math.sin(theta));
+    sheetFront.visible = sheetBack.visible = T.p > 0.001 && T.p < 0.999;
+    setBlocks({ l: K.lerp(tb.l, ta.l, u), r: K.lerp(tb.r, ta.r, u) });
+    if (paged) {
+      spreadEl.style.opacity = String(T.swapped ? K.seg(T.p, 0.93, 1) : 1 - K.seg(T.p, 0, 0.06));
+    } else if (T.swapped) {
+      leftEl.style.clipPath = '';
+      leftEl.style.opacity = String(T.dir > 0 ? K.seg(T.p, 0.96, 1) : K.seg(T.p, 0.5, 0.75));
+    } else {
+      // The page's words are on the paper, so they stop where the sheet's edge is:
+      // going forward it covers them, and going back it carries them away.
+      const x = K.clamp(T.dir * (1 - 2 * T.p) * W + W, 0, PW);
+      leftEl.style.clipPath = T.dir > 0 ? `inset(0 ${PW - x}px 0 0)` : `inset(0 0 0 ${x}px)`;
+    }
+  }
+  // the words swap once the old ones are out of sight
+  const swapDue = (T) => T.committed && !T.swapped && T.p >= (T.dir < 0 || paged ? 0.5 : 0.96);
+  function stepHeld(dt) {
+    const T = turn;
+    // the cut sheets are down and the flat pictures are there to replace them
+    if (paged && !T.under && !fig.popping && artTex(lessons[T.from].art).ready && artTex(lessons[T.to].art).ready) {
+      T.under = true;
+      fig.obj.show?.(false);
+      flatArt(T);
+    }
+    const S = T.settle;
+    if (!S) return;
+    S.t = Math.min(1, S.t + dt / S.dur);
+    T.p = K.lerp(S.from, S.to, K.ease.land(S.t));
+    if (swapDue(T)) { T.swapped = true; placeDOM(); }
+    poseHeld();
+    if (S.t >= 1) landHeld();
+  }
+  function letGo(commit) {
+    const T = turn;
+    if (reduced) {
+      T.p = 0;
+      landHeld();
+      if (commit) go(T.to, { focus: true });
+      return;
+    }
+    if (commit) {
+      T.committed = true;
+      focusAfter = true;
+      unmountFigure();
+      index = T.to;
+      mountFigure(index);
+      if (paged) flatArt(T);
+      fig.pop = 0;
+      applyPop();
+      if (mode === '3d') rightEl.append(fig.ui.root);
+      updateBar();
+    }
+    const to = commit ? 1 : 0;
+    T.settle = { from: T.p, to, t: 0, dur: Math.max(0.12, 0.55 * Math.abs(to - T.p)) };
+  }
+  function landHeld() {
+    const T = turn;
+    sheetFront.visible = sheetBack.visible = false;
+    leftEl.style.clipPath = '';
+    leftEl.style.opacity = '1';
+    spreadEl.style.opacity = '1';
+    rightEl.classList.remove('is-fading');
+    if (T.committed && !T.swapped) placeDOM();
+    setBlocks(thick(index));
+    turn = null;
+    if (T.committed || T.under) {
+      if (paged) { setArt(artL, lessons[index].room); setArt(artR, lessons[index].room); fig.obj.show?.(true); }
+    }
+    popTo(1, T.committed ? 0.6 : 0.35);
+    if (T.committed) afterGo();
+  }
+
   // the cover opens once, on a first visit to the title page
   let opening = null;
   function openCover() {
@@ -1091,7 +1234,7 @@ async function main() {
 
   // ---------------------------------------------------------- camera
 
-  const camState = { intro: 0, px: 0, py: 0, tx: 0, ty: 0, view: 'spread' };
+  const camState = { intro: 0, px: 0, py: 0, tx: 0, ty: 0, view: 'spread', az: 0, el: 0, held: false };
   let W = 1, H = 1, barH = 64;
 
   const boxes = {
@@ -1170,22 +1313,167 @@ async function main() {
     const { center, d, elev } = camBase;
     camState.px += (camState.tx - camState.px) * 0.06;
     camState.py += (camState.ty - camState.py) * 0.06;
-    const az = camState.px * 0.045;
-    const el2 = elev + camState.py * 0.03 - camState.intro * 0.18;
+    const az = camState.px * 0.045 + camState.az;
+    const el2 = elev + camState.py * 0.03 + camState.el - camState.intro * 0.18;
     const dir = new THREE.Vector3(Math.sin(az) * Math.cos(el2), Math.sin(el2), Math.cos(az) * Math.cos(el2));
     const target = center.clone();
     if (camState.intro) target.x = K.lerp(center.x, center.x + (PW + GUT) / 2, camState.intro);
-    camera.position.copy(target).addScaledVector(dir, d * (1 + camState.intro * 0.12));
+    // a little further off while tilted, so the book's corners stay in the picture
+    camera.position.copy(target).addScaledVector(dir, d * (1 + camState.intro * 0.12 + (Math.abs(camState.az) + Math.abs(camState.el)) * 0.5));
     camera.lookAt(target);
     camera.setViewOffset(W, H, camBase.offset.x, camBase.offset.y, W, H);
     camera.updateProjectionMatrix();
   }
 
   addEventListener('pointermove', (e) => {
-    if (mode !== '3d' || reduced) return;
+    if (mode !== '3d' || reduced || gesture) return;
     camState.tx = (e.clientX / innerWidth - 0.5) * 2;
     camState.ty = (e.clientY / innerHeight - 0.5) * 2;
   }, { passive: true });
+
+  // ---------------------------------------------------------- the hand
+
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const paperPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(bookGroup.position.y + BOARD + BLOCK / 2));
+  // The point on the paper's height under a pointer. The projection carries the
+  // view offset, so this holds however the book is tilted or shifted.
+  function onPaper(e) {
+    const r = stage.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, 1 - ((e.clientY - r.top) / r.height) * 2);
+    camera.updateMatrixWorld();
+    ray.setFromCamera(ndc, camera);
+    return ray.ray.intersectPlane(paperPlane, new THREE.Vector3());
+  }
+  // Which way a page would turn from here: 1 for the right page's edge, -1 for the
+  // left's, 0 if this is not a page's edge. The grip keeps a size a finger can find.
+  function edgeAt(hit, touch) {
+    const W = PW + GUT, ax = Math.abs(hit.x), az = Math.abs(hit.z);
+    const scale = pxPerUnit(V3(0, 0, 0), 'x');
+    const inside = K.clamp((touch ? 44 : 28) / scale, EDGE_IN, CORNER);
+    const out = Math.max(EDGE_OUT, 22 / scale);
+    if (ax > W + out || az > PH / 2 + out) return 0;
+    const onEdge = ax >= W - inside;
+    const onCorner = ax >= W - CORNER && az >= PH / 2 - EDGE_IN;
+    return onEdge || onCorner ? Math.sign(hit.x) : 0;
+  }
+  // What a press here would take hold of. A control or a word is never taken, and
+  // nor is the left page's own paper, where a selection or a scroll can start.
+  function gripAt(e) {
+    const t = e.target;
+    if (mode !== '3d' || opening || !t.closest || t.closest('.bk-barwrap, .bk-notes, ' + CONTROLS)) return null;
+    const words = t.closest(WORDS);
+    const hit = onPaper(e);
+    const dir = hit && !turn ? edgeAt(hit, e.pointerType === 'touch') : 0;
+    if (dir && !words && lessons[index + dir]) return { kind: 'page', dir, hit };
+    if (words || t.closest('.bk-page') || (dir && turn)) return null;
+    return { kind: 'tilt', hit };
+  }
+  let gesture = null, lastTap = null;
+  const soft = (v, up, down) => (v > 0 ? up * Math.tanh(v / up) : down * Math.tanh(v / down));
+  function resetView() {
+    camState.az = camState.el = camState.tx = camState.ty = 0;
+    if (reduced) camState.px = camState.py = 0;
+    live.textContent = 'View reset.';
+  }
+  bReset.addEventListener('click', resetView);
+  mReset.addEventListener('click', () => { closeMenu(); resetView(); });
+  // the book settles back on the book's clock, like everything else on it
+  function settleView(dt) {
+    if (camState.held || (!camState.az && !camState.el)) return;
+    const k = 1 - Math.exp(-dt * 6.5);
+    camState.az *= 1 - k; camState.el *= 1 - k;
+    if (Math.abs(camState.az) + Math.abs(camState.el) < 0.0008) camState.az = camState.el = 0;
+  }
+  function endGesture(g) {
+    gesture = null;
+    stage.classList.remove('bk-held');
+    if (g.kind === 'tilt' && g.live) {
+      camState.held = false;
+      if (reduced) camState.az = camState.el = 0;
+    }
+  }
+  function moveGesture(e, g) {
+    const dx = e.clientX - g.x0, dy = e.clientY - g.y0;
+    if (!g.live) {
+      if (Math.hypot(dx, dy) < (SLOP[e.pointerType] ?? SLOP.mouse)) return;
+      if (g.kind === 'page' && turn) { endGesture(g); return; }
+      g.live = true;
+      stage.classList.add('bk-held');
+      dropTip();
+      if (g.kind === 'page') holdSheet(g.dir); else camState.held = true;
+    }
+    if (g.kind === 'tilt') {
+      camState.az = soft(-dx * 0.0045, LOOK.az, LOOK.az);
+      camState.el = soft(dy * 0.0035, Math.min(LOOK.up, 1.38 - camBase.elev), LOOK.down);
+      return;
+    }
+    const hit = onPaper(e);
+    if (!hit) return;
+    const W = PW + GUT;
+    const edge = hit.x + g.dir * W - g.hit.x;   // the free edge, kept where the hand took it
+    turn.p = K.clamp((W - g.dir * edge) / (2 * W));
+    const a = K.clamp(hit.z / (PH / 2), -1, 1);
+    turn.twist = 0.3 * a * Math.abs(a);
+    g.track.push({ t: e.timeStamp, p: turn.p });
+    if (g.track.length > 24) g.track.shift();
+    poseHeld();
+  }
+  stage.addEventListener('pointerdown', (e) => {
+    if (gesture || !e.isPrimary || e.button !== 0 || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+    const g = gripAt(e);
+    if (!g) return;
+    e.preventDefault();    // no selection starts under a hand that has hold of the book
+    gesture = { ...g, id: e.pointerId, x0: e.clientX, y0: e.clientY, t0: e.timeStamp, live: false, track: [] };
+    stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener('pointermove', (e) => {
+    if (gesture) { if (e.pointerId === gesture.id) moveGesture(e, gesture); return; }
+    if (e.pointerType !== 'mouse') return;
+    stage.dataset.grip = gripAt(e)?.kind ?? '';
+  }, { passive: true });
+  stage.addEventListener('pointerup', (e) => {
+    const g = gesture;
+    if (!g || e.pointerId !== g.id) return;
+    endGesture(g);
+    if (!g.live) {
+      if (g.kind === 'page') { if (e.timeStamp - g.t0 < 700) go(index + g.dir, { focus: true }); return; }
+      const twice = lastTap && e.timeStamp - lastTap.t < 400 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30;
+      lastTap = twice ? null : { t: e.timeStamp, x: e.clientX, y: e.clientY };
+      if (twice) resetView();
+      return;
+    }
+    if (g.kind !== 'page') return;
+    // the speed over the last moment of the drag, so a pause before letting go is no flick
+    const end = g.track[g.track.length - 1], start = g.track.find((s) => end && end.t - s.t <= 120) ?? end;
+    const speed = end && end.t > start.t ? ((end.p - start.p) * 1000) / (end.t - start.t) : 0;
+    const fresh = end && e.timeStamp - end.t < 120;
+    const past = turn.p >= 0.5;
+    letGo(fresh && speed > FLICK ? true : fresh && speed < -FLICK ? false : past);
+  });
+  function dropHand() {
+    const g = gesture;
+    if (!g) return;
+    endGesture(g);
+    if (g.kind === 'page' && g.live && turn?.held) letGo(false);
+  }
+  stage.addEventListener('pointercancel', (e) => { if (gesture && e.pointerId === gesture.id) dropHand(); });
+  stage.addEventListener('lostpointercapture', (e) => { if (gesture && e.pointerId === gesture.id) dropHand(); });
+  stage.addEventListener('selectstart', (e) => { if (gesture) e.preventDefault(); });
+
+  let tipWait = testing || store('bk-tip') ? 0 : 0.7, tipLeft = 0;
+  function showTip() {
+    store('bk-tip', 'seen');
+    tip.hidden = false;
+    tipLeft = 8;
+  }
+  function dropTip() {
+    tipWait = tipLeft = 0;
+    tip.hidden = true;
+  }
+  function stepTip(dt) {
+    if (tipLeft > 0) { tipLeft -= dt; if (tipLeft <= 0) dropTip(); return; }
+    if (tipWait > 0 && !opening && mode === '3d') { tipWait -= dt; if (tipWait <= 0) showTip(); }
+  }
 
   // ---------------------------------------------------------- modes
 
@@ -1208,6 +1496,8 @@ async function main() {
 
   function setMode(m) {
     if (m === mode) return;
+    dropHand();
+    if (turn?.held) { turn.p = turn.committed ? 1 : 0; landHeld(); }
     closeNotes();
     closeMenu();
     mode = m;
@@ -1230,6 +1520,7 @@ async function main() {
   addEventListener('keydown', (e) => {
     const t = e.target;
     const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
+    if (e.key === 'Escape' && gesture) { dropHand(); return; }
     if (e.key === 'Escape') { if (!menu.hidden) { closeMenu(); bContents.focus(); } else if (notesFor !== null) { closeNotes(); bNotes.focus(); } return; }
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     // on a prediction, left and right still turn pages; up and down change the choice
@@ -1252,6 +1543,8 @@ async function main() {
     clock += dt;
     if (opening) stepOpen(dt);
     if (turn) stepTurn(dt);
+    settleView(dt);
+    stepTip(dt);
     if (fig) {
       if (fig.popping) {
         const p = fig.popping;
@@ -1431,6 +1724,17 @@ async function main() {
     window.__book = {
       get index() { return index; },
       get mode() { return mode; },
+      // the page's edge on screen: side 1 right, -1 left, along from -1 at the far corner to 1 at the near
+      edge(side, along = 0, inset = 20) {
+        camera.updateMatrixWorld();
+        const p = V3(side * (PW + GUT - inset), bookGroup.position.y + BOARD + BLOCK / 2, along * PH / 2).project(camera);
+        const r = stage.getBoundingClientRect();
+        return { x: r.left + (p.x + 1) / 2 * r.width, y: r.top + (1 - p.y) / 2 * r.height };
+      },
+      hand() {
+        return { held: !!turn?.held, p: turn?.p ?? null, committed: !!turn?.committed, az: camState.az, el: camState.el, gesture: gesture?.kind ?? null, live: !!gesture?.live, grip: stage.dataset.grip ?? '', sheet: sheetFront.visible };
+      },
+      tip() { showTip(); return tip.textContent; },
       lessons: lessons.map((l) => ({ figure: l.figureName, steps: l.steps.length, title: l.title })),
       manual(on = true) { manual = on; last = performance.now(); },
       advance(ms, step = 1000 / 60, draw = true) {

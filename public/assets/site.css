@@ -716,6 +716,14 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 .bk-stage { position: relative; height: calc(100svh - 83px); min-height: 560px; overflow: hidden; background: #e4d5bb; }
 .bk-stage[hidden] { display: none; }
 .bk-gl, .bk-css3d { position: absolute; inset: 0; }
+/* A vertical swipe still scrolls the page; a sideways one reaches the book. */
+html.bk-3d .bk-stage { touch-action: pan-y pinch-zoom; }
+.bk-stage[data-grip="page"] { cursor: grab; }
+.bk-stage[data-grip="tilt"] { cursor: move; }
+.bk-stage.bk-held, .bk-stage.bk-held * { cursor: grabbing !important; -webkit-user-select: none !important; user-select: none !important; }
+.bk-tip { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 4; width: max-content; max-width: calc(100% - 32px); margin: 0; padding: 8px 14px; border-radius: 999px; background: var(--header); border: 1px solid var(--soft-line); box-shadow: 0 8px 24px rgba(0,0,0,.14); font-size: 14px; font-weight: 600; text-align: center; pointer-events: none; animation: bk-tip-in .3s ease both; }
+.bk-tip[hidden] { display: none; }
+@keyframes bk-tip-in { from { opacity: 0; } to { opacity: 1; } }
 .bk-gl { display: block; }
 
 .bk-page, .bk-rpage { width: 600px; height: 780px; color: var(--ink); }
@@ -794,6 +802,8 @@ html.bk-3d .book-page main { padding-bottom: 0; }
 .bk-barwrap { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 5; max-width: calc(100% - 24px); }
 .bk-bar { display: flex; align-items: center; gap: 6px; padding: 6px; background: var(--header); border: 1px solid var(--soft-line); border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.14); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .bk-b-prev, .bk-b-next { width: 40px; padding: 0; font-size: 24px; line-height: 1; }
+.bk-b-reset { width: 40px; padding: 0; font-size: 19px; line-height: 1; }
+@media (max-width: 720px) { .bk-b-reset { display: none; } }
 .bk-where { display: grid; text-align: center; min-width: 200px; max-width: 300px; padding: 0 6px; line-height: 1.2; }
 .bk-where-num { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--dim); }
 .bk-where-title { font-size: 14px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -822,7 +832,7 @@ html.bk-flat .lesson { border-top: 0; padding-top: 28px; }
 html.bk-flat .bk-barwrap { position: fixed; bottom: max(10px, env(safe-area-inset-bottom)); width: min(560px, calc(100% - 16px)); max-width: none; }
 html.bk-flat .bk-bar { width: 100%; }
 html.bk-flat .bk-where { flex: 1; min-width: 0; max-width: none; }
-html.bk-flat .bk-b-notes, html.bk-flat .bk-b-sound, html.bk-flat .bk-b-view { display: none; }
+html.bk-flat .bk-b-notes, html.bk-flat .bk-b-sound, html.bk-flat .bk-b-view, html.bk-flat .bk-b-reset, html.bk-flat .bk-m-reset { display: none; }
 html.bk-flat .bk-where-num { white-space: nowrap; }
 .bk-menu-foot { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 4px 2px; padding-top: 8px; border-top: 1px solid var(--soft-line); }
 .bk-flatcard { margin: 0 0 1rem; }
@@ -839,6 +849,7 @@ html.bk-flat .bk-where-num { white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bk-rpage { transition: none; }
+  .bk-tip { animation: none; }
   .shelf-cover { transition: none; }
 }
 @media print {
