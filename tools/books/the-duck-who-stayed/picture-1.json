@@ -20,7 +20,7 @@
   {
    "title": "The box",
    "art": "art/spreads/s01",
-   "alt": "A farmhouse kitchen. Aunt Mo walks in at the back door, carrying a cardboard box with a large red arrow on it pointing at the floor. Wren in her straw hat trots alongside with her nose level with the label. On the table at the left, beside a bowl of apples, sits Nod, a pale robot with one head, two thin antennas, no hands and no wheels, its head tipped toward the box.",
+   "alt": "A farmhouse kitchen. Aunt Mo walks in at the back door, carrying a cardboard box with a large red arrow on it pointing at the floor. Wren in her straw hat trots alongside with her nose level with the label, and her friend Tam, in a plum shirt, walks a step behind her. On the table at the left, beside a bowl of apples, sits Nod, a pale robot with one head, two thin antennas, no hands and no wheels, its head tipped toward the box.",
    "sheets": [
     {
      "name": "table",
@@ -46,6 +46,14 @@
      "tight": true
     },
     {
+     "x": 52,
+     "y": 6,
+     "w": 15,
+     "p": [
+      "Tam from the next farm came too. Tam counted things."
+     ]
+    },
+    {
      "x": 4,
      "y": 32,
      "w": 24,
@@ -54,8 +62,8 @@
      ]
     },
     {
-     "x": 38.5,
-     "y": 31,
+     "x": 36.5,
+     "y": 27,
      "w": 10.5,
      "p": [
       "“That box,” said Nod, “is a ham.”"
@@ -380,7 +388,7 @@
   {
    "title": "CLONK",
    "art": "art/spreads/s06",
-   "alt": "Close and enormous. The word CLONK is cut from red paper letters, the biggest thing in the book, filling the left page. A chair leg stands in the middle of the right page and Pip lies at its foot, legs in the air, with bits of paper flying up. Wren's hands are at her mouth at the left edge, and Aunt Mo's raised finger comes in from the top. Nod's two antennas show over the table's edge at the top left.",
+   "alt": "Close and enormous. The word CLONK is cut from red paper letters, the biggest thing in the book, filling the left page. A chair leg stands in the middle of the right page and Pip lies at its foot, legs in the air, with bits of paper flying up. Wren's hands are at her mouth at the left edge, Tam watches from the right edge with her hands together, and Aunt Mo's raised finger comes in from the top. Nod's two antennas show over the table's edge at the top left.",
    "sheets": [
     {
      "name": "table",
@@ -422,7 +430,7 @@
      "y": 17,
      "w": 20,
      "p": [
-      "“That’s one.”"
+      "“That’s one,” said Tam."
      ],
      "kind": "chant"
     },
@@ -646,7 +654,7 @@
   {
    "title": "We can know that",
    "art": "art/spreads/s08",
-   "alt": "Wren and Aunt Mo face each other. Pip is tucked under Aunt Mo's arm with its legs out, and she holds the manual open with a thumb. Wren points toward the chair, which stands alone on the right, in nobody's way. Nod on the table between them has its chin down. Wheeeeak! climbs in a curve from the floor up to Pip.",
+   "alt": "Wren and Aunt Mo face each other. Tam stands just behind Wren at the left edge, her mouth open, half hidden. Pip is tucked under Aunt Mo's arm with its legs out, and she holds the manual open with a thumb. Wren points toward the chair, which stands alone on the right, in nobody's way. Nod on the table between them has its chin down. Wheeeeak! climbs in a curve from the floor up to Pip.",
    "sheets": [
     {
      "name": "table",
@@ -726,10 +734,18 @@
     },
     {
      "x": 70.5,
-     "y": 42,
+     "y": 37.5,
      "w": 20,
      "p": [
       "“Three,” said Nod."
+     ]
+    },
+    {
+     "x": 70.5,
+     "y": 42.5,
+     "w": 12.5,
+     "p": [
+      "Tam had said it first."
      ]
     }
    ]
@@ -827,6 +843,7 @@
       "Look: Pip walked into the chair leg. Two times.",
       "Tried: Moved the chair. Pip walked into another leg. One time.",
       "Heard: ACK! ACK! ACK! before every CLONK.",
+      "Told: Tam said three. Two and one is three.",
       "Nod says that means all is well. I did not write that down.",
       "Chair leg: fine. I checked.",
       "Tomorrow: hens. They have not been told.",
