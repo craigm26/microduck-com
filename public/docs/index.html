@@ -96,19 +96,24 @@
       free TestFlight app and then
       <a href="https://testflight.apple.com/join/S36AnsKr" rel="noopener">join the Microduck Studio beta</a>
       on your iPhone, iPad or Mac.</li>
-      <li><strong>Drive it.</strong> The app opens on <strong>Play</strong>, where the left stick
-      walks the duck, the right one turns it, and the buttons between them play moves Pollen
-      trained, like the roulade. It all runs in physics on your phone. The app has five tabs:
-      <strong>Play</strong>, <strong>Learn</strong>, <strong>Behaviours</strong>,
-      <strong>Studio</strong> and <strong>My Microduck</strong>.</li>
-      <li><strong>Follow Learn.</strong> The <strong>Learn</strong> tab is nine short
-      lessons, from driving to how Microduck is trained to tuning a network. Each one has
-      a button that opens the real screen, and the last one turns on every tool.</li>
-      <li><strong>Explore a policy.</strong> Open <strong>Behaviours</strong> and
+      <li><strong>Drive it.</strong> The app opens on <strong>Play</strong>, which has three
+      modes: <strong>Drive</strong>, <strong>Tell</strong> and <strong>Auto</strong>. In Drive
+      the sticks walk and turn the duck, and the buttons play moves Pollen trained, like the
+      roulade. Tell runs a move you ask for, and Auto lets the duck pick a few steps itself
+      and shows them before it starts. <strong>Stop</strong> is always on screen. It all runs
+      in physics on your phone. The app has three tabs: <strong>Play</strong>,
+      <strong>Moves</strong> and <strong>Studio</strong>.</li>
+      <li><strong>Find your moves.</strong> <strong>Moves</strong> holds the duck's moves,
+      your sequences, plans, cards and packs, the games and the goals.</li>
+      <li><strong>Follow Learn.</strong> In <strong>Studio → Learn</strong>, ten short
+      lessons go from driving to how Microduck is trained to tuning a network. Each one has
+      a button that opens the real screen, and the last one, <strong>Show every
+      tool</strong>, turns on every tool.</li>
+      <li><strong>Explore a policy.</strong> Open <strong>Studio → Behaviours</strong> and
       choose a policy from <strong>Released by Pollen Robotics</strong>.
       With every tool on, its detail shows the network's structure, and
       <strong>Probe this network</strong> shows how its inputs affect its actions.</li>
-      <li><strong>Play or make a motion.</strong> Open <strong>Studio</strong> to
+      <li><strong>Play or make a motion.</strong> Open <strong>Studio → Make</strong> to
       find motions and scenes, then play a recorded motion or create a draft and edit
       its keyframes. The preview shows the poses you asked for, not what a robot would
       do with them.</li>
@@ -118,12 +123,14 @@
       of RLHF: your picks are the labels. Once you have enough of them, Train from your
       picks learns your taste on the phone and uses it to re-weight Pollen's reward for a
       training run on Hugging Face, and Settings decides whether picks may be shared.</li>
-      <li><strong>Train a duck to shoot.</strong> In <strong>Studio → Play</strong>, build the
+      <li><strong>Train a duck to shoot.</strong> With every tool on, open <strong>Studio →
+      Train a duck to shoot</strong> and build the
       controller that walks the duck to a ball, lines up, dribbles and switches to
       Pollen's kick, then train its numbers against goals scored in physics on your
       phone. It is a search over the controller, not reinforcement learning:
       Pollen's networks never change.</li>
-      <li><strong>Play Duck Soccer.</strong> It has a proper pitch, smarter teams that pass,
+      <li><strong>Play Duck Soccer.</strong> It is in <strong>Moves → Games</strong>, on the
+      practice duck. It has a proper pitch, smarter teams that pass,
       press and make runs, and a camera that keeps your duck and the ball in view. Put your
       own motions, sequences or trained shooter on Shoot, Pass, Special and Celebrate.
       Practice mode has five skill challenges with stars, and the water polo finale floods
@@ -154,13 +161,14 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
       To have it start on its own, <code>castor up --archetype microduck</code> installs it as
       a service. The bridge prints a token and also saves it in
       <code>~/.microduck-bridge-token</code>.</li>
-      <li><strong>Connect.</strong> In the app, open <strong>My Microduck → Connect to your duck's
-      computer</strong>, type the computer's address (for example <code>duck.local</code>) and
+      <li><strong>Connect.</strong> In the app, tap the duck pill at the top left of
+      <strong>Play</strong> to open <strong>Your duck</strong>, choose <strong>Connect by
+      address</strong>, type the computer's address (for example <code>duck.local</code>) and
       the token, and tap <strong>Connect</strong>. The sticks on <strong>Play</strong> now
       drive the real duck. Switch its Bluetooth pad off first: the robot obeys whichever
       sends last, and an idle pad keeps sending zeros
       (<a href="https://github.com/pollen-robotics/microduck/blob/5def2f3e66501f0f365d4fb1183020b8ee875443/docs/design/robotd-design.md" rel="noopener">Pollen's robotd design</a>).</li>
-      <li><strong>Show the camera.</strong> On the camera card, type the duck's camera
+      <li><strong>Show the camera.</strong> In <strong>Your duck</strong>, on the camera card, type the duck's camera
       address (for example <code>duck.local:8080</code>) and tap <strong>Show the
       camera</strong>. Turn on <strong>Read Duck Cards</strong> and the app reads a row of
       <a href="/cards/">printed cards</a> it can see, ready to open in the plan editor or in
@@ -247,7 +255,7 @@ castor duck --bridge      # the bridge the app connects to, port 7788</code></pr
     <a href="/privacy/">privacy policy</a> says where each of them goes.</p>
 
     <h2 id="policies">Inspect a policy</h2>
-    <p>Start in <strong>Behaviours</strong>, which groups policies by where they came
+    <p>Start in <strong>Studio → Behaviours</strong>, which groups policies by where they came
     from: <strong>Released by Pollen Robotics</strong> and <strong>From elsewhere</strong>.
     The app checks the network's fingerprint, so renaming a file does not make it an
     official release.</p>
