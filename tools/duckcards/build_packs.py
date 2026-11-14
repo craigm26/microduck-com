@@ -454,10 +454,18 @@ def unit(pack: dict) -> str:
     return "steps" if pack["score"] == "steps" else "cards"
 
 
-def most_laid(pack: dict, deck: dict) -> tuple[int, str, str]:
-    """The most of one card any of the pack's own rows lays: (count, card name, challenge)."""
-    names = {c["code"]: c["name"] for c in deck["cards"]}
-    best = (0, "", "")
+def lent_name(code: str, pack: dict, deck: dict) -> str:
+    """A card's name in this pack: a Your card the pack lends goes by the name the pack gives
+    it, with its number so it can be found on the cut sheet; any other card by the deck's."""
+    card = bc.by_code(deck)[code]
+    yours = yours_of(pack).get(code)
+    return f'{yours["name"]} (Your card {card["tag"]})' if yours else card["name"]
+
+
+def multiples(pack: dict, deck: dict) -> list[tuple[int, str]]:
+    """Every card some one of the pack's own rows lays more than once, in deck order, with the
+    most any one row lays: [(count, lent name)]. A group needs that many of each."""
+    most: dict[str, int] = {}
     for ch in pack["challenges"]:
         for row in (ch["solution"], ch.get("buggy") or []):
             laid: dict[str, int] = {}
@@ -465,9 +473,13 @@ def most_laid(pack: dict, deck: dict) -> tuple[int, str, str]:
                 for code in [entry["card"], *entry.get("under", [])]:
                     laid[code] = laid.get(code, 0) + 1
             for code, n in laid.items():
-                if n > best[0]:
-                    best = (n, names[code], ch["name"])
-    return best
+                most[code] = max(most.get(code, 0), n)
+    return [(most[c["code"]], lent_name(c["code"], pack, deck))
+            for c in deck["cards"] if most.get(c["code"], 0) > 1]
+
+
+def and_list(items: list[str]) -> str:
+    return items[0] if len(items) == 1 else f'{", ".join(items[:-1])} and {items[-1]}'
 
 
 def in_play(pack: dict, deck: dict) -> list[dict]:
@@ -484,14 +496,14 @@ def board_line(pack: dict) -> str:
 
 
 def copies_html(pack: dict, deck: dict) -> str:
-    most, card, where = most_laid(pack, deck)
+    many = multiples(pack, deck)
     sheet = f'<a href="/cards/packs/{pack["id"]}/print/">this pack\'s cut sheet</a>'
-    if most > 1:
-        stop = "" if where[-1:] in "?!." else "."
-        return (f"Only these. The pack's own rows lay up to {word(most)} of one card: "
-                f"{word(most)} {esc(card)} cards in {esc(where)}{stop} Print {sheet} once for "
-                f"each group, then untick every card but {esc(card)} and print it again until "
-                f"each group has {word(most)}.")
+    if many:
+        need = and_list([f"{word(n)} {esc(name)}" for n, name in many])
+        those = "that card" if len(many) == 1 else "those"
+        return (f"Only these. A row in this pack can lay the same card more than once, so each "
+                f"group needs {need}. Print {sheet} once for each group, then untick every card "
+                f"but {those} and print it again until each group has enough.")
     return (f"Only these. The pack's own rows never lay the same card twice, so one copy of "
             f"{sheet} for each group covers them.")
 
@@ -681,7 +693,6 @@ def pack_page(pack: dict, packs: list[dict], deck: dict, kit: dict, tags: dict, 
     pid, name = pack["id"], pack["name"]
     n = len(pack["challenges"])
     playing = in_play(pack, deck)
-    most, most_card, most_where = most_laid(pack, deck)
     challenges = "".join(activity_card(pack, ch, i, deck)
                          for i, ch in enumerate(pack["challenges"], start=1))
     description = (f"{name}, a Duck Cards pack for grades {pack['grades']}: {word(n)} challenges "
