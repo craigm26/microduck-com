@@ -381,7 +381,100 @@ def pages_for(slug: str) -> dict[pathlib.Path, str]:
     return out
 
 
+KITH_SLUG = "the-duck-who-stayed"
+KITH_INTRO = ("The Duck Who Stayed is the first act of Kith: the farm while it still grows, "
+              "and the duck who keeps it. The game is what comes after.")
+KITH_OPERATOR = ("Kith and this book are made by Craig Merry. Neither is made by, endorsed by, "
+                 "or affiliated with Pollen Robotics, which makes the Microduck robot.")
+
+
+def kith_css() -> str:
+    """The site's stylesheet, for the story rules, with its fonts pointed at Kith's own copies
+    and the one font Kith does not carry left out. Same-origin only: Kith's /book CSP allows nothing else."""
+    css = (PUBLIC / "assets/site.css").read_text(encoding="utf-8")
+    css, n = re.subn(r'@font-face\s*\{[^}]*fredoka[^}]*\}\s*', "", css)
+    if n != 1:
+        raise SystemExit("build_story: the Kith edition expected one Fredoka @font-face in site.css")
+    css = css.replace('url("/assets/fonts/', 'url("/fonts/')
+    for name in re.findall(r'url\("/fonts/([^"]+)"\)', css):
+        if name not in ("IMFellEnglish-Regular.woff2", "IMFellEnglish-Italic.woff2", "AlegreyaSans-500.woff2"):
+            raise SystemExit(f"build_story: the Kith edition has no copy of font {name}")
+    if "url(" in re.sub(r'url\("/fonts/[^"]+"\)', "", css):
+        raise SystemExit("build_story: site.css names a file the Kith edition does not carry")
+    return css
+
+
+def kith_page(book: dict, source: dict) -> str:
+    """Chapter 1 as a flat picture book at kithgame.com/book/. Its one way out is the kids' valley."""
+    body = picture_body(book, source, engine=False).replace(f'src="/stories/{book["slug"]}/art/', 'src="/book/art/')
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(book["title"])}, Act 1 of Kith</title>
+<meta name="description" content="{attr(KITH_INTRO)}">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://kithgame.com/book/">
+<meta name="theme-color" content="#f5eddd">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/book/book.css">
+<script type="module" src="/book/picture.js"></script>
+</head>
+<body class="story-page pb-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="story-bar">
+  <span>{esc(book["title"])} · Act 1 of Kith</span>
+  <a class="pb-switch" href="/kids">Play in the kids' valley</a>
+</header>
+
+<main id="main" tabindex="-1" class="pb-main">
+{body}
+</main>
+
+<footer class="story-foot">
+  <p>{esc(KITH_INTRO)}</p>
+  <p>{esc(book["licence"])}</p>
+  <p>{esc(KITH_OPERATOR)}</p>
+</footer>
+</body>
+</html>
+"""
+
+
+def kith_edition(out: pathlib.Path) -> int:
+    """Write the Kith showcase into out (Kith's public/book/): the page, its stylesheet, the page-turning
+    script and the flat spreads. Nothing else, and no link anywhere but /kids."""
+    import shutil
+    book, _ = load(KITH_SLUG)
+    source = picture_source(KITH_SLUG, book)
+    page_html = kith_page(book, source)
+    links = set(re.findall(r'href="([^"]+)"', page_html)) - {"/book/book.css", "/favicon.svg", "https://kithgame.com/book/", "#main"}
+    if links != {"/kids"}:
+        raise SystemExit(f"build_story: the Kith edition may link only to /kids, not {sorted(links - {'/kids'})}")
+    if re.search(r'\b(?:src|href)="(?:https?:)?//', page_html.replace('href="https://kithgame.com/book/"', "")):
+        raise SystemExit("build_story: the Kith edition loads something from another site")
+    art = PUBLIC / "stories" / KITH_SLUG / "art/spreads"
+    names = [f'{s["art"].split("/")[-1]}.webp' for s in [source["title_page"], *source["spreads"]]]
+    if out.exists():
+        shutil.rmtree(out)
+    (out / "art/spreads").mkdir(parents=True)
+    for name in names:
+        shutil.copyfile(art / name, out / "art/spreads" / name)
+    shutil.copyfile(PUBLIC / "books/engine/picture.js", out / "picture.js")
+    (out / "book.css").write_text(kith_css(), encoding="utf-8")
+    (out / "index.html").write_text(page_html, encoding="utf-8")
+    print(f"build_story: Kith edition written to {out} ({len(names)} spreads)")
+    return 0
+
+
 def main() -> int:
+    if "--edition" in sys.argv[1:]:
+        args = sys.argv[1:]
+        at = args.index("--edition")
+        if args[at + 1:at + 2] != ["kith"] or len(args) < at + 3:
+            raise SystemExit("usage: build_story.py --edition kith <Kith's public/book directory>")
+        return kith_edition(pathlib.Path(args[at + 2]).expanduser().resolve())
     check = "--check" in sys.argv[1:]
     stale = []
     for slug in BOOKS:
