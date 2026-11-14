@@ -268,7 +268,7 @@
       "rows": 19
     }
   },
-  "duck_studio_commit": "4bb1ee9a4dfae4eb47cf0a94bff644ee8128eaa5",
+  "duck_studio_commit": "698695f629edf156da03c20222116fab2df48d6b",
   "eval_keys_missing": [],
   "formats": {
     "intent": "duck-intent/2",
@@ -307,7 +307,11 @@
       "design-a-level": "b2be9f9a79319095ca6fd85412b82b844245f75faac99bfc5a44f2666ea27c0a",
       "duck-maze": "b22cd2e709dc931316aba4de999bd94732efba03fff35e516e509fb804f38f95",
       "get-to-the-pond": "5a84c5c790b5f764af5845116e24db2df127a79f898d1a8fc123d49c90239005",
-      "loop-the-course": "66c58f64dd3d84e9cbe0390223818aed620ceeb9c0fcc0d68f21439855b37a94"
+      "long-rows": "63c4e3adf2b7de259e05f17bb2f2d50a0c36c89b856319a3a27dbc88780dec69",
+      "loop-the-course": "66c58f64dd3d84e9cbe0390223818aed620ceeb9c0fcc0d68f21439855b37a94",
+      "morning-chores": "2e3c514f7c03c3557ae960e80b4434c11c57e14b2476d902eb29d059d31546e4",
+      "night-field": "87513c184801d072ffba7266ef19aaffab4a89ccc9a253f729f5a9492ed19091",
+      "plan-the-farm": "a02d5b53a9ec7713acc79c5b77fd1c019adb18268e04ce7b4e07fc6568609655"
     },
     "first_measurement": {
       "section": "First measurement: duckbench, 2026-10-15",

@@ -201,6 +201,28 @@ def main() -> int:
             if y["name"] not in flatten(grid) or y["does"] not in flatten(grid):
                 problem(f"{name} does not show the pack's Your card {y['name']!r} and what it does")
 
+        # How many of each card a group prints: every card one of the pack's own rows lays more
+        # than once, counted here from the pack file, each named as the pack names it (a lent
+        # Your card by its lent name and number, never as a blank "Your card").
+        lent = {y["code"]: y["name"] for y in pack.get("yours", [])}
+        most: dict[str, int] = {}
+        for ch in pack["challenges"]:
+            for row in (ch["solution"], ch.get("buggy") or []):
+                codes = [c for entry in row for c in [entry["card"], *entry.get("under", [])]]
+                for code in set(codes):
+                    most[code] = max(most.get(code, 0), codes.count(code))
+        copies = flatten(grid)
+        for code, n in most.items():
+            if n < 2:
+                continue
+            said = (f"{bp.word(n)} {lent[code]} (Your card {cards[code]['tag']})" if code in lent
+                    else f"{bp.word(n)} {cards[code]['name']}")
+            if not re.search(re.escape(said) + r"(?![A-Za-z(])", copies):
+                problem(f"{name} does not say a group needs {said!r}: a row in the pack lays "
+                        f"{n} of that card")
+        if all(n < 2 for n in most.values()) and "never lay the same card twice" not in copies:
+            problem(f"{name} asks for more than one copy of a card no row lays twice")
+
         # The score.
         rule = "Fewest steps wins." if pack["score"] == "steps" else "Fewest cards wins."
         if rule not in flat:
