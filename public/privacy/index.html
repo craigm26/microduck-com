@@ -149,8 +149,10 @@ periodic sync, and no phone-home.</p>
     how far it is from the edge of its area; its last five steps in this run; the names
     of the moves and sounds it may choose from; and any notes from a robot tool server
     you added. One picture from the duck's camera goes only if you allowed the camera
-    for planners. That is off by default, and the build after build 95 has no switch
-    to turn it on. Anthropic bills your key for each
+    for planners. That is off by default, there is one switch for each
+    company, and turning it on needs the adult's agreement first. Any face the app
+    finds in that picture is blurred before it leaves the device, and if the app cannot
+    look for faces, no picture goes. Anthropic bills your key for each
     step, and what you send is under Anthropic's privacy policy, not ours. Anthropic
     says it deletes API inputs and outputs within 30 days, keeps content flagged under
     its Usage Policy for longer, and does not train its models on what API customers
@@ -200,13 +202,17 @@ periodic sync, and no phone-home.</p>
 </div>
 
 <p>Planners and robot tool servers are new in the build after build 95. In that
-build you can save an Anthropic or OpenAI key, and add a robot tool server and look
-at its tools, but no planner is offered on Play or Auto yet: a planner shows there
-only after it has been measured on the practice duck. So that build does not contact
-Anthropic, OpenAI or a planner server on your network, and reads no tool. The rows
-above say what will go once a planner is offered. When a planner does read a robot
-tool server, it reads only tools the server marks read-only that need no input, and
-what they say is given to the planner as information, never as the goal.</p>
+build, when you type something for the duck that the app cannot read by itself
+(Tell), it can ask Apple's on-device model to choose the next step. That model runs
+on this device, needs no key, and nothing it reads or decides leaves the device.
+You can also save an Anthropic or OpenAI key, and add a robot tool server and look
+at its tools. Hosted planners, planners on your network and downloaded models are
+not offered yet: each shows only after it has been measured on the practice duck.
+So that build does not contact Anthropic, OpenAI or a planner server on your
+network, and reads no tool. The rows above say what will go once one is offered.
+When a planner does read a robot tool server, it reads only tools the server marks
+read-only that need no input, and what they say is given to the planner as
+information, never as the goal.</p>
 
 <p>If you use an on-device model instead, nothing you type leaves the device at
 all, because the weights were downloaded once and everything after that is
@@ -260,10 +266,12 @@ children, stay out of the camera's view.</p>
 screen where you save a hosted planner key says so for each company, in these words:
 "Decisions come from an AI model (Anthropic, Claude Haiku 5.5), not a person." and
 "Decisions come from an AI model (OpenAI, GPT-6 Luna), not a person." It also says
-"The AI can be wrong. Check what it suggests." The app does not yet show this
-beside each step during a run, or for a model on your network or on this device,
-because no planner runs on Play or Auto yet. Before one does, this page will say
-how the app labels its steps.</p>
+"The AI can be wrong. Check what it suggests." During a run, each step a model chose
+is marked on the card that asks you to go ahead and in the list at the end of the
+run: "Chosen by an AI model, not a person", with the provider and the model. A step
+the app read from your words by itself has no such mark. Settings shows the same
+line for a model on your network or on this device, for example "Decisions come
+from an AI model (Apple's on-device model, on this phone), not a person."</p>
 
 <h2>What we would have to tell you, and cannot</h2>
 
