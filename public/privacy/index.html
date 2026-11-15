@@ -36,7 +36,7 @@
 <header class="privacy-header">
   <h1>Privacy</h1>
   <p class="lede">What Microduck Studio does and does not do with your data.</p>
-  <p class="updated">Last updated 4 November 2026 · applies to Microduck Studio for iPhone, iPad and Mac</p>
+  <p class="updated">Last updated 14 November 2026 · applies to Microduck Studio for iPhone, iPad and Mac</p>
 </header>
 
 <main id="main" tabindex="-1">
@@ -58,6 +58,12 @@ your device and are never uploaded anywhere by the app.</p>
 model service you configured are stored in the iOS Keychain. They are sent only
 to the service they belong to, only when you ask for something that needs
 them.</p>
+
+<p>An Anthropic or OpenAI key for a hosted planner, and a robot tool server's token,
+each have their own place in the Keychain, kept on this device only and never in a
+backup. A key is checked for shape before it is saved, so an Anthropic key cannot be
+sent to OpenAI or the other way round. Forgetting a key removes it from this device
+but does not cancel it; you cancel it with the company that issued it.</p>
 
 <h2>When the app talks to the network</h2>
 
@@ -134,12 +140,78 @@ periodic sync, and no phone-home.</p>
     <td>The words you typed and the context the app builds. It goes to whoever
     runs that service, under their privacy policy, not ours.</td>
   </tr>
+  <tr>
+    <td><code>api.anthropic.com</code></td>
+    <td>A hosted planner you set up with your own Anthropic key chooses the duck's
+    next step. Not offered yet; see below the table.</td>
+    <td>Your key, and for each step: the goal you typed, and what you said if it was
+    different; the duck's position, heading, whether it is standing, its last move and
+    how far it is from the edge of its area; its last five steps in this run; the names
+    of the moves and sounds it may choose from; and any notes from a robot tool server
+    you added. One picture from the duck's camera goes only if you allowed the camera
+    for planners. That is off by default, and the build after build 95 has no switch
+    to turn it on. Anthropic bills your key for each
+    step, and what you send is under Anthropic's privacy policy, not ours. Anthropic
+    says it deletes API inputs and outputs within 30 days, keeps content flagged under
+    its Usage Policy for longer, and does not train its models on what API customers
+    send (<a href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data" rel="noopener">retention</a>,
+    <a href="https://www.anthropic.com/legal/commercial-terms" rel="noopener">commercial terms</a>).
+    Microduck Studio is not affiliated with or endorsed by Anthropic.</td>
+  </tr>
+  <tr>
+    <td><code>api.openai.com</code></td>
+    <td>A hosted planner you set up with your own OpenAI key chooses the duck's next
+    step. Not offered yet; see below the table.</td>
+    <td>The same as for Anthropic: your key, the goal, the duck's state, its last five
+    steps, the names it may choose from, any tool server notes, and a camera picture
+    only if you allowed one. Every request sets <code>store</code> to false, so OpenAI
+    is asked not to keep the response for later use. OpenAI bills your key for each
+    step, and what you send is under OpenAI's privacy policy, not ours. OpenAI says it
+    keeps abuse-monitoring logs for up to 30 days, keeps any picture its checks flag as
+    child sexual abuse material for review, and does not train its models on API data
+    unless you opt in
+    (<a href="https://developers.openai.com/api/docs/guides/your-data" rel="noopener">your data</a>).
+    Microduck Studio is not affiliated with or endorsed by OpenAI.</td>
+  </tr>
+  <tr>
+    <td>A planner server on your network</td>
+    <td>A model on a computer you set up, such as Ollama, LM Studio or llama.cpp's
+    server, chooses the duck's next step. Not offered yet; see below the table.</td>
+    <td>The same words a hosted planner gets: the goal, the duck's state, its last
+    steps, the names it may choose from and any tool server notes, plus the access
+    token if you typed one. Never a camera picture. The app may also ask an Ollama
+    server which models it has, to record exactly which one answered. This is a machine
+    at an address you typed. Over plain http, anyone on the same Wi-Fi can read what is
+    sent, the token too; on a tailnet, Tailscale encrypts it between your devices. The
+    app refuses plain http to an address on the public internet.</td>
+  </tr>
+  <tr>
+    <td>A robot tool server (MCP) you added</td>
+    <td>You tap Look at its tools.</td>
+    <td>A greeting that names this app and its version, requests for the server's list
+    of tools, and the token you typed, if any. The app sends a token over plain http
+    only to an address on your own network, and the screen says when it travels
+    unencrypted. Your keys, Stop, the sticks and the duck's limits never go to a tool
+    server, and the app never moves the duck through one. Nothing the server sends is
+    kept: no cookies, no cache, and its list is shown, not saved. This is a machine at
+    an address you typed.</td>
+  </tr>
 </table>
 </div>
 
+<p>Planners and robot tool servers are new in the build after build 95. In that
+build you can save an Anthropic or OpenAI key, and add a robot tool server and look
+at its tools, but no planner is offered on Play or Auto yet: a planner shows there
+only after it has been measured on the practice duck. So that build does not contact
+Anthropic, OpenAI or a planner server on your network, and reads no tool. The rows
+above say what will go once a planner is offered. When a planner does read a robot
+tool server, it reads only tools the server marks read-only that need no input, and
+what they say is given to the planner as information, never as the goal.</p>
+
 <p>If you use an on-device model instead, nothing you type leaves the device at
 all, because the weights were downloaded once and everything after that is
-local.</p>
+local. That includes a planner that runs on a model downloaded to this device:
+nothing it reads or decides leaves the device.</p>
 
 <p>Files you export or share stay on your device until you send them somewhere
 yourself. The share sheet hands the file to whatever you pick, and the app is not
@@ -156,7 +228,8 @@ also works on a rendered stage with the camera off.</p>
 <h3>Local network</h3>
 <p>Used to find computers on your own network running the physics bench, the
 plan router or a robot's bridge, which announce themselves over Bonjour, and to
-reach the ones you saved or typed in when you ask them to run something. The app
+reach the ones you saved or typed in when you ask them to run something. A robot
+tool server or a planner server is reached only at the address you typed. The app
 looks only for those services, only on your own network; nothing is added until
 you tap Add, and nothing found is sent anywhere.</p>
 
@@ -168,8 +241,29 @@ proximity to anything, or for any other purpose.</p>
 
 <h2>Children</h2>
 
-<p>The app collects no personal information from anyone, of any age. There is
-nothing to delete because nothing is gathered.</p>
+<p>The app collects no personal information from anyone, of any age, children
+under 13 included. It has no accounts, no analytics, no advertising and no
+tracking, and nothing it does reaches the people who make it. There is nothing to
+delete because nothing is gathered. On that basis Microduck Studio complies with
+the Children's Online Privacy Protection Act (COPPA).</p>
+
+<p>Hosted planners send words, and a camera picture if you allow one, to Anthropic
+or OpenAI, as the table says. A hosted planner works only with a key an adult pastes
+in and pays for, so it receives what that adult's runs send, under that company's
+terms. The key screen says: "For children: a parent or guardian holds the key and
+agrees to the child using it." We recommend that an adult sets up any planner,
+holds its key and watches the duck while it runs, and that people, especially
+children, stay out of the camera's view.</p>
+
+<h3>A model, not a person</h3>
+<p>When a model chooses the duck's next step, a model chose it, not a person. The
+screen where you save a hosted planner key says so for each company, in these words:
+"Decisions come from an AI model (Anthropic, Claude Haiku 5.5), not a person." and
+"Decisions come from an AI model (OpenAI, GPT-6 Luna), not a person." It also says
+"The AI can be wrong. Check what it suggests." The app does not yet show this
+beside each step during a run, or for a model on your network or on this device,
+because no planner runs on Play or Auto yet. Before one does, this page will say
+how the app labels its steps.</p>
 
 <h2>What we would have to tell you, and cannot</h2>
 
