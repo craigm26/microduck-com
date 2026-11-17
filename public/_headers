@@ -44,6 +44,12 @@
 /assets/*
   Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
+# The dock page shows the MicroDock v3's pictures straight from its author's GitHub repository,
+# pinned to one commit, so its images may also come from raw.githubusercontent.com. Nothing else
+# on the site loads anything from another host.
+/dock/*
+  Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://raw.githubusercontent.com; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
 # A story book's home, page for grown-ups and pictures run no scripts at all, so each part is listed here under the
 # plain pages' policy. The list is by part, not /stories/*, because a policy is joined to every
 # other rule that matches, so a /stories/* rule would still block the two pages below. A new part

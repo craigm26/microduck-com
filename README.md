@@ -3,7 +3,7 @@
 The static site for Microduck Studio, served by Cloudflare Pages (project `microduck`,
 `microduck-4m8.pages.dev`, custom domain microduckstudio.com + www).
 
-Thirty-three HTML pages, a not-found page and a shared stylesheet, with no build step at deploy time, bundler or npm
+Forty-two HTML pages, a not-found page and a shared stylesheet, with no build step at deploy time, bundler or npm
 dependency. There is no JavaScript anywhere except the four learning books under `/books/`, which run
 the site's own scripts and nothing else's (see "The books" below). The visual theme follows
 Pollen Robotics' warm orange accents, spacious typography and rounded panels while clearly
@@ -34,6 +34,11 @@ identifying Studio as an independent project.
   book as a document; `engine/book.js` lays it onto a 3D pop-up book, `engine/kit.js` is the
   shared paper kit, `engine/figures-<book>.js` holds each lesson's pop-up, and `vendor/` is
   three.js r170 with its licence.
+- `public/dock/` - how to print and build the MicroDock v3 charging dock. The design is Vottivott's
+  ([microduck-playground](https://github.com/Vottivott/microduck-playground), CC BY-NC-SA 4.0); the page's pictures
+  and files load from that repository pinned to one commit, the only images on the site from another host, and
+  `_headers` allows raw.githubusercontent.com for `/dock/*` alone. To follow a newer upstream commit, change the
+  commit in every URL on the page at once.
 - `public/stories/` - story books, which are fiction: one folder a book, drawn by
   `tools/books/build_story.py` and never edited by hand (see "The story books" below).
 - `public/assets/site.css` - shared theme, responsive navigation, documentation layout,
