@@ -1065,3 +1065,24 @@ html:not(.bk-3d) .pb-3d .pb-main { max-width: 1400px; padding: 0 .75rem 1rem; }
   .pb-canvas, html.pb-live .pb-canvas { width: 100% !important; transform: none !important; }
   .pb-z { text-shadow: none; }
 }
+
+/* The dock page: the MicroDock v3's manual pages, print plates and renders, from its author's repository. */
+.dock-hero { margin: 0 0 1.5rem; }
+.dock-hero img, .dock-page img, .dock-step img { width: 100%; border-radius: 14px; border: 1px solid var(--soft-line); background: #faf7f0; }
+.dock-page { margin: 1rem 0 1.5rem; }
+.dock-page figcaption, .dock-plates figcaption, .dock-renders figcaption { font-size: .85rem; color: var(--dim); margin-top: .5rem; }
+.dock-toc { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0; }
+.dock-toc a { padding: .35rem .8rem; border: 1px solid var(--brand); border-radius: 999px; font-size: .88rem; text-decoration: none; }
+.dock-plates { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+.dock-plates figure, .dock-renders figure { margin: 0; }
+.dock-plates img { border-radius: 12px; background: #2b2b33; }
+.dock-renders { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1.25rem 0; }
+.dock-renders img { border-radius: 12px; border: 1px solid var(--soft-line); }
+.dock-step { margin: 2rem 0 2.5rem; padding: 1.25rem; background: var(--card); border: 1px solid var(--soft-line); border-top: 3px solid var(--brand); border-radius: 18px; break-inside: avoid; }
+.dock-step h3 { margin-top: 0; }
+.dock-step ol { margin: 1rem 0 0; padding-left: 1.6rem; }
+.dock-step li { margin-bottom: .6rem; }
+.dock-step li::marker { font-weight: 700; color: var(--brand); }
+.dock-why { display: block; margin-top: .35rem; padding-left: .75rem; border-left: 3px solid var(--brand); color: var(--dim); font-size: .9rem; }
+.dock-check { margin: 1rem 0 0; padding: .8rem 1rem; background: var(--tint); border-radius: 12px; }
+@media (max-width: 560px) { .dock-renders { grid-template-columns: 1fr; } .dock-step { padding: 1rem; } }

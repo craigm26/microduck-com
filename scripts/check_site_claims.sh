@@ -115,6 +115,8 @@ BOOK_PAGE = re.compile(r"public/books/(beginner|intermediate|advanced|casebook)/
 BOOK_TAG = '<script type="module" src="/books/engine/book.js"></script>'
 PICTURE_PAGE = re.compile(r"public/stories/[a-z-]+/picture/index\.html$")
 PICTURE_TAG = '<script type="module" src="/books/engine/picture.js"></script>'
+DOCK_SRC = re.compile(r"https://raw\.githubusercontent\.com/Vottivott/microduck-playground/[0-9a-f]{40}/"
+                      r"hardware/microdock-v3/[A-Za-z0-9_./-]+\.(?:jpg|png)$")
 for name, text in (pages | assets).items():
     parsed = Markup(text) if not name.endswith(".css") else None
     scripts = re.findall(r"<script\b[^>]*>(?:.*?</script>)?", text, flags=re.IGNORECASE | re.DOTALL)
@@ -134,7 +136,15 @@ for name, text in (pages | assets).items():
                    for value in attrs.values()):
                 fail.append(f"{name} carries a JavaScript URL")
             for attr in ("src", "srcset", "poster", "data"):
-                if re.search(r"(?:https?:)?//", attrs.get(attr, ""), flags=re.IGNORECASE):
+                value = attrs.get(attr, "")
+                # THE DOCK PAGE IS THE ONE REMOTE-IMAGE EXCEPTION: an <img> on public/dock/
+                # may load from the MicroDock v3's own repository, and only at a full pinned
+                # commit, so the pictures cannot change under the page. _headers allows
+                # raw.githubusercontent.com for /dock/* alone.
+                if (name == "public/dock/index.html" and tag == "img" and attr == "src"
+                        and DOCK_SRC.match(value)):
+                    continue
+                if re.search(r"(?:https?:)?//", value, flags=re.IGNORECASE):
                     fail.append(f"{name} has a remote {attr} asset")
             if tag == "link" and set(attrs.get("rel", "").split()) & {
                     "stylesheet", "icon", "preload", "prefetch", "preconnect", "dns-prefetch"}:
