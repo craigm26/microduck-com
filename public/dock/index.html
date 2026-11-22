@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#101018" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" href="/assets/studio-icon.png">
-<link rel="stylesheet" href="/assets/site.css?v=4957a47f22">
+<link rel="stylesheet" href="/assets/site.css?v=66aba9db0e">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -44,12 +44,12 @@
 <main id="main" tabindex="-1">
 
 <figure class="dock-hero">
-  <img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_09.jpg" width="1600" height="1131" alt="Microduck sitting in the finished egg dock, the magnetic tip in its back meeting the floating hood, with the tag on the egg behind it">
+  <img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_09.jpg" width="1600" height="1131" alt="Microduck sitting in the finished egg dock, the magnetic tip in its back meeting the floating hood, with the tag on the egg behind it">
 </figure>
 
 <div class="note">
   <p><strong>Whose dock this is.</strong> The MicroDock v3 is designed and published by Vottivott in
-  <a href="https://github.com/Vottivott/microduck-playground/tree/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3" rel="noopener">microduck-playground</a>,
+  <a href="https://github.com/Vottivott/microduck-playground/tree/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3" rel="noopener">microduck-playground</a>,
   not by Microduck Studio or Pollen Robotics. Every picture and file on this page loads straight from that
   repository, pinned to one commit, so what you see here is exactly what was published there. The printable parts are
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener">CC BY-NC-SA 4.0</a>: share and remix
@@ -61,6 +61,7 @@
   <a href="#print">Print the parts</a>
   <a href="#build">Build it, step by step</a>
   <a href="#works">How it works</a>
+  <a href="#scoot">The scoot policies</a>
   <a href="#status">Where it stands</a>
   <a href="#files">Every file</a>
 </nav>
@@ -68,8 +69,8 @@
 <h2 id="need">What you need</h2>
 
 <figure class="dock-page">
-  <img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_02.jpg" width="1600" height="1131" loading="lazy" alt="What you need: the six printed parts and two filament pins, a magnetic USB-C adapter pair, a 90 degree USB-C adapter, and a USB-C cable and charger, with a 1:1 outline of the cable's plug">
-  <figcaption>Page 2 of the <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/microdock_v3_assembly.pdf" rel="noopener">assembly manual (PDF)</a>.</figcaption>
+  <img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_02.jpg" width="1600" height="1131" loading="lazy" alt="What you need: the six printed parts and two filament pins, a magnetic USB-C adapter pair, a 90 degree USB-C adapter, and a cable and charger, with a 1:1 outline of the cable's plug">
+  <figcaption>Page 2 of the <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/microdock_v3_assembly.pdf" rel="noopener">assembly manual (PDF)</a>.</figcaption>
 </figure>
 
 <div class="feature-grid two-up">
@@ -82,7 +83,8 @@
       <li>1 spring stage</li>
       <li>1 hood</li>
       <li>1 tag, in white and black</li>
-      <li>2 filament pins: pieces of 1.75 mm PLA filament, about 4 cm each</li>
+      <li>2 filament pins: pieces of 1.75 mm PLA filament, about 4 cm each. You may not need them: if the post
+      already sits firmly on its pegs (step 2), or the arm in the carriage (step 7), leave that pin out.</li>
     </ul>
   </div>
   <div class="card">
@@ -90,44 +92,49 @@
     <ul>
       <li>A magnetic USB-C adapter pair (24-pin, passes CC so chargers switch on). The adapter goes in the hood, the tip in Microduck.</li>
       <li>A 90&deg; USB-C adapter, "horizontal": it turns the cable sideways in the hood.</li>
-      <li>A USB-C cable and a charger. The hood's clip holds the cable's plug.</li>
+      <li>A cable with a USB-C plug for the dock end, and a charger to suit its other end. The plug only passes
+      through the hood, so it must be at most 12.3 mm wide and 6.4 mm thick.</li>
       <li>Flush cutters, for the pins.</li>
       <li>Removable mounting tape, for the floor.</li>
     </ul>
   </div>
 </div>
 
-<table>
-  <thead><tr><th>Item</th><th>What the designer uses</th></tr></thead>
+<table class="dock-buy">
+  <thead><tr><th></th><th>Part</th><th>What the designer uses</th><th>Price</th></tr></thead>
   <tbody>
-    <tr><td>Magnetic USB-C adapter, 2-pack</td><td>Auravale 240 W</td></tr>
-    <tr><td>90&deg; USB-C adapter, horizontal</td><td>goobay USB4 angle adapter, Kjell &amp; Company 66960</td></tr>
-    <tr><td>USB-C cable, plug 12.3 &times; 20 mm, 6.4 mm thick</td><td>white 60 W, 1 m, in Clas Ohlson's 20 W charger kit 39-2051</td></tr>
-    <tr><td>USB-C charger</td><td>the same kit's 20 W charger, or any phone charger you have</td></tr>
+    <tr><td><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/parts/magnetic-adapter.png" width="386" height="330" loading="lazy" alt="Auravale magnetic USB-C adapters and tips"></td><td>Magnetic USB-C adapter, 2-pack</td><td>Auravale 240 W (Amazon <a href="https://www.amazon.de/dp/B0GWQ71YND" rel="noopener">DE</a>, <a href="https://www.amazon.fr/dp/B0GWQ71YND" rel="noopener">FR</a>)</td><td>about &euro;9 to &euro;13</td></tr>
+    <tr><td><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/parts/angle-adapter.png" width="218" height="330" loading="lazy" alt="goobay 74441 angle adapter"></td><td>90&deg; USB-C adapter, horizontal. goobay's vertical and U-shaped ones (74442 to 74446) don't fit.</td><td>goobay 74441, USB4 (<a href="https://www.wentronic.com/en/usb-ctm-adapter-horizontal-90-usb4tm-74441" rel="noopener">goobay</a>, Kjell &amp; Company 66960 in Sweden and Norway)</td><td>about &euro;6</td></tr>
+    <tr><td><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/parts/usb-c-cable.png" width="307" height="330" loading="lazy" alt="Apple 60 W USB-C Charge Cable"></td><td>Cable with a USB-C plug for the dock</td><td>Apple 60 W USB-C Charge Cable, 1 m, the one in the box of an iPhone 15 or later (<a href="https://www.apple.com/shop/product/MW493AM/A" rel="noopener">Apple US</a>)</td><td>$19</td></tr>
+    <tr><td><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/parts/charger.png" width="168" height="330" loading="lazy" alt="Apple 20 W USB-C Power Adapter"></td><td>Charger</td><td>Any phone charger with a port for the cable, for example Apple's 20 W USB-C Power Adapter (<a href="https://www.apple.com/shop/product/MWVV3AM/A" rel="noopener">Apple US</a>)</td><td>$19</td></tr>
   </tbody>
 </table>
 
+<p class="meta">Prices as of November 2026, from the designer's list. Photos: Amazon, goobay, Apple.</p>
+
 <div class="note">
-  <p><strong>Check your cable's plug first.</strong> The hood is shaped around that angle adapter and that plug. Print
-  page 2 of the PDF at 100 % and hold your plug to its outline: it should match 12.3 &times; 20 mm, 6.4 mm thick.
-  Plate 7 (optional) prints just the hood's middle, so you can try your adapters and the duck's tip before printing the
-  whole hood.</p>
+  <p><strong>Check your cable's plug first.</strong> The hood holds the two adapters; the cable's plug only has to pass
+  through, so it must be at most 12.3 mm wide and 6.4 mm thick. Apple's plug is 10.2 &times; 14.5 mm and 4.5 mm thick.
+  The designer also tested the white cable in Clas Ohlson's 20 W charger kit (39-2051, Nordic only), which is exactly
+  at the limit. Pick a thin, flexible cable: a thick or stiff one pushes the floating hood. Print page 2 of the PDF at
+  100 % and hold your plug to its outline. Plate 7 (optional) prints just the hood's middle, so you can try your
+  adapters and the duck's tip before printing the whole hood.</p>
 </div>
 
 <h2 id="print">Print the parts</h2>
 
 <p>PLA, white, plus black for the tag, on a 0.4 mm nozzle at 0.20 mm Standard. For a Bambu Lab P1S, the
-<a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_P1S.3mf" rel="noopener">ready Bambu Studio project</a> sets everything up.
+<a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_P1S.3mf" rel="noopener">ready Bambu Studio project</a> sets everything up.
 Plates 1 to 6 take about 9 h 15 min and 365 g of PLA.</p>
 
 <div class="dock-plates">
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate1_base.png" width="1024" height="1024" loading="lazy" alt="Plate 1, the base"><figcaption><strong>1. Base</strong> as it sits. 2 h 8 min, 100 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate2_front.png" width="1024" height="1024" loading="lazy" alt="Plate 2, the front plate"><figcaption><strong>2. Front plate</strong> face down, supports under the tag pocket's floor. 2 h 4 min, 89 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate3_dome.png" width="1024" height="1024" loading="lazy" alt="Plate 3, the dome"><figcaption><strong>3. Dome</strong> standing on its floor, brim. 2 h 31 min, 100 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate4_stage.png" width="1024" height="1024" loading="lazy" alt="Plate 4, the spring stage"><figcaption><strong>4. Spring stage</strong> flat, no supports, Arachne walls for the 0.4 mm blades. 40 min, 19 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate5_hood.png" width="1024" height="1024" loading="lazy" alt="Plate 5, the hood"><figcaption><strong>5. Hood</strong> upside down, supports. 1 h 30 min, 48 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate6_tag.png" width="1024" height="1024" loading="lazy" alt="Plate 6, the tag"><figcaption><strong>6. Tag</strong> black base, then the white cells. 22 min, 9 g.</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_plate7_test.png" width="1024" height="1024" loading="lazy" alt="Plate 7, the optional hood fit test"><figcaption><strong>7. Hood fit test</strong>, optional: the hood's middle, as plate 5. 33 min, 13 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate1_base.png" width="1024" height="1024" loading="lazy" alt="Plate 1, the base"><figcaption><strong>1. Base</strong> as it sits. 2 h 8 min, 100 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate2_front.png" width="1024" height="1024" loading="lazy" alt="Plate 2, the front plate"><figcaption><strong>2. Front plate</strong> face down, supports under the tag pocket's floor. 2 h 4 min, 89 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate3_dome.png" width="1024" height="1024" loading="lazy" alt="Plate 3, the dome"><figcaption><strong>3. Dome</strong> standing on its floor, brim. 2 h 31 min, 100 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate4_stage.png" width="1024" height="1024" loading="lazy" alt="Plate 4, the spring stage"><figcaption><strong>4. Spring stage</strong> flat, no supports, Arachne walls for the 0.4 mm blades. 40 min, 19 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate5_hood.png" width="1024" height="1024" loading="lazy" alt="Plate 5, the hood"><figcaption><strong>5. Hood</strong> upside down, supports. 1 h 30 min, 48 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate6_tag.png" width="1024" height="1024" loading="lazy" alt="Plate 6, the tag"><figcaption><strong>6. Tag</strong> black base, then the white cells. 22 min, 9 g.</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_plate7_test.png" width="1024" height="1024" loading="lazy" alt="Plate 7, the optional hood fit test"><figcaption><strong>7. Hood fit test</strong>, optional: the hood's middle, as plate 5. 33 min, 13 g.</figcaption></figure>
 </div>
 
 <h2 id="build">Build it, step by step</h2>
@@ -137,7 +144,7 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s1">
   <h3 id="s1">Steps 1 and 2: the spring stage onto the front plate</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_03.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_03.jpg" width="1600" height="1131" loading="lazy" alt="Steps 1 and 2: the spring stage pressed onto the front plate's two pegs, then a pin pushed through the ear, the post and the far ear"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_03.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_03.jpg" width="1600" height="1131" loading="lazy" alt="Steps 1 and 2: the spring stage pressed onto the front plate's two pegs, then a pin pushed through the ear, the post and the far ear"></a>
   <ol start="1">
     <li>Lay the front plate face down. Put the spring stage on it: the post's two holes onto the plate's two pegs.</li>
     <li>Push a pin through the ear, the post and the far ear, from the middle of the egg. Cut it off flush on both
@@ -147,7 +154,7 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s3">
   <h3 id="s3">Steps 3 to 5: build the hood and cable first</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_04.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_04.jpg" width="1600" height="1131" loading="lazy" alt="Steps 3 to 5: the cable plugged into the angle adapter and the angle adapter into the magnetic adapter, the three lowered into the upside-down hood and pressed until they click"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_04.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_04.jpg" width="1600" height="1131" loading="lazy" alt="Steps 3 to 5: the cable plugged into the angle adapter and the angle adapter into the magnetic adapter, the three lowered into the upside-down hood and pressed until they click"></a>
   <ol start="3">
     <li>Plug the cable into the angle adapter's side, then the angle adapter into the magnetic adapter's back.</li>
     <li>Turn the hood upside down. Lower the three in: the magnetic face toward the hood's flared end, the cable out
@@ -160,7 +167,7 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s6">
   <h3 id="s6">Steps 6 and 7: the hood onto the stage</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_05.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_05.jpg" width="1600" height="1131" loading="lazy" alt="Steps 6 and 7: the hood's arm pushed through the front plate's window into the stage's carriage, then the second pin pushed down from behind"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_05.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_05.jpg" width="1600" height="1131" loading="lazy" alt="Steps 6 and 7: the hood's arm pushed through the front plate's window into the stage's carriage, then the second pin pushed down from behind"></a>
   <ol start="6">
     <li>Turn the hood back over. Stand the front plate up and push the hood's arm through its window into the stage's
     carriage, all the way in. Hold the carriage from behind. <span class="dock-why">Crush ribs in the carriage hold the
@@ -172,7 +179,7 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s8">
   <h3 id="s8">Steps 8 and 9: the cable loop and the dome</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_06.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_06.jpg" width="1600" height="1131" loading="lazy" alt="Steps 8 and 9: the cable pressed into the clip in the egg's edge with a loose loop of about 7 cm, then the dome snapped on from behind"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_06.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_06.jpg" width="1600" height="1131" loading="lazy" alt="Steps 8 and 9: the cable pressed into the clip in the egg's edge with a loose loop of about 7 cm, then the dome snapped on from behind"></a>
   <ol start="8">
     <li>Press the cable into the clip in the egg's edge, near the hood's side. Leave about 7 cm of cable between the
     hood and the clip, in a loose loop. <span class="dock-why">The loop lets the hood float: lift the hood and slide it
@@ -184,16 +191,16 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s10">
   <h3 id="s10">Steps 10 and 11: the base and the tag</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_07.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_07.jpg" width="1600" height="1131" loading="lazy" alt="Steps 10 and 11: the egg pushed down into the base's socket, then the tag pressed into its pocket on the front plate"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_07.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_07.jpg" width="1600" height="1131" loading="lazy" alt="Steps 10 and 11: the egg pushed down into the base's socket, then any support cut out of the tag's pocket and the tag pressed in"></a>
   <ol start="10">
     <li>Push the egg down into the base's socket, the hood facing out.</li>
-    <li>Press the tag into its pocket on the front plate, white cells out.</li>
+    <li>Cut any support out of the tag's pocket on the front plate, then press the tag in, white cells out.</li>
   </ol>
 </section>
 
 <section class="dock-step" aria-labelledby="s12">
   <h3 id="s12">Step 12 and a check: power, and the floating hood</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_08.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_08.jpg" width="1600" height="1131" loading="lazy" alt="Step 12: the cable run along the floor into the charger. The check: the hood lifted and slid sideways, springing back"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_08.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_08.jpg" width="1600" height="1131" loading="lazy" alt="Step 12: the cable run along the floor into the charger. The check: the hood lifted and slid sideways, springing back"></a>
   <ol start="12">
     <li>Run the cable along the floor and plug it into the USB-C charger.</li>
   </ol>
@@ -203,7 +210,7 @@ size.</p>
 
 <section class="dock-step" aria-labelledby="s13">
   <h3 id="s13">Step 13 and done: the tip in Microduck</h3>
-  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_09.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/assembly/page_09.jpg" width="1600" height="1131" loading="lazy" alt="Step 13: the magnetic tip pushed into the USB-C port on Microduck's back. Done: Microduck sitting in the dock"></a>
+  <a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_09.jpg" rel="noopener"><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/assembly/page_09.jpg" width="1600" height="1131" loading="lazy" alt="Step 13: the magnetic tip pushed into the USB-C port on Microduck's back. Done: Microduck sitting in the dock"></a>
   <ol start="13">
     <li>On Microduck: push the magnetic tip into the USB-C port on its back. It stays there.</li>
   </ol>
@@ -214,9 +221,9 @@ size.</p>
 <h2 id="works">How it works</h2>
 
 <div class="dock-renders">
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/renders/microdock_three_quarter.png" width="1200" height="900" loading="lazy" alt="The assembled egg dock from three quarters"><figcaption>Assembled</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/renders/microdock_parts.png" width="1200" height="900" loading="lazy" alt="The six printed parts laid out"><figcaption>Printed parts</figcaption></figure>
-  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/renders/microdock_docked.png" width="1200" height="900" loading="lazy" alt="Microduck docked under the hood"><figcaption>Docked</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/renders/microdock_three_quarter.png" width="1200" height="900" loading="lazy" alt="The assembled egg dock from three quarters"><figcaption>Assembled</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/renders/microdock_parts.png" width="1200" height="900" loading="lazy" alt="The six printed parts laid out"><figcaption>Printed parts</figcaption></figure>
+  <figure><img src="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/renders/microdock_docked.png" width="1200" height="900" loading="lazy" alt="Microduck docked under the hood"><figcaption>Docked</figcaption></figure>
 </div>
 
 <ol>
@@ -231,16 +238,39 @@ and 16 mm to either side and springs back to the middle, but toward the egg it b
 the magnet's pull go into the egg, not into the springs. The hood's flared side walls line the duck up, the hood rides
 up onto its back, and the magnet closes the last millimetre.</p>
 
-<p><a href="https://github.com/Vottivott/microduck-playground/blob/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/preview.mp4" rel="noopener">Watch it dock in simulation</a>
+<p><a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/preview.mp4" rel="noopener">Watch it dock in simulation</a>
 (video on GitHub): it turns, sits, scoots back under the hood, then scoots out, stands up and walks off.</p>
+
+<h2 id="scoot">The scoot policies</h2>
+
+<p>Scooting is its own trained skill: a seated Microduck shuffles on its seat in the direction it is told. The designer
+trained two scoot policies for the MicroDock v2, and the egg dock uses them unchanged:</p>
+
+<ul>
+  <li><strong><a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v2/policy/scoot_dock.onnx" rel="noopener">scoot_dock.onnx</a></strong> backs
+  the seated duck in at about 4 cm/s, holding its heading, for the last 6 to 9 cm, and holds still on a zero
+  command once USB power appears.</li>
+  <li><strong><a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v2/policy/scoot_undock.onnx" rel="noopener">scoot_undock.onnx</a></strong>
+  scoots it forward out of the dock against the magnet. In simulation it breaks free about a second in and is 70 mm out
+  after about two; then the official sit-stand policy stands it up and the official walk takes it away.</li>
+  <li><strong><a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v2/policy/experimental/scoot_dock_undock.onnx" rel="noopener">scoot_dock_undock.onnx</a></strong>
+  (experimental) does both, with only the command's sign changed, so a duck that docked crooked could pull forward and
+  try again. It has been tested less than the other two.</li>
+</ul>
+
+<p>Each one reads the same 61 numbers as Pollen's own policies and drives the same 14 joints at 50 Hz, and each
+starts from the pose the official sit-stand policy sits in, so a robot can hand over to it after a sit, and back. The
+<a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v2/training/README.md" rel="noopener">training notes</a> explain how they were trained, and
+Apache-2.0 covers them.</p>
 
 <h2 id="status">Where it stands</h2>
 
 <p>The dock has been printed, assembled and tried by hand. The docking and undocking moves have run in simulation
 only: there, with the official walk and sit policies and the MicroDock v2's scoot policies, it docked 90 times out of
-90 with a normal cable and 90 out of 90 with a stiff one. The scoot policies have not run on a robot yet, and
-Microduck Studio does not run them. The designer's
-<a href="https://github.com/Vottivott/microduck-playground/blob/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/README.md" rel="noopener">README</a>
+90 with a normal cable and 90 out of 90 with a stiff one. The scoot policies have not run on a robot yet. A stock
+Microduck cannot run them either: its robot software (release 0.23.0) refuses any skill while the duck is seated, and
+scooting only happens seated. Microduck Studio does not run them on a real duck. The designer's
+<a href="https://github.com/Vottivott/microduck-playground/blob/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/README.md" rel="noopener">README</a>
 has the full trial results and what the simulation leaves out.</p>
 
 <h2 id="files">Every file</h2>
@@ -248,22 +278,22 @@ has the full trial results and what the simulation leaves out.</p>
 <table>
   <thead><tr><th>File</th><th>What it is</th></tr></thead>
   <tbody>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/media/microdock_v3_assembly.pdf" rel="noopener">Assembly manual (PDF)</a></td><td>The pages above, to print. Print at 100 % for page 2's plug check.</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/print/microdock_v3_P1S.3mf" rel="noopener">Bambu Studio project (3MF)</a></td><td>All seven plates, ready for a Bambu Lab P1S.</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_base.stl" rel="noopener">Base (STL)</a></td><td>Plate 1</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_front.stl" rel="noopener">Front plate (STL)</a></td><td>Plate 2</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_dome.stl" rel="noopener">Dome (STL)</a></td><td>Plate 3, a large file (about 28 MB)</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_stage.stl" rel="noopener">Spring stage (STL)</a></td><td>Plate 4</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_hood.stl" rel="noopener">Hood (STL)</a></td><td>Plate 5</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_tag.stl" rel="noopener">Tag (STL)</a></td><td>Plate 6</td></tr>
-    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3/stl/microdock_v3_test.stl" rel="noopener">Hood fit test (STL)</a></td><td>Plate 7, optional</td></tr>
-    <tr><td><a href="https://github.com/Vottivott/microduck-playground/tree/e38206dbe3f7b75bfc074e3152a9cf4e604aa1c5/hardware/microdock-v3" rel="noopener">The whole design on GitHub</a></td><td>The source, the checks, the simulation and earlier docks</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/media/microdock_v3_assembly.pdf" rel="noopener">Assembly manual (PDF)</a></td><td>The pages above, to print. Print at 100 % for page 2's plug check.</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/print/microdock_v3_P1S.3mf" rel="noopener">Bambu Studio project (3MF)</a></td><td>All seven plates, ready for a Bambu Lab P1S.</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_base.stl" rel="noopener">Base (STL)</a></td><td>Plate 1</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_front.stl" rel="noopener">Front plate (STL)</a></td><td>Plate 2</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_dome.stl" rel="noopener">Dome (STL)</a></td><td>Plate 3, a large file (about 28 MB)</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_stage.stl" rel="noopener">Spring stage (STL)</a></td><td>Plate 4</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_hood.stl" rel="noopener">Hood (STL)</a></td><td>Plate 5</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_tag.stl" rel="noopener">Tag (STL)</a></td><td>Plate 6</td></tr>
+    <tr><td><a href="https://raw.githubusercontent.com/Vottivott/microduck-playground/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3/stl/microdock_v3_test.stl" rel="noopener">Hood fit test (STL)</a></td><td>Plate 7, optional</td></tr>
+    <tr><td><a href="https://github.com/Vottivott/microduck-playground/tree/c1ba96f596df5e99829cbb6590971eca97d96e2d/hardware/microdock-v3" rel="noopener">The whole design on GitHub</a></td><td>The source, the checks, the simulation and earlier docks</td></tr>
   </tbody>
 </table>
 
 <p class="meta">Pictures and files: MicroDock v3 by Vottivott, from
 <a href="https://github.com/Vottivott/microduck-playground" rel="noopener">microduck-playground</a> at commit
-<code>e38206d</code> (13 November 2026). Printable parts
+<code>c1ba96f</code> (21 November 2026). Printable parts
 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener">CC BY-NC-SA 4.0</a>, scripts Apache-2.0.
 The step text above is the manual's own.</p>
 
